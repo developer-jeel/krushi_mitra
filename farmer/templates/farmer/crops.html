@@ -1,0 +1,473 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Crops – Farmer Panel | Krushi Mitra</title>
+  <meta name="description" content="List, manage and sell your crops on Krushi Mitra." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+</head>
+
+<body>
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title" data-translate="main">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span data-translate="home">Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item active" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span data-translate="crops">My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span data-translate="tools">Tools</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span data-translate="chatbot">AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="community">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span data-translate="blogsReviews">Blogs & Reviews</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="account">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span data-translate="profile">Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════ MAIN ════════════ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <div class="page-title" data-translate="myCrops">My Crops 🌾</div>
+          <div class="breadcrumb" data-translate="dashboardMyCrops">Dashboard / My Crops</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="badge"></span>
+        </button>
+        <div class="avatar" data-translate="r">R</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Stat Row -->
+      <div class="stat-grid" style="grid-template-columns: repeat(4,1fr);">
+        <div class="stat-card">
+          <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg></div>
+          <div class="stat-info">
+            <div class="stat-value">18</div>
+            <div class="stat-label" data-translate="activeListings">Active Listings</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg></div>
+          <div class="stat-info">
+            <div class="stat-value">7</div>
+            <div class="stat-label" data-translate="pendingOrders">Pending Orders</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12" />
+            </svg></div>
+          <div class="stat-info">
+            <div class="stat-value">42</div>
+            <div class="stat-label" data-translate="soldThisMonth">Sold This Month</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23" />
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg></div>
+          <div class="stat-info">
+            <div class="stat-value" data-translate="48k">₹48K</div>
+            <div class="stat-label" data-translate="revenue">Revenue</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Crop Form -->
+      <form action="{% url 'farmer_crops' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="order-form-card" style="margin-bottom:28px;">
+          <div class="section-title" style="margin-bottom:6px;" data-translate="listANewCrop">➕ Register a New Crop
+          </div>
+          <p style="color:var(--text-muted,#8a9bb0); font-size:13px; margin-bottom:20px;">Fill in all the details below
+            to list your crop on Krushi Mitra marketplace.</p>
+
+          <!-- Row 1: Crop Name + Category -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cropName">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right:5px;vertical-align:middle;">
+                  <path d="M12 2a10 10 0 0 1 10 10" />
+                  <path d="M12 2v20" />
+                  <path d="M2 12h20" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                Crop Name <span style="color:#ef4444;">*</span>
+              </label>
+              <input type="text" id="cropName" name="cropname" placeholder="e.g. Basmati Rice" maxlength="20"
+                required />
+              <small style="color:var(--text-muted,#8a9bb0);font-size:11px;">Max 20 characters</small>
+            </div>
+            <div class="form-field">
+              <label for="cropCategory">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right:5px;vertical-align:middle;">
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                Category <span style="color:#ef4444;">*</span>
+              </label>
+              <select id="cropCategory" name="category" required>
+                <option value="" disabled selected>-- Select Category --</option>
+                <option value="grain cereals">🌾 Grain Cereals</option>
+                <option value="vegetables">🥦 Vegetables</option>
+                <option value="fruits">🍎 Fruits</option>
+                <option value="pulses">🫘 Pulses</option>
+                <option value="spices">🌶️ Spices</option>
+                <option value="cotton">🪡 Cotton</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 2: Quantity + Price -->
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cropQty">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right:5px;vertical-align:middle;">
+                  <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                </svg>
+                Quantity (kg) <span style="color:#ef4444;">*</span>
+              </label>
+              <input type="number" id="cropQty" placeholder="e.g. 200" min="1" name="quantity" required />
+              <small style="color:var(--text-muted,#8a9bb0);font-size:11px;">Enter total quantity available in
+                kilograms</small>
+            </div>
+            <div class="form-field">
+              <label for="cropPrice">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right:5px;vertical-align:middle;">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                Price per kg (₹) <span style="color:#ef4444;">*</span>
+              </label>
+              <input type="number" id="cropPrice" placeholder="e.g. 45" min="1" name="price" required />
+              <small style="color:var(--text-muted,#8a9bb0);font-size:11px;">Set your asking price in Indian Rupees per
+                kg</small>
+            </div>
+          </div>
+
+          <!-- Row 3: Description -->
+          <div class="form-field">
+            <label for="cropDesc">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right:5px;vertical-align:middle;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              Description <span style="color:#8a9bb0;font-size:12px;font-weight:400;">(Optional)</span>
+            </label>
+            <textarea id="cropDesc" rows="3" name="description"
+              placeholder="Describe your crop — grade, harvest date, storage info, certifications (organic/premium), etc."></textarea>
+          </div>
+
+          <!-- Row 4: Crop Image Upload -->
+          <div class="form-field">
+            <label for="cropImage">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right:5px;vertical-align:middle;">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              Crop Image <span style="color:#8a9bb0;font-size:12px;font-weight:400;">(Optional)</span>
+            </label>
+            <div id="cropImageDropZone" style="
+              border: 2px dashed var(--border,#2a3d55);
+              border-radius: 12px;
+              padding: 28px 20px;
+              text-align: center;
+              cursor: pointer;
+              transition: border-color 0.2s, background 0.2s;
+              background: var(--bg-card,#0f1d2e);
+              position: relative;
+            " onclick="document.getElementById('cropImage').click()"
+              ondragover="event.preventDefault(); this.style.borderColor='#22c55e';"
+              ondragleave="this.style.borderColor='var(--border,#2a3d55)';" ondrop="handleCropImageDrop(event);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.5"
+                style="margin-bottom:10px;opacity:0.8;">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              <div style="font-size:14px;font-weight:600;color:var(--text-primary,#e2eaf4);margin-bottom:4px;">Click to
+                upload or drag & drop</div>
+              <div style="font-size:12px;color:var(--text-muted,#8a9bb0);">JPG, PNG, WEBP · Max 5 MB</div>
+              <div id="cropImagePreviewWrapper" style="display:none; margin-top:14px;">
+                <img id="cropImagePreview" src="#" alt="Crop Preview"
+                  style="max-height:120px; border-radius:8px; border:1px solid var(--border,#2a3d55); object-fit:cover;" />
+                <div id="cropImageFileName" style="font-size:12px;color:#22c55e;margin-top:6px;"></div>
+              </div>
+            </div>
+            <input type="file" id="cropImage" accept="image/*" style="display:none;" onchange="previewCropImage(event)"
+              name="image" required />
+          </div>
+
+          <!-- Action Buttons -->
+          <div
+            style="display:flex; gap:12px; justify-content:flex-end; margin-top:20px; padding-top:16px; border-top:1px solid var(--border,#2a3d55);">
+            <button class="btn btn-secondary" type="button" id="clearCropFormBtn" onclick="clearCropForm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <polyline points="1 4 1 10 7 10" />
+                <path d="M3.51 15a9 9 0 1 0 .49-3.5" />
+              </svg>
+              Clear Form
+            </button>
+            <button class="btn btn-primary" type="submit" id="publishCropBtn" onclick="submitCropForm()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Publish Listing
+            </button>
+          </div>
+
+          <!-- Success / Error Banner (hidden by default) -->
+          <div id="cropFormMsg"
+            style="display:none; margin-top:14px; padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500;">
+          </div>
+        </div>
+      </form>
+
+      <script>
+        /* ── Crop Image Preview ── */
+        function previewCropImage(event) {
+          var file = event.target.files[0];
+          if (!file) return;
+          var wrapper = document.getElementById('cropImagePreviewWrapper');
+          var preview = document.getElementById('cropImagePreview');
+          var fname = document.getElementById('cropImageFileName');
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            preview.src = e.target.result;
+            fname.textContent = file.name;
+            wrapper.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+
+        function handleCropImageDrop(event) {
+          event.preventDefault();
+          document.getElementById('cropImageDropZone').style.borderColor = 'var(--border,#2a3d55)';
+          var file = event.dataTransfer.files[0];
+          if (!file || !file.type.startsWith('image/')) return;
+          var dt = new DataTransfer();
+          dt.items.add(file);
+          document.getElementById('cropImage').files = dt.files;
+          previewCropImage({ target: { files: [file] } });
+        }
+
+        /* ── Clear Form ── */
+        function clearCropForm() {
+          document.getElementById('cropName').value = '';
+          document.getElementById('cropCategory').value = '';
+          document.getElementById('cropQty').value = '';
+          document.getElementById('cropPrice').value = '';
+          document.getElementById('cropDesc').value = '';
+          document.getElementById('cropImage').value = '';
+          document.getElementById('cropImagePreviewWrapper').style.display = 'none';
+          document.getElementById('cropFormMsg').style.display = 'none';
+        }
+
+        /* ── Basic front-end validation ── */
+        function submitCropForm() {
+          var name = document.getElementById('cropName').value.trim();
+          var category = document.getElementById('cropCategory').value;
+          var qty = document.getElementById('cropQty').value;
+          var price = document.getElementById('cropPrice').value;
+          var msg = document.getElementById('cropFormMsg');
+
+          if (!name || !category || !qty || !price) {
+            msg.style.display = 'block';
+            msg.style.background = 'rgba(239,68,68,0.12)';
+            msg.style.color = '#f87171';
+            msg.style.border = '1px solid rgba(239,68,68,0.25)';
+            msg.textContent = '⚠️  Please fill in all required fields before publishing.';
+            return;
+          }
+          msg.style.display = 'block';
+          msg.style.background = 'rgba(34,197,94,0.12)';
+          msg.style.color = '#4ade80';
+          msg.style.border = '1px solid rgba(34,197,94,0.25)';
+          msg.textContent = '✅  Crop listing submitted! Awaiting admin approval.';
+        }
+      </script>
+
+      <!-- Filter Bar -->
+      <div class="section-header">
+        <div class="section-title" data-translate="allListings">All Listings</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-primary" style="font-size:12px; padding:7px 14px;" data-translate="all">All</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
+            data-translate="active">Active</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
+            data-translate="pending">Pending</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
+            data-translate="sold">Sold</button>
+        </div>
+      </div>
+
+      <!-- Crop Cards -->
+      <div class="card-grid">
+        {% for crop in all_crops %}
+        <div class="product-card">
+
+          <div class="card-img">
+            <img src="{{ crop.image.url }}" alt="{{ crop.cropname }}">
+            {% if crop.is_approved %}
+            <span class="card-badge" data-translate="Aapproved">Aapproved</span>
+            {%else%}
+            <span class="card-badge red" data-translate="Not Aapproved">Not Aapproved</span>
+            {%endif%}
+          </div>
+
+          <div class="card-body">
+            <div class="card-name" data-translate="{{crop.cropname}}">
+              {{crop.cropname}}
+            </div>
+
+            <div class="card-meta">
+              {{crop.description}}
+            </div>
+
+            <div class="card-price-row">
+              <div class="card-price">
+                ₹{{crop.price}}
+                <span class="unit" data-translate="kg">/ kg</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn btn-secondary" data-translate="edit">
+                Edit
+              </button>
+
+              <button class="btn btn-primary" data-translate="viewOrders">
+                View Orders
+              </button>
+
+              <button class="btn btn-danger" data-translate="remove">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+
+  <!-- Language Modal -->
+
+
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/language.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+
+</html>

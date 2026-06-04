@@ -1,0 +1,629 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krushi Mitro 🌾 — Community Chat | Krushi Mitra</title>
+  <meta name="description" content="Krushi Mitro group chat — farmers discussing crops, prices, weather and government schemes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/community_chat.css' %}">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══════════════════ FARMER SIDEBAR ═══════════════════ -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Farmer panel navigation">
+
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 2v20"/><path d="M2 12h20"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+        <span>Tools</span>
+      </a>
+
+      <div class="nav-section-title">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span>Blogs &amp; Reviews</span>
+      </a>
+
+      <!-- Active page -->
+      <a href="{% url 'community_chat' %}" class="nav-item active" id="nav-chat" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/>
+          <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z"/>
+        </svg>
+        <span>Krushi Mitro 🌾</span>
+        <span class="nav-badge" aria-label="12 unread">12</span>
+      </a>
+
+      <div class="nav-section-title">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span>Language</span>
+        <span class="lang-current-label">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+  <!-- ═══════════════════ WHATSAPP CHAT ═══════════════════ -->
+  <div class="wa-chat">
+
+    <!-- Mobile topbar -->
+    <div class="topbar" id="mobileTopbar">
+      <button class="wa-icon-btn wa-menu-btn" id="menuToggle" aria-label="Open menu" style="display:flex;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <span class="topbar-title">Krushi Mitro 🌾</span>
+      <div style="width:38px;"></div>
+    </div>
+
+    <!-- ── Group Header ── -->
+    <div class="wa-header" id="waHeader">
+
+      <!-- Mobile hamburger inside header on desktop -->
+      <button class="wa-icon-btn wa-menu-btn" id="menuToggleHdr" aria-label="Open menu"
+              style="display:none; margin-right:4px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="wa-header-avatar" title="Krushi Mitro Group" role="img" aria-label="Group icon">🌾</div>
+
+      <div class="wa-header-info">
+        <div class="wa-header-name">Krushi Mitro 🌾</div>
+        <div class="wa-header-sub" id="headerSub">1,250 members · 150 online</div>
+      </div>
+
+      <div class="wa-header-actions">
+        <button class="wa-icon-btn" title="Video call" aria-label="Video call" id="vcBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </button>
+        <button class="wa-icon-btn" title="Voice call" aria-label="Voice call" id="callBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.6 1.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </button>
+        <button class="wa-icon-btn" title="Search" aria-label="Search messages" id="searchBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <button class="wa-icon-btn" title="More options" aria-label="More options" id="moreBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="5"  r="1.3" fill="currentColor"/>
+            <circle cx="12" cy="12" r="1.3" fill="currentColor"/>
+            <circle cx="12" cy="19" r="1.3" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ MESSAGES ══ -->
+    <div class="wa-body" id="waBody" role="log" aria-live="polite" aria-label="Group messages">
+
+      <!-- ─── Yesterday ─── -->
+      <div class="wa-date-badge"><span>Yesterday</span></div>
+
+      <!-- System -->
+      <div class="wa-notice">
+        <span>🔒 Messages are end-to-end encrypted. Welcome to <strong>Krushi Mitro</strong>!</span>
+      </div>
+
+      <!-- ░░░ RECEIVED — Ramesh Patel ░░░ -->
+      <div class="wa-msg recv" id="m1">
+        <div class="wa-av av-g" title="Ramesh Patel">RP</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#4ade80;">Ramesh Patel</div>
+          <div class="wa-bubble">
+            Has anyone used <span class="kw">organic fertilizer</span> for cotton this season?
+            I heard Jeevamrutha is giving very good results in Saurashtra this year. 🌱
+            <div class="wa-meta">
+              <span class="wa-time">9:15 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">👍 <span class="wa-reaction-count">14</span></span>
+            <span class="wa-reaction">🌱 <span class="wa-reaction-count">6</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Sunita Devi ░░░ -->
+      <div class="wa-msg recv" id="m2">
+        <div class="wa-av av-p" title="Sunita Devi">SD</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#c084fc;">Sunita Devi</div>
+          <div class="wa-bubble">
+            Yes Ramesh bhai! Used it on 5 acres last season. Cotton quality improved a lot
+            and input cost came down by <span class="kw">30%</span>. Highly recommended! 🙏
+            <div class="wa-meta">
+              <span class="wa-time">9:22 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">❤️ <span class="wa-reaction-count">22</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Mohan Kumar ░░░ -->
+      <div class="wa-msg recv" id="m3">
+        <div class="wa-av av-a" title="Mohan Kumar">MK</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#fbbf24;">Mohan Kumar</div>
+          <div class="wa-bubble">
+            📢 <strong>Market Update:</strong> Today's cotton price at Rajkot APMC is
+            <span class="kw">₹7,150 per quintal</span>. Yesterday was ₹7,080.
+            Small rise expected next week — good time to hold! 📈
+            <div class="wa-meta">
+              <span class="wa-time">9:45 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">🔥 <span class="wa-reaction-count">31</span></span>
+            <span class="wa-reaction">📈 <span class="wa-reaction-count">18</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ SENT — You ░░░ -->
+      <div class="wa-msg sent" id="m4">
+        <div class="wa-bubble-wrap">
+          <div class="wa-bubble">
+            Thanks Mohan bhai! 🙌 Sunita ji, is Jeevamrutha available ready-made or
+            do we prepare it ourselves at the farm?
+            <div class="wa-meta">
+              <span class="wa-time">9:48 AM</span>
+              <span class="wa-ticks">✓✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Arjun Desai ░░░ -->
+      <div class="wa-msg recv" id="m5">
+        <div class="wa-av av-t" title="Arjun Desai">AD</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#2dd4bf;">Arjun Desai</div>
+          <div class="wa-bubble">
+            ☁️ <strong>Weather Alert — Gujarat:</strong> Heavy rain expected tomorrow in
+            <span class="kw">Saurashtra &amp; South Gujarat</span>.
+            Winds 30–40 km/h. Please store harvested crops safely today! ⚠️
+            <div class="wa-meta">
+              <span class="wa-time">10:05 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">⚠️ <span class="wa-reaction-count">45</span></span>
+            <span class="wa-reaction">🌧️ <span class="wa-reaction-count">27</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Priya Sharma ░░░ -->
+      <div class="wa-msg recv" id="m6">
+        <div class="wa-av av-r" title="Priya Sharma">PS</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#fb7185;">Priya Sharma</div>
+          <div class="wa-bubble">
+            😟 My wheat crop is showing <span class="kw">yellow leaves</span> in the
+            middle section. Nitrogen was fine last week. Could it be zinc or iron
+            deficiency? Any experienced farmer advice? 🙏
+            <div class="wa-meta">
+              <span class="wa-time">10:18 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">🙏 <span class="wa-reaction-count">9</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Vikram Singh ░░░ -->
+      <div class="wa-msg recv" id="m7">
+        <div class="wa-av av-b" title="Vikram Singh">VS</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#60a5fa;">Vikram Singh</div>
+          <div class="wa-bubble">
+            Priya ji, yellowing between green veins is
+            <span class="kw">interveinal chlorosis</span> — usually Iron or Manganese
+            deficiency. Try foliar spray of Ferrous Sulphate (0.5%). Check soil pH too —
+            should be 6.0–7.0 for wheat. Results in 8–10 days. 🌾
+            <div class="wa-meta">
+              <span class="wa-time">10:27 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">👏 <span class="wa-reaction-count">17</span></span>
+            <span class="wa-reaction">✅ <span class="wa-reaction-count">11</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ SENT — You ░░░ -->
+      <div class="wa-msg sent" id="m8">
+        <div class="wa-bubble-wrap">
+          <div class="wa-bubble">
+            Vikram bhai is right Priya ji! Same happened to my wheat last year.
+            Zinc + Iron combo spray worked in 10 days. Add small dose of DAP too. ✅🌾
+            <div class="wa-meta">
+              <span class="wa-time">10:30 AM</span>
+              <span class="wa-ticks">✓✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Today ─── -->
+      <div class="wa-date-badge"><span>Today</span></div>
+
+      <div class="wa-notice">
+        <span>🎉 3 new farmers joined Krushi Mitro today</span>
+      </div>
+
+      <!-- ░░░ RECEIVED — Anita Verma ░░░ -->
+      <div class="wa-msg recv" id="m9">
+        <div class="wa-av av-i" title="Anita Verma">AV</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#818cf8;">Anita Verma</div>
+          <div class="wa-bubble">
+            📣 <strong>PM Kisan Update:</strong> The
+            <span class="kw">17th Installment of ₹2,000</span> is being credited today
+            to all registered farmers. Check your bank account or Kisan portal! 🏦🇮🇳
+            <div class="wa-meta">
+              <span class="wa-time">8:00 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">🎉 <span class="wa-reaction-count">89</span></span>
+            <span class="wa-reaction">❤️ <span class="wa-reaction-count">54</span></span>
+            <span class="wa-reaction">🙏 <span class="wa-reaction-count">37</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Mohan Kumar ░░░ -->
+      <div class="wa-msg recv" id="m10">
+        <div class="wa-av av-a" title="Mohan Kumar">MK</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#fbbf24;">Mohan Kumar</div>
+          <div class="wa-bubble">
+            💧 <strong>PMKSY Subsidy:</strong> Govt offering
+            <span class="kw">80% subsidy on drip &amp; sprinkler irrigation</span>
+            for small farmers. Last date: <strong>30 June 2026</strong>.
+            Apply at local agriculture office or pmksy.gov.in 🚜
+            <div class="wa-meta">
+              <span class="wa-time">9:10 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">🔔 <span class="wa-reaction-count">62</span></span>
+            <span class="wa-reaction">👆 <span class="wa-reaction-count">28</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ SENT — You ░░░ -->
+      <div class="wa-msg sent" id="m11">
+        <div class="wa-bubble-wrap">
+          <div class="wa-bubble">
+            Excellent news everyone! 🌟 This group is truly helpful.
+            Mohan bhai, please share the direct PMKSY portal link too. Thank you all! 🙏🌾
+            <div class="wa-meta">
+              <span class="wa-time">9:14 AM</span>
+              <span class="wa-ticks">✓✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Sunita Devi ░░░ -->
+      <div class="wa-msg recv" id="m12">
+        <div class="wa-av av-p" title="Sunita Devi">SD</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#c084fc;">Sunita Devi</div>
+          <div class="wa-bubble">
+            Ramesh bhai, Jeevamrutha is prepared on the farm itself! 🐄<br>
+            Mix: <span class="kw">Cow Dung 10 kg + Cow Urine 5 L + Jaggery 1 kg + Pulse Flour 1 kg</span>
+            in 200L water. Ferment 48 hours. Use 200L per acre.
+            Posting the full video tomorrow! 🌿
+            <div class="wa-meta">
+              <span class="wa-time">9:20 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">💯 <span class="wa-reaction-count">33</span></span>
+            <span class="wa-reaction">🌱 <span class="wa-reaction-count">19</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ RECEIVED — Bharat Patel ░░░ -->
+      <div class="wa-msg recv" id="m13">
+        <div class="wa-av av-o" title="Bharat Patel">BP</div>
+        <div class="wa-bubble-wrap">
+          <div class="wa-sender" style="color:#fb923c;">Bharat Patel 🆕</div>
+          <div class="wa-bubble">
+            Namaste everyone! I'm from Anand, Gujarat — growing sugarcane &amp; groundnut
+            on 8 acres. Happy to join this amazing farmer community! 🙏🌾
+            <div class="wa-meta">
+              <span class="wa-time">9:31 AM</span>
+            </div>
+          </div>
+          <div class="wa-reactions">
+            <span class="wa-reaction">👋 <span class="wa-reaction-count">41</span></span>
+            <span class="wa-reaction">🌾 <span class="wa-reaction-count">23</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ░░░ SENT — You ░░░ -->
+      <div class="wa-msg sent" id="m14">
+        <div class="wa-bubble-wrap">
+          <div class="wa-bubble">
+            Welcome Bharat bhai! 🎉 This group has amazing farmers who help each other.
+            Ask freely — we're all here for each other! 💪🌾
+            <div class="wa-meta">
+              <span class="wa-time">9:34 AM</span>
+              <span class="wa-ticks">✓✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── Typing indicator ─── -->
+      <div class="wa-typing" id="waTyping" aria-label="Arjun is typing">
+        <div class="wa-typing-av" title="Arjun Desai">AD</div>
+        <div class="wa-typing-bubble">
+          <div class="wa-dots">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /wa-body -->
+
+    <!-- ══ INPUT BAR ══ -->
+    <div class="wa-input-bar" role="form" aria-label="Message input">
+
+      <!-- Emoji -->
+      <button class="wa-input-icon" id="emojiBtn" title="Emoji" aria-label="Emoji">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+        </svg>
+      </button>
+
+      <!-- Attachment -->
+      <button class="wa-input-icon" id="attachBtn" title="Attach" aria-label="Attach file">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+        </svg>
+      </button>
+
+      <!-- Text input pill -->
+      <div class="wa-input-wrap">
+        <input
+          type="text"
+          class="wa-input"
+          id="msgInput"
+          placeholder="Type a message"
+          autocomplete="off"
+          maxlength="600"
+          aria-label="Type a message"
+        />
+        <button class="wa-emoji-btn" id="smileyBtn" title="Emoji picker" aria-label="Emoji">😊</button>
+      </div>
+
+      <!-- Send / Mic -->
+      <button class="wa-send-btn" id="sendBtn" title="Send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+
+    </div><!-- /wa-input-bar -->
+
+  </div><!-- /wa-chat -->
+
+</div><!-- /app-shell -->
+
+<!-- ════════ SCRIPT ════════ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ── Sidebar toggle ── */
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebarOverlay');
+  var btns    = [document.getElementById('menuToggle'), document.getElementById('menuToggleHdr')];
+
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    overlay.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  function toggle() { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); }
+
+  btns.forEach(function (b) { if (b) b.addEventListener('click', toggle); });
+  if (overlay) overlay.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSidebar(); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 900) closeSidebar(); }, { passive: true });
+
+  /* Show hamburger inside WA header on tablet/mobile */
+  function handleResize() {
+    var hdrBtn = document.getElementById('menuToggleHdr');
+    if (!hdrBtn) return;
+    hdrBtn.style.display = window.innerWidth <= 900 ? 'flex' : 'none';
+  }
+  handleResize();
+  window.addEventListener('resize', handleResize, { passive: true });
+
+  /* ── Auto-scroll to bottom ── */
+  var waBody = document.getElementById('waBody');
+  if (waBody) waBody.scrollTop = waBody.scrollHeight;
+
+  /* ── Hide typing indicator after 3.5 s ── */
+  var typing = document.getElementById('waTyping');
+  if (typing) {
+    setTimeout(function () {
+      typing.style.transition = 'opacity .4s ease, transform .4s ease';
+      typing.style.opacity = '0';
+      typing.style.transform = 'translateY(6px)';
+      setTimeout(function () { typing.style.display = 'none'; }, 420);
+    }, 3500);
+  }
+
+  /* ── Send (UI only) — appends new sent bubble ── */
+  var input   = document.getElementById('msgInput');
+  var sendBtn = document.getElementById('sendBtn');
+
+  function now12() {
+    var d = new Date();
+    var h = d.getHours(), m = d.getMinutes(), ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+  }
+
+  function sendMessage() {
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+
+    /* Build bubble */
+    var row = document.createElement('div');
+    row.className = 'wa-msg sent';
+    row.innerHTML =
+      '<div class="wa-bubble-wrap">' +
+        '<div class="wa-bubble">' +
+          escapeHTML(text) +
+          '<div class="wa-meta">' +
+            '<span class="wa-time">' + now12() + '</span>' +
+            '<span class="wa-ticks">✓</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    /* Insert before typing indicator */
+    var typingRow = document.getElementById('waTyping');
+    if (typingRow) {
+      waBody.insertBefore(row, typingRow);
+    } else {
+      waBody.appendChild(row);
+    }
+
+    input.value = '';
+    if (waBody) waBody.scrollTop = waBody.scrollHeight;
+
+    /* Simulate delivery tick after 1 s */
+    setTimeout(function () {
+      var tick = row.querySelector('.wa-ticks');
+      if (tick) tick.textContent = '✓✓';
+    }, 1000);
+  }
+
+  function escapeHTML(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+  }
+
+  /* ── Emoji cycle on smiley click ── */
+  var emojis = ['🌾','😊','🙏','👍','💯','🔥','🎉','🌧️','📈','🐄','✅','❤️'];
+  var ei = 0;
+  var smileyBtn = document.getElementById('smileyBtn');
+  if (smileyBtn) {
+    smileyBtn.addEventListener('click', function () {
+      if (input) { input.value += emojis[ei % emojis.length]; ei++; input.focus(); }
+    });
+  }
+
+}());
+</script>
+
+</body>
+</html>

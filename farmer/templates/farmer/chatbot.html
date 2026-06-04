@@ -1,0 +1,550 @@
+{%load static%}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chatbot – Krushi Mitra 🌱</title>
+  <meta name="description"
+    content="Krushi Mitra AI — your smart farming assistant for crop advice, weather updates, and market insights." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,700;1,500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/chatbot.css' %}">
+</head>
+
+<body>
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title" data-translate="main">Main</div>
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span data-translate="home">Home</span>
+      </a>
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span data-translate="crops">My Crops</span>
+      </a>
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span data-translate="tools">Tools</span>
+      </a>
+      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item active" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span data-translate="chatbot">AI Chatbot 🌱</span>
+      </a>
+      <div class="nav-section-title" data-translate="community">Community</div>
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span data-translate="blogsReviews">Blogs & Reviews</span>
+      </a>
+      <div class="nav-section-title" data-translate="account">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span data-translate="profile">Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span data-translate="lang">Language</span>
+        <span class="lang-current-label" data-translate="en">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  
+  <!-- ════════════ MAIN ════════════ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <div class="page-title" data-translate="krushiMitraAi">Krushi Mitra AI 🌱</div>
+          <div class="breadcrumb" data-translate="dashboardAiChatbot">Dashboard / AI Chatbot</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" id="notifBtn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="badge"></span>
+        </button>
+        <div class="avatar" title="My Profile" data-translate="r">R</div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content chatbot-page-content">
+      <div class="chatbot-container">
+
+        <!-- ══════════════════════════════════
+             CHATBOT HEADER  (scrollable internally)
+             ══════════════════════════════════ -->
+        
+        <!-- /chatbot-header -->
+
+        <!-- ══════════════════════════════════
+             MESSAGES AREA
+             ══════════════════════════════════ -->
+        <div class="chatbot-messages" id="chatMessages">
+          <div class="chatbot-header">
+          <!-- Ambient layers -->
+          <div class="header-scan"></div>
+          <div class="chatbot-header-orbs">
+            <span class="orb orb-1"></span>
+            <span class="orb orb-2"></span>
+            <span class="orb orb-3"></span>
+            <span class="orb orb-4"></span>
+          </div>
+
+          <!-- Main row -->
+          <div class="chatbot-header-content">
+            <div class="chatbot-header-left">
+              <!-- Bot icon -->
+              <div class="chatbot-header-icon">
+                <span class="bot-icon-bg"></span>
+                <span class="bot-icon-emoji">🌱</span>
+                <span class="bot-icon-ring"></span>
+                <span class="bot-icon-ring-2"></span>
+              </div>
+              <!-- Title -->
+              <div class="chatbot-header-text">
+                <h2>
+                  Krushi Mitra
+                  <span class="ai-badge" data-translate="ai">AI</span>
+                </h2>
+                <p data-translate="smartFarmingAssistantPoweredBy">Smart Farming Assistant · Powered by AI</p>
+              </div>
+            </div>
+
+            <div class="chatbot-header-right">
+              <!-- Status -->
+              <div class="chatbot-status">
+                <span class="chatbot-status-dot"></span>
+                <span data-translate="online">Online</span>
+              </div>
+              <!-- Clear chat -->
+              <a href="{% url 'clear_history' %}" class="header-action-btn" title="Clear Chat History">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+              </a>
+              <!-- Settings -->
+              <button class="header-action-btn" title="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                  <circle cx="12" cy="12" r="3" />
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Context pills (scrollable on overflow) -->
+          <div class="header-context-pills">
+            <span class="context-pill" data-translate="kharifSeason">🌾 Kharif Season</span>
+            <span class="context-pill" data-translate="gujarat">📍 Gujarat</span>
+            <span class="context-pill" data-translate="34c">🌡 34°C</span>
+            <span class="context-pill">💧 Humidity 62%</span>
+            <span class="context-pill">🌙 Monsoon Alert</span>
+          </div>
+        </div>
+
+          <!-- Date Separator -->
+          <div class="chat-date-separator">
+            <span>Today · <span id="currentDate"></span></span>
+          </div>
+
+          <!-- Welcome Message -->
+          <div class="chat-message bot" style="--delay:0.08s">
+            <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+              <div class="chat-bubble bot-bubble">
+                <div class="bubble-content">
+                  🙏 Namaste, <strong>{{ uid.name }}</strong>! Main aapka smart farming assistant hoon.
+                  <br><br>
+                  Main aapki in cheezon mein madad kar sakta hoon:
+                  <div class="capability-grid">
+                    <div class="cap-item"><span>🌾</span> Fasal Salah</div>
+                    <div class="cap-item"><span>🌦</span> Mausam</div>
+                    <div class="cap-item"><span>💰</span> Mandi Bhav</div>
+                    <div class="cap-item"><span>🐛</span> Keeda Rog</div>
+                    <div class="cap-item"><span>💧</span> Sinchai</div>
+                    <div class="cap-item"><span>🌱</span> Beej Salah</div>
+                  </div>
+                </div>
+                <div class="chat-time" id="welcomeTime"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Dynamic Messages ── -->
+          {% for message in messages %}
+          {% if message.role == 'user' %}
+          <div class="chat-message user" style="--delay:0.04s">
+            <div class="chat-bubble-wrap">
+              <div class="chat-bubble user-bubble">
+                <div class="bubble-content">{{ message.content }}</div>
+                <div class="chat-time">{{ message.created_at|default:"" }}</div>
+              </div>
+            </div>
+            <div class="chat-avatar user-avatar"><span data-translate="r">R</span></div>
+          </div>
+          {% else %}
+          <div class="chat-message bot" style="--delay:0.04s">
+            <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+              <div class="chat-bubble bot-bubble">
+                <div class="bubble-content">{{ message.content|safe }}</div>
+                <div class="chat-time">{{ message.created_at|default:"" }}</div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+
+          <!-- Typing Indicator (hidden by default) -->
+          <div class="chat-message bot typing-message" id="typingIndicator" style="display:none; --delay:0s">
+            <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+              <div class="chat-bubble bot-bubble typing-bubble">
+                <div class="typing-dots">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /chatbot-messages -->
+
+        <!-- ══════════════════════════════════
+             QUICK CHIPS
+             ══════════════════════════════════ -->
+        <div class="chatbot-chips-bar">
+          <div class="chips-label" data-translate="quickAsk">Quick Ask:</div>
+          <div class="chips-scroll">
+            <button class="chip" onclick="useChip(this)" data-translate="fasalSalah">🌾 Fasal Salah</button>
+            <button class="chip" onclick="useChip(this)" data-translate="aajKaMausam">🌦 Aaj ka Mausam</button>
+            <button class="chip" onclick="useChip(this)" data-translate="mandiBhav">💰 Mandi Bhav</button>
+            <button class="chip" onclick="useChip(this)" data-translate="keedaRog">🐛 Keeda Rog</button>
+            <button class="chip" onclick="useChip(this)" data-translate="sinchaiTips">💧 Sinchai Tips</button>
+            <button class="chip" onclick="useChip(this)" data-translate="beejChunav">🌱 Beej Chunav</button>
+            <button class="chip" onclick="useChip(this)">🧪 Mitti Pareeksha</button>
+            <button class="chip" onclick="useChip(this)">📦 Fasal Bhandar</button>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════
+             INPUT FORM
+             ══════════════════════════════════ -->
+        <form method="POST" action="{% url 'farmer_chatbot' %}" enctype="multipart/form-data" id="chatForm">
+          {% csrf_token %}
+          <div class="chatbot-input-area">
+
+            <!-- Feature row -->
+            <div class="input-features">
+              <button type="button" class="feat-btn" title="Attach Image" id="attachBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+              </button>
+              <button type="button" class="feat-btn" title="Voice Input" id="voiceBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                  <line x1="12" y1="19" x2="12" y2="23" />
+                  <line x1="8" y1="23" x2="16" y2="23" />
+                </svg>
+              </button>
+              <button type="button" class="feat-btn" title="Translate" id="translateBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Text input -->
+            <div class="chatbot-input-wrapper">
+              <textarea class="chatbot-input" placeholder="Apna sawal poochein... (Ask anything about farming)"
+                id="chatInput" name="Question" rows="1" onkeydown="handleKeyDown(event)" oninput="autoResize(this)"
+                maxlength="500"></textarea>
+              <button class="chatbot-send-btn" title="Send Message" type="submit" id="chatSendBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="input-footer">
+              <span class="input-hint" data-translate="enterToSendShiftenterForNewLin">
+                Enter to send · Shift+Enter for new line
+              </span>
+              <span class="char-count" id="charCount">0 / 500</span>
+            </div>
+
+          </div>
+        </form>
+        <!-- /chatForm -->
+
+      </div>
+    </div>
+    <!-- /page-content -->
+
+  </div>
+  <!-- /main -->
+
+  <!-- ════════════ SCRIPTS ════════════ -->
+  <script>
+    /* ── Init ── */
+    (function () {
+      const now = new Date();
+      document.getElementById('welcomeTime').textContent =
+        now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('currentDate').textContent =
+        now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      scrollToBottom();
+    })();
+
+    /* ── Scroll ── */
+    function scrollToBottom() {
+      const msgs = document.getElementById('chatMessages');
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    /* ── Chip click ── */
+    function useChip(el) {
+      const input = document.getElementById('chatInput');
+      // Strip leading emoji + space
+      const text = el.textContent.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]+\s*/u, '').trim();
+      input.value = text;
+      input.focus();
+      autoResize(input);
+      updateCharCount(text);
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-active'));
+      el.classList.add('chip-active');
+    }
+
+    /* ── Auto-resize textarea ── */
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+      updateCharCount(el.value);
+    }
+
+    function updateCharCount(val) {
+      const cc = document.getElementById('charCount');
+      cc.textContent = `${val.length} / 500`;
+      cc.style.color = val.length > 450 ? '#e53935' : '';
+    }
+
+    /* ── Enter key submit ── */
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const submitEvent = new Event('submit', { cancelable: true });
+        document.getElementById('chatForm').dispatchEvent(submitEvent);
+      }
+    }
+
+    /* ── Typing indicator ── */
+    function showTyping() {
+      const ti = document.getElementById('typingIndicator');
+      if (ti) {
+        ti.style.display = 'flex';
+        scrollToBottom();
+      }
+    }
+
+    function hideTyping() {
+      const ti = document.getElementById('typingIndicator');
+      if (ti) {
+        ti.style.display = 'none';
+      }
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function appendUserMessage(text) {
+      const chatMessages = document.getElementById('chatMessages');
+      const timeStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-message user';
+      msgDiv.style.setProperty('--delay', '0s');
+      msgDiv.innerHTML = `
+        <div class="chat-bubble-wrap">
+          <div class="chat-bubble user-bubble">
+            <div class="bubble-content">${escapeHtml(text)}</div>
+            <div class="chat-time">${timeStr}</div>
+          </div>
+        </div>
+        <div class="chat-avatar user-avatar"><span data-translate="r">R</span></div>
+      `;
+      const typingIndicator = document.getElementById('typingIndicator');
+      chatMessages.insertBefore(msgDiv, typingIndicator);
+      scrollToBottom();
+    }
+
+    function appendBotMessage(htmlContent) {
+      const chatMessages = document.getElementById('chatMessages');
+      const timeStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-message bot';
+      msgDiv.style.setProperty('--delay', '0s');
+      msgDiv.innerHTML = `
+        <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+        <div class="chat-bubble-wrap">
+          <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+          <div class="chat-bubble bot-bubble">
+            <div class="bubble-content">${htmlContent}</div>
+            <div class="chat-time">${timeStr}</div>
+          </div>
+        </div>
+      `;
+      const typingIndicator = document.getElementById('typingIndicator');
+      chatMessages.insertBefore(msgDiv, typingIndicator);
+      scrollToBottom();
+    }
+
+    /* ── Form submit ── */
+    document.getElementById('chatForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      // Add user message to UI immediately
+      appendUserMessage(val);
+
+      // Clear input and resize
+      input.value = '';
+      autoResize(input);
+
+      // Show typing indicator
+      showTyping();
+
+      // Send the request asynchronously
+      const formData = new FormData(this);
+      formData.set('Question', val);
+
+      fetch(this.action || window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(data => {
+        hideTyping();
+        if (data.status === 'success') {
+          appendBotMessage(data.bot_message);
+        } else {
+          appendBotMessage(`Error: ${data.message || 'Something went wrong.'}`);
+        }
+      })
+      .catch(error => {
+        hideTyping();
+        appendBotMessage(`Error: Unable to connect to the server.`);
+        console.error('Error:', error);
+      });
+    });
+
+    /* ── Chip active-state auto-clear after 3s ── */
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        setTimeout(() => chip.classList.remove('chip-active'), 3000);
+      });
+    });
+  </script>
+
+  <!-- Language Modal -->
+  <div class="lang-modal-overlay" id="langModal">
+    <div class="lang-modal">
+      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
+      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">
+        Select your preferred language for the interface
+      </div>
+      <div class="lang-grid" id="langGrid"></div>
+      <div class="lang-modal-actions">
+        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
+        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/language.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+
+</html>

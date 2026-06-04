@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Management – Admin | Krushi Mitra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .order-timeline{display:flex;gap:0;align-items:flex-start;margin:16px 0;}
+    .order-timeline-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+    .order-timeline-step:not(:last-child)::after{content:'';position:absolute;top:18px;left:50%;width:100%;height:2px;background:var(--gray-200);z-index:0;}
+    .order-timeline-step.done::after{background:var(--primary-mid);}
+    .order-step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:1;background:var(--gray-100);color:var(--gray-400);border:2px solid var(--gray-200);}
+    .order-step-dot.done{background:var(--primary-mid);color:var(--white);border-color:var(--primary-mid);}
+    .order-step-dot.current{background:var(--amber);color:var(--white);border-color:var(--amber);}
+    .order-step-label{font-size:10px;color:var(--gray-400);font-weight:600;margin-top:6px;text-align:center;}
+    .order-step-label.done{color:var(--primary-mid);}
+    .order-step-label.current{color:var(--amber);}
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
+    <div class="brand">Krushi Mitra <span>Admin Panel</span><div class="admin-badge">Admin</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Main</div>
+    <a href="{% url 'subadmin:dashboard' %}" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <div class="nav-section-title">User Management</div>
+    <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item"><i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
+    <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item"><i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
+    <div class="nav-section-title">Operations</div>
+    <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item"><i class="fa-solid fa-id-card"></i><span>KYC Approval</span><span class="nav-badge">8</span></a>
+    <a href="{% url 'subadmin:order_management' %}" class="nav-item active"><i class="fa-solid fa-cart-flatbed"></i><span>Order Management</span></a>
+    <a href="{% url 'subadmin:product_approval' %}" class="nav-item"><i class="fa-solid fa-seedling"></i><span>Product Approval</span><span class="nav-badge amber">5</span></a>
+    <div class="nav-section-title">Support</div>
+    <a href="{% url 'subadmin:support_tickets' %}" class="nav-item"><i class="fa-solid fa-headset"></i><span>Support Tickets</span><span class="nav-badge">3</span></a>
+    <div class="nav-section-title">More</div>
+    <a href="{% url 'subadmin:reports' %}" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Reports & Analytics</span></a>
+    <a href="{% url 'subadmin:profile' %}" class="nav-item"><i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
+    <a href="{% url 'subadmin:system_settings' %}" class="nav-item"><i class="fa-solid fa-gears"></i><span>System Settings</span></a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-user-av">A</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Amit Sharma</div><div class="sidebar-user-role">Super Admin</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
+      <div>
+        <div class="page-title">Order Management</div>
+        <div class="breadcrumb">Dashboard / Operations / Orders</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
+      <div class="avatar">A</div>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Summary Cards -->
+    <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));">
+      <div class="stat-card"><div class="stat-icon amber"><i class="fa-solid fa-clock"></i></div><div class="stat-info"><div class="stat-value">142</div><div class="stat-label">Pending</div><div class="stat-change down">Needs action</div></div></div>
+      <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-truck"></i></div><div class="stat-info"><div class="stat-value">387</div><div class="stat-label">Shipped</div><div class="stat-change up">↑ 42 today</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div><div class="stat-info"><div class="stat-value">7,840</div><div class="stat-label">Delivered</div><div class="stat-change up">↑ All time</div></div></div>
+      <div class="stat-card"><div class="stat-icon red"><i class="fa-solid fa-rotate-left"></i></div><div class="stat-info"><div class="stat-value">118</div><div class="stat-label">Cancelled</div><div class="stat-change down">↓ 5 today</div></div></div>
+      <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-indian-rupee-sign"></i></div><div class="stat-info"><div class="stat-value">₹42.6L</div><div class="stat-label">Total Revenue</div><div class="stat-change up">↑ 18%</div></div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-group">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-all-orders">All Orders</button>
+        <button class="tab-btn" data-tab="tab-pending-orders">⏳ Pending (142)</button>
+        <button class="tab-btn" data-tab="tab-shipped-orders">🚚 Shipped (387)</button>
+        <button class="tab-btn" data-tab="tab-delivered-orders">✅ Delivered</button>
+        <button class="tab-btn" data-tab="tab-cancelled-orders">❌ Cancelled</button>
+      </div>
+
+      <div class="tab-content active" id="tab-all-orders">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="search-input-wrap"><i class="fa-solid fa-magnifying-glass"></i><input type="text" class="search-input" id="searchInput" placeholder="Search by order ID, buyer, crop…"/></div>
+          <select class="filter-select"><option>All Status</option><option>Pending</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select>
+          <select class="filter-select"><option>All Time</option><option>Today</option><option>This Week</option><option>This Month</option></select>
+          <button class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-export"></i> Export</button>
+        </div>
+
+        <div class="table-wrapper">
+          <div class="table-header"><div class="table-title">All Orders <span style="font-size:12px;color:var(--gray-400);font-weight:400;">(8,921 records)</span></div></div>
+          <table>
+            <thead><tr><th>Order ID</th><th>Buyer</th><th>Farmer</th><th>Crop / Product</th><th>Qty</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>#ORD-9021</strong></td>
+                <td><div class="user-cell"><div class="user-av blue" style="width:28px;height:28px;font-size:11px;">S</div><div class="user-name">Suresh Kumar</div></div></td>
+                <td>Ramesh Patel</td><td>Basmati Rice</td><td>50 kg</td><td>₹2,500</td><td>04 May 2026</td>
+                <td><span class="status-pill delivered">Delivered</span></td>
+                <td><div class="action-btns"><button class="btn btn-blue btn-sm" data-modal-open="orderDetailModal"><i class="fa-solid fa-eye"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-9020</strong></td>
+                <td><div class="user-cell"><div class="user-av purple" style="width:28px;height:28px;font-size:11px;">P</div><div class="user-name">Priya Sharma</div></div></td>
+                <td>Mahesh Kumar</td><td>Wheat (Grade A)</td><td>100 kg</td><td>₹3,200</td><td>04 May 2026</td>
+                <td><span class="status-pill pending">Pending</span></td>
+                <td><div class="action-btns"><button class="btn btn-blue btn-sm" data-modal-open="orderDetailModal"><i class="fa-solid fa-eye"></i></button><button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button><button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-xmark"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-9019</strong></td>
+                <td><div class="user-cell"><div class="user-av teal" style="width:28px;height:28px;font-size:11px;">R</div><div class="user-name">Rakesh Patel</div></div></td>
+                <td>Arjun Desai</td><td>Maize</td><td>200 kg</td><td>₹4,800</td><td>03 May 2026</td>
+                <td><span class="status-pill shipped">Shipped</span></td>
+                <td><div class="action-btns"><button class="btn btn-blue btn-sm" data-modal-open="orderDetailModal"><i class="fa-solid fa-eye"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-9018</strong></td>
+                <td><div class="user-cell"><div class="user-av amber" style="width:28px;height:28px;font-size:11px;">A</div><div class="user-name">Anita Verma</div></div></td>
+                <td>Vikas Co-op</td><td>Cotton Bale</td><td>5 bales</td><td>₹7,500</td><td>03 May 2026</td>
+                <td><span class="status-pill delivered">Delivered</span></td>
+                <td><div class="action-btns"><button class="btn btn-blue btn-sm" data-modal-open="orderDetailModal"><i class="fa-solid fa-eye"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-9017</strong></td>
+                <td><div class="user-cell"><div class="user-av blue" style="width:28px;height:28px;font-size:11px;">V</div><div class="user-name">Vikram Singh</div></div></td>
+                <td>Suresh Yadav</td><td>Mustard Seeds</td><td>30 kg</td><td>₹1,800</td><td>02 May 2026</td>
+                <td><span class="status-pill cancelled">Cancelled</span></td>
+                <td><div class="action-btns"><button class="btn btn-blue btn-sm" data-modal-open="orderDetailModal"><i class="fa-solid fa-eye"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><strong>#ORD-9016</strong></td>
+                <td><div class="user-cell"><div class="user-av green" style="width:28px;height:28px;font-size:11px;">M</div><div class="user-name">Meena Joshi</div></div></td>
+                <td>Ramesh Patel</td><td>Tomatoes (Bulk)</td><td>80 kg</td><td>₹2,800</td><td>01 May 2026</td>
+                <td><span class="status-pill processing">Processing</span></td>
+                <td><div class="action-btns"><button class="btn btn-blue btn-sm" data-modal-open="orderDetailModal"><i class="fa-solid fa-eye"></i></button><button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <span style="font-size:13px;color:var(--gray-400);">Showing 1–6 of 8,921 orders</span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm">← Prev</button>
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-secondary btn-sm">2</button>
+            <button class="btn btn-secondary btn-sm">3</button>
+            <button class="btn btn-secondary btn-sm">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-pending-orders">
+        <div class="empty-state"><i class="fa-solid fa-clock"></i><p>Showing pending orders — same table with Pending filter applied.</p></div>
+      </div>
+      <div class="tab-content" id="tab-shipped-orders">
+        <div class="empty-state"><i class="fa-solid fa-truck"></i><p>Showing shipped orders — same table with Shipped filter applied.</p></div>
+      </div>
+      <div class="tab-content" id="tab-delivered-orders">
+        <div class="empty-state"><i class="fa-solid fa-circle-check"></i><p>Showing delivered orders.</p></div>
+      </div>
+      <div class="tab-content" id="tab-cancelled-orders">
+        <div class="empty-state"><i class="fa-solid fa-ban"></i><p>Showing cancelled orders.</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="orderDetailModal">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-receipt" style="color:var(--primary-mid);margin-right:8px;"></i>Order #ORD-9021</div>
+      <button class="modal-close" data-modal-close="orderDetailModal"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <!-- Timeline -->
+      <div class="order-timeline">
+        <div class="order-timeline-step done">
+          <div class="order-step-dot done"><i class="fa-solid fa-check"></i></div>
+          <div class="order-step-label done">Placed</div>
+        </div>
+        <div class="order-timeline-step done">
+          <div class="order-step-dot done"><i class="fa-solid fa-check"></i></div>
+          <div class="order-step-label done">Confirmed</div>
+        </div>
+        <div class="order-timeline-step done">
+          <div class="order-step-dot done"><i class="fa-solid fa-check"></i></div>
+          <div class="order-step-label done">Shipped</div>
+        </div>
+        <div class="order-timeline-step">
+          <div class="order-step-dot done"><i class="fa-solid fa-check"></i></div>
+          <div class="order-step-label done">Delivered</div>
+        </div>
+      </div>
+      <div class="form-grid" style="margin-top:16px;">
+        <div class="form-group"><label>Buyer</label><input class="form-control" value="Suresh Kumar" disabled/></div>
+        <div class="form-group"><label>Farmer</label><input class="form-control" value="Ramesh Patel" disabled/></div>
+        <div class="form-group"><label>Product</label><input class="form-control" value="Basmati Rice" disabled/></div>
+        <div class="form-group"><label>Quantity</label><input class="form-control" value="50 kg" disabled/></div>
+        <div class="form-group"><label>Amount</label><input class="form-control" value="₹2,500" disabled/></div>
+        <div class="form-group"><label>Payment</label><input class="form-control" value="UPI · Paid" disabled/></div>
+        <div class="form-group"><label>Placed On</label><input class="form-control" value="04 May 2026" disabled/></div>
+        <div class="form-group"><label>Delivered On</label><input class="form-control" value="05 May 2026" disabled/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close="orderDetailModal">Close</button>
+      <button class="btn btn-primary"><i class="fa-solid fa-print"></i> Print Invoice</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/admin.js' %}"></script>
+</body>
+</html>

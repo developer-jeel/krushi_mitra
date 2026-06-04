@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>System Settings – Admin Panel | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--gray-100); }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-info { flex: 1; }
+    .toggle-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+    .toggle-desc { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+    .switch { position: relative; display: inline-block; width: 42px; height: 22px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--gray-200); transition: .3s; border-radius: 20px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--primary-mid); }
+    input:checked + .slider:before { transform: translateX(20px); }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
+    <div class="brand">Krushi Mitra <span>Admin Panel</span><div class="admin-badge">Admin</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Main</div>
+    <a href="{% url 'subadmin:dashboard' %}" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <div class="nav-section-title">User Management</div>
+    <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item"><i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
+    <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item"><i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
+    <div class="nav-section-title">Operations</div>
+    <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item"><i class="fa-solid fa-id-card"></i><span>KYC Approval</span><span class="nav-badge">8</span></a>
+    <a href="{% url 'subadmin:order_management' %}" class="nav-item"><i class="fa-solid fa-cart-flatbed"></i><span>Order Management</span></a>
+    <a href="{% url 'subadmin:product_approval' %}" class="nav-item"><i class="fa-solid fa-seedling"></i><span>Product Approval</span><span class="nav-badge amber">5</span></a>
+    <div class="nav-section-title">Support</div>
+    <a href="{% url 'subadmin:support_tickets' %}" class="nav-item"><i class="fa-solid fa-headset"></i><span>Support Tickets</span><span class="nav-badge">3</span></a>
+    <div class="nav-section-title">More</div>
+    <a href="{% url 'subadmin:reports' %}" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Reports & Analytics</span></a>
+    <a href="{% url 'subadmin:profile' %}" class="nav-item"><i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
+    <a href="{% url 'subadmin:system_settings' %}" class="nav-item active"><i class="fa-solid fa-gears"></i><span>System Settings</span></a>
+  </nav>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
+      <div><div class="page-title">System Settings ⚙️</div><div class="breadcrumb">Admin / Global Configuration</div></div>
+    </div>
+    <div class="topbar-right">
+      <div class="avatar">A</div>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <div class="settings-grid">
+      
+      <!-- Platform Fees -->
+      <div class="profile-section">
+        <div class="profile-section-title">Platform Fees & Commission</div>
+        <div class="form-grid" style="grid-template-columns: 1fr;">
+          <div class="form-group">
+            <label>Farmer Commission (%)</label>
+            <input type="number" class="form-control" value="2.5" step="0.1"/>
+          </div>
+          <div class="form-group">
+            <label>Buyer Service Fee (Fixed ₹)</label>
+            <input type="number" class="form-control" value="50"/>
+          </div>
+          <div class="form-group">
+            <label>Tax Percentage (GST %)</label>
+            <input type="number" class="form-control" value="5"/>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:20px;">Save Fee Settings</button>
+      </div>
+
+      <!-- System Maintenance -->
+      <div class="profile-section">
+        <div class="profile-section-title">System Control</div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-title">Maintenance Mode</div>
+            <div class="toggle-desc">Temporarily disable user access to the platform</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-title">New Farmer Registration</div>
+            <div class="toggle-desc">Allow/Disallow new farmer signups</div>
+          </div>
+          <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-title">Product Auto-Approval</div>
+            <div class="toggle-desc">Bypass manual review for trusted sellers</div>
+          </div>
+          <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Global Search Config -->
+      <div class="profile-section">
+        <div class="profile-section-title">Marketplace Defaults</div>
+        <div class="form-grid" style="grid-template-columns: 1fr;">
+          <div class="form-group">
+            <label>Default Currency</label>
+            <select class="form-control">
+              <option selected>INR (₹) - Indian Rupee</option>
+              <option>USD ($) - US Dollar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Search Radius (km)</label>
+            <input type="number" class="form-control" value="50"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Settings -->
+      <div class="profile-section">
+        <div class="profile-section-title">Security & API</div>
+        <div class="form-group">
+          <label>Google Maps API Key</label>
+          <input type="password" class="form-control" value="AIzaSyA_placeholder_key_12345"/>
+        </div>
+        <div class="form-group" style="margin-top:15px;">
+          <label>Two-Factor Authentication (Admin)</label>
+          <div class="toggle-row">
+            <div class="toggle-desc">Require 2FA for all admin logins</div>
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:12px;">
+      <button class="btn btn-secondary">Restore Defaults</button>
+      <button class="btn btn-primary" style="padding:12px 30px;">Save All System Settings</button>
+    </div>
+
+  </div><!-- /page-content -->
+</div><!-- /main -->
+
+<script src="{% static 'js/admin.js' %}"></script>
+</body>
+</html>

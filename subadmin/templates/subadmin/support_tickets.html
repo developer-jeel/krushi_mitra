@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support Tickets – Admin Panel | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .ticket-priority { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; margin-left: 8px; }
+    .priority-high { background: #fee2e2; color: #dc2626; }
+    .priority-medium { background: #ffedd5; color: #ea580c; }
+    .priority-low { background: #f3f4f6; color: #4b5563; }
+    .chat-bubble { padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; max-width: 85%; font-size: 13.5px; line-height: 1.5; }
+    .bubble-user { background: var(--gray-100); color: var(--gray-800); align-self: flex-start; border-bottom-left-radius: 2px; }
+    .bubble-admin { background: var(--primary-pale); color: var(--primary-mid); align-self: flex-end; border-bottom-right-radius: 2px; }
+    .chat-container { display: flex; flex-direction: column; height: 350px; overflow-y: auto; padding: 10px; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
+    <div class="brand">Krushi Mitra <span>Admin Panel</span><div class="admin-badge">Admin</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Main</div>
+    <a href="{% url 'subadmin:dashboard' %}" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <div class="nav-section-title">User Management</div>
+    <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item"><i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
+    <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item"><i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
+    <div class="nav-section-title">Operations</div>
+    <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item"><i class="fa-solid fa-id-card"></i><span>KYC Approval</span><span class="nav-badge">8</span></a>
+    <a href="{% url 'subadmin:order_management' %}" class="nav-item"><i class="fa-solid fa-cart-flatbed"></i><span>Order Management</span></a>
+    <a href="{% url 'subadmin:product_approval' %}" class="nav-item"><i class="fa-solid fa-seedling"></i><span>Product Approval</span><span class="nav-badge amber">5</span></a>
+    <div class="nav-section-title">Support</div>
+    <a href="{% url 'subadmin:support_tickets' %}" class="nav-item active"><i class="fa-solid fa-headset"></i><span>Support Tickets</span><span class="nav-badge">3</span></a>
+    <div class="nav-section-title">More</div>
+    <a href="{% url 'subadmin:reports' %}" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Reports & Analytics</span></a>
+    <a href="{% url 'subadmin:profile' %}" class="nav-item"><i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
+    <a href="{% url 'subadmin:system_settings' %}" class="nav-item"><i class="fa-solid fa-gears"></i><span>System Settings</span></a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-user-av">A</div>
+      <div class="sidebar-user-info"><div class="sidebar-user-name">Amit Sharma</div><div class="sidebar-user-role">Super Admin</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
+      <div><div class="page-title">Support & Helpdesk 🎧</div><div class="breadcrumb">Admin / Support Tickets</div></div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-icon-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
+      <div class="avatar">A</div>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="search-input-wrap"><i class="fa-solid fa-magnifying-glass"></i><input type="text" class="search-input" placeholder="Search by Ticket ID or User..."/></div>
+      <select class="filter-select"><option>All Status</option><option>Open</option><option>In Progress</option><option>Resolved</option></select>
+      <select class="filter-select"><option>All Priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Ticket ID</th>
+            <th>User</th>
+            <th>Subject</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#TK-5021</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-av green">R</div>
+                <div><div class="user-name">Ramesh Patel</div><div class="user-sub">Farmer</div></div>
+              </div>
+            </td>
+            <td>Payment not received for Order #9012</td>
+            <td><span class="ticket-priority priority-high">High</span></td>
+            <td><span class="status-pill pending">Open</span></td>
+            <td>2 hours ago</td>
+            <td><button class="btn btn-primary btn-sm open-ticket" data-id="5021">View & Reply</button></td>
+          </tr>
+          <tr>
+            <td>#TK-5020</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-av blue">S</div>
+                <div><div class="user-name">Suresh Kumar</div><div class="user-sub">Buyer</div></div>
+              </div>
+            </td>
+            <td>Unable to upload KYC documents</td>
+            <td><span class="ticket-priority priority-medium">Medium</span></td>
+            <td><span class="status-pill processing">In Progress</span></td>
+            <td>5 hours ago</td>
+            <td><button class="btn btn-primary btn-sm open-ticket" data-id="5020">View & Reply</button></td>
+          </tr>
+          <tr>
+            <td>#TK-5019</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-av purple">P</div>
+                <div><div class="user-name">Priya Sharma</div><div class="user-sub">Buyer</div></div>
+              </div>
+            </td>
+            <td>Incorrect weight of delivered wheat</td>
+            <td><span class="ticket-priority priority-high">High</span></td>
+            <td><span class="status-pill pending">Open</span></td>
+            <td>1 day ago</td>
+            <td><button class="btn btn-primary btn-sm open-ticket" data-id="5019">View & Reply</button></td>
+          </tr>
+          <tr>
+            <td>#TK-5018</td>
+            <td>
+              <div class="user-cell">
+                <div class="user-av amber">V</div>
+                <div><div class="user-name">Vikram Singh</div><div class="user-sub">Farmer</div></div>
+              </div>
+            </td>
+            <td>Product listing rejected query</td>
+            <td><span class="ticket-priority priority-low">Low</span></td>
+            <td><span class="status-pill delivered">Resolved</span></td>
+            <td>2 days ago</td>
+            <td><button class="btn btn-secondary btn-sm open-ticket" data-id="5018">View History</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /page-content -->
+</div><!-- /main -->
+
+<!-- Reply Modal -->
+<div class="modal-overlay" id="ticketModal">
+  <div class="modal" style="max-width: 650px;">
+    <div class="modal-header">
+      <div class="modal-title">Ticket #TK-5021: Payment Issue</div>
+      <button class="modal-close" data-close="ticketModal"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="chat-container">
+        <div class="chat-bubble bubble-user">Hello, I haven't received payment for my wheat order #9012 which was delivered 3 days ago. Please check.</div>
+        <div class="chat-bubble bubble-admin">Hello Ramesh, We are looking into this. It seems there is a small delay from the bank's side.</div>
+        <div class="chat-bubble bubble-user">Okay, how long will it take? I need to buy seeds for the next crop.</div>
+      </div>
+      <div class="form-group">
+        <label>Your Reply</label>
+        <textarea class="form-control" rows="3" placeholder="Type your message to the user..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div style="margin-right:auto;">
+        <select class="filter-select" style="padding: 6px 12px;">
+          <option>Open</option>
+          <option selected>In Progress</option>
+          <option>Resolved</option>
+        </select>
+      </div>
+      <button class="btn btn-secondary" data-close="ticketModal">Close</button>
+      <button class="btn btn-primary">Send Message</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/admin.js' %}"></script>
+<script>
+  document.querySelectorAll('.open-ticket').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('ticketModal').classList.add('open');
+    });
+  });
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.close).classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

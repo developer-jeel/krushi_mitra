@@ -1,0 +1,54 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/login.css' %}">
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra Logo" onerror="this.style.display='none'" />
+    </div>
+    <p class="subtitle" data-translate="loginToYourAccount">Login to your account</p>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <p style="color: red; text-align: center; font-size: 14px;">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="contact" data-translate="contactNumber">Contact Number</label>
+        <input data-translate="10digitMobileNumber" type="tel" name="contact" id="contact" placeholder="10-digit mobile number" maxlength="10" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password" data-translate="password">Password</label>
+        <input data-translate="enterPassword" type="password" name="password" id="password" placeholder="Enter password" required />
+      </div>
+
+      <button type="submit" id="loginBtn" data-translate="login">Login</button>
+
+    </form>
+
+    <p class="link">Don't have an account? <a href="{% url 'register' %}" data-translate="registerHere">Register here</a></p>
+
+  </div>
+
+</body>
+
+</html>

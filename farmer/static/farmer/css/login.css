@@ -1,0 +1,330 @@
+/* ══════════════════════════════════════════════════════════════
+   KRUSHI MITRA — PREMIUM GLASSMORPHISM LOGIN v3.0
+   ══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Animated dark background ── */
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', -apple-system, sans-serif;
+  padding: 20px;
+  background: #070f09;
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animated gradient orbs */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 20% 20%, rgba(22,101,52,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(21,128,61,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(245,158,11,0.05) 0%, transparent 50%),
+    linear-gradient(135deg, #030a04 0%, #0a1a0d 50%, #071009 100%);
+  animation: bgPulse 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Grain texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes bgPulse {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(8deg); }
+}
+
+/* ── Glass Card ── */
+.card {
+  background: rgba(13, 34, 17, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  width: 100%;
+  max-width: 420px;
+  padding: 38px 32px 30px;
+  border-radius: 22px;
+  border: 1px solid rgba(34,197,94,0.20);
+  box-shadow:
+    0 24px 64px rgba(0,0,0,0.65),
+    0 0 0 1px rgba(34,197,94,0.08) inset,
+    0 1px 0 rgba(34,197,94,0.15) inset;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  overflow: hidden;
+}
+
+/* Shimmer top line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34,197,94,0.6), rgba(245,158,11,0.3), transparent);
+  border-radius: 9999px;
+}
+
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(32px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Logo ── */
+.logo { margin-bottom: 8px; }
+
+.logo img {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 16px rgba(34,197,94,0.25));
+  animation: logoGlow 3s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+  0%, 100% { filter: drop-shadow(0 0 12px rgba(34,197,94,0.20)); }
+  50%       { filter: drop-shadow(0 0 24px rgba(34,197,94,0.40)); }
+}
+
+/* ── App name badge ── */
+.card h1, .card .app-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+
+/* ── Subtitle ── */
+.subtitle {
+  font-size: 13px;
+  color: rgba(34,197,94,0.65);
+  margin-bottom: 26px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* ── Messages ── */
+.messages {
+  background: rgba(239,68,68,0.10);
+  border: 1px solid rgba(239,68,68,0.20);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.messages p {
+  color: #fca5a5 !important;
+  font-size: 13.5px !important;
+  text-align: center !important;
+  font-weight: 500;
+}
+
+/* ── Form group ── */
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.form-group label, .field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(34,197,94,0.75);
+  margin-bottom: 7px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid rgba(34,197,94,0.15);
+  border-radius: 10px;
+  outline: none;
+  color: rgba(255,255,255,0.88);
+  background: rgba(13, 34, 17, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  -webkit-appearance: none;
+}
+
+.form-group input::placeholder { color: rgba(255,255,255,0.22); }
+
+.form-group input:focus {
+  border-color: rgba(34,197,94,0.45);
+  background: rgba(13, 34, 17, 0.75);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.12), 0 0 16px rgba(34,197,94,0.08);
+}
+
+/* ── Error ── */
+.error {
+  display: none;
+  font-size: 12px;
+  color: #f87171;
+  margin-top: 5px;
+  font-weight: 500;
+}
+.error.show { display: block; }
+
+/* ── Submit button ── */
+button[type="submit"], #loginBtn {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(34,197,94,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+}
+
+button[type="submit"]:hover, #loginBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(34,197,94,0.50), inset 0 1px 0 rgba(255,255,255,0.20);
+}
+
+button[type="submit"]:active, #loginBtn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+button[type="submit"]:disabled {
+  background: rgba(255,255,255,0.10);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ── Bottom link ── */
+.link {
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.40);
+}
+
+.link a {
+  color: rgba(34,197,94,0.85);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.link a:hover {
+  color: #4ade80;
+  text-decoration: underline;
+}
+
+/* ── Radio group (register) ── */
+.radio-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.radio-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.radio-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 10px;
+  border: 1px solid rgba(34,197,94,0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  background: rgba(13,34,17,0.40);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  user-select: none;
+}
+
+.radio-card:hover {
+  border-color: rgba(34,197,94,0.35);
+  background: rgba(34,197,94,0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(34,197,94,0.12);
+}
+
+.role-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34,197,94,0.10);
+  border-radius: 50%;
+  color: rgba(34,197,94,0.80);
+  border: 1px solid rgba(34,197,94,0.15);
+  transition: background 0.22s ease, color 0.22s ease;
+}
+
+.role-icon svg { width: 20px; height: 20px; }
+
+.role-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.50);
+  transition: color 0.22s ease;
+}
+
+.radio-card.selected {
+  border-color: rgba(34,197,94,0.50);
+  background: rgba(34,197,94,0.12);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.10), 0 0 24px rgba(34,197,94,0.12);
+}
+
+.radio-card.selected .role-icon {
+  background: linear-gradient(135deg, #15803d, #22c55e);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(34,197,94,0.35);
+}
+
+.radio-card.selected .role-name {
+  color: rgba(34,197,94,0.90);
+  font-weight: 700;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

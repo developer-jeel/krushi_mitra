@@ -1,0 +1,472 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Tool – Farmer Panel | Krushi Mitra</title>
+  <meta name="description" content="List your farming tool for sale or rent on Krushi Mitra." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <style>
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+      background: var(--white);
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      width: fit-content;
+      border: 1px solid var(--gray-200);
+    }
+
+    .tab-btn {
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-400);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--green-main), var(--green-light));
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(46, 125, 50, 0.25);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: var(--green-pale);
+      color: var(--green-dark);
+    }
+
+    /* ── Form Styles ── */
+    .add-tool-form {
+      max-width: 700px;
+    }
+
+    .form-section {
+      background: var(--glass-card);
+      backdrop-filter: var(--blur-md);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      border: 1px solid var(--glass-border-light);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+    }
+
+    .form-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.90);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.60);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--glass-input);
+      border: 1.5px solid var(--glass-border-light);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: rgba(255,255,255,0.90);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255,255,255,0.25);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--em-500);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+    }
+
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='%2322c55e' d='M5.5 7L0 0h11z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    .form-group select option {
+      background: var(--dark-800);
+      color: rgba(255,255,255,0.90);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--glass-border);
+      border-radius: 14px;
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: rgba(34,197,94,0.03);
+      position: relative;
+    }
+
+    .upload-area:hover {
+      border-color: var(--em-500);
+      background: rgba(34,197,94,0.06);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-area p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.50);
+      margin-top: 6px;
+    }
+
+    .upload-area p strong {
+      color: var(--em-400);
+    }
+
+    .upload-previews {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .upload-previews img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1.5px solid var(--glass-border);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title" data-translate="main">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span data-translate="home">Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span data-translate="crops">My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item active" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span data-translate="tools">Tools</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span data-translate="chatbot">AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="community">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span data-translate="blogsReviews">Blogs &amp; Reviews</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="account">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span data-translate="profile">Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════ MAIN ════════════ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <div class="page-title">Add New Tool 🔧</div>
+          <div class="breadcrumb">Dashboard / Tools / Add Tool</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="badge"></span>
+        </button>
+        <div class="avatar">R</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <a href="{% url 'farmer_tools' %}" class="tab-btn">Browse Tools</a>
+        <a href="{% url 'add_tool' %}" class="tab-btn active">Add Tool</a>
+      </div>
+
+      <!-- Add Tool Form -->
+      <div class="add-tool-form">
+
+        <!-- Tool Information -->
+        <div class="form-section">
+          <div class="form-section-title">🔧 Tool Information</div>
+
+          <div class="form-group">
+            <label for="tool_name">Tool Name *</label>
+            <input type="text" id="tool_name" name="tool_name" placeholder="e.g. Mini Power Tiller" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tool_category">Category *</label>
+              <select id="tool_category" name="category">
+                <option value="" disabled selected>Select category</option>
+                <option value="tractors">🚜 Tractors & Machinery</option>
+                <option value="hand_tools">🔨 Hand Tools</option>
+                <option value="irrigation">💧 Irrigation</option>
+                <option value="sprayers">🌿 Sprayers</option>
+                <option value="storage">🏗️ Storage</option>
+                <option value="soil_testing">🌱 Soil Testing</option>
+                <option value="harvesting">🌾 Harvesting</option>
+                <option value="other">📦 Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tool_condition">Condition *</label>
+              <select id="tool_condition" name="condition">
+                <option value="" disabled selected>Select condition</option>
+                <option value="excellent">Excellent</option>
+                <option value="good">Good</option>
+                <option value="average">Average</option>
+                <option value="poor">Poor</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="tool_desc">Description</label>
+            <textarea id="tool_desc" name="description" rows="3"
+              placeholder="Describe your tool — model, specs, usage history..."></textarea>
+          </div>
+        </div>
+
+        <!-- Pricing & Listing -->
+        <div class="form-section">
+          <div class="form-section-title">💰 Pricing & Listing</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="listing_type">Listing Type *</label>
+              <select id="listing_type" name="listing_type">
+                <option value="sell">For Sale</option>
+                <option value="rent">For Rent</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tool_price">Price (₹) *</label>
+              <input type="number" id="tool_price" name="price" placeholder="e.g. 12500" min="0" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tool_years">Years Used</label>
+              <input type="number" id="tool_years" name="years_used" placeholder="e.g. 3" min="0" max="50" />
+            </div>
+            <div class="form-group">
+              <label for="tool_location">Location *</label>
+              <input type="text" id="tool_location" name="location" placeholder="e.g. Anand, Gujarat" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool Images -->
+        <div class="form-section">
+          <div class="form-section-title">📸 Tool Images</div>
+
+          <label class="upload-area" for="tool_images">
+            <div style="font-size:32px; margin-bottom:4px;">📷</div>
+            <p><strong>Click to upload</strong> photos of your tool</p>
+            <p style="font-size:11px; color:rgba(255,255,255,0.30);">PNG, JPG, WEBP · max 5 MB each</p>
+            <input type="file" id="tool_images" name="images" accept="image/*" multiple />
+          </label>
+          <div class="upload-previews" id="imagePreviews"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <a href="{% url 'farmer_tools' %}" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Publish Listing
+          </button>
+        </div>
+
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+
+  <!-- Language Modal -->
+  <div class="lang-modal-overlay" id="langModal">
+    <div class="lang-modal">
+      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
+      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language
+        for the interface</div>
+      <div class="lang-grid" id="langGrid"></div>
+      <div class="lang-modal-actions">
+        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
+        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Preview Script -->
+  <script>
+    document.getElementById('tool_images').addEventListener('change', function () {
+      const container = document.getElementById('imagePreviews');
+      container.innerHTML = '';
+      Array.from(this.files).slice(0, 5).forEach(function (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Preview';
+          container.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/language.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+
+</html>

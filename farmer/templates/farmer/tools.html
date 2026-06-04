@@ -1,0 +1,393 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tools – Farmer Panel | Krushi Mitra</title>
+  <meta name="description" content="Buy, sell and rent farming tools on Krushi Mitra." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <style>
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+      background: var(--white);
+      padding: 6px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      width: fit-content;
+      border: 1px solid var(--gray-200);
+    }
+
+    .tab-btn {
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-400);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--green-main), var(--green-light));
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(46, 125, 50, 0.25);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: var(--green-pale);
+      color: var(--green-dark);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title" data-translate="main">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span data-translate="home">Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span data-translate="crops">My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item active" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span data-translate="tools">Tools</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span data-translate="chatbot">AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="community">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span data-translate="blogsReviews">Blogs & Reviews</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="account">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span data-translate="profile">Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════ MAIN ════════════ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <div class="page-title" data-translate="toolsMarketplace">Tools Marketplace 🔧</div>
+          <div class="breadcrumb" data-translate="dashboardTools">Dashboard / Tools</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-right">
+
+          <!-- ADD THIS ↓ -->
+          <a href="{% url 'tool_price' %}" style="
+    display:inline-flex; align-items:center; gap:6px;
+    background:linear-gradient(135deg,var(--green-main),var(--green-light));
+    color:#fff; font-size:12px; font-weight:600;
+    padding:7px 14px; border-radius:20px;
+    text-decoration:none; letter-spacing:0.03em;
+    box-shadow:0 3px 10px rgba(46,125,50,0.3);
+    transition:box-shadow 0.2s,transform 0.2s;
+    white-space:nowrap;"
+            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(46,125,50,0.4)'"
+            onmouseout="this.style.transform='';this.style.boxShadow='0 3px 10px rgba(46,125,50,0.3)'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v20M2 12h20" />
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+            Price Predictor
+          </a>
+          <!-- END ADD -->
+
+          <button class="topbar-icon-btn" title="Notifications">
+            ...
+            <button class="topbar-icon-btn" title="Notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+              <span class="badge"></span>
+            </button>
+            <div class="avatar" data-translate="r">R</div>
+        </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-browse" data-translate="browseTools">Browse Tools</button>
+        <button class="tab-btn" id="tab-sell" data-translate="sellRentTool">Sell / Rent Tool</button>
+        <button class="tab-btn" id="tab-my" data-translate="myListings">My Listings</button>
+        <a href="{% url 'add_tool' %}" class="tab-btn" id="tab-my" data-translate="">add tool</a>
+      </div>
+
+      <!-- Browse Tools -->
+      <div id="panel-browse">
+        <!-- Filter Row -->
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center;">
+          <input data-translate="searchTools" type="text" placeholder="Search tools..."
+            style="padding:9px 16px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; font-family:inherit; outline:none; min-width:220px; background:var(--white);" />
+          <select
+            style="padding:9px 14px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; font-family:inherit; outline:none; background:var(--white); color:var(--gray-800);">
+            <option data-translate="allCategories">All Categories</option>
+            <option data-translate="tractorsMachinery">Tractors & Machinery</option>
+            <option data-translate="handTools">Hand Tools</option>
+            <option data-translate="irrigation">Irrigation</option>
+            <option data-translate="storage">Storage</option>
+            <option data-translate="sprayers">Sprayers</option>
+          </select>
+          <select
+            style="padding:9px 14px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; font-family:inherit; outline:none; background:var(--white); color:var(--gray-800);">
+            <option data-translate="buyRent">Buy & Rent</option>
+            <option data-translate="forSale">For Sale</option>
+            <option data-translate="forRent">For Rent</option>
+          </select>
+        </div>
+
+        <div class="card-grid">
+
+          <div class="product-card">
+            <div class="card-img"
+              style="background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center; font-size:60px;">
+              🚜</div>
+            <div class="card-body">
+              <span class="card-badge"
+                style="position:relative; top:auto; left:auto; display:inline-block; margin-bottom:8px;"
+                data-translate="forRent">For Rent</span>
+              <div class="card-name" data-translate="miniPowerTiller">Mini Power Tiller</div>
+              <div class="card-meta" data-translate="machineryGoodConditionAnandGuj">Machinery · Good condition · Anand,
+                Gujarat</div>
+              <div class="card-price-row">
+                <div class="card-price">₹800 <span class="unit" data-translate="day">/ day</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" data-translate="viewDetails">View Details</button>
+                <button class="btn btn-primary" data-translate="rentNow">Rent Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-img"
+              style="background:linear-gradient(135deg,#f093fb,#f5576c); display:flex; align-items:center; justify-content:center; font-size:60px;">
+              💧</div>
+            <div class="card-body">
+              <span class="card-badge amber"
+                style="position:relative; top:auto; left:auto; display:inline-block; margin-bottom:8px;"
+                data-translate="forSale">For Sale</span>
+              <div class="card-name" data-translate="dripIrrigationKit1Acre">Drip Irrigation Kit (1 Acre)</div>
+              <div class="card-meta" data-translate="irrigationBrandNewIncludesFitt">Irrigation · Brand new · Includes
+                fittings</div>
+              <div class="card-price-row">
+                <div class="card-price" data-translate="12500">₹12,500</div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" data-translate="viewDetails">View Details</button>
+                <button class="btn btn-amber" data-translate="buyNow">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-img"
+              style="background:linear-gradient(135deg,#4facfe,#00f2fe); display:flex; align-items:center; justify-content:center; font-size:60px;">
+              🌿</div>
+            <div class="card-body">
+              <span class="card-badge"
+                style="position:relative; top:auto; left:auto; display:inline-block; margin-bottom:8px;"
+                data-translate="forRent">For Rent</span>
+              <div class="card-name" data-translate="backpackSprayer16l">Backpack Sprayer 16L</div>
+              <div class="card-meta" data-translate="sprayersStainlessSteelLightwei">Sprayers · Stainless steel ·
+                Lightweight</div>
+              <div class="card-price-row">
+                <div class="card-price">₹150 <span class="unit" data-translate="day">/ day</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" data-translate="viewDetails">View Details</button>
+                <button class="btn btn-primary" data-translate="rentNow">Rent Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-img"
+              style="background:linear-gradient(135deg,#43e97b,#38f9d7); display:flex; align-items:center; justify-content:center; font-size:60px;">
+              🔨</div>
+            <div class="card-body">
+              <span class="card-badge amber"
+                style="position:relative; top:auto; left:auto; display:inline-block; margin-bottom:8px;"
+                data-translate="forSale">For Sale</span>
+              <div class="card-name" data-translate="farmingHandToolSet12Pcs">Farming Hand Tool Set (12 pcs)</div>
+              <div class="card-meta" data-translate="handToolsStainlessSteelHeavyDu">Hand Tools · Stainless steel ·
+                Heavy duty</div>
+              <div class="card-price-row">
+                <div class="card-price" data-translate="2200">₹2,200</div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" data-translate="viewDetails">View Details</button>
+                <button class="btn btn-amber" data-translate="buyNow">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-img"
+              style="background:linear-gradient(135deg,#fa709a,#fee140); display:flex; align-items:center; justify-content:center; font-size:60px;">
+              🏗️</div>
+            <div class="card-body">
+              <span class="card-badge"
+                style="position:relative; top:auto; left:auto; display:inline-block; margin-bottom:8px;"
+                data-translate="forRent">For Rent</span>
+              <div class="card-name" data-translate="grainStorageSilo5Tonne">Grain Storage Silo (5 Tonne)</div>
+              <div class="card-meta" data-translate="storageWeatherproofModularDesi">Storage · Weatherproof · Modular
+                design</div>
+              <div class="card-price-row">
+                <div class="card-price">₹2,000 <span class="unit" data-translate="month">/ month</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" data-translate="viewDetails">View Details</button>
+                <button class="btn btn-primary" data-translate="rentNow">Rent Now</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-card">
+            <div class="card-img"
+              style="background:linear-gradient(135deg,#a8caba,#5d4e75); display:flex; align-items:center; justify-content:center; font-size:60px;">
+              🌱</div>
+            <div class="card-body">
+              <span class="card-badge amber"
+                style="position:relative; top:auto; left:auto; display:inline-block; margin-bottom:8px;"
+                data-translate="forSale">For Sale</span>
+              <div class="card-name" data-translate="soilTestingKit">Soil Testing Kit</div>
+              <div class="card-meta" data-translate="labKit100TestsNpkPhMoisture">Lab Kit · 100 tests · NPK + pH +
+                moisture</div>
+              <div class="card-price-row">
+                <div class="card-price" data-translate="850">₹850</div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" data-translate="viewDetails">View Details</button>
+                <button class="btn btn-amber" data-translate="buyNow">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+
+  <!-- Language Modal -->
+  <div class="lang-modal-overlay" id="langModal">
+    <div class="lang-modal">
+      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
+      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language
+        for the interface</div>
+      <div class="lang-grid" id="langGrid"></div>
+      <div class="lang-modal-actions">
+        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
+        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
+      </div>
+    </div>
+  </div>
+  <div class="lang-grid">
+    <div class="lang-item selected"><span class="lang-flag">🇮🇳</span> हिन्दी</div>
+    <div class="lang-item"><span class="lang-flag">🇬🇧</span> English</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> ગુજરાતી</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> मराठी</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> ਪੰਜਾਬੀ</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> தமிழ்</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> తెలుగు</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> বাংলা</div>
+    <div class="lang-item"><span class="lang-flag">🇮🇳</span> ಕನ್ನಡ</div>
+  </div>
+  <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
+    <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
+    <button class="btn btn-primary" data-translate="applyLanguage">Apply Language</button>
+  </div>
+  </div>
+  </div>
+
+
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/language.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+
+</html>

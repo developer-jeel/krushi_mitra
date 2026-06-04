@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – Admin Panel | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'js/admin.js' %}"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f7fa;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .login-container {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-logo img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+    .login-container h2 {
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: #2c3e50;
+      font-weight: 700;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #4b5563;
+      font-weight: 500;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #2e7d32;
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
+    }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .login-btn:hover {
+      background: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
+    </div>
+    <h2>Admin Login</h2>
+    <form action="{% url 'subadmin:dashboard' %}" method="get">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
+      </div>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+  </div>
+</body>
+</html>
