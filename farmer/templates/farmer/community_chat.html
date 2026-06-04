@@ -139,7 +139,7 @@
 
       <div class="wa-header-info">
         <div class="wa-header-name">Krushi Mitro 🌾</div>
-        <div class="wa-header-sub" id="headerSub">1,250 members · 150 online</div>
+        <div class="wa-header-sub" id="headerSub">1,250 members ·{{ user_count }} online</div>
       </div>
 
       <div class="wa-header-actions">
@@ -186,7 +186,7 @@
       <div class="wa-msg recv" id="m1">
         <div class="wa-av av-g" title="Ramesh Patel">RP</div>
         <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#4ade80;">Ramesh Patel</div>
+          <div class="wa-sender" style="color:#4ade80;">{{message.sender.name}}</div>
           <div class="wa-bubble">
             {{message.message}}
             <div class="wa-meta">
@@ -269,7 +269,7 @@
 </div><!-- /app-shell -->
 
 <!-- ════════ SCRIPT ════════ -->
-<script>
+<!-- <script>
 (function () {
   'use strict';
 
@@ -391,7 +391,7 @@
   }
 
 }());
-</script>
+</script> -->
 
 </body>
 </html>

@@ -324,10 +324,12 @@ def community_chat(request):
     all_messages = community_message.objects.all()
     all_users = User.objects.all()
     user_count = len([user for user in all_users if user.is_active])
-    context = {'uid': uid, 'messages':  all_messages, 'user_count': user_count}
+    member_count = len([user for user in all_users if user.role == 'Farmer'])
+    context = {'uid': uid, 'messages':  all_messages, 'user_count': user_count, 'member_count': member_count}
     if request.method == "POST":
         sender = User.objects.get(id = uid.id)
-        message_content = request.POST.get('message')
+        # message_content = request.POST.get('message')
+        message_content = request.POST['message']
         print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++MESSAGE : " , message_content)
 
         user_message = community_message.objects.create(
