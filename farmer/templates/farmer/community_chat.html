@@ -181,15 +181,16 @@
       </div>
 
       <!-- ░░░ RECEIVED — Ramesh Patel ░░░ -->
+      {%for message in messages%}
+      {% if message.sender != uid %}
       <div class="wa-msg recv" id="m1">
         <div class="wa-av av-g" title="Ramesh Patel">RP</div>
         <div class="wa-bubble-wrap">
           <div class="wa-sender" style="color:#4ade80;">Ramesh Patel</div>
           <div class="wa-bubble">
-            Has anyone used <span class="kw">organic fertilizer</span> for cotton this season?
-            I heard Jeevamrutha is giving very good results in Saurashtra this year. 🌱
+            {{message.message}}
             <div class="wa-meta">
-              <span class="wa-time">9:15 AM</span>
+              <span class="wa-time">{{message.created_at|date:"g:i A"}}</span>
             </div>
           </div>
           <div class="wa-reactions">
@@ -198,263 +199,28 @@
           </div>
         </div>
       </div>
-
-      <!-- ░░░ RECEIVED — Sunita Devi ░░░ -->
-      <div class="wa-msg recv" id="m2">
-        <div class="wa-av av-p" title="Sunita Devi">SD</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#c084fc;">Sunita Devi</div>
-          <div class="wa-bubble">
-            Yes Ramesh bhai! Used it on 5 acres last season. Cotton quality improved a lot
-            and input cost came down by <span class="kw">30%</span>. Highly recommended! 🙏
-            <div class="wa-meta">
-              <span class="wa-time">9:22 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">❤️ <span class="wa-reaction-count">22</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ RECEIVED — Mohan Kumar ░░░ -->
-      <div class="wa-msg recv" id="m3">
-        <div class="wa-av av-a" title="Mohan Kumar">MK</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#fbbf24;">Mohan Kumar</div>
-          <div class="wa-bubble">
-            📢 <strong>Market Update:</strong> Today's cotton price at Rajkot APMC is
-            <span class="kw">₹7,150 per quintal</span>. Yesterday was ₹7,080.
-            Small rise expected next week — good time to hold! 📈
-            <div class="wa-meta">
-              <span class="wa-time">9:45 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">🔥 <span class="wa-reaction-count">31</span></span>
-            <span class="wa-reaction">📈 <span class="wa-reaction-count">18</span></span>
-          </div>
-        </div>
-      </div>
-
+      {% else %}
       <!-- ░░░ SENT — You ░░░ -->
       <div class="wa-msg sent" id="m4">
         <div class="wa-bubble-wrap">
           <div class="wa-bubble">
-            Thanks Mohan bhai! 🙌 Sunita ji, is Jeevamrutha available ready-made or
-            do we prepare it ourselves at the farm?
+            {{message.message}}
             <div class="wa-meta">
-              <span class="wa-time">9:48 AM</span>
+              <span class="wa-time">{{message.created_at|date:"g:i A"}}</span>
               <span class="wa-ticks">✓✓</span>
             </div>
           </div>
         </div>
       </div>
+      {% endif %}
+      {% endfor %}
 
-      <!-- ░░░ RECEIVED — Arjun Desai ░░░ -->
-      <div class="wa-msg recv" id="m5">
-        <div class="wa-av av-t" title="Arjun Desai">AD</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#2dd4bf;">Arjun Desai</div>
-          <div class="wa-bubble">
-            ☁️ <strong>Weather Alert — Gujarat:</strong> Heavy rain expected tomorrow in
-            <span class="kw">Saurashtra &amp; South Gujarat</span>.
-            Winds 30–40 km/h. Please store harvested crops safely today! ⚠️
-            <div class="wa-meta">
-              <span class="wa-time">10:05 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">⚠️ <span class="wa-reaction-count">45</span></span>
-            <span class="wa-reaction">🌧️ <span class="wa-reaction-count">27</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ RECEIVED — Priya Sharma ░░░ -->
-      <div class="wa-msg recv" id="m6">
-        <div class="wa-av av-r" title="Priya Sharma">PS</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#fb7185;">Priya Sharma</div>
-          <div class="wa-bubble">
-            😟 My wheat crop is showing <span class="kw">yellow leaves</span> in the
-            middle section. Nitrogen was fine last week. Could it be zinc or iron
-            deficiency? Any experienced farmer advice? 🙏
-            <div class="wa-meta">
-              <span class="wa-time">10:18 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">🙏 <span class="wa-reaction-count">9</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ RECEIVED — Vikram Singh ░░░ -->
-      <div class="wa-msg recv" id="m7">
-        <div class="wa-av av-b" title="Vikram Singh">VS</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#60a5fa;">Vikram Singh</div>
-          <div class="wa-bubble">
-            Priya ji, yellowing between green veins is
-            <span class="kw">interveinal chlorosis</span> — usually Iron or Manganese
-            deficiency. Try foliar spray of Ferrous Sulphate (0.5%). Check soil pH too —
-            should be 6.0–7.0 for wheat. Results in 8–10 days. 🌾
-            <div class="wa-meta">
-              <span class="wa-time">10:27 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">👏 <span class="wa-reaction-count">17</span></span>
-            <span class="wa-reaction">✅ <span class="wa-reaction-count">11</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ SENT — You ░░░ -->
-      <div class="wa-msg sent" id="m8">
-        <div class="wa-bubble-wrap">
-          <div class="wa-bubble">
-            Vikram bhai is right Priya ji! Same happened to my wheat last year.
-            Zinc + Iron combo spray worked in 10 days. Add small dose of DAP too. ✅🌾
-            <div class="wa-meta">
-              <span class="wa-time">10:30 AM</span>
-              <span class="wa-ticks">✓✓</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── Today ─── -->
-      <div class="wa-date-badge"><span>Today</span></div>
-
-      <div class="wa-notice">
-        <span>🎉 3 new farmers joined Krushi Mitro today</span>
-      </div>
-
-      <!-- ░░░ RECEIVED — Anita Verma ░░░ -->
-      <div class="wa-msg recv" id="m9">
-        <div class="wa-av av-i" title="Anita Verma">AV</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#818cf8;">Anita Verma</div>
-          <div class="wa-bubble">
-            📣 <strong>PM Kisan Update:</strong> The
-            <span class="kw">17th Installment of ₹2,000</span> is being credited today
-            to all registered farmers. Check your bank account or Kisan portal! 🏦🇮🇳
-            <div class="wa-meta">
-              <span class="wa-time">8:00 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">🎉 <span class="wa-reaction-count">89</span></span>
-            <span class="wa-reaction">❤️ <span class="wa-reaction-count">54</span></span>
-            <span class="wa-reaction">🙏 <span class="wa-reaction-count">37</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ RECEIVED — Mohan Kumar ░░░ -->
-      <div class="wa-msg recv" id="m10">
-        <div class="wa-av av-a" title="Mohan Kumar">MK</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#fbbf24;">Mohan Kumar</div>
-          <div class="wa-bubble">
-            💧 <strong>PMKSY Subsidy:</strong> Govt offering
-            <span class="kw">80% subsidy on drip &amp; sprinkler irrigation</span>
-            for small farmers. Last date: <strong>30 June 2026</strong>.
-            Apply at local agriculture office or pmksy.gov.in 🚜
-            <div class="wa-meta">
-              <span class="wa-time">9:10 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">🔔 <span class="wa-reaction-count">62</span></span>
-            <span class="wa-reaction">👆 <span class="wa-reaction-count">28</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ SENT — You ░░░ -->
-      <div class="wa-msg sent" id="m11">
-        <div class="wa-bubble-wrap">
-          <div class="wa-bubble">
-            Excellent news everyone! 🌟 This group is truly helpful.
-            Mohan bhai, please share the direct PMKSY portal link too. Thank you all! 🙏🌾
-            <div class="wa-meta">
-              <span class="wa-time">9:14 AM</span>
-              <span class="wa-ticks">✓✓</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ RECEIVED — Sunita Devi ░░░ -->
-      <div class="wa-msg recv" id="m12">
-        <div class="wa-av av-p" title="Sunita Devi">SD</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#c084fc;">Sunita Devi</div>
-          <div class="wa-bubble">
-            Ramesh bhai, Jeevamrutha is prepared on the farm itself! 🐄<br>
-            Mix: <span class="kw">Cow Dung 10 kg + Cow Urine 5 L + Jaggery 1 kg + Pulse Flour 1 kg</span>
-            in 200L water. Ferment 48 hours. Use 200L per acre.
-            Posting the full video tomorrow! 🌿
-            <div class="wa-meta">
-              <span class="wa-time">9:20 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">💯 <span class="wa-reaction-count">33</span></span>
-            <span class="wa-reaction">🌱 <span class="wa-reaction-count">19</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ RECEIVED — Bharat Patel ░░░ -->
-      <div class="wa-msg recv" id="m13">
-        <div class="wa-av av-o" title="Bharat Patel">BP</div>
-        <div class="wa-bubble-wrap">
-          <div class="wa-sender" style="color:#fb923c;">Bharat Patel 🆕</div>
-          <div class="wa-bubble">
-            Namaste everyone! I'm from Anand, Gujarat — growing sugarcane &amp; groundnut
-            on 8 acres. Happy to join this amazing farmer community! 🙏🌾
-            <div class="wa-meta">
-              <span class="wa-time">9:31 AM</span>
-            </div>
-          </div>
-          <div class="wa-reactions">
-            <span class="wa-reaction">👋 <span class="wa-reaction-count">41</span></span>
-            <span class="wa-reaction">🌾 <span class="wa-reaction-count">23</span></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- ░░░ SENT — You ░░░ -->
-      <div class="wa-msg sent" id="m14">
-        <div class="wa-bubble-wrap">
-          <div class="wa-bubble">
-            Welcome Bharat bhai! 🎉 This group has amazing farmers who help each other.
-            Ask freely — we're all here for each other! 💪🌾
-            <div class="wa-meta">
-              <span class="wa-time">9:34 AM</span>
-              <span class="wa-ticks">✓✓</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── Typing indicator ─── -->
-      <div class="wa-typing" id="waTyping" aria-label="Arjun is typing">
-        <div class="wa-typing-av" title="Arjun Desai">AD</div>
-        <div class="wa-typing-bubble">
-          <div class="wa-dots">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-      </div>
 
     </div><!-- /wa-body -->
 
     <!-- ══ INPUT BAR ══ -->
+    <form action="{% url 'community_chat' %}" method="post" class="wa-input-bar" role="form" aria-label="Message input">
+      {% csrf_token %}
     <div class="wa-input-bar" role="form" aria-label="Message input">
 
       <!-- Emoji -->
@@ -482,19 +248,21 @@
           autocomplete="off"
           maxlength="600"
           aria-label="Type a message"
+          name="message"
         />
         <button class="wa-emoji-btn" id="smileyBtn" title="Emoji picker" aria-label="Emoji">😊</button>
       </div>
 
       <!-- Send / Mic -->
-      <button class="wa-send-btn" id="sendBtn" title="Send" aria-label="Send message">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <line x1="22" y1="2" x2="11" y2="13"/>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
-      </button>
+     <button type="submit" class="wa-send-btn" id="sendBtn" title="Send">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+    </svg>
+</button>
 
     </div><!-- /wa-input-bar -->
+    </form>
 
   </div><!-- /wa-chat -->
 

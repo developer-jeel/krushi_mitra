@@ -72,6 +72,8 @@ def login(request):
 
             #  Redirect based on role
             if user.role == 'Farmer':
+                user.is_active = True
+                user.save()
                 return redirect('farmer_home')
             elif user.role == 'Buyer':
                 return redirect('buyer_home')
@@ -319,25 +321,28 @@ def clear_history(request):
 @check_login(['Farmer'])
 def community_chat(request):
     uid = request.uid
-    all_messages = community_message.objects.all().order_by('-created_at')
-    context = {'uid': uid, 'messages': all_messages}
+    all_messages = community_message.objects.all()
+    all_users = User.objects.all()
+    user_count = len([user for user in all_users if user.is_active])
+    context = {'uid': uid, 'messages':  all_messages, 'user_count': user_count}
     if request.method == "POST":
         sender = User.objects.get(id = uid.id)
         message_content = request.POST.get('message')
-        image = request.FILES.get('image')
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++MESSAGE : " , message_content)
 
-        if image:
-            community_message.objects.create(
+        user_message = community_message.objects.create(
                 sender=sender,
                 message=message_content,
-                image=image
-            )
-        else:
-            community_message.objects.create(
-                sender=sender,
-                message=message_content
-            )
-        
+        )
+        try:
+            image= request.FILES.get('image')
+            is_image = True
+        except:
+            is_image = False
+
+        if is_image:
+            user_message.image = image
+        user_message.save()
         return render(request, "farmer/community_chat.html", context)
     return render(request, "farmer/community_chat.html", context)
 
