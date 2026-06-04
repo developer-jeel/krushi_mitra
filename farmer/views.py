@@ -318,10 +318,27 @@ def clear_history(request):
 
 @check_login(['Farmer'])
 def community_chat(request):
-    if request.method == "POST":
-        pass
     uid = request.uid
-    context = {'uid': uid}
+    all_messages = community_message.objects.all().order_by('-created_at')
+    context = {'uid': uid, 'messages': all_messages}
+    if request.method == "POST":
+        sender = User.objects.get(id = uid.id)
+        message_content = request.POST.get('message')
+        image = request.FILES.get('image')
+
+        if image:
+            community_message.objects.create(
+                sender=sender,
+                message=message_content,
+                image=image
+            )
+        else:
+            community_message.objects.create(
+                sender=sender,
+                message=message_content
+            )
+        
+        return render(request, "farmer/community_chat.html", context)
     return render(request, "farmer/community_chat.html", context)
 
 def predict_price(price, category, years, condition):
