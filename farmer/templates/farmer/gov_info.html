@@ -255,26 +255,27 @@
       <div class="gi-grid">
 
         <!-- PM-KISAN -->
+        {% for info in all_info %}
         <div class="gi-card" id="pm-kisan">
           <div class="gi-card-img-wrap">
-            <img src="{% static 'farmer/images/scheme_pmkisan.png' %}" alt="PM-KISAN Scheme" class="gi-card-img" />
+            <img src="{{ info.image.url }}" alt="PM-KISAN Scheme" class="gi-card-img" />
             <span class="gi-badge active gi-img-badge">● Active</span>
           </div>
           <div class="gi-card-body">
             <div class="gi-card-title-row">
               <span class="gi-emoji">💰</span>
-              <div class="gi-name">PM-KISAN</div>
+              <div class="gi-name">{{ info.title }}</div>
             </div>
-            <p class="gi-desc">Direct income support of ₹6,000/year to small &amp; marginal farmer families via direct
-              bank transfer in 3 instalments.</p>
-            <div class="gi-benefit">💳 ₹2,000 × 3 instalments/year to bank account</div>
+            <p class="gi-desc">{{ info.description }}</p>
+            <div class="gi-benefit">{{ info.oneline_info }}</div>
             <div class="gi-footer">
               <span class="gi-dept">Ministry of Agriculture</span>
-              <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmkisan">View
+              <a href="{{info.source_link}}" target="_blank" rel="noopener" class="gi-link" id="btn-pmkisan">View
                 Details →</a>
             </div>
           </div>
         </div>
+        {% endfor %}
 
         <!-- PM Fasal Bima -->
         <!-- <div class="gi-card" id="crop-insurance">
