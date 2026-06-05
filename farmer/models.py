@@ -131,7 +131,7 @@ class community_message(models.Model):
     def __str__(self):
         return f"{self.sender} --> {self.message}"
 
-class gove_info(models.Moddel):
+class gov_info(models.Model):
     STATE_CHOICES = [
     ("Andhra Pradesh", "Andhra Pradesh"),
     ("Arunachal Pradesh", "Arunachal Pradesh"),
@@ -174,8 +174,10 @@ class gove_info(models.Moddel):
     description = models.TextField()
     oneline_info = models.CharField(max_length=255, blank=True, null=True)
     state = models.CharField(max_length=100,choices=STATE_CHOICES)
+    image = models.FileField(upload_to='gov_info/images/', null=True, blank=True)
     source_link = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+    
