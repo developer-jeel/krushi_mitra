@@ -34,6 +34,7 @@ urlpatterns = [
     path('tool_price', views.tool_price, name='tool_price'),
     path('add-tool', views.add_tool, name='add_tool'),
     path('community_chat', views.community_chat, name='community_chat'),
+    path('gov_info', views.gov_info, name='gov_info'),
 
 
     path('buyer_home', views.buyer_home, name='buyer_home'),

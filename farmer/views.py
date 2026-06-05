@@ -199,6 +199,10 @@ def farmer_profile(request):
     return render(request, "farmer/profile.html")
 
 @check_login(['Farmer'])
+def gov_info(request):
+    return render(request, "farmer/gov_info.html")
+
+@check_login(['Farmer'])
 def farmer_chatbot(request):
     uid = request.uid
     room = chatroom.objects.filter(user=uid).first()
