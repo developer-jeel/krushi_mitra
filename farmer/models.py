@@ -130,6 +130,4 @@ class community_message(models.Model):
 
     def __str__(self):
         return f"{self.sender} --> {self.message}"
-
-class gove_info(models.Model):
     

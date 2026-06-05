@@ -84,12 +84,10 @@
   backdrop-filter: var(--blur-md);
   -webkit-backdrop-filter: var(--blur-md);
   border-radius: var(--r-xl);
-  padding: 20px 20px 16px;
   border: 1px solid var(--glass-border-light);
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  gap: 10px;
   transition: transform var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid);
   position: relative;
   overflow: hidden;
@@ -111,15 +109,65 @@
   border-color: var(--glass-border);
 }
 
-.gi-card-top {
+/* ── Card image banner ── */
+.gi-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 155px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.gi-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+
+.gi-card:hover .gi-card-img { transform: scale(1.06); }
+
+/* gradient overlay so text below stays readable */
+.gi-card-img-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(7,16,9,0.75));
+  pointer-events: none;
+}
+
+/* badge pinned top-right inside the image */
+.gi-img-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* card body below the image */
+.gi-card-body {
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+/* emoji + name on same row */
+.gi-card-title-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 }
 
 .gi-emoji {
-  font-size: 30px;
+  font-size: 26px;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 /* status badge */
@@ -176,7 +224,8 @@
   justify-content: space-between;
   gap: 8px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: auto;
 }
 
 .gi-dept {
