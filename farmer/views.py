@@ -202,6 +202,11 @@ def farmer_profile(request):
 def govt_info(request):
     all_info = gov_info.objects.all().order_by('-created_at')
     context = {'all_info': all_info}
+    if request.method == "POST":
+        state = request.POST.get('state')
+        all_info = gov_info.objects.filter(state=state).order_by('-created_at')
+        context = {'all_info': all_info}
+        return render(request, "farmer/gov_info.html",context)
     return render(request, "farmer/gov_info.html",context)
 
 @check_login(['Farmer'])
