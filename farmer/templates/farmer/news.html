@@ -1,0 +1,614 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agriculture News Center – Farmer Panel | Krushi Mitra</title>
+  <meta name="description" content="Stay updated with latest agriculture market trends, weather alerts, government announcements and crop news." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/news.css' %}">
+</head>
+
+<body>
+
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title" data-translate="main">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span data-translate="home">Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span data-translate="crops">My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span data-translate="tools">Tools</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span data-translate="chatbot">AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="community">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span data-translate="blogs">Blogs &amp; Reviews</span>
+      </a>
+
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1" />
+          <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z" />
+        </svg>
+        <span>Krushi Mitro 🌾</span>
+      </a>
+
+      <a href="{% url 'gov_info' %}" class="nav-item" id="nav-gov-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 21h18" />
+          <path d="M5 21V7l7-4 7 4v14" />
+          <path d="M9 21V11h6v10" />
+          <rect x="10" y="3" width="4" height="4" rx="1" />
+        </svg>
+        <span>Gov Info 🏛</span>
+      </a>
+
+      <a href="{% url 'news' %}" class="nav-item active" id="nav-news">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1" />
+          <path d="M8 8h8M8 12h8M8 16h5" />
+        </svg>
+        <span data-translate="news">News 📰</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="account">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span data-translate="profile">Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span data-translate="lang">Language</span><span class="lang-current-label">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <div class="page-title">Agriculture News Center</div>
+          <div class="breadcrumb">Dashboard / News</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="badge"></span>
+        </button>
+        <div class="avatar" title="My Profile">R</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ══ HERO SECTION ══ -->
+      <section class="news-hero">
+        <div class="news-hero-content">
+          <h1 class="news-hero-heading">Latest Agriculture News & Updates</h1>
+          <p class="news-hero-subheading">Stay ahead with real-time updates on market prices, monsoon alerts, government schemes, agricultural technology trends, and organic farming guides.</p>
+        </div>
+      </section>
+
+      <!-- ══ STATISTICS ROW ══ -->
+      <section class="news-stats-grid">
+        <div class="news-stat-card">
+          <div class="news-stat-icon blue">📰</div>
+          <div class="news-stat-info">
+            <span class="news-stat-val">1,248</span>
+            <span class="news-stat-lbl">Total Articles</span>
+          </div>
+        </div>
+        <div class="news-stat-card">
+          <div class="news-stat-icon green">⚡</div>
+          <div class="news-stat-info">
+            <span class="news-stat-val">14 New</span>
+            <span class="news-stat-lbl">Today's Updates</span>
+          </div>
+        </div>
+        <div class="news-stat-card">
+          <div class="news-stat-icon amber">🏛️</div>
+          <div class="news-stat-info">
+            <span class="news-stat-val">8 Active</span>
+            <span class="news-stat-lbl">Govt Announcements</span>
+          </div>
+        </div>
+        <div class="news-stat-card">
+          <div class="news-stat-icon purple">📊</div>
+          <div class="news-stat-info">
+            <span class="news-stat-val">24 Mandis</span>
+            <span class="news-stat-lbl">Market Reports</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ SEARCH & FILTER SECTION ══ -->
+      <section class="news-search-bar">
+        <div class="news-search-input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" placeholder="Search agriculture news, alerts, schemes..." id="news-search-input">
+        </div>
+        <select class="news-filter-select" id="news-state-filter">
+          <option value="">All India States</option>
+          <option value="maharashtra">Maharashtra</option>
+          <option value="punjab">Punjab</option>
+          <option value="haryana">Haryana</option>
+          <option value="gujarat">Gujarat</option>
+          <option value="uttar-pradesh">Uttar Pradesh</option>
+          <option value="madhya-pradesh">Madhya Pradesh</option>
+          <option value="rajasthan">Rajasthan</option>
+        </select>
+        <select class="news-filter-select" id="news-category-filter">
+          <option value="">All Categories</option>
+          <option value="crop">Crop News</option>
+          <option value="govt">Government Updates</option>
+          <option value="market">Market Prices</option>
+          <option value="weather">Weather Alerts</option>
+          <option value="tech">Technology</option>
+          <option value="organic">Organic Farming</option>
+          <option value="dairy">Dairy Farming</option>
+          <option value="irrigation">Irrigation</option>
+          <option value="equipment">Agriculture Equipment</option>
+        </select>
+        <button class="news-search-btn" id="news-search-btn">
+          <span>Search</span>
+        </button>
+      </section>
+
+      <!-- ══ BREAKING NEWS ══ -->
+      <section style="margin-bottom:28px;">
+        <div class="news-section-header">
+          <h2 class="news-section-title">🚨 Breaking News</h2>
+        </div>
+        <div class="news-breaking-card">
+          <div class="news-breaking-img-wrap">
+            <img src="{% static 'farmer/images/news_breaking.png' %}" alt="Bumper harvest output" class="news-breaking-img">
+            <span class="news-breaking-badge">BREAKING</span>
+          </div>
+          <div class="news-breaking-content">
+            <div class="news-date-row">
+              <span class="news-category-pill govt">Government Updates</span>
+              <span>•</span>
+              <span>June 5, 2026</span>
+            </div>
+            <h3 class="news-breaking-title">MSP for Kharif Crops Hiked: Paddy Prices Witness 7% Increase for 2026-27 Season</h3>
+            <p class="news-breaking-desc">The Cabinet Committee on Economic Affairs has approved an increase in the Minimum Support Prices (MSP) for all mandated Kharif crops. The MSP for common grade paddy has been raised to ₹2,340 per quintal, representing a substantial hike aimed at encouraging crop diversification and ensuring fair pricing for farmers across India.</p>
+            <a href="#" class="news-readmore-btn">Read Full Article →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ LATEST NEWS ══ -->
+      <section style="margin-bottom:28px;">
+        <div class="news-section-header">
+          <h2 class="news-section-title">📰 Latest Agriculture News</h2>
+        </div>
+        <div class="news-cards-grid">
+          <!-- Card 1: Crop News -->
+          <article class="news-card">
+            <div class="news-card-img-wrap">
+              <img src="{% static 'farmer/images/news_market.png' %}" alt="Pusa Wheat Variety" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill crop">Crop News</span></span>
+            </div>
+            <div class="news-card-body">
+              <h3 class="news-card-title">ICAR Releases New High-Yield, Heat-Resistant Wheat Variety 'HD-3385'</h3>
+              <p class="news-card-desc">The Indian Agricultural Research Institute has officially licensed HD-3385, a novel wheat variety tailored to withstand sudden heatwaves during the grain-filling stage, promising a 15% increase in yields.</p>
+              <div class="news-card-footer">
+                <span class="news-date-row" style="margin-bottom:0;">June 4, 2026</span>
+                <a href="#" class="news-readmore-btn">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Organic Farming -->
+          <article class="news-card">
+            <div class="news-card-img-wrap">
+              <img src="{% static 'farmer/images/news_organic.png' %}" alt="Natural fertilizers" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill organic">Organic Farming</span></span>
+            </div>
+            <div class="news-card-body">
+              <h3 class="news-card-title">Organic Rice Exports from Sikkim to European Markets Set New Records</h3>
+              <p class="news-card-desc">Sikkim's cooperative farmers have successfully exported over 500 tonnes of premium organic aromatic rice to Europe, securing a 40% premium price over conventional basmati varieties.</p>
+              <div class="news-card-footer">
+                <span class="news-date-row" style="margin-bottom:0;">June 3, 2026</span>
+                <a href="#" class="news-readmore-btn">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Technology -->
+          <article class="news-card">
+            <div class="news-card-img-wrap">
+              <img src="{% static 'farmer/images/news_tech.png' %}" alt="Drone spraying crops" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill tech">Technology</span></span>
+            </div>
+            <div class="news-card-body">
+              <h3 class="news-card-title">Drone Subsidies Expanded: Government to Cover 50% Cost for Farm Cooperatives</h3>
+              <p class="news-card-desc">Under the Sub-Mission on Agricultural Mechanization, the Ministry has increased subsidies on agricultural drones to boost precision pesticide spraying and crop health monitoring.</p>
+              <div class="news-card-footer">
+                <span class="news-date-row" style="margin-bottom:0;">June 2, 2026</span>
+                <a href="#" class="news-readmore-btn">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Dairy Farming -->
+          <article class="news-card">
+            <div class="news-card-img-wrap">
+              <img src="{% static 'farmer/images/news_hero.png' %}" alt="Modern dairy milking parlor" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill organic">Dairy Farming</span></span>
+            </div>
+            <div class="news-card-body">
+              <h3 class="news-card-title">NDDB Launches Smart Cattle Health Tracking Neckbands in Gujarat Mandis</h3>
+              <p class="news-card-desc">The National Dairy Development Board has initiated a pilot project to equip cattle with IoT-enabled neckbands that predict illness and optimize feed ratios in real-time.</p>
+              <div class="news-card-footer">
+                <span class="news-date-row" style="margin-bottom:0;">May 31, 2026</span>
+                <a href="#" class="news-readmore-btn">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: Irrigation -->
+          <article class="news-card">
+            <div class="news-card-img-wrap">
+              <img src="{% static 'farmer/images/news_weather.png' %}" alt="Drip irrigation pipes in field" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill crop">Irrigation</span></span>
+            </div>
+            <div class="news-card-body">
+              <h3 class="news-card-title">Micro-Irrigation Funds Raised by ₹5,000 Crore to Combat Water Scarcity</h3>
+              <p class="news-card-desc">The National Bank for Agriculture and Rural Development (NABARD) announced additional funding to support drip and sprinkler system installations in semi-arid zones.</p>
+              <div class="news-card-footer">
+                <span class="news-date-row" style="margin-bottom:0;">May 29, 2026</span>
+                <a href="#" class="news-readmore-btn">Read More</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: Agriculture Equipment -->
+          <article class="news-card">
+            <div class="news-card-img-wrap">
+              <img src="{% static 'farmer/images/news_govt.png' %}" alt="Electric tractors displayed" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill tech">Agriculture Equipment</span></span>
+            </div>
+            <div class="news-card-body">
+              <h3 class="news-card-title">Indigenous Electric Tractors Gaining High Traction Among Small Farmers</h3>
+              <p class="news-card-desc">Low-maintenance electric tractors developed by domestic startups are reporting record sales due to rising diesel prices and government subsidy incentives.</p>
+              <div class="news-card-footer">
+                <span class="news-date-row" style="margin-bottom:0;">May 27, 2026</span>
+                <a href="#" class="news-readmore-btn">Read More</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ══ SPLIT SECTION: GOVERNMENT + WEATHER + MARKET + TRENDING ══ -->
+      <div class="news-split-layout">
+
+        <!-- Left Layout: Government Announcements -->
+        <div class="news-split-main">
+          <div class="news-panel">
+            <div class="news-panel-head">
+              <h3 class="news-panel-title">🏛️ Official Government Announcements</h3>
+            </div>
+            <div class="news-panel-body">
+              <!-- Item 1 -->
+              <div class="news-govt-item">
+                <div class="news-govt-header">
+                  <span class="news-govt-dept">Ministry of Agriculture</span>
+                  <span class="news-date-row" style="margin-bottom:0;">June 5, 2026</span>
+                </div>
+                <h4 class="news-govt-title">PM-KISAN 17th Installment Release Date Formally Declared</h4>
+                <p class="news-govt-desc">Direct bank transfers of ₹2,000 to over 11 crore eligible farmers under the PM-KISAN scheme will be processed on June 18, 2026. Farmers are advised to complete their e-KYC compliance immediately.</p>
+                <div class="news-govt-footer">
+                  <span class="news-category-pill govt">Scheme Update</span>
+                  <a href="#" class="news-readmore-btn">Official Press Release</a>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="news-govt-item">
+                <div class="news-govt-header">
+                  <span class="news-govt-dept">National Seed Corporation</span>
+                  <span class="news-date-row" style="margin-bottom:0;">June 3, 2026</span>
+                </div>
+                <h4 class="news-govt-title">Seed Subsidy Scheme Launched for Kharif Rice & Maize Crops</h4>
+                <p class="news-govt-desc">Farmers can now book certified high-yielding seeds online with a 40% direct subsidy discount at authorized district distribution warehouses.</p>
+                <div class="news-govt-footer">
+                  <span class="news-category-pill govt">Subsidy announcement</span>
+                  <a href="#" class="news-readmore-btn">Book Seeds Now</a>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="news-govt-item">
+                <div class="news-govt-header">
+                  <span class="news-govt-dept">Department of Fertilizers</span>
+                  <span class="news-date-row" style="margin-bottom:0;">May 30, 2026</span>
+                </div>
+                <h4 class="news-govt-title">Nano Urea Stock Buffers Doubled in Major Grain Producing States</h4>
+                <p class="news-govt-desc">To prevent local fertilizer shortages during peak sowing times, additional shipments of liquid nano-urea bottles have been dispatched to state cooperative societies.</p>
+                <div class="news-govt-footer">
+                  <span class="news-category-pill govt">Policy changes</span>
+                  <a href="#" class="news-readmore-btn">View stock list</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Layout: Weather + Market + Trending -->
+        <div class="news-split-side">
+
+          <!-- Weather Alerts Panel -->
+          <div class="news-panel">
+            <div class="news-panel-head">
+              <h3 class="news-panel-title">🌦️ Weather Updates & Alerts</h3>
+            </div>
+            <div class="news-panel-body">
+              <!-- Alert 1 -->
+              <div class="news-weather-alert">
+                <div class="news-alert-icon">⛈️</div>
+                <div class="news-alert-content">
+                  <span class="news-alert-badge danger">Rainfall Alert</span>
+                  <h4 class="news-alert-title">Heavy Rainfall Expected in Western Ghats Regions</h4>
+                  <p class="news-alert-desc">IMD warns of heavy to very heavy precipitation over Maharashtra and Karnataka coastlines during next 48 hours. Secure harvested produce in dry storage.</p>
+                </div>
+              </div>
+
+              <!-- Alert 2 -->
+              <div class="news-weather-alert">
+                <div class="news-alert-icon">🌡️</div>
+                <div class="news-alert-content">
+                  <span class="news-alert-badge warning">Heatwave Update</span>
+                  <h4 class="news-alert-title">Normal Sowing Operations to Resume as Temperatures Fall</h4>
+                  <p class="news-alert-desc">Pre-monsoon showers have successfully lowered temperatures in Northern Plains, indicating favorable soil moisture settings for crop sowing.</p>
+                </div>
+              </div>
+
+              <!-- Alert 3 -->
+              <div class="news-weather-alert">
+                <div class="news-alert-icon">🐛</div>
+                <div class="news-alert-content">
+                  <span class="news-alert-badge danger">Pest Warning</span>
+                  <h4 class="news-alert-title">Whitefly Outbreak Warning for Cotton Sowing Blocks</h4>
+                  <p class="news-alert-desc">State agriculture departments advise cotton farmers to use neem-based organic sprays early to mitigate whitefly populations in semi-arid zones.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Market Updates Panel -->
+          <div class="news-panel">
+            <div class="news-panel-head">
+              <h3 class="news-panel-title">📈 Live Crop Market Trends</h3>
+            </div>
+            <div class="news-panel-body">
+              <!-- Crop 1 -->
+              <div class="news-market-item">
+                <div class="news-market-left">
+                  <div class="news-market-emoji">🌾</div>
+                  <div>
+                    <div class="news-market-name">Basmati Rice (Paddy)</div>
+                    <div class="news-market-price">Price: <span>₹4,200/Qtl</span></div>
+                  </div>
+                </div>
+                <div class="news-market-right">
+                  <div class="news-market-trend up">▲ +4.2%</div>
+                  <div class="news-market-volume">Vol: 1,500T</div>
+                </div>
+              </div>
+
+              <!-- Crop 2 -->
+              <div class="news-market-item">
+                <div class="news-market-left">
+                  <div class="news-market-emoji">🌽</div>
+                  <div>
+                    <div class="news-market-name">Hybrid Maize Seeds</div>
+                    <div class="news-market-price">Price: <span>₹2,150/Qtl</span></div>
+                  </div>
+                </div>
+                <div class="news-market-right">
+                  <div class="news-market-trend up">▲ +1.8%</div>
+                  <div class="news-market-volume">Vol: 850T</div>
+                </div>
+              </div>
+
+              <!-- Crop 3 -->
+              <div class="news-market-item">
+                <div class="news-market-left">
+                  <div class="news-market-emoji">🧅</div>
+                  <div>
+                    <div class="news-market-name">Red Onion (Nashik)</div>
+                    <div class="news-market-price">Price: <span>₹1,800/Qtl</span></div>
+                  </div>
+                </div>
+                <div class="news-market-right">
+                  <div class="news-market-trend down">▼ -2.5%</div>
+                  <div class="news-market-volume">Vol: 3,200T</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trending News Panel -->
+          <div class="news-panel">
+            <div class="news-panel-head">
+              <h3 class="news-panel-title">🔥 Trending Right Now</h3>
+            </div>
+            <div class="news-panel-body">
+              <!-- Item 1 -->
+              <div class="news-trend-card">
+                <span class="news-trend-num">01</span>
+                <div class="news-trend-info">
+                  <a href="#" class="news-trend-title">How cooperative sugarcane farming is driving record revenues in western Maharashtra</a>
+                  <div class="news-trend-meta">
+                    <span>Crop Advisory</span>
+                    <span>12.5k views</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="news-trend-card">
+                <span class="news-trend-num">02</span>
+                <div class="news-trend-info">
+                  <a href="#" class="news-trend-title">Top 5 solar water pump models certified under PM-KUSUM Subsidy Yojana</a>
+                  <div class="news-trend-meta">
+                    <span>Technology</span>
+                    <span>9.2k views</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="news-trend-card">
+                <span class="news-trend-num">03</span>
+                <div class="news-trend-info">
+                  <a href="#" class="news-trend-title">Guide: Optimizing crop irrigation rotations for the upcoming summer season</a>
+                  <div class="news-trend-meta">
+                    <span>Irrigation</span>
+                    <span>7.8k views</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ══ NEWS CATEGORIES GRID ══ -->
+      <section style="margin-bottom:28px;">
+        <div class="news-section-header">
+          <h2 class="news-section-title">📂 Explore News by Category</h2>
+        </div>
+        <div class="news-cats-grid">
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">🏛️</span>
+            <span class="news-cat-name">Government News</span>
+            <span class="news-cat-count">148 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">📈</span>
+            <span class="news-cat-name">Market News</span>
+            <span class="news-cat-count">312 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">⛈️</span>
+            <span class="news-cat-name">Weather Updates</span>
+            <span class="news-cat-count">85 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">🌾</span>
+            <span class="news-cat-name">Crop Advisory</span>
+            <span class="news-cat-count">219 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">🤖</span>
+            <span class="news-cat-name">Technology</span>
+            <span class="news-cat-count">94 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">🐄</span>
+            <span class="news-cat-name">Livestock</span>
+            <span class="news-cat-count">115 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">🌱</span>
+            <span class="news-cat-name">Organic Farming</span>
+            <span class="news-cat-count">134 Articles</span>
+          </a>
+          <a href="#" class="news-cat-card">
+            <span class="news-cat-icon">🏆</span>
+            <span class="news-cat-name">Success Stories</span>
+            <span class="news-cat-count">76 Articles</span>
+          </a>
+        </div>
+      </section>
+
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/language.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+
+</html>

@@ -491,5 +491,9 @@ def kyc(request):
         
     return render(request, "buyer/kyc.html", {'buyer': buyer})
 
+@check_login(['Farmer'])
+def news(request):
+    return render(request, "farmer/news.html")
+
 def home(request):
     return HttpResponse("Welcome to Krushi Mitra! You are logged in.")  

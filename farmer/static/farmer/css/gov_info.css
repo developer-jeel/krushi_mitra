@@ -256,6 +256,16 @@
   margin-bottom: 12px;
 }
 
+/* helplines single column */
+.gi-helplines-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.gi-helplines-grid .gi-contact {
+  border-right: none;
+}
+
 /* ── Panel wrapper ── */
 .gi-panel {
   background: var(--glass-card);

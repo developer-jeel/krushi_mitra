@@ -39,7 +39,8 @@ const translations = {
     submit: "Submit",
     purchase: "Purchase",
     bulkOrder: "Bulk Order",
-    kyc: "KYC Verification"
+    kyc: "KYC Verification",
+    news: "News"
     ,
     predictPrice: "Predict Price",
     agritechMlEngine: "AgriTech ML Engine",
@@ -86,7 +87,8 @@ const translations = {
     submit: "जमा करें",
     purchase: "खरीदें",
     bulkOrder: "थोक ऑर्डर",
-    kyc: "KYC सत्यापन"
+    kyc: "KYC सत्यापन",
+    news: "समाचार"
   },
   gu: {
     home: "હોમ",
@@ -128,7 +130,8 @@ const translations = {
     submit: "સબમિટ",
     purchase: "ખરીદી",
     bulkOrder: "જથ્થાબંધ ઓર્ડર",
-    kyc: "KYC ચકાસણી"
+    kyc: "KYC ચકાસણી",
+    news: "સમાચાર"
   },
   mr: {
     home: "होम",
@@ -170,7 +173,8 @@ const translations = {
     submit: "सबमिट",
     purchase: "खरेदी",
     bulkOrder: "मोठी ऑर्डर",
-    kyc: "KYC पडताळणी"
+    kyc: "KYC पडताळणी",
+    news: "बातम्या"
   },
   pa: {
     home: "ਹੋਮ",
@@ -212,7 +216,8 @@ const translations = {
     submit: "ਸਬਮਿਟ",
     purchase: "ਖਰੀਦਦਾਰੀ",
     bulkOrder: "ਥੋਕ ਆਰਡਰ",
-    kyc: "KYC ਤਸਦੀਕ"
+    kyc: "KYC ਤਸਦੀਕ",
+    news: "ਖ਼ਬਰਾਂ"
   },
   ta: {
     home: "முகப்பு",
@@ -254,7 +259,8 @@ const translations = {
     submit: "சமர்ப்பி",
     purchase: "கொள்முதல்",
     bulkOrder: "மொத்த ஆர்டர்",
-    kyc: "KYC சரிபார்ப்பு"
+    kyc: "KYC சரிபார்ப்பு",
+    news: "செய்திகள்"
   },
   te: {
     home: "హోమ్",
@@ -296,7 +302,8 @@ const translations = {
     submit: "సమర్పించు",
     purchase: "కొనుగోలు",
     bulkOrder: "టోకు ఆర్డర్",
-    kyc: "KYC ధృవీకరణ"
+    kyc: "KYC ధృవీకరణ",
+    news: "వార్తలు"
   }
 };
 

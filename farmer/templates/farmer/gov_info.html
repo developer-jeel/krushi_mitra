@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,206 +12,272 @@
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/gov_info.css' %}">
 </head>
+
 <body>
 
-<!-- ════ SIDEBAR ════ -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
-    <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
-  </div>
-
-  <nav class="sidebar-nav">
-    <div class="nav-section-title">Main</div>
-
-    <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-
-    <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
-      <span>My Crops</span>
-    </a>
-
-    <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-      <span>Tools</span>
-    </a>
-
-    <div class="nav-section-title">AI Assistant</div>
-
-    <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span>AI Chatbot 🌱</span>
-    </a>
-
-    <div class="nav-section-title">Community</div>
-
-    <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <span>Blogs &amp; Reviews</span>
-    </a>
-
-    <a href="{% url 'community_chat' %}" class="nav-item" id="nav-chat">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/>
-        <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z"/>
-      </svg>
-      <span>Krushi Mitro 🌾</span>
-    </a>
-
-    <a href="{% url 'gov_info' %}" class="nav-item active" id="nav-gov-info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V11h6v10"/>
-        <rect x="10" y="3" width="4" height="4" rx="1"/>
-      </svg>
-      <span>Gov Info 🏛</span>
-    </a>
-
-    <div class="nav-section-title">Account</div>
-
-    <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Profile</span>
-    </a>
-  </nav>
-
-  <div class="sidebar-bottom">
-    <div class="lang-selector">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <span>Language</span><span class="lang-current-label">EN</span>
-    </div>
-  </div>
-</aside>
-
-<!-- ════ MAIN ════ -->
-<div class="main">
-
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="topbar-icon-btn" id="menuToggle" title="Menu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-      <div>
-        <div class="page-title">🏛 Government Information Center</div>
-        <div class="breadcrumb">Dashboard / Gov Info</div>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <button class="topbar-icon-btn" title="Notifications">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span class="badge"></span>
-      </button>
-      <div class="avatar" title="My Profile">R</div>
-    </div>
-  </header>
-
-  <div class="page-content">
-
-    <!-- ══ STATS ROW ══ -->
-    <div class="stat-grid" style="margin-bottom:24px;">
-      <div class="stat-card">
-        <div class="stat-icon green">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V11h6v10"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-value">312</div>
-          <div class="stat-label">Total Schemes</div>
-          <div class="stat-change up">↑ 18 added this year</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon amber">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-value">248</div>
-          <div class="stat-label">Active Schemes</div>
-          <div class="stat-change up">Open for enrolment</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon blue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-value">64</div>
-          <div class="stat-label">Upcoming Schemes</div>
-          <div class="stat-change up">Launching 2026–27</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon purple">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="stat-info">
-          <div class="stat-value">14.2 Cr</div>
-          <div class="stat-label">Beneficiary Farmers</div>
-          <div class="stat-change up">Nationwide</div>
-        </div>
-      </div>
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
     </div>
 
-    <!-- ══ SEARCH ══ -->
-    <div class="gi-search">
-      <div class="gi-search-input-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="gov-scheme-search" placeholder="Search schemes, subsidies, policies…" />
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span>Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span>My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span>Tools</span>
+      </a>
+
+      <div class="nav-section-title">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span>AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span>Blogs &amp; Reviews</span>
+      </a>
+
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1" />
+          <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z" />
+        </svg>
+        <span>Krushi Mitro 🌾</span>
+      </a>
+
+      <a href="{% url 'gov_info' %}" class="nav-item active" id="nav-gov-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 21h18" />
+          <path d="M5 21V7l7-4 7 4v14" />
+          <path d="M9 21V11h6v10" />
+          <rect x="10" y="3" width="4" height="4" rx="1" />
+        </svg>
+        <span>Gov Info 🏛</span>
+      </a>
+
+      <a href="{% url 'news' %}" class="nav-item" id="nav-news">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1" />
+          <path d="M8 8h8M8 12h8M8 16h5" />
+        </svg>
+        <span data-translate="news">News 📰</span>
+      </a>
+
+      <div class="nav-section-title">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span>Language</span><span class="lang-current-label">EN</span>
       </div>
-      <select id="gov-state-filter">
-        <option value="">All States / Central</option>
-        <option>Central Government</option>
-        <option>Gujarat</option>
-        <option>Maharashtra</option>
-        <option>Punjab</option>
-        <option>Rajasthan</option>
-        <option>Uttar Pradesh</option>
-        <option>Madhya Pradesh</option>
-        <option>Haryana</option>
-        <option>Karnataka</option>
-        <option>Telangana</option>
-        <option>Andhra Pradesh</option>
-        <option>Bihar</option>
-        <option>West Bengal</option>
-        <option>Odisha</option>
-      </select>
-      <button class="btn btn-primary" id="gov-search-submit">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Search
-      </button>
     </div>
+  </aside>
 
-    <!-- ══ SCHEMES ══ -->
-    <div class="section-header">
-      <div class="section-title">Government Schemes</div>
-    </div>
+  <!-- ════ MAIN ════ -->
+  <div class="main">
 
-    <div class="gi-grid">
-
-      <!-- PM-KISAN -->
-      <div class="gi-card" id="pm-kisan">
-        <div class="gi-card-img-wrap">
-          <img src="{% static 'farmer/images/scheme_pmkisan.png' %}" alt="PM-KISAN Scheme" class="gi-card-img" />
-          <span class="gi-badge active gi-img-badge">● Active</span>
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <div class="page-title">🏛 Government Information Center</div>
+          <div class="breadcrumb">Dashboard / Gov Info</div>
         </div>
-        <div class="gi-card-body">
-          <div class="gi-card-title-row">
-            <span class="gi-emoji">💰</span>
-            <div class="gi-name">PM-KISAN</div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="badge"></span>
+        </button>
+        <div class="avatar" title="My Profile">R</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ══ STATS ROW ══ -->
+      <div class="stat-grid" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 21h18" />
+              <path d="M5 21V7l7-4 7 4v14" />
+              <path d="M9 21V11h6v10" />
+            </svg>
           </div>
-          <p class="gi-desc">Direct income support of ₹6,000/year to small &amp; marginal farmer families via direct bank transfer in 3 instalments.</p>
-          <div class="gi-benefit">💳 ₹2,000 × 3 instalments/year to bank account</div>
-          <div class="gi-footer">
-            <span class="gi-dept">Ministry of Agriculture</span>
-            <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmkisan">View Details →</a>
+          <div class="stat-info">
+            <div class="stat-value">312</div>
+            <div class="stat-label">Total Schemes</div>
+            <div class="stat-change up">↑ 18 added this year</div>
           </div>
         </div>
+        <div class="stat-card">
+          <div class="stat-icon amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">248</div>
+            <div class="stat-label">Active Schemes</div>
+            <div class="stat-change up">Open for enrolment</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">64</div>
+            <div class="stat-label">Upcoming Schemes</div>
+            <div class="stat-change up">Launching 2026–27</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">14.2 Cr</div>
+            <div class="stat-label">Beneficiary Farmers</div>
+            <div class="stat-change up">Nationwide</div>
+          </div>
+        </div>
       </div>
 
-      <!-- PM Fasal Bima -->
-      <div class="gi-card" id="crop-insurance">
+      <!-- ══ SEARCH ══ -->
+      <div class="gi-search">
+        <div class="gi-search-input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="gov-scheme-search" placeholder="Search schemes, subsidies, policies…" />
+        </div>
+        <select id="gov-state-filter">
+          <option value="">All States / Central</option>
+          <option>Central Government</option>
+          <option>Gujarat</option>
+          <option>Maharashtra</option>
+          <option>Punjab</option>
+          <option>Rajasthan</option>
+          <option>Uttar Pradesh</option>
+          <option>Madhya Pradesh</option>
+          <option>Haryana</option>
+          <option>Karnataka</option>
+          <option>Telangana</option>
+          <option>Andhra Pradesh</option>
+          <option>Bihar</option>
+          <option>West Bengal</option>
+          <option>Odisha</option>
+        </select>
+        <button class="btn btn-primary" id="gov-search-submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          Search
+        </button>
+      </div>
+
+      <!-- ══ SCHEMES ══ -->
+      <div class="section-header">
+        <div class="section-title">Government Schemes</div>
+      </div>
+
+      <div class="gi-grid">
+
+        <!-- PM-KISAN -->
+        <div class="gi-card" id="pm-kisan">
+          <div class="gi-card-img-wrap">
+            <img src="{% static 'farmer/images/scheme_pmkisan.png' %}" alt="PM-KISAN Scheme" class="gi-card-img" />
+            <span class="gi-badge active gi-img-badge">● Active</span>
+          </div>
+          <div class="gi-card-body">
+            <div class="gi-card-title-row">
+              <span class="gi-emoji">💰</span>
+              <div class="gi-name">PM-KISAN</div>
+            </div>
+            <p class="gi-desc">Direct income support of ₹6,000/year to small &amp; marginal farmer families via direct
+              bank transfer in 3 instalments.</p>
+            <div class="gi-benefit">💳 ₹2,000 × 3 instalments/year to bank account</div>
+            <div class="gi-footer">
+              <span class="gi-dept">Ministry of Agriculture</span>
+              <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmkisan">View
+                Details →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- PM Fasal Bima -->
+        <!-- <div class="gi-card" id="crop-insurance">
         <div class="gi-card-img-wrap">
           <img src="{% static 'farmer/images/scheme_pmfby.png' %}" alt="PM Fasal Bima Yojana" class="gi-card-img" />
           <span class="gi-badge active gi-img-badge">● Active</span>
@@ -227,10 +294,10 @@
             <a href="https://pmfby.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmfby">View Details →</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- KCC -->
-      <div class="gi-card" id="kcc">
+        <!-- KCC -->
+        <!-- <div class="gi-card" id="kcc">
         <div class="gi-card-img-wrap">
           <img src="{% static 'farmer/images/scheme_kcc.png' %}" alt="Kisan Credit Card" class="gi-card-img" />
           <span class="gi-badge active gi-img-badge">● Active</span>
@@ -247,10 +314,10 @@
             <a href="https://www.nabard.org" target="_blank" rel="noopener" class="gi-link" id="btn-kcc">View Details →</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- PM KUSUM -->
-      <div class="gi-card" id="pm-kusum">
+        <!-- PM KUSUM -->
+        <!-- <div class="gi-card" id="pm-kusum">
         <div class="gi-card-img-wrap">
           <img src="{% static 'farmer/images/scheme_kusum.png' %}" alt="PM KUSUM Yojana" class="gi-card-img" />
           <span class="gi-badge active gi-img-badge">● Active</span>
@@ -267,10 +334,10 @@
             <a href="https://mnre.gov.in/pm-kusum/" target="_blank" rel="noopener" class="gi-link" id="btn-kusum">View Details →</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- Soil Health Card -->
-      <div class="gi-card" id="soil-health">
+        <!-- Soil Health Card -->
+        <!-- <div class="gi-card" id="soil-health">
         <div class="gi-card-img-wrap">
           <img src="{% static 'farmer/images/scheme_soil.png' %}" alt="Soil Health Card Scheme" class="gi-card-img" />
           <span class="gi-badge active gi-img-badge">● Active</span>
@@ -287,10 +354,10 @@
             <a href="https://soilhealth.dac.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-shc">View Details →</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <!-- eNAM -->
-      <div class="gi-card" id="enam">
+        <!-- eNAM -->
+        <!-- <div class="gi-card" id="enam">
         <div class="gi-card-img-wrap">
           <img src="{% static 'farmer/images/scheme_enam.png' %}" alt="eNAM National Agriculture Market" class="gi-card-img" />
           <span class="gi-badge upcoming gi-img-badge">● Expanding</span>
@@ -307,128 +374,64 @@
             <a href="https://enam.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-enam">View Details →</a>
           </div>
         </div>
+      </div> -->
+
       </div>
-
-    </div><!-- /gi-grid -->
-
-    <!-- ══ BOTTOM: Announcements + Helplines ══ -->
-    <div class="gi-bottom">
-
-      <!-- Announcements -->
-      <div class="gi-panel">
-        <div class="gi-panel-head">
-          <span class="gi-panel-title">📢 Latest Announcements</span>
-          <span class="status-pill active" style="font-size:10px;padding:3px 10px;">5 New</span>
-        </div>
-
-        <div class="gi-ann-item">
-          <div class="gi-ann-left">
-            <span class="gi-tag urgent">URGENT</span>
-            <span class="gi-date">02 Jun 2026</span>
-          </div>
-          <div>
-            <div class="gi-ann-title">PM-KISAN 19th Instalment Disbursed</div>
-            <p class="gi-ann-desc">₹2,000 transferred to 9.4 crore farmers. Check status at pmkisan.gov.in.</p>
-          </div>
-        </div>
-
-        <div class="gi-ann-item">
-          <div class="gi-ann-left">
-            <span class="gi-tag policy">POLICY</span>
-            <span class="gi-date">28 May 2026</span>
-          </div>
-          <div>
-            <div class="gi-ann-title">MSP Hike for Kharif 2026–27 Crops</div>
-            <p class="gi-ann-desc">Cabinet approves MSP increase — paddy MSP raised to ₹2,469/quintal.</p>
-          </div>
-        </div>
-
-        <div class="gi-ann-item">
-          <div class="gi-ann-left">
-            <span class="gi-tag notice">NOTICE</span>
-            <span class="gi-date">22 May 2026</span>
-          </div>
-          <div>
-            <div class="gi-ann-title">Fasal Bima Registration — Kharif 2026</div>
-            <p class="gi-ann-desc">Last date to enroll is 31 July 2026. Apply via bank or CSC.</p>
-          </div>
-        </div>
-
-        <div class="gi-ann-item">
-          <div class="gi-ann-left">
-            <span class="gi-tag policy">POLICY</span>
-            <span class="gi-date">15 May 2026</span>
-          </div>
-          <div>
-            <div class="gi-ann-title">Drip Irrigation Subsidy — 75% Off</div>
-            <p class="gi-ann-desc">75% subsidy on drip &amp; sprinkler irrigation for SC/ST farmers.</p>
-          </div>
-        </div>
-
-        <div class="gi-ann-item" style="border-bottom:none;">
-          <div class="gi-ann-left">
-            <span class="gi-tag notice">NOTICE</span>
-            <span class="gi-date">05 May 2026</span>
-          </div>
-          <div>
-            <div class="gi-ann-title">eNAM Expands to 30 New Mandis</div>
-            <p class="gi-ann-desc">Total mandis now 1,389 across 23 states on eNAM platform.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Helplines -->
-      <div class="gi-panel">
+      <!-- ══ HELPLINES ══ -->
+      <div class="gi-panel" style="margin-bottom:12px;">
         <div class="gi-panel-head">
           <span class="gi-panel-title">📞 Important Helplines</span>
         </div>
 
-        <div class="gi-contact">
-          <span class="gi-c-icon">💰</span>
-          <div class="gi-c-info">
-            <div class="gi-c-name">PM-KISAN Helpline</div>
-            <div class="gi-c-num">155261 / 1800-11-5526</div>
-            <div class="gi-c-time">Mon–Sat &nbsp;|&nbsp; 6 AM – 10 PM</div>
-          </div>
-          <a href="tel:155261" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-pmkisan">Call</a>
-        </div>
+        <div class="gi-helplines-grid">
 
-        <div class="gi-contact">
-          <span class="gi-c-icon">🏛️</span>
-          <div class="gi-c-info">
-            <div class="gi-c-name">Agriculture Department</div>
-            <div class="gi-c-num">1800-180-1551</div>
-            <div class="gi-c-time">Mon–Fri &nbsp;|&nbsp; 9 AM – 5:30 PM</div>
+          <div class="gi-contact">
+            <span class="gi-c-icon">💰</span>
+            <div class="gi-c-info">
+              <div class="gi-c-name">PM-KISAN Helpline</div>
+              <div class="gi-c-num">155261 / 1800-11-5526</div>
+              <div class="gi-c-time">Mon–Sat &nbsp;|&nbsp; 6 AM – 10 PM</div>
+            </div>
+            <a href="tel:155261" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-pmkisan">Call</a>
           </div>
-          <a href="tel:18001801551" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-agri">Call</a>
-        </div>
 
-        <div class="gi-contact">
-          <span class="gi-c-icon">☎️</span>
-          <div class="gi-c-info">
-            <div class="gi-c-name">Kisan Call Center (KCC)</div>
-            <div class="gi-c-num">1800-180-1551</div>
-            <div class="gi-c-time">All Days &nbsp;|&nbsp; 6 AM – 10 PM</div>
+          <div class="gi-contact">
+            <span class="gi-c-icon">🏛️</span>
+            <div class="gi-c-info">
+              <div class="gi-c-name">Agriculture Department</div>
+              <div class="gi-c-num">1800-180-1551</div>
+              <div class="gi-c-time">Mon–Fri &nbsp;|&nbsp; 9 AM – 5:30 PM</div>
+            </div>
+            <a href="tel:18001801551" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-agri">Call</a>
           </div>
-          <a href="tel:18001801551" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-kcc">Call</a>
-        </div>
 
-        <div class="gi-contact" style="border-bottom:none;">
-          <span class="gi-c-icon">🌾</span>
-          <div class="gi-c-info">
-            <div class="gi-c-name">Crop Insurance Support</div>
-            <div class="gi-c-num">1800-200-7710</div>
-            <div class="gi-c-time">Mon–Sat &nbsp;|&nbsp; 8 AM – 8 PM</div>
+          <div class="gi-contact">
+            <span class="gi-c-icon">☎️</span>
+            <div class="gi-c-info">
+              <div class="gi-c-name">Kisan Call Center (KCC)</div>
+              <div class="gi-c-num">1800-180-1551</div>
+              <div class="gi-c-time">All Days &nbsp;|&nbsp; 6 AM – 10 PM</div>
+            </div>
+            <a href="tel:18001801551" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-kcc">Call</a>
           </div>
-          <a href="tel:18002007710" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-insurance">Call</a>
-        </div>
 
+          <div class="gi-contact" style="border-bottom:none;">
+            <span class="gi-c-icon">🌾</span>
+            <div class="gi-c-info">
+              <div class="gi-c-name">Crop Insurance Support</div>
+              <div class="gi-c-num">1800-200-7710</div>
+              <div class="gi-c-time">Mon–Sat &nbsp;|&nbsp; 8 AM – 8 PM</div>
+            </div>
+            <a href="tel:18002007710" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-insurance">Call</a>
+          </div>
+
+        </div>
       </div>
-    </div><!-- /gi-bottom -->
 
-  </div><!-- /page-content -->
-</div><!-- /main -->
+    </div><!-- /page-content -->
+  </div><!-- /main -->
 
-<script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
 </body>
+
 </html>
