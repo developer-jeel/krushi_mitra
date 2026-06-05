@@ -4,16 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Government Information Center – Farmer Panel | Krushi Mitra</title>
-  <meta name="description" content="Access government schemes, subsidies, policies and official announcements for farmers on Krushi Mitra — your trusted agricultural companion." />
+  <title>Gov Info – Farmer Panel | Krushi Mitra</title>
+  <meta name="description" content="Government schemes, subsidies and helplines for farmers." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/gov_info.css' %}">
 </head>
 <body>
 
-<!-- ════════════ SIDEBAR ════════════ -->
+<!-- ════ SIDEBAR ════ -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -60,14 +60,9 @@
       <span>Krushi Mitro 🌾</span>
     </a>
 
-    <div class="nav-section-title">Government</div>
-
-    <!-- ACTIVE: Government Information -->
     <a href="{% url 'gov_info' %}" class="nav-item active" id="nav-gov-info">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 21h18"/>
-        <path d="M5 21V7l7-4 7 4v14"/>
-        <path d="M9 21V11h6v10"/>
+        <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V11h6v10"/>
         <rect x="10" y="3" width="4" height="4" rx="1"/>
       </svg>
       <span>Gov Info 🏛</span>
@@ -89,22 +84,22 @@
   </div>
 </aside>
 
-<!-- ════════════ MAIN ════════════ -->
+<!-- ════ MAIN ════ -->
 <div class="main">
 
   <!-- Topbar -->
   <header class="topbar">
     <div class="topbar-left">
-      <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
+      <button class="topbar-icon-btn" id="menuToggle" title="Menu">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       <div>
-        <div class="page-title">Government Information Center</div>
+        <div class="page-title">🏛 Government Information Center</div>
         <div class="breadcrumb">Dashboard / Gov Info</div>
       </div>
     </div>
     <div class="topbar-right">
-      <button class="topbar-icon-btn" id="notifBtn" title="Notifications">
+      <button class="topbar-icon-btn" title="Notifications">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="badge"></span>
       </button>
@@ -112,453 +107,288 @@
     </div>
   </header>
 
-  <!-- ════ Page Content ════ -->
   <div class="page-content">
 
-    <!-- ══ HERO BANNER ══ -->
-    <section class="gov-hero" aria-label="Government Information Hero">
-      <div class="gov-hero-content">
-        <div class="gov-hero-eyebrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V11h6v10"/></svg>
-          Official Government Portal
+    <!-- ══ STATS ROW ══ -->
+    <div class="stat-grid" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21V11h6v10"/></svg>
         </div>
-        <h1 class="gov-hero-title">
-          Government Information<br>
-          <span>for Farmers</span>
-        </h1>
-        <p class="gov-hero-sub">
-          Access all central and state government schemes, subsidies, crop insurance policies, official helplines, and the latest agricultural announcements — all in one place.
-        </p>
-      </div>
-      <!-- Decorative illustration -->
-      <div class="gov-hero-illustration" aria-hidden="true">
-        <div class="gov-hero-illus-icon">🏛️</div>
-      </div>
-    </section>
-
-    <!-- ══ SEARCH SECTION ══ -->
-    <section class="gov-search-card" aria-label="Search Government Schemes">
-      <div class="gov-search-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Search Schemes &amp; Policies
-      </div>
-      <div class="gov-search-row">
-        <!-- Search Input -->
-        <div class="gov-search-input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input
-            type="text"
-            id="gov-scheme-search"
-            class="gov-search-input"
-            placeholder="Search schemes, subsidies, crop insurance…"
-            aria-label="Search government schemes"
-          />
-        </div>
-        <!-- State Filter -->
-        <select class="gov-state-select" id="gov-state-filter" aria-label="Filter by state">
-          <option value="">🗺 All States / Central</option>
-          <option value="central">🏛 Central Government</option>
-          <option value="gujarat">Gujarat</option>
-          <option value="maharashtra">Maharashtra</option>
-          <option value="punjab">Punjab</option>
-          <option value="rajasthan">Rajasthan</option>
-          <option value="up">Uttar Pradesh</option>
-          <option value="mp">Madhya Pradesh</option>
-          <option value="haryana">Haryana</option>
-          <option value="karnataka">Karnataka</option>
-          <option value="telangana">Telangana</option>
-          <option value="ap">Andhra Pradesh</option>
-          <option value="bihar">Bihar</option>
-          <option value="wb">West Bengal</option>
-          <option value="odisha">Odisha</option>
-        </select>
-        <!-- Search Button -->
-        <button class="gov-search-btn" id="gov-search-submit" type="button" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Search
-        </button>
-      </div>
-      <!-- Quick tags -->
-      <div class="gov-search-tags">
-        <span class="gov-search-tags-label">Popular:</span>
-        <a href="#pm-kisan" class="gov-tag">💰 PM-KISAN</a>
-        <a href="#crop-insurance" class="gov-tag">🌾 Crop Insurance</a>
-        <a href="#kcc" class="gov-tag">💳 Kisan Credit</a>
-        <a href="#soil-health" class="gov-tag">🌱 Soil Health</a>
-        <a href="#subsidy" class="gov-tag">🤝 Subsidy</a>
-        <a href="#enam" class="gov-tag">📊 eNAM</a>
-      </div>
-    </section>
-
-    <!-- ══ STATISTICS CARDS ══ -->
-    <section class="gov-stat-grid" aria-label="Scheme Statistics">
-
-      <div class="gov-stat-card">
-        <div class="gov-stat-icon gov-green">🏛️</div>
-        <div class="gov-stat-info">
-          <div class="gov-stat-value">312</div>
-          <div class="gov-stat-label">Total Schemes</div>
-          <div class="gov-stat-sub">↑ 18 added this year</div>
+        <div class="stat-info">
+          <div class="stat-value">312</div>
+          <div class="stat-label">Total Schemes</div>
+          <div class="stat-change up">↑ 18 added this year</div>
         </div>
       </div>
-
-      <div class="gov-stat-card">
-        <div class="gov-stat-icon gov-amber">✅</div>
-        <div class="gov-stat-info">
-          <div class="gov-stat-value">248</div>
-          <div class="gov-stat-label">Active Schemes</div>
-          <div class="gov-stat-sub">↑ Open for enrolment</div>
+      <div class="stat-card">
+        <div class="stat-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">248</div>
+          <div class="stat-label">Active Schemes</div>
+          <div class="stat-change up">Open for enrolment</div>
         </div>
       </div>
-
-      <div class="gov-stat-card">
-        <div class="gov-stat-icon gov-blue">🔔</div>
-        <div class="gov-stat-info">
-          <div class="gov-stat-value">64</div>
-          <div class="gov-stat-label">Upcoming Schemes</div>
-          <div class="gov-stat-sub">Launching in 2026–27</div>
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value">64</div>
+          <div class="stat-label">Upcoming Schemes</div>
+          <div class="stat-change up">Launching 2026–27</div>
         </div>
       </div>
-
-      <div class="gov-stat-card">
-        <div class="gov-stat-icon gov-purple">👨‍🌾</div>
-        <div class="gov-stat-info">
-          <div class="gov-stat-value">14.2 Cr</div>
-          <div class="gov-stat-label">Beneficiary Farmers</div>
-          <div class="gov-stat-sub">Nationwide beneficiaries</div>
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-      </div>
-
-    </section>
-
-    <!-- ══ CTA ENROLMENT BANNER ══ -->
-    <div class="gov-cta-banner" role="banner">
-      <div class="gov-cta-text">
-        <div class="gov-cta-title">🚀 New: PM-KISAN 19th Instalment Released!</div>
-        <div class="gov-cta-sub">₹2,000 has been directly transferred to eligible farmers' bank accounts. Check your status and ensure your Aadhaar &amp; bank details are updated to receive your instalment.</div>
-      </div>
-      <div class="gov-cta-actions">
-        <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="btn btn-primary" id="check-pmkisan-status">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Check Status
-        </a>
-        <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="btn btn-outline" id="register-pmkisan">
-          Register Now
-        </a>
+        <div class="stat-info">
+          <div class="stat-value">14.2 Cr</div>
+          <div class="stat-label">Beneficiary Farmers</div>
+          <div class="stat-change up">Nationwide</div>
+        </div>
       </div>
     </div>
 
-    <!-- ══ MAIN 2-COLUMN GRID ══ -->
-    <div class="gov-main-grid">
+    <!-- ══ SEARCH ══ -->
+    <div class="gi-search">
+      <div class="gi-search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="gov-scheme-search" placeholder="Search schemes, subsidies, policies…" />
+      </div>
+      <select id="gov-state-filter">
+        <option value="">All States / Central</option>
+        <option>Central Government</option>
+        <option>Gujarat</option>
+        <option>Maharashtra</option>
+        <option>Punjab</option>
+        <option>Rajasthan</option>
+        <option>Uttar Pradesh</option>
+        <option>Madhya Pradesh</option>
+        <option>Haryana</option>
+        <option>Karnataka</option>
+        <option>Telangana</option>
+        <option>Andhra Pradesh</option>
+        <option>Bihar</option>
+        <option>West Bengal</option>
+        <option>Odisha</option>
+      </select>
+      <button class="btn btn-primary" id="gov-search-submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+    </div>
 
-      <!-- LEFT: Government Schemes -->
-      <div>
-        <div class="gov-scheme-header">
-          <div class="gov-scheme-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-            Government Schemes
-          </div>
-          <a href="#all-schemes" class="btn btn-secondary" style="font-size:12px; padding:7px 14px;">View All Schemes</a>
+    <!-- ══ SCHEMES ══ -->
+    <div class="section-header">
+      <div class="section-title">Government Schemes</div>
+    </div>
+
+    <div class="gi-grid">
+
+      <div class="gi-card" id="pm-kisan">
+        <div class="gi-card-top">
+          <div class="gi-emoji">💰</div>
+          <span class="gi-badge active">● Active</span>
+        </div>
+        <div class="gi-name">PM-KISAN</div>
+        <p class="gi-desc">Direct income support of ₹6,000/year to small &amp; marginal farmer families via direct bank transfer in 3 instalments.</p>
+        <div class="gi-benefit">💳 ₹2,000 × 3 instalments/year to bank account</div>
+        <div class="gi-footer">
+          <span class="gi-dept">Ministry of Agriculture</span>
+          <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmkisan">View Details →</a>
+        </div>
+      </div>
+
+      <div class="gi-card" id="crop-insurance">
+        <div class="gi-card-top">
+          <div class="gi-emoji">🌾</div>
+          <span class="gi-badge active">● Active</span>
+        </div>
+        <div class="gi-name">PM Fasal Bima Yojana</div>
+        <p class="gi-desc">Comprehensive crop insurance covering loss from flood, drought, or pest attack at very low premium rates for all farmers.</p>
+        <div class="gi-benefit">🛡️ Premium as low as 1.5% (Rabi) &amp; 2% (Kharif)</div>
+        <div class="gi-footer">
+          <span class="gi-dept">Ministry of Agriculture</span>
+          <a href="https://pmfby.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmfby">View Details →</a>
+        </div>
+      </div>
+
+      <div class="gi-card" id="kcc">
+        <div class="gi-card-top">
+          <div class="gi-emoji">💳</div>
+          <span class="gi-badge active">● Active</span>
+        </div>
+        <div class="gi-name">Kisan Credit Card (KCC)</div>
+        <p class="gi-desc">Flexible credit access for crop cultivation, post-harvest costs, and farm maintenance at subsidised interest rates.</p>
+        <div class="gi-benefit">📈 Up to ₹3 lakh credit at just 4% p.a. interest</div>
+        <div class="gi-footer">
+          <span class="gi-dept">Ministry of Finance</span>
+          <a href="https://www.nabard.org" target="_blank" rel="noopener" class="gi-link" id="btn-kcc">View Details →</a>
+        </div>
+      </div>
+
+      <div class="gi-card" id="pm-kusum">
+        <div class="gi-card-top">
+          <div class="gi-emoji">☀️</div>
+          <span class="gi-badge active">● Active</span>
+        </div>
+        <div class="gi-name">PM KUSUM Yojana</div>
+        <p class="gi-desc">Solar pumps and grid-connected solar power plants to help farmers reduce electricity cost and earn extra income.</p>
+        <div class="gi-benefit">⚡ 60% subsidy on solar pump installation</div>
+        <div class="gi-footer">
+          <span class="gi-dept">Ministry of Renewable Energy</span>
+          <a href="https://mnre.gov.in/pm-kusum/" target="_blank" rel="noopener" class="gi-link" id="btn-kusum">View Details →</a>
+        </div>
+      </div>
+
+      <div class="gi-card" id="soil-health">
+        <div class="gi-card-top">
+          <div class="gi-emoji">🌱</div>
+          <span class="gi-badge active">● Active</span>
+        </div>
+        <div class="gi-name">Soil Health Card Scheme</div>
+        <p class="gi-desc">Free soil testing with personalised fertiliser &amp; nutrient recommendations for each farm plot once every 2 years.</p>
+        <div class="gi-benefit">📋 Free soil test + personalised fertiliser advice</div>
+        <div class="gi-footer">
+          <span class="gi-dept">Dept. of Agriculture</span>
+          <a href="https://soilhealth.dac.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-shc">View Details →</a>
+        </div>
+      </div>
+
+      <div class="gi-card" id="enam">
+        <div class="gi-card-top">
+          <div class="gi-emoji">📊</div>
+          <span class="gi-badge upcoming">● Expanding</span>
+        </div>
+        <div class="gi-name">eNAM — National Agriculture Market</div>
+        <p class="gi-desc">Pan-India e-trading portal linking APMC mandis for a unified national commodity market with online payments.</p>
+        <div class="gi-benefit">💹 Transparent pricing &amp; online trade across 23 states</div>
+        <div class="gi-footer">
+          <span class="gi-dept">SFAC</span>
+          <a href="https://enam.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-enam">View Details →</a>
+        </div>
+      </div>
+
+    </div><!-- /gi-grid -->
+
+    <!-- ══ BOTTOM: Announcements + Helplines ══ -->
+    <div class="gi-bottom">
+
+      <!-- Announcements -->
+      <div class="gi-panel">
+        <div class="gi-panel-head">
+          <span class="gi-panel-title">📢 Latest Announcements</span>
+          <span class="status-pill active" style="font-size:10px;padding:3px 10px;">5 New</span>
         </div>
 
-        <div class="gov-schemes-grid">
-
-          <!-- PM-KISAN -->
-          <article class="gov-scheme-card" id="pm-kisan" aria-label="PM-KISAN Scheme">
-            <div class="gov-scheme-top">
-              <div class="gov-scheme-icon-wrap">💰</div>
-              <span class="gov-scheme-status status-active">
-                <span class="gov-scheme-status-dot"></span>
-                Active
-              </span>
-            </div>
-            <div>
-              <div class="gov-scheme-name">PM-KISAN</div>
-              <p class="gov-scheme-desc">Pradhan Mantri Kisan Samman Nidhi provides direct income support of ₹6,000/year to small and marginal farmer families across India through direct bank transfer.</p>
-            </div>
-            <div class="gov-scheme-benefit">
-              <span class="gov-scheme-benefit-icon">💳</span>
-              <span class="gov-scheme-benefit-text">₹6,000/year in 3 instalments of ₹2,000 directly to bank account</span>
-            </div>
-            <div class="gov-scheme-footer">
-              <span class="gov-scheme-ministry">🏛 Ministry of Agriculture</span>
-              <a href="https://pmkisan.gov.in" target="_blank" rel="noopener" class="gov-scheme-btn" id="btn-pmkisan-details">
-                Details
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- PM Fasal Bima Yojana -->
-          <article class="gov-scheme-card" id="crop-insurance" aria-label="PM Fasal Bima Yojana Scheme">
-            <div class="gov-scheme-top">
-              <div class="gov-scheme-icon-wrap">🌾</div>
-              <span class="gov-scheme-status status-active">
-                <span class="gov-scheme-status-dot"></span>
-                Active
-              </span>
-            </div>
-            <div>
-              <div class="gov-scheme-name">PM Fasal Bima Yojana</div>
-              <p class="gov-scheme-desc">Comprehensive crop insurance scheme providing financial support to farmers suffering crop loss or damage due to unforeseen events like flood, drought, or pest attack.</p>
-            </div>
-            <div class="gov-scheme-benefit">
-              <span class="gov-scheme-benefit-icon">🛡️</span>
-              <span class="gov-scheme-benefit-text">Premium as low as 1.5% (Rabi) & 2% (Kharif) of sum insured amount</span>
-            </div>
-            <div class="gov-scheme-footer">
-              <span class="gov-scheme-ministry">🏛 Ministry of Agriculture</span>
-              <a href="https://pmfby.gov.in" target="_blank" rel="noopener" class="gov-scheme-btn" id="btn-pmfby-details">
-                Details
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- Kisan Credit Card -->
-          <article class="gov-scheme-card" id="kcc" aria-label="Kisan Credit Card Scheme">
-            <div class="gov-scheme-top">
-              <div class="gov-scheme-icon-wrap">💳</div>
-              <span class="gov-scheme-status status-active">
-                <span class="gov-scheme-status-dot"></span>
-                Active
-              </span>
-            </div>
-            <div>
-              <div class="gov-scheme-name">Kisan Credit Card (KCC)</div>
-              <p class="gov-scheme-desc">Provides farmers timely access to credit for agricultural needs including crop cultivation, post-harvest expenses, maintenance of farm assets and allied activities.</p>
-            </div>
-            <div class="gov-scheme-benefit">
-              <span class="gov-scheme-benefit-icon">📈</span>
-              <span class="gov-scheme-benefit-text">Credit up to ₹3 lakh at 4% interest p.a. with interest subvention</span>
-            </div>
-            <div class="gov-scheme-footer">
-              <span class="gov-scheme-ministry">🏛 Ministry of Finance</span>
-              <a href="https://www.nabard.org/content1.aspx?id=572" target="_blank" rel="noopener" class="gov-scheme-btn" id="btn-kcc-details">
-                Details
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- PM KUSUM Yojana -->
-          <article class="gov-scheme-card" id="pm-kusum" aria-label="PM KUSUM Yojana Scheme">
-            <div class="gov-scheme-top">
-              <div class="gov-scheme-icon-wrap">☀️</div>
-              <span class="gov-scheme-status status-active">
-                <span class="gov-scheme-status-dot"></span>
-                Active
-              </span>
-            </div>
-            <div>
-              <div class="gov-scheme-name">PM KUSUM Yojana</div>
-              <p class="gov-scheme-desc">Pradhan Mantri Kisan Urja Suraksha evam Utthan Mahabhiyan — provides solar pumps and grid-connected solar power plants to farmers for sustainable irrigation.</p>
-            </div>
-            <div class="gov-scheme-benefit">
-              <span class="gov-scheme-benefit-icon">⚡</span>
-              <span class="gov-scheme-benefit-text">60% subsidy on solar pump installation; extra income by selling surplus power to grid</span>
-            </div>
-            <div class="gov-scheme-footer">
-              <span class="gov-scheme-ministry">🏛 Ministry of New &amp; Renewable Energy</span>
-              <a href="https://mnre.gov.in/pm-kusum/" target="_blank" rel="noopener" class="gov-scheme-btn" id="btn-kusum-details">
-                Details
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- Soil Health Card -->
-          <article class="gov-scheme-card" id="soil-health" aria-label="Soil Health Card Scheme">
-            <div class="gov-scheme-top">
-              <div class="gov-scheme-icon-wrap">🌱</div>
-              <span class="gov-scheme-status status-active">
-                <span class="gov-scheme-status-dot"></span>
-                Active
-              </span>
-            </div>
-            <div>
-              <div class="gov-scheme-name">Soil Health Card Scheme</div>
-              <p class="gov-scheme-desc">Provides a soil health card to every farmer containing crop-wise recommendations of nutrients and fertilizers required for individual farms to help improve productivity.</p>
-            </div>
-            <div class="gov-scheme-benefit">
-              <span class="gov-scheme-benefit-icon">📋</span>
-              <span class="gov-scheme-benefit-text">Free soil testing and personalised fertiliser recommendations every 2 years</span>
-            </div>
-            <div class="gov-scheme-footer">
-              <span class="gov-scheme-ministry">🏛 Department of Agriculture</span>
-              <a href="https://soilhealth.dac.gov.in" target="_blank" rel="noopener" class="gov-scheme-btn" id="btn-shc-details">
-                Details
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- eNAM -->
-          <article class="gov-scheme-card" id="enam" aria-label="eNAM Scheme">
-            <div class="gov-scheme-top">
-              <div class="gov-scheme-icon-wrap">📊</div>
-              <span class="gov-scheme-status status-upcoming">
-                <span class="gov-scheme-status-dot"></span>
-                Expanding
-              </span>
-            </div>
-            <div>
-              <div class="gov-scheme-name">eNAM — National Agriculture Market</div>
-              <p class="gov-scheme-desc">Pan-India electronic trading portal linking existing APMC mandis to create a unified national market for agricultural commodities and ensure better price discovery.</p>
-            </div>
-            <div class="gov-scheme-benefit">
-              <span class="gov-scheme-benefit-icon">💹</span>
-              <span class="gov-scheme-benefit-text">Transparent price discovery, online payment &amp; seamless commodity movement across states</span>
-            </div>
-            <div class="gov-scheme-footer">
-              <span class="gov-scheme-ministry">🏛 Small Farmers Agribusiness Consortium</span>
-              <a href="https://enam.gov.in" target="_blank" rel="noopener" class="gov-scheme-btn" id="btn-enam-details">
-                Details
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-        </div><!-- /gov-schemes-grid -->
-      </div><!-- /LEFT column -->
-
-      <!-- RIGHT: Side Panel -->
-      <div class="gov-side-panel">
-
-        <!-- ── Latest Announcements ── -->
-        <div class="gov-announcements-card" aria-label="Latest Government Announcements">
-          <div class="gov-panel-header">
-            <div class="gov-panel-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
-              Latest Announcements
-            </div>
-            <span class="gov-panel-badge">5 New</span>
+        <div class="gi-ann-item">
+          <div class="gi-ann-left">
+            <span class="gi-tag urgent">URGENT</span>
+            <span class="gi-date">02 Jun 2026</span>
           </div>
-
-          <div class="gov-announcement-list">
-
-            <div class="gov-announcement-item">
-              <div class="gov-ann-meta">
-                <span class="gov-ann-date">02 Jun 2026</span>
-                <span class="gov-ann-type type-urgent">URGENT</span>
-              </div>
-              <div class="gov-ann-title">PM-KISAN 19th Instalment Disbursed</div>
-              <p class="gov-ann-desc">₹2,000 transferred to 9.4 crore farmers. Check beneficiary status at pmkisan.gov.in.</p>
-              <span class="gov-ann-arrow">›</span>
-            </div>
-
-            <div class="gov-announcement-item">
-              <div class="gov-ann-meta">
-                <span class="gov-ann-date">28 May 2026</span>
-                <span class="gov-ann-type type-policy">POLICY</span>
-              </div>
-              <div class="gov-ann-title">MSP Hike for Kharif 2026–27 Crops</div>
-              <p class="gov-ann-desc">Cabinet approves MSP increase for 14 Kharif crops — paddy MSP raised to ₹2,469/quintal.</p>
-              <span class="gov-ann-arrow">›</span>
-            </div>
-
-            <div class="gov-announcement-item">
-              <div class="gov-ann-meta">
-                <span class="gov-ann-date">22 May 2026</span>
-                <span class="gov-ann-type">NOTICE</span>
-              </div>
-              <div class="gov-ann-title">Fasal Bima Registration — Kharif 2026</div>
-              <p class="gov-ann-desc">Last date to enroll in PM Fasal Bima for Kharif season is 31 July 2026. Apply via bank or CSC.</p>
-              <span class="gov-ann-arrow">›</span>
-            </div>
-
-            <div class="gov-announcement-item">
-              <div class="gov-ann-meta">
-                <span class="gov-ann-date">15 May 2026</span>
-                <span class="gov-ann-type type-policy">POLICY</span>
-              </div>
-              <div class="gov-ann-title">New Drip Irrigation Subsidy — 75% Off</div>
-              <p class="gov-ann-desc">State governments announce 75% subsidy on drip &amp; sprinkler irrigation for SC/ST farmers.</p>
-              <span class="gov-ann-arrow">›</span>
-            </div>
-
-            <div class="gov-announcement-item">
-              <div class="gov-ann-meta">
-                <span class="gov-ann-date">05 May 2026</span>
-                <span class="gov-ann-type">NOTICE</span>
-              </div>
-              <div class="gov-ann-title">eNAM Expands to 30 New Mandis</div>
-              <p class="gov-ann-desc">30 new APMC mandis onboarded to eNAM platform. Total mandis now 1,389 across 23 states.</p>
-              <span class="gov-ann-arrow">›</span>
-            </div>
-
-          </div><!-- /gov-announcement-list -->
-        </div><!-- /gov-announcements-card -->
-
-        <!-- ── Important Contacts ── -->
-        <div class="gov-contacts-card" aria-label="Government Helpline Contacts">
-          <div class="gov-panel-header">
-            <div class="gov-panel-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              Important Helplines
-            </div>
+          <div>
+            <div class="gi-ann-title">PM-KISAN 19th Instalment Disbursed</div>
+            <p class="gi-ann-desc">₹2,000 transferred to 9.4 crore farmers. Check status at pmkisan.gov.in.</p>
           </div>
+        </div>
 
-          <div class="gov-contact-list">
+        <div class="gi-ann-item">
+          <div class="gi-ann-left">
+            <span class="gi-tag policy">POLICY</span>
+            <span class="gi-date">28 May 2026</span>
+          </div>
+          <div>
+            <div class="gi-ann-title">MSP Hike for Kharif 2026–27 Crops</div>
+            <p class="gi-ann-desc">Cabinet approves MSP increase — paddy MSP raised to ₹2,469/quintal.</p>
+          </div>
+        </div>
 
-            <div class="gov-contact-item">
-              <div class="gov-contact-icon ci-green">💰</div>
-              <div class="gov-contact-info">
-                <div class="gov-contact-name">PM-KISAN Helpline</div>
-                <div class="gov-contact-num">155261 / 1800-11-5526</div>
-                <div class="gov-contact-avail">Mon–Sat, 6 AM – 10 PM</div>
-              </div>
-              <a href="tel:155261" class="gov-contact-call-btn" id="call-pmkisan">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Call
-              </a>
-            </div>
+        <div class="gi-ann-item">
+          <div class="gi-ann-left">
+            <span class="gi-tag notice">NOTICE</span>
+            <span class="gi-date">22 May 2026</span>
+          </div>
+          <div>
+            <div class="gi-ann-title">Fasal Bima Registration — Kharif 2026</div>
+            <p class="gi-ann-desc">Last date to enroll is 31 July 2026. Apply via bank or CSC.</p>
+          </div>
+        </div>
 
-            <div class="gov-contact-item">
-              <div class="gov-contact-icon ci-blue">🏛️</div>
-              <div class="gov-contact-info">
-                <div class="gov-contact-name">Agriculture Department</div>
-                <div class="gov-contact-num">1800-180-1551</div>
-                <div class="gov-contact-avail">Mon–Fri, 9 AM – 5:30 PM</div>
-              </div>
-              <a href="tel:18001801551" class="gov-contact-call-btn" id="call-agri">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Call
-              </a>
-            </div>
+        <div class="gi-ann-item">
+          <div class="gi-ann-left">
+            <span class="gi-tag policy">POLICY</span>
+            <span class="gi-date">15 May 2026</span>
+          </div>
+          <div>
+            <div class="gi-ann-title">Drip Irrigation Subsidy — 75% Off</div>
+            <p class="gi-ann-desc">75% subsidy on drip &amp; sprinkler irrigation for SC/ST farmers.</p>
+          </div>
+        </div>
 
-            <div class="gov-contact-item">
-              <div class="gov-contact-icon ci-amber">📞</div>
-              <div class="gov-contact-info">
-                <div class="gov-contact-name">Kisan Call Center (KCC)</div>
-                <div class="gov-contact-num">1800-180-1551</div>
-                <div class="gov-contact-avail">All Days, 6 AM – 10 PM</div>
-              </div>
-              <a href="tel:18001801551" class="gov-contact-call-btn" id="call-kcc">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Call
-              </a>
-            </div>
+        <div class="gi-ann-item" style="border-bottom:none;">
+          <div class="gi-ann-left">
+            <span class="gi-tag notice">NOTICE</span>
+            <span class="gi-date">05 May 2026</span>
+          </div>
+          <div>
+            <div class="gi-ann-title">eNAM Expands to 30 New Mandis</div>
+            <p class="gi-ann-desc">Total mandis now 1,389 across 23 states on eNAM platform.</p>
+          </div>
+        </div>
+      </div>
 
-            <div class="gov-contact-item">
-              <div class="gov-contact-icon ci-purple">🌾</div>
-              <div class="gov-contact-info">
-                <div class="gov-contact-name">Crop Insurance Support</div>
-                <div class="gov-contact-num">1800-200-7710</div>
-                <div class="gov-contact-avail">Mon–Sat, 8 AM – 8 PM</div>
-              </div>
-              <a href="tel:18002007710" class="gov-contact-call-btn" id="call-insurance">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Call
-              </a>
-            </div>
+      <!-- Helplines -->
+      <div class="gi-panel">
+        <div class="gi-panel-head">
+          <span class="gi-panel-title">📞 Important Helplines</span>
+        </div>
 
-          </div><!-- /gov-contact-list -->
-        </div><!-- /gov-contacts-card -->
+        <div class="gi-contact">
+          <span class="gi-c-icon">💰</span>
+          <div class="gi-c-info">
+            <div class="gi-c-name">PM-KISAN Helpline</div>
+            <div class="gi-c-num">155261 / 1800-11-5526</div>
+            <div class="gi-c-time">Mon–Sat &nbsp;|&nbsp; 6 AM – 10 PM</div>
+          </div>
+          <a href="tel:155261" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-pmkisan">Call</a>
+        </div>
 
-      </div><!-- /gov-side-panel -->
+        <div class="gi-contact">
+          <span class="gi-c-icon">🏛️</span>
+          <div class="gi-c-info">
+            <div class="gi-c-name">Agriculture Department</div>
+            <div class="gi-c-num">1800-180-1551</div>
+            <div class="gi-c-time">Mon–Fri &nbsp;|&nbsp; 9 AM – 5:30 PM</div>
+          </div>
+          <a href="tel:18001801551" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-agri">Call</a>
+        </div>
 
-    </div><!-- /gov-main-grid -->
+        <div class="gi-contact">
+          <span class="gi-c-icon">☎️</span>
+          <div class="gi-c-info">
+            <div class="gi-c-name">Kisan Call Center (KCC)</div>
+            <div class="gi-c-num">1800-180-1551</div>
+            <div class="gi-c-time">All Days &nbsp;|&nbsp; 6 AM – 10 PM</div>
+          </div>
+          <a href="tel:18001801551" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-kcc">Call</a>
+        </div>
+
+        <div class="gi-contact" style="border-bottom:none;">
+          <span class="gi-c-icon">🌾</span>
+          <div class="gi-c-info">
+            <div class="gi-c-name">Crop Insurance Support</div>
+            <div class="gi-c-num">1800-200-7710</div>
+            <div class="gi-c-time">Mon–Sat &nbsp;|&nbsp; 8 AM – 8 PM</div>
+          </div>
+          <a href="tel:18002007710" class="btn btn-outline" style="font-size:11.5px;padding:7px 14px;" id="call-insurance">Call</a>
+        </div>
+
+      </div>
+    </div><!-- /gi-bottom -->
 
   </div><!-- /page-content -->
 </div><!-- /main -->
