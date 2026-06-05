@@ -200,7 +200,9 @@ def farmer_profile(request):
 
 @check_login(['Farmer'])
 def govt_info(request):
-    return render(request, "farmer/gov_info.html")
+    all_info = gov_info.objects.all().order_by('-created_at')
+    context = {'all_info': all_info}
+    return render(request, "farmer/gov_info.html",context)
 
 @check_login(['Farmer'])
 def farmer_chatbot(request):
