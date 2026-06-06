@@ -241,28 +241,31 @@
       </section>
 
       <!-- ══ BREAKING NEWS ══ -->
-
-      <section style="margin-bottom:28px;">
-        <div class="news-section-header">
-          <h2 class="news-section-title">🚨 Breaking News</h2>
-        </div>
-        <div class="news-breaking-card">
-          <div class="news-breaking-img-wrap">
-            <img src="{% static 'farmer/images/news_breaking.png' %}" alt="Bumper harvest output" class="news-breaking-img">
-            <span class="news-breaking-badge">BREAKING</span>
+        <section style="margin-bottom:28px;">
+          <div class="news-section-header">
+            <h2 class="news-section-title">🚨 Breaking News</h2>
           </div>
-          <div class="news-breaking-content">
-            <div class="news-date-row">
-              <span class="news-category-pill govt">Government Updates</span>
-              <span>•</span>
-              <span>June 5, 2026</span>
+          {% for newss in all_news %}
+          {% if newss.is_breaking %}
+          <div class="news-breaking-card">
+            <div class="news-breaking-img-wrap">
+              <img src="{{newss.image.url}}" alt="Bumper harvest output" class="news-breaking-img">
+              <span class="news-breaking-badge">BREAKING</span>
             </div>
-            <h3 class="news-breaking-title">MSP for Kharif Crops Hiked: Paddy Prices Witness 7% Increase for 2026-27 Season</h3>
-            <p class="news-breaking-desc">The Cabinet Committee on Economic Affairs has approved an increase in the Minimum Support Prices (MSP) for all mandated Kharif crops. The MSP for common grade paddy has been raised to ₹2,340 per quintal, representing a substantial hike aimed at encouraging crop diversification and ensuring fair pricing for farmers across India.</p>
-            <a href="#" class="news-readmore-btn">Read Full Article →</a>
+            <div class="news-breaking-content">
+              <div class="news-date-row">
+                <span class="news-category-pill govt">{{ newss.category }}</span>
+                <span>•</span>
+                <span>{{ newss.created_at }}</span>
+              </div>
+              <h3 class="news-breaking-title">{{ newss.title }}</h3>
+              <p class="news-breaking-desc">{{ newss.description }}</p>
+              <a href="{{newss.source_link}}" target="_blank" class="news-readmore-btn">Read Full Article →</a>
+            </div>
           </div>
-        </div>
-      </section>
+          {% endif %}
+          {% endfor %}
+        </section>
 
       <!-- ══ LATEST NEWS ══ -->
       <section style="margin-bottom:28px;">
@@ -270,102 +273,25 @@
           <h2 class="news-section-title">📰 Latest Agriculture News</h2>
         </div>
         <div class="news-cards-grid">
-          <!-- Card 1: Crop News -->
+          {% for newss in all_news %}
+          {% if not newss.is_breaking %}
           <article class="news-card">
             <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_market.png' %}" alt="Pusa Wheat Variety" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill crop">Crop News</span></span>
+              <img src="{{newss.image.url}}" alt="Pusa Wheat Variety" class="news-card-img">
+              <span class="news-card-badge"><span class="news-category-pill crop">{{ newss.category }}</span></span>
             </div>
             <div class="news-card-body">
-              <h3 class="news-card-title">ICAR Releases New High-Yield, Heat-Resistant Wheat Variety 'HD-3385'</h3>
-              <p class="news-card-desc">The Indian Agricultural Research Institute has officially licensed HD-3385, a novel wheat variety tailored to withstand sudden heatwaves during the grain-filling stage, promising a 15% increase in yields.</p>
+              <h3 class="news-card-title">{{ newss.title }}</h3>
+              <p class="news-card-desc">{{ newss.description }}</p>
               <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">June 4, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
+                <span class="news-date-row" style="margin-bottom:0;">{{ newss.created_at}}</span>
+                <a href="{{ newss.source_link }}" target="_blank" class="news-readmore-btn">Read More</a>
               </div>
             </div>
           </article>
-
-          <!-- Card 2: Organic Farming -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_organic.png' %}" alt="Natural fertilizers" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill organic">Organic Farming</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Organic Rice Exports from Sikkim to European Markets Set New Records</h3>
-              <p class="news-card-desc">Sikkim's cooperative farmers have successfully exported over 500 tonnes of premium organic aromatic rice to Europe, securing a 40% premium price over conventional basmati varieties.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">June 3, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 3: Technology -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_tech.png' %}" alt="Drone spraying crops" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill tech">Technology</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Drone Subsidies Expanded: Government to Cover 50% Cost for Farm Cooperatives</h3>
-              <p class="news-card-desc">Under the Sub-Mission on Agricultural Mechanization, the Ministry has increased subsidies on agricultural drones to boost precision pesticide spraying and crop health monitoring.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">June 2, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 4: Dairy Farming -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_hero.png' %}" alt="Modern dairy milking parlor" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill organic">Dairy Farming</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">NDDB Launches Smart Cattle Health Tracking Neckbands in Gujarat Mandis</h3>
-              <p class="news-card-desc">The National Dairy Development Board has initiated a pilot project to equip cattle with IoT-enabled neckbands that predict illness and optimize feed ratios in real-time.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 31, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 5: Irrigation -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_weather.png' %}" alt="Drip irrigation pipes in field" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill crop">Irrigation</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Micro-Irrigation Funds Raised by ₹5,000 Crore to Combat Water Scarcity</h3>
-              <p class="news-card-desc">The National Bank for Agriculture and Rural Development (NABARD) announced additional funding to support drip and sprinkler system installations in semi-arid zones.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 29, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 6: Agriculture Equipment -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_govt.png' %}" alt="Electric tractors displayed" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill tech">Agriculture Equipment</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Indigenous Electric Tractors Gaining High Traction Among Small Farmers</h3>
-              <p class="news-card-desc">Low-maintenance electric tractors developed by domestic startups are reporting record sales due to rising diesel prices and government subsidy incentives.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 27, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-        </div>
+          {% endif %}
+          {% endfor %}
+  
         
         <!-- See More News Button -->
         <div class="news-see-more-container">
@@ -378,103 +304,6 @@
         </div>
 
         <!-- More News Cards (Hidden by default) -->
-        <div class="news-cards-grid" id="more-news-grid" style="display:none;">
-          <!-- Card 7: Crop Rotation -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_market.png' %}" alt="Crop rotation planning" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill crop">Crop News</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Best Practices for Sustainable Crop Rotation in Indian Agriculture</h3>
-              <p class="news-card-desc">Agricultural scientists recommend a 3-year rotation cycle combining legumes, cereals, and cash crops to maintain soil fertility and reduce pest infestation naturally.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">June 1, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 8: Pesticide Ban -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_organic.png' %}" alt="Organic pesticides" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill organic">Organic Farming</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Harmful Pesticide Ban Effective from July: Transition to Organic Alternatives</h3>
-              <p class="news-card-desc">The Central government has banned 11 highly toxic pesticides used in crop protection. Farmers are encouraged to switch to bio-pesticides available at subsidized rates.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 26, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 9: Soil Testing -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_tech.png' %}" alt="Soil testing laboratory" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill tech">Technology</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Free Soil Testing Camps Launched Across All Districts This Month</h3>
-              <p class="news-card-desc">State agriculture departments are conducting mobile soil testing units to provide farmers with customized nutrient recommendations for optimal crop yield.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 24, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 10: Bee Keeping -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_hero.png' %}" alt="Bee keeping apiary" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill crop">Crop News</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Bee-keeping Programs Show Promise for Farmer Income Diversification</h3>
-              <p class="news-card-desc">Training camps across rural areas are teaching sustainable apiculture practices. Honey exports from India have increased by 35% year-on-year.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 22, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 11: Water Conservation -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_weather.png' %}" alt="Water conservation techniques" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill weather">Weather Alerts</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">Rainwater Harvesting Systems: Complete Guide for Small Farm Holdings</h3>
-              <p class="news-card-desc">Simple rainwater harvesting structures can reduce water dependency by 40-60%. Central schemes provide up to 80% subsidy for installation.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 20, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 12: Export Opportunities -->
-          <article class="news-card">
-            <div class="news-card-img-wrap">
-              <img src="{% static 'farmer/images/news_govt.png' %}" alt="Agricultural exports" class="news-card-img">
-              <span class="news-card-badge"><span class="news-category-pill market">Market News</span></span>
-            </div>
-            <div class="news-card-body">
-              <h3 class="news-card-title">New Export Market Opportunities for Indian Spices and Organic Produce</h3>
-              <p class="news-card-desc">Trade agreements with Southeast Asian countries have opened new markets. Farmer groups can directly export through government-approved channels.</p>
-              <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">May 18, 2026</span>
-                <a href="#" class="news-readmore-btn">Read More</a>
-              </div>
-            </div>
-          </article>
-        </div>
       </section>
 
     </div><!-- /page-content -->
