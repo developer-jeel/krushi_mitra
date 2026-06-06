@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import django.utils.timezone as timezone
+from datetime import timedelta
 
 class User(AbstractUser):
     ROLE_CHOICES = (
@@ -244,5 +246,9 @@ class news(models.Model):
     is_breaking = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def  check_is_breaking(self):
+        if self.is_breaking and timezone.now() > self.created_at + timedelta(hours=24):
+            self.is_breaking = False
+            self.save(update_fields=['is_breaking'])
     def __str__(self):
         return f"{self.title} - {self.category} - {self.state} - {self.created_at}"
