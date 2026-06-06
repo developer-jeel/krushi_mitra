@@ -243,6 +243,7 @@ class news(models.Model):
     state = models.CharField(max_length=100,choices=STATE_CHOICES)
     image = models.FileField(upload_to='news/images/', null=True, blank=True)
     video = models.FileField(upload_to='news/videos/', null=True, blank=True)
+    source_link = models.URLField(blank=True, null=True)
     is_breaking = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -250,5 +251,6 @@ class news(models.Model):
         if self.is_breaking and timezone.now() > self.created_at + timedelta(hours=24):
             self.is_breaking = False
             self.save(update_fields=['is_breaking'])
+
     def __str__(self):
         return f"{self.title} - {self.category} - {self.state} - {self.created_at}"
