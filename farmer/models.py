@@ -234,3 +234,15 @@ class news(models.Model):
         ("Agricultural Equipment", "Agricultural Equipment"), 
         ("Other", "Other"), 
 ]
+    
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.CharField(max_length=50, choices=category_choices)
+    state = models.CharField(max_length=100,choices=STATE_CHOICES)
+    image = models.FileField(upload_to='news/images/', null=True, blank=True)
+    video = models.FileField(upload_to='news/videos/', null=True, blank=True)
+    is_breaking = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.category} - {self.state} - {self.created_at}"
