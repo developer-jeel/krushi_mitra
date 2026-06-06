@@ -35,7 +35,7 @@ urlpatterns = [
     path('add-tool', views.add_tool, name='add_tool'),
     path('community_chat', views.community_chat, name='community_chat'),
     path('gov_info', views.govt_info, name='gov_info'),
-    path('news', views.news, name='news'),
+    path('news', views.farmer_news, name='news'),
 
 
     path('buyer_home', views.buyer_home, name='buyer_home'),

@@ -435,6 +435,11 @@ def tool_price(request):
 def add_tool(request):
     return render(request, "farmer/add_tool.html")
 
+@check_login(['Farmer'])
+def farmer_news(request):
+    all_news = news.objects.all().order_by('-created_at')
+    context = {'all_news': all_news}
+    return render(request, "farmer/news.html", context)
 
 #++++++++++++++++++++++==============================+++++++++++++++++++++===========================++++++++++++++++++++++++++++=====================
 
@@ -504,9 +509,6 @@ def kyc(request):
         
     return render(request, "buyer/kyc.html", {'buyer': buyer})
 
-@check_login(['Farmer'])
-def news(request):
-    return render(request, "farmer/news.html")
 
 def home(request):
     return HttpResponse("Welcome to Krushi Mitra! You are logged in.")  
