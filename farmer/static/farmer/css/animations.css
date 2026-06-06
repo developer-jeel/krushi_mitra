@@ -101,7 +101,7 @@
 }
 
 @keyframes particleDrift {
-  0%   { transform: translate(0, 0)rotate(0deg) opacity: 0; }
+  0%   { transform: translate(0, 0)rotate(0deg);opacity: 0; }
   10%  { opacity: 1; }
   90%  { opacity: 0.4; }
   100% { transform: translate(var(--dx,0), var(--dy,-120px)) rotate(var(--rot,180deg)); opacity: 0; }
