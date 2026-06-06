@@ -133,6 +133,7 @@ class community_message(models.Model):
 
 class gov_info(models.Model):
     STATE_CHOICES = [
+    ("Central Government", "Central Government"),
     ("Andhra Pradesh", "Andhra Pradesh"),
     ("Arunachal Pradesh", "Arunachal Pradesh"),
     ("Assam", "Assam"),

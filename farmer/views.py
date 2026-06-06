@@ -206,8 +206,12 @@ def govt_info(request):
         state = request.POST.get('state')
         if state == "Central":
             return redirect('gov_info')
-        all_info = gov_info.objects.filter(state=state).order_by('-created_at')
-        context = {'all_info': all_info}
+        elif state == "Central Government":
+            all_info = gov_info.objects.filter(state="Central Government").order_by('-created_at')
+            context = {'all_info': all_info}
+        else:
+            all_info = gov_info.objects.filter(state__in=["Central Government", state]).order_by('-created_at')
+            context = {'all_info': all_info}
         return render(request, "farmer/gov_info.html",context)
     return render(request, "farmer/gov_info.html",context)
 

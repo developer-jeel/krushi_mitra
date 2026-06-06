@@ -155,7 +155,7 @@
     <div class="page-content">
 
       <!-- ══ STATS ROW ══ -->
-      <div class="stat-grid" style="margin-bottom:24px;">
+      <!-- <div class="stat-grid" style="margin-bottom:24px;">
         <div class="stat-card">
           <div class="stat-icon green">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -210,7 +210,7 @@
             <div class="stat-change up">Nationwide</div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- ══ SEARCH ══ -->
       <form action="{% url 'gov_info' %}" method="post">
@@ -225,7 +225,7 @@
         </div>
         <select id="gov-state-filter" name="state">
           <option value="Central">All States / Central</option>
-          <option value="Central">Central Government</option>
+          <option value="Central Government">Central Government</option>
 
           <!-- States -->
           <option value="Andhra Pradesh">Andhra Pradesh</option>
@@ -463,6 +463,51 @@
   </div><!-- /main -->
 
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
-</body>
+  
+  <script>
+    /**
+     * Highlight all dollar amounts ($XXX or $X,XXX) in bold yellow text
+     * This function wraps currency amounts in <span> with dollar-amount class
+     */
+    function highlightDollarAmounts() {
+      // Get all text nodes in the page content area
+      const pageContent = document.querySelector('.page-content');
+      if (!pageContent) return;
 
-</html>
+      // Create a TreeWalker to traverse all text nodes
+      const walker = document.createTreeWalker(
+        pageContent,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+      );
+
+      const nodesToReplace = [];
+      let node;
+
+      while (node = walker.nextNode()) {
+        // Skip if node is inside a script tag or already styled element
+        if (node.parentElement.closest('script') || node.parentElement.className === 'dollar-amount') {
+          continue;
+        }
+
+        // Check if text contains dollar amounts
+        if (node.nodeValue.match(/\$[\d,]+/)) {
+          nodesToReplace.push(node);
+        }
+      }
+
+      // Replace each text node with HTML that includes highlighted dollar amounts
+      nodesToReplace.forEach(node => {
+        const span = document.createElement('span');
+        span.innerHTML = node.nodeValue.replace(
+          /(\$[\d,]+)/g,
+          '<span class="dollar-amount">$1</span>'
+        );
+        node.parentNode.replaceChild(span, node);
+      });
+    }
+
+    // Run when DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', highlightDollarAmounts);
+  </script>
