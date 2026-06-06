@@ -437,6 +437,9 @@ def add_tool(request):
 
 @check_login(['Farmer'])
 def farmer_news(request):
+    api_key = "cda9b54ada6d720cbc78948d2e86b4d8"
+    uid = request.uid
+    
     all_news = news.objects.all().order_by('-created_at')
     context = {'all_news': all_news}
     return render(request, "farmer/news.html", context)
