@@ -439,8 +439,19 @@ def add_tool(request):
 def farmer_news(request):
     api_key = "cda9b54ada6d720cbc78948d2e86b4d8"
     uid = request.uid
-    
+    city = uid.city if uid.city else "Delhi"
     all_news = news.objects.all().order_by('-created_at')
+
+    response= requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}")
+    data = response.json()
+    context = {
+    'all_news': all_news,
+    "city": city.upper(),
+    "temperature": round(data["main"]["temp"]),
+    "condition": data["weather"][0]["description"].title(),
+    "humidity": data["main"]["humidity"],
+    "wind_speed": round(data["wind"]["speed"]),
+   }
     context = {'all_news': all_news}
     return render(request, "farmer/news.html", context)
 
