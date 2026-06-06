@@ -223,7 +223,7 @@ class news(models.Model):
     ("Lakshadweep", "Lakshadweep"),
     ("Puducherry", "Puducherry"),
 ]
-    category_choices = (
+    category_choices = [
         ("Crop News", "Crop News"),
         ("Government Updates", "Government Updates"),
         ("Market Prices", "Market Prices"),
@@ -232,4 +232,5 @@ class news(models.Model):
         ("Organic Farming", "Organic Farming"),
         ("Dairy Farming", "Dairy Farming"),   
         ("Agricultural Equipment", "Agricultural Equipment"), 
-    )
+        ("Other", "Other"), 
+]
