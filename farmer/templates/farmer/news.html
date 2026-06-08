@@ -137,7 +137,7 @@
         </button>
         <div>
           <div class="page-title">Agriculture News Center</div>
-          <div class="breadcrumb">Dashboard / News</div>
+          <div class="breadcrumb">Latest Agriculture News & Updates — Stay updated with farming news, weather alerts and government announcements</div>
         </div>
       </div>
       <div class="topbar-right">
@@ -153,15 +153,6 @@
     </header>
 
     <div class="page-content">
-
-      <!-- ══ HERO SECTION ══ -->
-      <section class="news-hero">
-        <div class="news-hero-content">
-          <h1 class="news-hero-heading">🌾 Agriculture News Center</h1>
-          <p class="news-hero-subheading">Latest Agriculture News & Updates — Stay updated with farming news, weather alerts and government announcements.</p>
-        </div>
-      </section>
-
       <!-- ══ WEATHER OVERVIEW CARD ══ -->
       <section class="news-weather-overview">
         <div class="weather-card">
@@ -174,9 +165,11 @@
               <div class="weather-temp">{{temperature}}°C</div>
               <div class="weather-condition">{{condition}}</div>
             </div>
+            {% if rain_probability > 70 %}
             <div class="weather-alert-badge">
               <span>⚠️ Monsoon Alert</span>
             </div>
+            {% endif %}
           </div>
           <div class="weather-details">
             <div class="weather-detail-item">

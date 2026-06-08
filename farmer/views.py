@@ -503,9 +503,9 @@ def farmer_news(request):
     # 
     temperature = 10
     condition = "Rainy"
-    humidity = 40
+    humidity = 90
     wind_speed = 10
-    clouds = 55
+    clouds = 90
     if request.method == "POST":
         state = request.POST.get('state').capitalize()
         category = request.POST.get('category')
@@ -531,6 +531,7 @@ def farmer_news(request):
 
     context = {'all_news': all_news,"city": city.upper(),"temperature": temperature,"condition": condition,"humidity": humidity,"wind_speed": wind_speed,"rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)}
     return render(request, "farmer/news.html", context)
+
 
 #++++++++++++++++++++++==============================+++++++++++++++++++++===========================++++++++++++++++++++++++++++=====================
 
