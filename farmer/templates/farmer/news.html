@@ -203,13 +203,6 @@
       <form action="{% url 'news' %}" method="post">
         {% csrf_token %}
         <section class="news-search-bar">
-          <div class="news-search-input-wrap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" placeholder="Search agriculture news, alerts, schemes..." id="news-search-input">
-          </div>
           <select name="state" class="news-filter-select" id="news-state-filter">
             <option value="">All India States</option>
             <option value="maharashtra">Maharashtra</option>
