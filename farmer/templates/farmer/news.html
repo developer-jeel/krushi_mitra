@@ -167,12 +167,12 @@
         <div class="weather-card">
           <div class="weather-header">
             <h3 class="weather-title">🌦️ Weather Overview</h3>
-            <span class="weather-location">📍 Maharashtra, India</span>
+            <span class="weather-location">📍 {{city}}, India</span>
           </div>
           <div class="weather-main">
             <div class="weather-temp-section">
-              <div class="weather-temp">28°C</div>
-              <div class="weather-condition">Partly Cloudy</div>
+              <div class="weather-temp">{{temperature}}°C</div>
+              <div class="weather-condition">{{condition}}</div>
             </div>
             <div class="weather-alert-badge">
               <span>⚠️ Monsoon Alert</span>
@@ -183,21 +183,21 @@
               <div class="weather-detail-icon">💧</div>
               <div class="weather-detail-content">
                 <div class="weather-detail-label">Humidity</div>
-                <div class="weather-detail-value">72%</div>
+                <div class="weather-detail-value">{{humidity}}%</div>
               </div>
             </div>
             <div class="weather-detail-item">
               <div class="weather-detail-icon">💨</div>
               <div class="weather-detail-content">
                 <div class="weather-detail-label">Wind Speed</div>
-                <div class="weather-detail-value">18 km/h</div>
+                <div class="weather-detail-value">{{wind_speed}} km/h</div>
               </div>
             </div>
             <div class="weather-detail-item">
               <div class="weather-detail-icon">🌧️</div>
               <div class="weather-detail-content">
                 <div class="weather-detail-label">Rain Probability</div>
-                <div class="weather-detail-value">65%</div>
+                <div class="weather-detail-value">{{rain_probability}}%</div>
               </div>
             </div>
           </div>

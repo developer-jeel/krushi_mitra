@@ -7,6 +7,7 @@ from .models import *
 import requests , math ,json,sseclient
 from django.contrib.auth.decorators import login_required
 from sklearn.linear_model import LinearRegression 
+from sklearn.ensemble import RandomForestClassifier
 
 def register(request):
     if request.method == 'POST':
@@ -367,7 +368,6 @@ def community_chat(request):
 
 def predict_price(price, category, years, condition):
 
-    # Prevent large values
     years = min(years, 5)
 
     X = [
@@ -435,24 +435,86 @@ def tool_price(request):
 def add_tool(request):
     return render(request, "farmer/add_tool.html")
 
+def rain_probability(temperature,humidity,wind_speed,clouds):
+    model = RandomForestClassifier()
+    
+    X = [
+        [45,20,5,5],
+        [44,22,6,10],
+        [43,25,8,15],
+        [42,28,10,20],
+        [41,30,12,25],
+        [40,35,14,30],
+        [39,40,16,35],
+        [38,45,18,40],
+        [37,50,20,45],
+        [36,55,22,50],
+        [35,60,24,55],
+        [34,65,20,60],
+        [33,70,18,65],
+        [32,75,16,70],
+        [31,80,14,75],
+        [30,85,12,80],
+        [29,90,10,85],
+        [28,92,8,90],
+        [27,95,6,95],
+        [26,98,5,100],
+        [35,72,18,68],
+        [34,74,16,72],
+        [33,78,15,78],
+        [32,82,14,82],
+        [31,86,12,86],
+        [30,88,10,88],
+        [29,91,9,92],
+        [28,94,8,95],
+        [27,96,7,97],
+        [26,99,6,100]
+    ]
+
+    y = [
+        0,0,0,0,0,
+        0,0,0,0,0,
+        0,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1,1,1
+    ] # 1 is rain, 0 is no rain
+    model.fit(X, y)
+    result = model.predict_proba([
+        [temperature, humidity, wind_speed, clouds]
+    ])
+    return round(result[0][1] * 100)
+
 @check_login(['Farmer'])
 def farmer_news(request):
-    api_key = "cda9b54ada6d720cbc78948d2e86b4d8"
+    # api_key = "cda9b54ada6d720cbc78948d2e86b4d8"
     uid = request.uid
     city = uid.city if uid.city else "Delhi"
     all_news = news.objects.all().order_by('-created_at')
 
-    response= requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}")
-    data = response.json()
+    # response= requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric")
+    # data = response.json()
+    # print("WEATHER DATA :", data)
+    # temperature = round(data["main"]["temp"])
+    # condition = data["weather"][0]["main"]
+    # humidity = data["main"]["humidity"]
+    # wind_speed = round(data["wind"]["speed"]*3.6)
+    # clouds = data["clouds"]["all"]
+    # 
+    temperature = 10
+    condition = 10
+    humidity = 10
+    wind_speed = 10
+    clouds = 10
     context = {
-    'all_news': all_news,
-    "city": city.upper(),
-    "temperature": round(data["main"]["temp"]),
-    "condition": data["weather"][0]["description"].title(),
-    "humidity": data["main"]["humidity"],
-    "wind_speed": round(data["wind"]["speed"]),
-   }
-    context = {'all_news': all_news}
+        'all_news': all_news,
+        "city": city.upper(),
+        "temperature": temperature,
+        "condition": condition,
+        "humidity": humidity,
+        "wind_speed": wind_speed,
+        "rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)
+    }
     return render(request, "farmer/news.html", context)
 
 #++++++++++++++++++++++==============================+++++++++++++++++++++===========================++++++++++++++++++++++++++++=====================
