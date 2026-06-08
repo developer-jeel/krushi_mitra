@@ -254,6 +254,8 @@ class news(models.Model):
         if (self.is_breaking and timezone.now() > self.created_at + timedelta(hours=self.breaking_hours)):
             self.is_breaking = False
             self.save(update_fields=['is_breaking'])
+        
+        return self.is_breaking
 
     def __str__(self):
         return f"{self.title} - {self.category} - {self.state} - {self.created_at}"
