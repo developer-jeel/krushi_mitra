@@ -6,7 +6,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agriculture News Center – Farmer Panel | Krushi Mitra</title>
-  <meta name="description" content="Stay updated with latest agriculture market trends, weather alerts, government announcements and crop news." />
+  <meta name="description"
+    content="Stay updated with latest agriculture market trends, weather alerts, government announcements and crop news." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
@@ -137,7 +138,8 @@
         </button>
         <div>
           <div class="page-title">Agriculture News Center</div>
-          <div class="breadcrumb">Latest Agriculture News & Updates — Stay updated with farming news, weather alerts and government announcements</div>
+          <div class="breadcrumb">Latest Agriculture News & Updates — Stay updated with farming news, weather alerts and
+            government announcements</div>
         </div>
       </div>
       <div class="topbar-right">
@@ -200,70 +202,70 @@
       <!-- ══ SEARCH & FILTER SECTION ══ -->
       <form action="{% url 'news' %}" method="post">
         {% csrf_token %}
-      <section class="news-search-bar">
-        <div class="news-search-input-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" placeholder="Search agriculture news, alerts, schemes..." id="news-search-input">
-        </div>
-        <select name = "state" class="news-filter-select" id="news-state-filter">
-          <option value="">All India States</option>
-          <option value="maharashtra">Maharashtra</option>
-          <option value="punjab">Punjab</option>
-          <option value="haryana">Haryana</option>
-          <option value="gujarat">Gujarat</option>
-          <option value="uttar-pradesh">Uttar Pradesh</option>
-          <option value="madhya-pradesh">Madhya Pradesh</option>
-          <option value="rajasthan">Rajasthan</option>
-        </select>
-        <select name = "category" class="news-filter-select" id="news-category-filter">
-          <option value="">All Categories</option>
-          <option value="Crop News">Crop News</option>
-          <option value="Government Updates">Government Updates</option>
-          <option value="Market Prices">Market Prices</option>
-          <option value="Weather Alerts">Weather Alerts</option>
-          <option value="Technology">Technology</option>
-          <option value="Organic Farming">Organic Farming</option>
-          <option value="Dairy Farming">Dairy Farming</option>
-          <option value="Agricultural Equipment">Agricultural Equipment</option>
-          <option value="Other">Other</option>
-]
-  >Other</option>
-        </select>
-        <button type="submit" class="news-search-btn" id="news-search-btn">
-          <span>Search</span>
-        </button>
-      </section>
+        <section class="news-search-bar">
+          <div class="news-search-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" placeholder="Search agriculture news, alerts, schemes..." id="news-search-input">
+          </div>
+          <select name="state" class="news-filter-select" id="news-state-filter">
+            <option value="">All India States</option>
+            <option value="maharashtra">Maharashtra</option>
+            <option value="punjab">Punjab</option>
+            <option value="haryana">Haryana</option>
+            <option value="gujarat">Gujarat</option>
+            <option value="uttar-pradesh">Uttar Pradesh</option>
+            <option value="madhya-pradesh">Madhya Pradesh</option>
+            <option value="rajasthan">Rajasthan</option>
+          </select>
+          <select name="category" class="news-filter-select" id="news-category-filter">
+            <option value="">All Categories</option>
+            <option value="Crop News">Crop News</option>
+            <option value="Government Updates">Government Updates</option>
+            <option value="Market Prices">Market Prices</option>
+            <option value="Weather Alerts">Weather Alerts</option>
+            <option value="Technology">Technology</option>
+            <option value="Organic Farming">Organic Farming</option>
+            <option value="Dairy Farming">Dairy Farming</option>
+            <option value="Agricultural Equipment">Agricultural Equipment</option>
+            <option value="Other">Other</option>
+            ]
+            >Other</option>
+          </select>
+          <button type="submit" class="news-search-btn" id="news-search-btn">
+            <span>Search</span>
+          </button>
+        </section>
       </form>
 
       <!-- ══ BREAKING NEWS ══ -->
-        <section style="margin-bottom:28px;">
-          <div class="news-section-header">
-            <h2 class="news-section-title">🚨 Breaking News</h2>
+      <section style="margin-bottom:28px;">
+        <div class="news-section-header">
+          <h2 class="news-section-title">🚨 Breaking News</h2>
+        </div>
+        {% for newss in all_news %}
+        {% if newss.check_is_breaking %}
+        <div class="news-breaking-card">
+          <div class="news-breaking-img-wrap">
+            <img src="{{newss.image.url}}" alt="Bumper harvest output" class="news-breaking-img">
+            <span class="news-breaking-badge">BREAKING</span>
           </div>
-          {% for newss in all_news %}
-          {% if newss.check_is_breaking %}
-          <div class="news-breaking-card">
-            <div class="news-breaking-img-wrap">
-              <img src="{{newss.image.url}}" alt="Bumper harvest output" class="news-breaking-img">
-              <span class="news-breaking-badge">BREAKING</span>
+          <div class="news-breaking-content">
+            <div class="news-date-row">
+              <span class="news-category-pill govt">{{ newss.category }}</span>
+              <span>•</span>
+              <span>{{ newss.created_at }}</span>
             </div>
-            <div class="news-breaking-content">
-              <div class="news-date-row">
-                <span class="news-category-pill govt">{{ newss.category }}</span>
-                <span>•</span>
-                <span>{{ newss.created_at }}</span>
-              </div>
-              <h3 class="news-breaking-title">{{ newss.title }}</h3>
-              <p class="news-breaking-desc">{{ newss.description }}</p>
-              <a href="{{newss.source_link}}" target="_blank" class="news-readmore-btn">Read Full Article →</a>
-            </div>
+            <h3 class="news-breaking-title">{{ newss.title }}</h3>
+            <p class="news-breaking-desc">{{ newss.description }}</p>
+            <a href="{{newss.source_link}}" target="_blank" class="news-readmore-btn">Read Full Article →</a>
           </div>
-          {% endif %}
-          {% endfor %}
-        </section>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </section>
 
       <!-- ══ LATEST NEWS ══ -->
       <section style="margin-bottom:28px;">
@@ -289,19 +291,20 @@
           </article>
           {% endif %}
           {% endfor %}
-  
-        
-        <!-- See More News Button -->
-        <div class="news-see-more-container">
-          <button class="news-see-more-btn" onclick="this.style.display='none'; document.getElementById('more-news-grid').style.display='grid';">
-            <span>See More News</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
 
-        <!-- More News Cards (Hidden by default) -->
+
+          <!-- See More News Button -->
+          <div class="news-see-more-container">
+            <button class="news-see-more-btn"
+              onclick="this.style.display='none'; document.getElementById('more-news-grid').style.display='grid';">
+              <span>See More News</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- More News Cards (Hidden by default) -->
       </section>
 
     </div><!-- /page-content -->
