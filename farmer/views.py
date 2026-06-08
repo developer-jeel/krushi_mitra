@@ -511,12 +511,13 @@ def farmer_news(request):
         category = request.POST.get('category')
         print("FILTERS :", category)
         if state and category:
-            all_news = news.objects.filter(state=state, category=category).order_by('-created_at')
+            all_news = news.objects.filter(state=state, category=category , is_breaking=True).order_by('-created_at')
         elif state:
-            all_news = news.objects.filter(state=state).order_by('-created_at')
+            all_news = news.objects.filter(state=state,is_breaking=True).order_by('-created_at')
         elif category:
-            all_news = news.objects.filter(category=category).order_by('-created_at')
+            all_news = news.objects.filter(category=category,is_breaking=True).order_by('-created_at')
 
+        print(all_news)
         context = {
         'all_news': all_news,
         "city": city.upper(),
