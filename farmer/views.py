@@ -528,15 +528,7 @@ def farmer_news(request):
         }
         return render(request, "farmer/news.html", context)
 
-    context = {
-        'all_news': all_news,
-        "city": city.upper(),
-        "temperature": temperature,
-        "condition": condition,
-        "humidity": humidity,
-        "wind_speed": wind_speed,
-        "rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)
-    }
+    context = {'all_news': all_news,"city": city.upper(),"temperature": temperature,"condition": condition,"humidity": humidity,"wind_speed": wind_speed,"rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)}
     return render(request, "farmer/news.html", context)
 
 #++++++++++++++++++++++==============================+++++++++++++++++++++===========================++++++++++++++++++++++++++++=====================
