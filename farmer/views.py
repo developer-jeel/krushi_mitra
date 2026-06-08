@@ -507,7 +507,26 @@ def farmer_news(request):
     wind_speed = 10
     clouds = 90
     if request.method == "POST":
-        
+        state = request.POST.get('state')
+        category = request.POST.get('category')
+        if state and category:
+            all_news = news.objects.filter(state=state, category=category).order_by('-created_at')
+        elif state:
+            all_news = news.objects.filter(state=state).order_by('-created_at')
+        elif category:
+            all_news = news.objects.filter(category=category).order_by('-created_at')
+
+        context = {
+        'all_news': all_news,
+        "city": city.upper(),
+        "temperature": temperature,
+        "condition": condition,
+        "humidity": humidity,
+        "wind_speed": wind_speed,
+        "rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)
+        }
+        return render(request, "farmer/news.html", context)
+
     context = {
         'all_news': all_news,
         "city": city.upper(),
