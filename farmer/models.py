@@ -248,6 +248,7 @@ class news(models.Model):
     is_breaking = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
     def  check_is_breaking(self):
         if self.is_breaking and timezone.now() > self.created_at + timedelta(hours=24):
             self.is_breaking = False

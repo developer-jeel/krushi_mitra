@@ -246,7 +246,7 @@
             <h2 class="news-section-title">🚨 Breaking News</h2>
           </div>
           {% for newss in all_news %}
-          {% if newss.is_breaking %}
+          {% if newss.check_is_breaking %}
           <div class="news-breaking-card">
             <div class="news-breaking-img-wrap">
               <img src="{{newss.image.url}}" alt="Bumper harvest output" class="news-breaking-img">

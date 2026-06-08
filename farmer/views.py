@@ -502,10 +502,10 @@ def farmer_news(request):
     # clouds = data["clouds"]["all"]
     # 
     temperature = 10
-    condition = 10
-    humidity = 10
+    condition = "Rainy"
+    humidity = 90
     wind_speed = 10
-    clouds = 10
+    clouds = 90
     context = {
         'all_news': all_news,
         "city": city.upper(),
