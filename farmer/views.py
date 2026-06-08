@@ -507,8 +507,9 @@ def farmer_news(request):
     wind_speed = 10
     clouds = 90
     if request.method == "POST":
-        state = request.POST.get('state')
+        state = request.POST.get('state').capitalize()
         category = request.POST.get('category')
+        print("FILTERS :", category)
         if state and category:
             all_news = news.objects.filter(state=state, category=category).order_by('-created_at')
         elif state:
