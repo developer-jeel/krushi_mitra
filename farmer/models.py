@@ -246,13 +246,14 @@ class news(models.Model):
     video = models.FileField(upload_to='news/videos/', null=True, blank=True)
     source_link = models.URLField(blank=True, null=True)
     is_breaking = models.BooleanField(default=False)
+    breaking_hours = models.PositiveIntegerField(default=24)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def  check_is_breaking(self):
-        if self.is_breaking and timezone.now() > self.created_at + timedelta(hours=24):
+        if (self.is_breaking andtimezone.now() > self.created_at + timedelta(hours=self.breaking_hours)):
             self.is_breaking = False
             self.save(update_fields=['is_breaking'])
-
+            
     def __str__(self):
         return f"{self.title} - {self.category} - {self.state} - {self.created_at}"
