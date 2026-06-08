@@ -205,6 +205,7 @@
       </section>
 
       <!-- ══ SEARCH & FILTER SECTION ══ -->
+       <form action="{% url 'news' %}" method="post">
       <section class="news-search-bar">
         <div class="news-search-input-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -213,7 +214,7 @@
           </svg>
           <input type="text" placeholder="Search agriculture news, alerts, schemes..." id="news-search-input">
         </div>
-        <select class="news-filter-select" id="news-state-filter">
+        <select name = "state" class="news-filter-select" id="news-state-filter">
           <option value="">All India States</option>
           <option value="maharashtra">Maharashtra</option>
           <option value="punjab">Punjab</option>
@@ -223,7 +224,7 @@
           <option value="madhya-pradesh">Madhya Pradesh</option>
           <option value="rajasthan">Rajasthan</option>
         </select>
-        <select class="news-filter-select" id="news-category-filter">
+        <select name = "category" class="news-filter-select" id="news-category-filter">
           <option value="">All Categories</option>
           <option value="crop">Crop News</option>
           <option value="govt">Government Updates</option>
@@ -235,10 +236,11 @@
           <option value="equipment">Agricultural Equipment</option>
           <option value="other">Other</option>
         </select>
-        <button class="news-search-btn" id="news-search-btn">
+        <button type="submit" class="news-search-btn" id="news-search-btn">
           <span>Search</span>
         </button>
       </section>
+      </form>
 
       <!-- ══ BREAKING NEWS ══ -->
         <section style="margin-bottom:28px;">

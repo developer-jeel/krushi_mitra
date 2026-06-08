@@ -506,6 +506,8 @@ def farmer_news(request):
     humidity = 90
     wind_speed = 10
     clouds = 90
+    if request.method == "POST":
+        
     context = {
         'all_news': all_news,
         "city": city.upper(),
