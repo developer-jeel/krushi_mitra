@@ -244,64 +244,6 @@
       <!-- Right Column (Sidebar Widgets) -->
       <div class="home-split-side">
         
-        <!-- 3. Live Weather Advisory Section -->
-        <div class="home-weather-card">
-          <div class="home-weather-top">
-            <div class="home-weather-location">
-              <span>📍</span>
-              <span data-translate="weatherLocation">Indore, Madhya Pradesh</span>
-            </div>
-            <div class="home-weather-label" data-translate="weatherAdvisory">Live Weather Advisory</div>
-          </div>
-          
-          <div class="home-weather-main">
-            <div class="home-weather-icon" id="weather-icon">🌦️</div>
-            <div>
-              <div class="home-weather-temp" id="weather-temp">32°C</div>
-              <div class="home-weather-condition" id="weather-condition" data-translate="partlyCloudy">Partly Cloudy</div>
-            </div>
-          </div>
-          
-          <div class="home-weather-details">
-            <div class="home-weather-detail">
-              <div class="home-weather-detail-icon">💧</div>
-              <div class="home-weather-detail-val" id="weather-humidity">65%</div>
-              <div class="home-weather-detail-lbl" data-translate="humidity">Humidity</div>
-            </div>
-            <div class="home-weather-detail">
-              <div class="home-weather-detail-icon">💨</div>
-              <div class="home-weather-detail-val" id="weather-wind">12 km/h</div>
-              <div class="home-weather-detail-lbl" data-translate="wind">Wind</div>
-            </div>
-            <div class="home-weather-detail">
-              <div class="home-weather-detail-icon">☔</div>
-              <div class="home-weather-detail-val" id="weather-rain">10%</div>
-              <div class="home-weather-detail-lbl" data-translate="rainChance">Rain</div>
-            </div>
-          </div>
-          
-          <div class="home-weather-advisory" style="margin-top: 18px; padding: 14px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: var(--r-sm); display: flex; align-items: flex-start; gap: 10px;">
-            <span style="font-size: 18px;">💡</span>
-            <div>
-              <div style="font-size: 12px; font-weight: 700; color: var(--em-400); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">AI Advisory</div>
-              <div style="font-size: 12px; color: rgba(255,255,255,0.70); line-height: 1.45;" id="weather-advisory-text">Ideal time to water crops. Rain expected in 2 days - defer pesticide application.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 9. Daily Farming Tips Section -->
-        <div class="home-quick-panel">
-          <div class="home-quick-head">
-            💡 <span data-translate="farmingTipOfTheDay">Farming Tip of the Day</span>
-          </div>
-          <div style="padding: 20px; text-align: center; display: flex; flex-direction: column; gap: 12px;">
-            <div class="home-tip-icon" style="margin: 0 auto; background: rgba(34,197,94,0.1); width: 50px; height: 50px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 24px;">💡</div>
-            <div style="font-size: 13.5px; font-weight: 700; color: #fff;" id="tip-title">Crop Rotation Benefits</div>
-            <p style="font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.55; margin: 0;" id="tip-desc">Rotating legumes with grains helps naturally replenish soil nitrogen without chemical fertilizers.</p>
-            <button class="btn btn-secondary" id="next-tip-btn" style="font-size: 12px; padding: 6px 12px; margin-top: 8px; width: fit-content; align-self: center;">Next Tip ➔</button>
-          </div>
-        </div>
-
         <!-- Quick Actions Panel -->
         <div class="home-quick-panel">
           <div class="home-quick-head">
@@ -333,57 +275,8 @@
 
     </div>
 
-    <!-- 7. Seasonal Crop Recommendations -->
-    <div class="home-section stagger-4">
-      <div class="home-section-header">
-        <div class="home-section-title">
-          <span class="section-emoji">🌾</span>
-          <span data-translate="seasonalCrops">Seasonal Crop Recommendations</span>
-        </div>
-        <span class="home-section-badge">June - September</span>
-      </div>
-      
-      <div class="home-seasonal-grid">
-        <div class="home-seasonal-card">
-          <div class="home-seasonal-icon">☁️</div>
-          <div class="home-seasonal-name">Kharif Crops</div>
-          <div class="home-seasonal-period" data-translate="kharifPeriod">Sowing: June - July</div>
-          <div class="home-seasonal-crops">
-            <span class="home-seasonal-chip">Cotton</span>
-            <span class="home-seasonal-chip">Rice</span>
-            <span class="home-seasonal-chip">Maize</span>
-            <span class="home-seasonal-chip">Groundnut</span>
-          </div>
-        </div>
-        
-        <div class="home-seasonal-card">
-          <div class="home-seasonal-icon">🌾</div>
-          <div class="home-seasonal-name">Rabi Crops</div>
-          <div class="home-seasonal-period" data-translate="rabiPeriod">Sowing: October - November</div>
-          <div class="home-seasonal-crops">
-            <span class="home-seasonal-chip">Wheat</span>
-            <span class="home-seasonal-chip">Mustard</span>
-            <span class="home-seasonal-chip">Gram</span>
-            <span class="home-seasonal-chip">Barley</span>
-          </div>
-        </div>
-        
-        <div class="home-seasonal-card">
-          <div class="home-seasonal-icon">🍉</div>
-          <div class="home-seasonal-name">Zaid Crops</div>
-          <div class="home-seasonal-period" data-translate="zaidPeriod">Sowing: March - April</div>
-          <div class="home-seasonal-crops">
-            <span class="home-seasonal-chip">Watermelon</span>
-            <span class="home-seasonal-chip">Cucumber</span>
-            <span class="home-seasonal-chip">Muskmelon</span>
-            <span class="home-seasonal-chip">Moong</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- 8. Government Schemes Widget -->
-    <div class="home-section stagger-5">
+    <div class="home-section stagger-4">
       <div class="home-section-header">
         <div class="home-section-title">
           <span class="section-emoji">🏛</span>
@@ -417,7 +310,7 @@
     </div>
 
     <!-- 5. Agricultural News Highlights -->
-    <div class="home-section stagger-6">
+    <div class="home-section stagger-5">
       <div class="home-section-header">
         <div class="home-section-title">
           <span class="section-emoji">📰</span>
@@ -460,7 +353,7 @@
     </div>
 
     <!-- 6. Featured Blogs Area -->
-    <div class="home-section stagger-7">
+    <div class="home-section stagger-6">
       <div class="home-section-header">
         <div class="home-section-title">
           <span class="section-emoji">✍️</span>
@@ -530,15 +423,21 @@
     </div>
 
     <!-- 10. Footer Section -->
-    <footer class="home-footer stagger-8">
+    <footer class="home-footer stagger-7">
       <div class="home-footer-grid">
         <div class="home-footer-col">
           <div class="home-footer-col-title">Krushi Mitra</div>
           <p style="font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; margin: 0 0 16px 0;">An integrated digital agriculture platform helping farmers maximize their yield, connect directly to markets, and make data-driven decisions.</p>
           <div class="home-footer-socials">
-            <a href="#" class="home-footer-social">🌐</a>
-            <a href="#" class="home-footer-social">📢</a>
-            <a href="#" class="home-footer-social">💬</a>
+            <a href="#" class="home-footer-social" title="Website">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </a>
+            <a href="#" class="home-footer-social" title="Twitter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            </a>
+            <a href="#" class="home-footer-social" title="Telegram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </a>
           </div>
         </div>
         <div class="home-footer-col">
@@ -555,8 +454,12 @@
         </div>
         <div class="home-footer-col">
           <div class="home-footer-col-title" data-translate="support">Support</div>
-          <p style="font-size: 12.5px; color: rgba(255,255,255,0.5); margin: 0 0 8px 0;">Email: support@krushimitra.in</p>
-          <p style="font-size: 12.5px; color: rgba(255,255,255,0.5); margin: 0;">Phone: +91 1800-123-4567</p>
+          <p style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+            <span>✉️</span> support@krushimitra.in
+          </p>
+          <p style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0; display: flex; align-items: center; gap: 6px;">
+            <span>📞</span> +91 1800-123-4567
+          </p>
         </div>
       </div>
       
@@ -597,30 +500,18 @@
   // Dynamic features: Live Market Prices, Sparklines, Weather fluctuations, Interactive Farming Tips
   
   const initialCrops = [
-    { id: 'cotton', name: 'Cotton', nameKey: 'cottonName', category: 'oilseed', emoji: '☁️', price: 6250, minPrice: 5800, maxPrice: 6500, apmc: 'Rajkot APMC', trend: 1.2, history: [6100, 6150, 6200, 6180, 6210, 6250] },
-    { id: 'wheat', name: 'Wheat (Lokwan)', nameKey: 'wheatName', category: 'grain', emoji: '🌾', price: 2450, minPrice: 2200, maxPrice: 2600, apmc: 'Indore APMC', trend: 0.8, history: [2410, 2430, 2420, 2440, 2435, 2450] },
-    { id: 'rice', name: 'Basmati Rice', nameKey: 'riceName', category: 'grain', emoji: '🌾', price: 6800, minPrice: 6400, maxPrice: 7200, apmc: 'Karnal APMC', trend: -0.5, history: [6900, 6880, 6850, 6830, 6810, 6800] },
-    { id: 'maize', name: 'Maize (Yellow)', nameKey: 'maizeName', category: 'grain', emoji: '🌽', price: 2150, minPrice: 1950, maxPrice: 2300, apmc: 'Guntur APMC', trend: 2.1, history: [2050, 2080, 2100, 2090, 2120, 2150] },
-    { id: 'tomato', name: 'Desi Tomato', nameKey: 'tomatoName', category: 'vegetable', emoji: '🍅', price: 1800, minPrice: 1400, maxPrice: 2200, apmc: 'Nashik APMC', trend: -1.8, history: [1950, 1920, 1880, 1850, 1830, 1800] },
-    { id: 'potato', name: 'Jyoti Potato', nameKey: 'potatoName', category: 'vegetable', emoji: '🥔', price: 1450, minPrice: 1200, maxPrice: 1650, apmc: 'Agra APMC', trend: 0.4, history: [1420, 1430, 1440, 1435, 1445, 1450] },
-    { id: 'onion', name: 'Red Onion', nameKey: 'onionName', category: 'vegetable', emoji: '🧅', price: 2250, minPrice: 1900, maxPrice: 2500, apmc: 'Lasalgaon APMC', trend: 1.5, history: [2150, 2180, 2200, 2210, 2230, 2250] },
-    { id: 'mustard', name: 'Mustard Seeds', nameKey: 'mustardName', category: 'oilseed', emoji: '🌱', price: 5650, minPrice: 5300, maxPrice: 5900, apmc: 'Jaipur APMC', trend: 0.0, history: [5650, 5650, 5650, 5650, 5650, 5650] }
+    { id: 'cotton', name: 'Cotton', nameKey: 'cottonName', category: 'oilseed', emoji: '☁️', price: 6250, minPrice: 5800, maxPrice: 6500, apmc: 'Rajkot APMC', trend: 1.2 },
+    { id: 'wheat', name: 'Wheat (Lokwan)', nameKey: 'wheatName', category: 'grain', emoji: '🌾', price: 2450, minPrice: 2200, maxPrice: 2600, apmc: 'Indore APMC', trend: 0.8 },
+    { id: 'rice', name: 'Basmati Rice', nameKey: 'riceName', category: 'grain', emoji: '🌾', price: 6800, minPrice: 6400, maxPrice: 7200, apmc: 'Karnal APMC', trend: -0.5 },
+    { id: 'maize', name: 'Maize (Yellow)', nameKey: 'maizeName', category: 'grain', emoji: '🌽', price: 2150, minPrice: 1950, maxPrice: 2300, apmc: 'Guntur APMC', trend: 2.1 },
+    { id: 'tomato', name: 'Desi Tomato', nameKey: 'tomatoName', category: 'vegetable', emoji: '🍅', price: 1800, minPrice: 1400, maxPrice: 2200, apmc: 'Nashik APMC', trend: -1.8 },
+    { id: 'potato', name: 'Jyoti Potato', nameKey: 'potatoName', category: 'vegetable', emoji: '🥔', price: 1450, minPrice: 1200, maxPrice: 1650, apmc: 'Agra APMC', trend: 0.4 },
+    { id: 'onion', name: 'Red Onion', nameKey: 'onionName', category: 'vegetable', emoji: '🧅', price: 2250, minPrice: 1900, maxPrice: 2500, apmc: 'Lasalgaon APMC', trend: 1.5 },
+    { id: 'mustard', name: 'Mustard Seeds', nameKey: 'mustardName', category: 'oilseed', emoji: '🌱', price: 5650, minPrice: 5300, maxPrice: 5900, apmc: 'Jaipur APMC', trend: 0.0 }
   ];
 
   let currentCategoryFilter = 'all';
   let currentSearchQuery = '';
-
-  function generateSparklinePath(prices) {
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    const range = max - min || 1;
-    const points = prices.map((val, idx) => {
-      const x = (idx / (prices.length - 1)) * 96 + 2;
-      const y = 24 - ((val - min) / range) * 18 - 3; // leave padding top/bottom
-      return `${x},${y}`;
-    });
-    return `M ${points.join(' L ')}`;
-  }
 
   function renderMarketPrices(data) {
     const container = document.getElementById('market-prices-container');
@@ -636,34 +527,28 @@
     data.forEach(item => {
       const trendClass = item.trend > 0 ? 'up' : (item.trend < 0 ? 'down' : 'neutral');
       const trendSign = item.trend > 0 ? '↑' : (item.trend < 0 ? '↓' : '');
-      const sparklinePath = generateSparklinePath(item.history);
-      const strokeColor = item.trend > 0 ? '#22c55e' : (item.trend < 0 ? '#ef4444' : '#94a3b8');
       
       const card = document.createElement('div');
       card.className = 'market-price-card';
       card.id = `crop-card-${item.id}`;
       card.innerHTML = `
-        <div class="market-card-top">
-          <div class="market-crop-info">
-            <div class="market-crop-emoji">${item.emoji}</div>
+        <div class="market-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+          <div class="market-crop-info" style="display: flex; gap: 10px; align-items: center;">
+            <div class="market-crop-emoji" style="font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(34,197,94,0.08); border-radius: var(--r-sm); border: 1px solid var(--glass-border-light);">${item.emoji}</div>
             <div>
-              <div class="market-crop-name" data-translate="${item.nameKey}">${item.name}</div>
-              <div class="market-crop-unit" data-translate="perQuintal">per Quintal</div>
+              <div class="market-crop-name" data-translate="${item.nameKey}" style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">${item.name}</div>
+              <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 ${item.apmc}</div>
             </div>
           </div>
           <div class="market-change-badge ${trendClass}">
             <span>${trendSign}</span> ${Math.abs(item.trend).toFixed(1)}%
           </div>
         </div>
-        <div class="market-card-price" id="price-val-${item.id}">
-          ₹${item.price.toLocaleString('en-IN')}
+        <div class="market-card-price" id="price-val-${item.id}" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">
+          ₹${item.price.toLocaleString('en-IN')} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/ Quintal</span>
         </div>
-        <svg class="market-sparkline" width="100%" height="24" style="margin: 6px 0; overflow: visible; display: block;">
-          <path d="${sparklinePath}" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" />
-        </svg>
-        <div class="market-card-bottom">
-          <div class="market-apmc">📍 ${item.apmc}</div>
-          <div class="market-range"><span data-translate="minMax">Min-Max</span>: <span>₹${item.minPrice}-₹${item.maxPrice}</span></div>
+        <div class="market-card-bottom" style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center;">
+          <div class="market-range" style="font-size: 11px; color: rgba(255,255,255,0.35);"><span data-translate="minMax">Min-Max</span>: <span style="color: rgba(255,255,255,0.7); font-weight: 600;">₹${item.minPrice} - ₹${item.maxPrice}</span></div>
         </div>
       `;
       container.appendChild(card);
@@ -706,146 +591,6 @@
     renderMarketPrices(filtered);
   }
 
-  function startPriceTickSimulator() {
-    setInterval(() => {
-      initialCrops.forEach(item => {
-        // 50% chance to update a crop price per tick
-        if (Math.random() > 0.5) {
-          const percentChange = (Math.random() * 1.2 - 0.6) / 100; // -0.6% to +0.6%
-          const oldPrice = item.price;
-          const changeAmount = Math.round(item.price * percentChange);
-          
-          if (changeAmount !== 0) {
-            item.price += changeAmount;
-            // Cap within limit
-            if (item.price < item.minPrice) item.price = item.minPrice;
-            if (item.price > item.maxPrice) item.price = item.maxPrice;
-            
-            const difference = item.price - oldPrice;
-            item.trend = (difference / oldPrice) * 100;
-            
-            // update history
-            item.history.shift();
-            item.history.push(item.price);
-            
-            // update card if rendered
-            const card = document.getElementById(`crop-card-${item.id}`);
-            const priceText = document.getElementById(`price-val-${item.id}`);
-            if (card && priceText) {
-              priceText.textContent = `₹${item.price.toLocaleString('en-IN')}`;
-              
-              const badge = card.querySelector('.market-change-badge');
-              if (badge) {
-                const trendClass = item.trend > 0 ? 'up' : (item.trend < 0 ? 'down' : 'neutral');
-                const trendSign = item.trend > 0 ? '↑' : (item.trend < 0 ? '↓' : '');
-                badge.className = `market-change-badge ${trendClass}`;
-                badge.innerHTML = `<span>${trendSign}</span> ${Math.abs(item.trend).toFixed(1)}%`;
-              }
-              
-              const pathNode = card.querySelector('.market-sparkline path');
-              if (pathNode) {
-                pathNode.setAttribute('d', generateSparklinePath(item.history));
-                pathNode.setAttribute('stroke', item.trend > 0 ? '#22c55e' : (item.trend < 0 ? '#ef4444' : '#94a3b8'));
-              }
-              
-              // flash card
-              const flashClass = difference > 0 ? 'price-up-flash' : 'price-down-flash';
-              card.classList.add(flashClass);
-              setTimeout(() => {
-                card.classList.remove(flashClass);
-              }, 1200);
-            }
-          }
-        }
-      });
-    }, 4000);
-  }
-
-  // Live Weather Updates
-  const weatherData = {
-    temp: 32,
-    humidity: 65,
-    wind: 12,
-    rain: 10,
-    advisories: [
-      "Ideal time to water crops. Rain expected in 2 days - defer pesticide application.",
-      "Sunny and dry. Keep soil moist for cash crops and young saplings.",
-      "Strong wind advisory. Ensure crop supports are secure for vertical crops.",
-      "High humidity detected. Watch out for pest/fungus outbreaks on vegetable crops.",
-      "Optimum temperature for seed sowing. Sowing Kharif crops is recommended this week.",
-      "Clear skies forecast. Safe to harvest mature crops and dry them in open sun."
-    ]
-  };
-
-  function startWeatherSimulator() {
-    setInterval(() => {
-      // Fluctuations
-      const tempDiff = Math.random() > 0.5 ? 1 : -1;
-      weatherData.temp = Math.max(26, Math.min(42, weatherData.temp + tempDiff));
-      
-      const humidityDiff = Math.round(Math.random() * 4 - 2);
-      weatherData.humidity = Math.max(40, Math.min(95, weatherData.humidity + humidityDiff));
-      
-      const windDiff = Math.round(Math.random() * 2 - 1);
-      weatherData.wind = Math.max(5, Math.min(25, weatherData.wind + windDiff));
-
-      const tempEl = document.getElementById('weather-temp');
-      const humidityEl = document.getElementById('weather-humidity');
-      const windEl = document.getElementById('weather-wind');
-      const advisoryEl = document.getElementById('weather-advisory-text');
-      
-      if (tempEl) tempEl.textContent = `${weatherData.temp}°C`;
-      if (humidityEl) humidityEl.textContent = `${weatherData.humidity}%`;
-      if (windEl) windEl.textContent = `${weatherData.wind} km/h`;
-      
-      // Update weather advisory occasionally
-      if (advisoryEl && Math.random() > 0.75) {
-        let index = 0;
-        if (weatherData.humidity > 80) index = 3;
-        else if (weatherData.wind > 18) index = 2;
-        else if (weatherData.temp > 38) index = 1;
-        else index = Math.floor(Math.random() * weatherData.advisories.length);
-        
-        advisoryEl.textContent = weatherData.advisories[index];
-      }
-    }, 10000);
-  }
-
-  // Farming Tips Switcher
-  const farmingTips = [
-    { title: "Crop Rotation Benefits", desc: "Rotating legumes with grains helps naturally replenish soil nitrogen without chemical fertilizers." },
-    { title: "Pest Management", desc: "Pest monitoring should be done weekly to catch infestations early before they destroy the crop yield." },
-    { title: "Drip Irrigation", desc: "Drip irrigation can save up to 60% of water and reduce weed growth compared to traditional flood irrigation." },
-    { title: "Composting Magic", desc: "Using organic compost improves soil structure, water retention capacity, and provides all essential nutrients." },
-    { title: "Seed Testing", desc: "Before sowing, perform a germination test to ensure seed viability is above 80% for optimal crop density." }
-  ];
-  let currentTipIdx = 0;
-
-  function setupFarmingTips() {
-    const nextBtn = document.getElementById('next-tip-btn');
-    const titleEl = document.getElementById('tip-title');
-    const descEl = document.getElementById('tip-desc');
-    
-    if (nextBtn && titleEl && descEl) {
-      nextBtn.addEventListener('click', () => {
-        currentTipIdx = (currentTipIdx + 1) % farmingTips.length;
-        
-        // Simple fade out
-        titleEl.style.opacity = 0;
-        descEl.style.opacity = 0;
-        
-        setTimeout(() => {
-          titleEl.textContent = farmingTips[currentTipIdx].title;
-          descEl.textContent = farmingTips[currentTipIdx].desc;
-          titleEl.style.transition = 'opacity 0.35s ease-in-out';
-          descEl.style.transition = 'opacity 0.35s ease-in-out';
-          titleEl.style.opacity = 1;
-          descEl.style.opacity = 1;
-        }, 150);
-      });
-    }
-  }
-
   // Update dates
   function updateMarketDate() {
     const dateEl = document.getElementById('market-date');
@@ -860,10 +605,6 @@
     // Initial render
     filterAndRenderCrops();
     setupMarketFilters();
-    startPriceTickSimulator();
-    startWeatherSimulator();
-    setupFarmingTips();
-    
     updateMarketDate();
     setInterval(updateMarketDate, 1000);
   });
