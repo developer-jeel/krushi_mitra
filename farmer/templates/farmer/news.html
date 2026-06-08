@@ -205,7 +205,8 @@
       </section>
 
       <!-- ══ SEARCH & FILTER SECTION ══ -->
-       <form action="{% url 'news' %}" method="post">
+      <form action="{% url 'news' %}" method="post">
+        {% csrf_token %}
       <section class="news-search-bar">
         <div class="news-search-input-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
