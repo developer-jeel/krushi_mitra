@@ -503,9 +503,9 @@ def farmer_news(request):
     # 
     temperature = 10
     condition = "Rainy"
-    humidity = 90
+    humidity = 40
     wind_speed = 10
-    clouds = 90
+    clouds = 55
     if request.method == "POST":
         state = request.POST.get('state').capitalize()
         category = request.POST.get('category')
