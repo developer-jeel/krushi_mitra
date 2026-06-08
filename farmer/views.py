@@ -349,21 +349,24 @@ def community_chat(request):
         # message_content = request.POST.get('message')
         message_content = request.POST['message']
         print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++MESSAGE : " , message_content)
+        if len(message_content) <= 0:
+            messages.error(request, "Message cannot be empty")
+            return render(request, "farmer/community_chat.html", context)
+        else:
+            user_message = community_message.objects.create(
+                    sender=sender,
+                    message=message_content,
+            )
+            try:
+                image= request.FILES.get('image')
+                is_image = True
+            except:
+                is_image = False
 
-        user_message = community_message.objects.create(
-                sender=sender,
-                message=message_content,
-        )
-        try:
-            image= request.FILES.get('image')
-            is_image = True
-        except:
-            is_image = False
-
-        if is_image:
-            user_message.image = image
-        user_message.save()
-        return render(request, "farmer/community_chat.html", context)
+            if is_image:
+                user_message.image = image
+            user_message.save()
+            return render(request, "farmer/community_chat.html", context)
     return render(request, "farmer/community_chat.html", context)
 
 def predict_price(price, category, years, condition):
