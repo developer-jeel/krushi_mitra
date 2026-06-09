@@ -116,6 +116,9 @@ def check_login(allowed_roles):
         return wrapper
     return decorator
 
+
+
+
 @check_login(['Farmer'])
 def farmer_home(request):
     return render(request, "farmer/home.html")
