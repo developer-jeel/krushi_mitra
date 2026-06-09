@@ -218,24 +218,28 @@
               <span class="market-live-dot"></span>
               <span data-translate="todayMarketPrices">Today's APMC Market Prices</span>
             </div>
-            <div class="market-board-date" id="market-date">Updating live...</div>
-          </div>
-          
-          <div class="market-controls" style="padding: 16px 20px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.01);">
-            <div class="market-search-box" style="position: relative; flex: 1; min-width: 200px;">
-              <input type="text" id="market-search" placeholder="Search crops or mandis..." data-translate="searchCropsPlaceholder" data-translate-attr="placeholder" style="width: 100%; padding: 10px 16px; padding-left: 40px; border-radius: var(--r-md); border: 1px solid var(--glass-border-light); background: rgba(255,255,255,0.03); color: #fff; font-size: 13px; outline: none; transition: border-color 0.3s;" />
-              <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); opacity: 0.4;">🔍</span>
-            </div>
-            <div class="market-filters" style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="market-filter-btn active" data-category="all" data-translate="allCrops">All</button>
-              <button class="market-filter-btn" data-category="grain" data-translate="grains">Grains</button>
-              <button class="market-filter-btn" data-category="vegetable" data-translate="vegetables">Vegetables</button>
-              <button class="market-filter-btn" data-category="oilseed" data-translate="oilseedsCashCrops">Oilseeds & Cash Crops</button>
-            </div>
+            <div class="market-board-date">June 9, 2026</div>
           </div>
 
-          <div class="market-grid" id="market-prices-container">
-            <!-- Dynamically populated via JS -->
+          <div class="market-grid">
+            <!-- Cotton -->
+            {% for crop in crop_prices %}
+            <div class="market-price-card">
+              <div class="market-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div class="market-crop-info" style="display: flex; gap: 10px; align-items: center;">
+                  <div class="market-crop-emoji" style="font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(34,197,94,0.08); border-radius: var(--r-sm); border: 1px solid var(--glass-border-light);">☁️</div>
+                  <div>
+                    <div class="market-crop-name" style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">{{crop.crop}}</div>
+                    <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 Rajkot APMC</div>
+                  </div>
+                </div>
+                <div class="market-change-badge" style="background: rgba(34,197,94,0.2); color: rgba(34,197,94,0.8); padding: 4px 8px; border-radius: var(--r-sm); border: 1px solid rgba(34,197,94,0.3); font-size: 11px; font-weight: 600;">↑ 1.2%</div>
+              </div>
+              <div class="market-card-price" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">{{crop.price}} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/ 20Kg</span></div>
+              <div class="market-card-bottom" style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: rgba(255,255,255,0.35);"><span data-translate="minMax">Min-Max</span>: <span style="color: rgba(255,255,255,0.7); font-weight: 600;">₹5,800 - ₹6,500</span></div>
+            </div>
+            {% endfor %}
+
           </div>
         </div>
 
@@ -496,119 +500,6 @@
 <script src="{% static 'farmer/js/language.js' %}"></script>
 <script src="{% static 'farmer/js/animations.js' %}"></script>
 
-<script>
-  // Dynamic features: Live Market Prices, Sparklines, Weather fluctuations, Interactive Farming Tips
-  
-  const initialCrops = [
-    { id: 'cotton', name: 'Cotton', nameKey: 'cottonName', category: 'oilseed', emoji: '☁️', price: 6250, minPrice: 5800, maxPrice: 6500, apmc: 'Rajkot APMC', trend: 1.2 },
-    { id: 'wheat', name: 'Wheat (Lokwan)', nameKey: 'wheatName', category: 'grain', emoji: '🌾', price: 2450, minPrice: 2200, maxPrice: 2600, apmc: 'Indore APMC', trend: 0.8 },
-    { id: 'rice', name: 'Basmati Rice', nameKey: 'riceName', category: 'grain', emoji: '🌾', price: 6800, minPrice: 6400, maxPrice: 7200, apmc: 'Karnal APMC', trend: -0.5 },
-    { id: 'maize', name: 'Maize (Yellow)', nameKey: 'maizeName', category: 'grain', emoji: '🌽', price: 2150, minPrice: 1950, maxPrice: 2300, apmc: 'Guntur APMC', trend: 2.1 },
-    { id: 'tomato', name: 'Desi Tomato', nameKey: 'tomatoName', category: 'vegetable', emoji: '🍅', price: 1800, minPrice: 1400, maxPrice: 2200, apmc: 'Nashik APMC', trend: -1.8 },
-    { id: 'potato', name: 'Jyoti Potato', nameKey: 'potatoName', category: 'vegetable', emoji: '🥔', price: 1450, minPrice: 1200, maxPrice: 1650, apmc: 'Agra APMC', trend: 0.4 },
-    { id: 'onion', name: 'Red Onion', nameKey: 'onionName', category: 'vegetable', emoji: '🧅', price: 2250, minPrice: 1900, maxPrice: 2500, apmc: 'Lasalgaon APMC', trend: 1.5 },
-    { id: 'mustard', name: 'Mustard Seeds', nameKey: 'mustardName', category: 'oilseed', emoji: '🌱', price: 5650, minPrice: 5300, maxPrice: 5900, apmc: 'Jaipur APMC', trend: 0.0 }
-  ];
-
-  let currentCategoryFilter = 'all';
-  let currentSearchQuery = '';
-
-  function renderMarketPrices(data) {
-    const container = document.getElementById('market-prices-container');
-    if (!container) return;
-    container.innerHTML = '';
-    
-    if (data.length === 0) {
-      container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: rgba(255,255,255,0.4);" data-translate="noCropsFound">No crops match your search or filter.</div>`;
-      if (typeof applyTranslations === 'function') applyTranslations();
-      return;
-    }
-    
-    data.forEach(item => {
-      const trendClass = item.trend > 0 ? 'up' : (item.trend < 0 ? 'down' : 'neutral');
-      const trendSign = item.trend > 0 ? '↑' : (item.trend < 0 ? '↓' : '');
-      
-      const card = document.createElement('div');
-      card.className = 'market-price-card';
-      card.id = `crop-card-${item.id}`;
-      card.innerHTML = `
-        <div class="market-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-          <div class="market-crop-info" style="display: flex; gap: 10px; align-items: center;">
-            <div class="market-crop-emoji" style="font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(34,197,94,0.08); border-radius: var(--r-sm); border: 1px solid var(--glass-border-light);">${item.emoji}</div>
-            <div>
-              <div class="market-crop-name" data-translate="${item.nameKey}" style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">${item.name}</div>
-              <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 ${item.apmc}</div>
-            </div>
-          </div>
-          <div class="market-change-badge ${trendClass}">
-            <span>${trendSign}</span> ${Math.abs(item.trend).toFixed(1)}%
-          </div>
-        </div>
-        <div class="market-card-price" id="price-val-${item.id}" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">
-          ₹${item.price.toLocaleString('en-IN')} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/ Quintal</span>
-        </div>
-        <div class="market-card-bottom" style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center;">
-          <div class="market-range" style="font-size: 11px; color: rgba(255,255,255,0.35);"><span data-translate="minMax">Min-Max</span>: <span style="color: rgba(255,255,255,0.7); font-weight: 600;">₹${item.minPrice} - ₹${item.maxPrice}</span></div>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-
-    if (typeof applyTranslations === 'function') {
-      applyTranslations();
-    }
-  }
-
-  function setupMarketFilters() {
-    const searchInput = document.getElementById('market-search');
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        currentSearchQuery = e.target.value.toLowerCase().trim();
-        filterAndRenderCrops();
-      });
-    }
-    
-    const filterBtns = document.querySelectorAll('.market-filter-btn');
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => {
-          b.classList.remove('active');
-        });
-        btn.classList.add('active');
-        currentCategoryFilter = btn.getAttribute('data-category');
-        filterAndRenderCrops();
-      });
-    });
-  }
-
-  function filterAndRenderCrops() {
-    const filtered = initialCrops.filter(item => {
-      const matchesCategory = currentCategoryFilter === 'all' || item.category === currentCategoryFilter;
-      const matchesSearch = item.name.toLowerCase().includes(currentSearchQuery) || 
-                            item.apmc.toLowerCase().includes(currentSearchQuery);
-      return matchesCategory && matchesSearch;
-    });
-    renderMarketPrices(filtered);
-  }
-
-  // Update dates
-  function updateMarketDate() {
-    const dateEl = document.getElementById('market-date');
-    if (dateEl) {
-      const now = new Date();
-      const options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      dateEl.textContent = `Live APMC: ${now.toLocaleDateString('en-IN', options)}`;
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // Initial render
-    filterAndRenderCrops();
-    setupMarketFilters();
-    updateMarketDate();
-    setInterval(updateMarketDate, 1000);
-  });
-</script>
 
 </body>
 </html>

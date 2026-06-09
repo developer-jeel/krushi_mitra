@@ -154,8 +154,10 @@ def crop_price(city):
 def farmer_home(request):
     uid = request.uid
     city = uid.city if uid.city else "Rajkot"
+    crop_prices = crop_price(city)
+    context = {"crop_prices": crop_prices}
 
-    return render(request, "farmer/home.html")
+    return render(request, "farmer/home.html",context)
 
 @check_login(['Farmer'])
 def farmer_crops(request):
