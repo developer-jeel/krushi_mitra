@@ -4,7 +4,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
 from .models import * 
-import requests , math ,json,sseclient
+import requests , math ,json,sseclient,random
 from django.contrib.auth.decorators import login_required
 from sklearn.linear_model import LinearRegression 
 from sklearn.ensemble import RandomForestClassifier
@@ -152,8 +152,11 @@ def farmer_home(request):
     uid = request.uid
     city = uid.city
     crop_prices = crop_price(city)
+    random.shuffle(crop_prices)
     crop_prices = crop_prices[:9]
-    context = {"crop_prices": crop_prices,'uid' : uid}
+    all_news = news.objects.all().order_by('-created_at')[:4]
+    bolgs = bloag.objects.all().order_by('-created_at')[:4]
+    context = {"crop_prices": crop_prices,'uid' : uid, 'all_news': all_news, 'bolgs': bolgs}
 
     return render(request, "farmer/home.html",context)
 
