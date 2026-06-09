@@ -7,15 +7,18 @@ def crop_price(city):
     # Build URL correctly using an f-string
     url = f"https://api.data.gov.in/resource/{resource_id}?api-key={api_key}&format=json&filters[state]=Gujarat&filters[district]={city}&limit=1000"
     
-    crops = ["Cotton","Wheat","Rice"]
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    
+    crops = ["Cotton", "Wheat", "Rice"]
     
     try:
-        response = requests.get(url, timeout=50)
+        response = requests.get(url, headers=headers, timeout=20)
         response.raise_for_status()          # Raise error for 4xx/5xx status codes
         
         # Debug: print status and raw response for inspection
         print(f"Status: {response.status_code}")
-        # print("Response text (first 200 chars):", response.text[:200])
         
         # Only parse JSON if response is not empty
         if not response.text.strip():
@@ -27,10 +30,27 @@ def crop_price(city):
         
         prices = []
         for crop in crops:
-            crop_data = next(
-                (item for item in records if item.get("commodity") == crop),
-                None
-            )
+            crop_data = None
+            for item in records:
+                commodity = item.get("commodity")
+                if not commodity:
+                    continue
+                comm_lower = commodity.lower()
+                crop_lower = crop.lower()
+                
+                # Direct match
+                if crop_lower == comm_lower:
+                    crop_data = item
+                    break
+                # Special alias matching (Rice is listed as Paddy(Common) in many Mandis)
+                elif crop_lower == "rice" and "paddy" in comm_lower:
+                    crop_data = item
+                    break
+                # Substring/reverse substring match
+                elif crop_lower in comm_lower or comm_lower in crop_lower:
+                    crop_data = item
+                    break
+            
             if crop_data:
                 prices.append({
                     "crop": crop,
@@ -46,5 +66,5 @@ def crop_price(city):
         print("Raw response (first 500 chars):", response.text[:500])
         return []
 
-# Test        
-        print(crop_price("Ahmedabad"))
+# Test
+print(crop_price("Ahmedabad"))

@@ -117,10 +117,44 @@ def check_login(allowed_roles):
     return decorator
 
 
-
+def crop_price(city):
+    api_key = "579b464db66ec23bdd0000012bddf55026c442586adb6f1fa0b82807"
+    resource_id = "9ef84268-d588-465a-a308-a864a43d0070"
+    
+    url = f"https://api.data.gov.in/resource/{resource_id}?api-key={api_key}&format=json&filters[state]=Gujarat&filters[district]={city}&limit=100"
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    
+    crops = ["Ground Nut Seed", "Wheat", "Bengal Gram", "Green Gram", "Cotton", "Jowar", "Corriander Seed", "Methi Seeds", "Castor Seed", "Red Gram", "Mustard", "Sesamum", "Soyabean", "Black Gram", "Cummin Seed"]
+    prices = []
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=30)
+        data = response.json()
+        records = data.get("records", [])
+        
+        # Look for our target crops in the records
+        for crop in crops:
+            for record in records:
+                if record.get("commodity") == crop:
+                    prices.append({
+                        "crop": crop,
+                        "price": record.get("modal_price")/100 * 20
+                    })
+                    break  # Stop searching for this crop once we find the first price
+                    
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        
+    return prices
 
 @check_login(['Farmer'])
 def farmer_home(request):
+    uid = request.uid
+    city = uid.city if uid.city else "Rajkot"
+
     return render(request, "farmer/home.html")
 
 @check_login(['Farmer'])
