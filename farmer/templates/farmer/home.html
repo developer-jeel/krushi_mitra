@@ -320,38 +320,19 @@
         </div>
         <a href="{% url 'news' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
       </div>
-      
+      {% for newss in all_news %}
       <div class="home-news-grid">
         <div class="home-news-card">
           <div class="home-news-gradient" style="background: linear-gradient(135deg, rgba(22,101,52,0.8), rgba(6,78,59,0.9)); display: flex; align-items: center; justify-content: center; font-size: 40px;">🌦️</div>
           <div class="home-news-body">
             <span class="home-news-badge weather">Weather</span>
-            <h4 class="home-news-title">Monsoon Arrival Expected 3 Days Early, Says IMD</h4>
-            <p class="home-news-desc">The Indian Meteorological Department reports favorable winds pushing the monsoon ahead of schedule, bringing relief to dry regions.</p>
-            <div class="home-news-date">June 8, 2026</div>
-          </div>
-        </div>
-        
-        <div class="home-news-card">
-          <div class="home-news-gradient" style="background: linear-gradient(135deg, rgba(146,64,14,0.8), rgba(120,53,4,0.9)); display: flex; align-items: center; justify-content: center; font-size: 40px;">🌾</div>
-          <div class="home-news-body">
-            <span class="home-news-badge crop">Crops</span>
-            <h4 class="home-news-title">New High-Yield Pest-Resistant Cotton Seed Released</h4>
-            <p class="home-news-desc">Agricultural scientists have developed a new cotton seed variant designed to resist pink bollworm pests while raising crop yield by 20%.</p>
-            <div class="home-news-date">June 6, 2026</div>
-          </div>
-        </div>
-        
-        <div class="home-news-card">
-          <div class="home-news-gradient" style="background: linear-gradient(135deg, rgba(30,58,138,0.8), rgba(23,37,84,0.9)); display: flex; align-items: center; justify-content: center; font-size: 40px;">📈</div>
-          <div class="home-news-body">
-            <span class="home-news-badge market">Market</span>
-            <h4 class="home-news-title">Government Hikes MSP for Kharif Crops for 2026-27</h4>
-            <p class="home-news-desc">The Cabinet approved increases in Minimum Support Prices (MSP) to guarantee farmers a 50% margin over the estimated cost of production.</p>
-            <div class="home-news-date">June 5, 2026</div>
+            <h4 class="home-news-title">{{ newss.title }}</h4>
+            <p class="home-news-desc">{{ newss.description }}</p>
+            <div class="home-news-date">{{ newss.created_at|date:"F j, Y" }}</div>
           </div>
         </div>
       </div>
+      {% endfor %}
     </div>
 
     <!-- 6. Featured Blogs Area -->
@@ -366,61 +347,27 @@
       
       <div class="home-blog-grid">
         <!-- Blog Card 1 -->
+         {% for bolg in bolgs %}
         <div class="home-blog-card">
           <div class="home-blog-img-wrap">
             <div class="blog-gradient" style="background: linear-gradient(135deg,#a8edea,#fed6e3);"></div>
             <div class="home-blog-category" data-translate="farmingTips">Farming Tips</div>
           </div>
           <div class="home-blog-body">
-            <h3 class="home-blog-title" data-translate="bestPracticesForWheatCultivati">Best practices for wheat cultivation in Rabi season</h3>
-            <p class="home-blog-excerpt" data-translate="learnTheMostEffectiveTechnique">Learn the most effective techniques to maximize your wheat yield this winter season...</p>
+            <h3 class="home-blog-title" data-translate="bestPracticesForWheatCultivati">{{ bolg.title }}</h3>
+            <p class="home-blog-excerpt" data-translate="learnTheMostEffectiveTechnique">{{ bolg.content|truncatewords:20 }}</p>
             <div class="home-blog-footer">
               <div class="home-blog-author">
                 <div class="home-blog-author-avatar">R</div>
-                <span>Ramesh Patel</span>
+                <span>{{ bolg.user.name }}</span>
               </div>
-              <div class="home-blog-date" style="font-size: 11px; color: rgba(255,255,255,0.35);">28 Apr 2026</div>
+              <div class="home-blog-date" style="font-size: 11px; color: rgba(255,255,255,0.35);">{{ bolg.created_at|date:"F j, Y" }}</div>
             </div>
           </div>
         </div>
+        {% endfor %}
         
-        <!-- Blog Card 2 -->
-        <div class="home-blog-card">
-          <div class="home-blog-img-wrap">
-            <div class="blog-gradient" style="background: linear-gradient(135deg,#d4fc79,#96e6a1);"></div>
-            <div class="home-blog-category" data-translate="marketInsight">Market Insight</div>
-          </div>
-          <div class="home-blog-body">
-            <h3 class="home-blog-title">Vegetable prices expected to rise in May — What to grow?</h3>
-            <p class="home-blog-excerpt" data-translate="marketAnalystsPredictA15RiseIn">Market analysts predict a 15% rise in tomato and onion prices in the coming weeks...</p>
-            <div class="home-blog-footer">
-              <div class="home-blog-author">
-                <div class="home-blog-author-avatar">K</div>
-                <span>Krushi Mitra</span>
-              </div>
-              <div class="home-blog-date" style="font-size: 11px; color: rgba(255,255,255,0.35);">25 Apr 2026</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Blog Card 3 -->
-        <div class="home-blog-card">
-          <div class="home-blog-img-wrap">
-            <div class="blog-gradient" style="background: linear-gradient(135deg,#ffecd2,#fcb69f);"></div>
-            <div class="home-blog-category" data-translate="successStory">Success Story</div>
-          </div>
-          <div class="home-blog-body">
-            <h3 class="home-blog-title" data-translate="howIDoubledMyIncomeUsingOrgani">How I doubled my income using organic farming methods</h3>
-            <p class="home-blog-excerpt" data-translate="aFarmerFromGujaratSharesHisJou">A farmer from Gujarat shares his journey to organic farming and financial success...</p>
-            <div class="home-blog-footer">
-              <div class="home-blog-author">
-                <div class="home-blog-author-avatar">A</div>
-                <span>Arjun Desai</span>
-              </div>
-              <div class="home-blog-date" style="font-size: 11px; color: rgba(255,255,255,0.35);">20 Apr 2026</div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
 
