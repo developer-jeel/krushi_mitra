@@ -138,7 +138,7 @@ def crop_price(city):
         for record in records:
                 prices.append({
                     "crop": record.get("commodity"),
-                    "price": record.get("modal_price") / 100 * 20,  # Convert to price per 20kg
+                    "price": record.get("modal_price") // 100 * 20,  # Convert to price per 20kg
                     "price_range": f"{record.get('min_price')} - {record.get('max_price')}"
                 })  # Stop searching for this crop once we find the first price
                     
@@ -153,7 +153,7 @@ def farmer_home(request):
     city = uid.city
     crop_prices = crop_price(city)
     random.shuffle(crop_prices)
-    crop_prices = crop_prices[:9]
+    crop_prices = crop_prices[:6]
     all_news = news.objects.all().order_by('-created_at')[:4]
     bolgs = bloag.objects.all().order_by('-created_at')[:4]
     context = {"crop_prices": crop_prices,'uid' : uid, 'all_news': all_news, 'bolgs': bolgs}

@@ -300,43 +300,6 @@
         <!-- Right Column (Sidebar Widgets) -->
         <div class="home-split-side">
 
-          <!-- Weather Card Widget -->
-          <div class="home-weather-card">
-            <div class="home-weather-top">
-              <div class="home-weather-location">📍 {{ city }}</div>
-              <div class="home-weather-label" data-translate="weatherAdvisory">Live Weather</div>
-            </div>
-            <div class="home-weather-main">
-              <div class="home-weather-icon">
-                {% if condition == "Sunny" or condition == "Mostly Sunny" or condition == "Clear" %}☀️
-                {% elif condition == "Rainy" or condition == "Showers" %}🌧️
-                {% elif condition == "Partly Cloudy" or condition == "Mostly Cloudy" or condition == "Cloudy" %}⛅
-                {% else %}🌫️
-                {% endif %}
-              </div>
-              <div>
-                <div class="home-weather-temp">{{ temperature }}°C</div>
-                <div class="home-weather-condition">{{ condition }}</div>
-              </div>
-            </div>
-            <div class="home-weather-details">
-              <div class="home-weather-detail">
-                <div class="home-weather-detail-icon">💧</div>
-                <div class="home-weather-detail-val">{{ humidity }}%</div>
-                <div class="home-weather-detail-lbl" data-translate="humidity">Humidity</div>
-              </div>
-              <div class="home-weather-detail">
-                <div class="home-weather-detail-icon">💨</div>
-                <div class="home-weather-detail-val">{{ wind_speed }} km/h</div>
-                <div class="home-weather-detail-lbl" data-translate="wind">Wind</div>
-              </div>
-              <div class="home-weather-detail">
-                <div class="home-weather-detail-icon">🌧️</div>
-                <div class="home-weather-detail-val">{{ rain_probability }}%</div>
-                <div class="home-weather-detail-lbl" data-translate="rainChance">Rain</div>
-              </div>
-            </div>
-          </div>
 
           <!-- Quick Actions Panel -->
           <div class="home-quick-panel">
