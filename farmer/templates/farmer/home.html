@@ -1,5 +1,6 @@
 {%load static%}
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,440 +12,564 @@
   <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/home.css' %}">
-  
+
   <style>
     /* Inline animations for market price tick indicator */
     @keyframes priceUpFlash {
-      0% { background: rgba(34, 197, 94, 0.25); border-color: rgba(34, 197, 94, 0.4); }
-      100% { background: var(--glass-card); border-color: var(--glass-border-light); }
+      0% {
+        background: rgba(34, 197, 94, 0.25);
+        border-color: rgba(34, 197, 94, 0.4);
+      }
+
+      100% {
+        background: var(--glass-card);
+        border-color: var(--glass-border-light);
+      }
     }
+
     @keyframes priceDownFlash {
-      0% { background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.4); }
-      100% { background: var(--glass-card); border-color: var(--glass-border-light); }
+      0% {
+        background: rgba(239, 68, 68, 0.25);
+        border-color: rgba(239, 68, 68, 0.4);
+      }
+
+      100% {
+        background: var(--glass-card);
+        border-color: var(--glass-border-light);
+      }
     }
+
     .price-up-flash {
       animation: priceUpFlash 1.2s ease-out;
     }
+
     .price-down-flash {
       animation: priceDownFlash 1.2s ease-out;
     }
-    
+
     /* Layout styling fixes */
     .market-board {
       margin-bottom: 0px !important;
     }
+
     .market-filter-btn {
       outline: none;
     }
+
     .market-filter-btn.active {
       background: rgba(34, 197, 94, 0.15) !important;
       color: var(--em-400) !important;
       border-color: rgba(34, 197, 94, 0.3) !important;
       font-weight: 700;
     }
+
     .market-sparkline path {
       transition: d 0.5s ease, stroke 0.5s ease;
     }
+
     .home-quick-panel {
       margin-bottom: 0px !important;
     }
   </style>
 </head>
+
 <body>
 
-<!-- ════════════ SIDEBAR ════════════ -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
-    <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
-  </div>
-
-  <nav class="sidebar-nav">
-    <div class="nav-section-title" data-translate="main">Main</div>
-
-    <a href="{% url 'farmer_home' %}" class="nav-item active" id="nav-home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span data-translate="home">Home</span>
-    </a>
-
-    <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="3"/></svg>
-      <span data-translate="crops">My Crops</span>
-    </a>
-
-    <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-      <span data-translate="tools">Tools</span>
-    </a>
-
-    <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
-
-    <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span data-translate="chatbot">AI Chatbot 🌱</span>
-    </a>
-
-    <div class="nav-section-title" data-translate="community">Community</div>
-
-    <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <span data-translate="blogsReviews">Blogs & Reviews</span>
-    </a>
-
-    <a href="{% url 'community_chat' %}" class="nav-item" id="nav-chat">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1"/>
-        <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z"/>
-      </svg>
-      <span>Krushi Mitro 🌾</span>
-    </a>
-
-    <a href="{% url 'gov_info' %}" class="nav-item" id="nav-gov-info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 21h18"/>
-        <path d="M5 21V7l7-4 7 4v14"/>
-        <path d="M9 21V11h6v10"/>
-        <rect x="10" y="3" width="4" height="4" rx="1"/>
-      </svg>
-      <span>Gov Info 🏛</span>
-    </a>
-
-    <a href="{% url 'news' %}" class="nav-item" id="nav-news">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1" />
-        <path d="M8 8h8M8 12h8M8 16h5" />
-      </svg>
-      <span data-translate="news">News 📰</span>
-    </a>
-
-    <div class="nav-section-title" data-translate="account">Account</div>
-
-    <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span data-translate="profile">Profile</span>
-    </a>
-  </nav>
-
-  <div class="sidebar-bottom">
-    <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
-    </div>
-  </div>
-</aside>
-
-<!-- ════════════ MAIN ════════════ -->
-<div class="main">
-
-  <!-- Topbar -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-      <div>
-        <div class="page-title" data-translate="goodMorningRamesh">Good Morning, Ramesh 👋</div>
-        <div class="breadcrumb" data-translate="dashboardHome">Dashboard / Home</div>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <button class="topbar-icon-btn" id="notifBtn" title="Notifications">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span class="badge"></span>
-      </button>
-      <div class="avatar" title="My Profile" data-translate="r">R</div>
-    </div>
-  </header>
-
-  <!-- Content -->
-  <div class="page-content">
-
-    <!-- 1. Hero Welcome Section -->
-    <section class="home-hero stagger-1">
-      <div class="home-hero-content">
-        <div class="home-hero-greeting" data-translate="welcomeBack">WELCOME BACK</div>
-        <h1 class="home-hero-title">Namaste, <span data-translate="rameshji">{{ uid.name}}</span>! 👋</h1>
-        <p class="home-hero-subtitle" data-translate="heroSubtitle">Empower your agricultural journey with real-time market data, dynamic farm analytics, and AI-driven weather insights. Let's cultivate progress together.</p>
-        <div class="home-hero-actions">
-          <a href="{% url 'farmer_crops' %}" class="btn btn-primary" data-translate="listCrop">List New Crop</a>
-          <a href="{% url 'farmer_chatbot' %}" class="btn btn-secondary" data-translate="consultAI">Consult Krushi AI 🌱</a>
-        </div>
-      </div>
-      <div class="home-hero-illustration">🌾</div>
-    </section>
-
-    <!-- 4. Farm Statistics Grid (Redesigned) -->
-    <div class="home-stats-grid home-section stagger-2">
-      <div class="home-stat-card">
-        <div class="home-stat-icon green">🚜</div>
-        <div class="home-stat-info">
-          <div class="home-stat-val">12</div>
-          <div class="home-stat-lbl" data-translate="cropListedCounts">Crops Listed</div>
-        </div>
-      </div>
-      <div class="home-stat-card">
-        <div class="home-stat-icon purple">⭐</div>
-        <div class="home-stat-info">
-          <div class="home-stat-val">4.8</div>
-          <div class="home-stat-lbl" data-translate="rating">Avg. Rating</div>
-        </div>
-      </div>
-      <div class="home-stat-card">
-        <div class="home-stat-icon amber">⏳</div>
-        <div class="home-stat-info">
-          <div class="home-stat-val">142 hrs</div>
-          <div class="home-stat-lbl" data-translate="farmingHours">Farming Hours</div>
-        </div>
-      </div>
-      <div class="home-stat-card">
-        <div class="home-stat-icon blue">✅</div>
-        <div class="home-stat-info">
-          <div class="home-stat-val">34</div>
-          <div class="home-stat-lbl" data-translate="completedTransactions">Completed Transactions</div>
-        </div>
-      </div>
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
     </div>
 
-    <!-- Two Column Dashboard Grid -->
-    <div class="home-split stagger-3">
-      
-      <!-- Left Column (Main Panel) -->
-      <div class="home-split-main">
-        
-        <!-- 2. Today's Market Prices Section -->
-        <div class="market-board">
-          <div class="market-board-head">
-            <div class="market-board-title">
-              <span class="market-live-dot"></span>
-              <span data-translate="todayMarketPrices">Today's APMC Market Prices</span>
-            </div>
-            <div class="market-board-date">June 9, 2026</div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title" data-translate="main">Main</div>
+
+      <a href="{% url 'farmer_home' %}" class="nav-item active" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span data-translate="home">Home</span>
+      </a>
+
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 0 1 10 10" />
+          <path d="M12 2v20" />
+          <path d="M2 12h20" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span data-translate="crops">My Crops</span>
+      </a>
+
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span data-translate="tools">Tools</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
+
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span data-translate="chatbot">AI Chatbot 🌱</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="community">Community</div>
+
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        <span data-translate="blogsReviews">Blogs & Reviews</span>
+      </a>
+
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1" />
+          <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z" />
+        </svg>
+        <span>Krushi Mitro 🌾</span>
+      </a>
+
+      <a href="{% url 'gov_info' %}" class="nav-item" id="nav-gov-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 21h18" />
+          <path d="M5 21V7l7-4 7 4v14" />
+          <path d="M9 21V11h6v10" />
+          <rect x="10" y="3" width="4" height="4" rx="1" />
+        </svg>
+        <span>Gov Info 🏛</span>
+      </a>
+
+      <a href="{% url 'news' %}" class="nav-item" id="nav-news">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1" />
+          <path d="M8 8h8M8 12h8M8 16h5" />
+        </svg>
+        <span data-translate="news">News 📰</span>
+      </a>
+
+      <div class="nav-section-title" data-translate="account">Account</div>
+
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span data-translate="profile">Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════ MAIN ════════════ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div>
+          <div class="page-title">Good Morning, {{ uid.name }} 👋</div>
+          <div class="breadcrumb" data-translate="dashboardHome">Dashboard / Home</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" id="notifBtn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="badge"></span>
+        </button>
+        <div class="avatar" title="My Profile" data-translate="r">R</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="page-content">
+
+      <!-- 1. Hero Welcome Section -->
+      <section class="home-hero stagger-1">
+        <div class="home-hero-content">
+          <div class="home-hero-greeting" data-translate="welcomeBack">WELCOME BACK</div>
+          <h1 class="home-hero-title">Namaste, {{ uid.name }}! 👋</h1>
+          <p class="home-hero-subtitle" data-translate="heroSubtitle">Empower your agricultural journey with real-time
+            market data, dynamic farm analytics, and AI-driven weather insights. Let's cultivate progress together.</p>
+          <div class="home-hero-actions">
+            <a href="{% url 'farmer_crops' %}" class="btn btn-primary" data-translate="listCrop">List New Crop</a>
+            <a href="{% url 'farmer_chatbot' %}" class="btn btn-secondary" data-translate="consultAI">Consult Krushi AI
+              🌱</a>
           </div>
+        </div>
+        <div class="home-hero-illustration">🌾</div>
+      </section>
 
-          <div class="market-grid">
-            <!-- Cotton -->
-            {% for crop in crop_prices %}
-            <div class="market-price-card">
-              <div class="market-card-top" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-                <div class="market-crop-info" style="display: flex; gap: 10px; align-items: center;">
-                  <div>
-                    <div class="market-crop-name" style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">{{crop.crop}}</div>
-                    <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 {{city}} APMC</div>
-                  </div>
+      <!-- 4. Farm Statistics Grid (Redesigned) -->
+      <div class="home-stats-grid home-section stagger-2">
+        <div class="home-stat-card">
+          <div class="home-stat-icon green">🚜</div>
+          <div class="home-stat-info">
+            <div class="home-stat-val">{{ listed_crops_count }}</div>
+            <div class="home-stat-lbl" data-translate="cropListedCounts">Crops Listed</div>
+          </div>
+        </div>
+        <div class="home-stat-card">
+          <div class="home-stat-icon purple">⭐</div>
+          <div class="home-stat-info">
+            <div class="home-stat-val">{{ avg_rating }}</div>
+            <div class="home-stat-lbl" data-translate="rating">Avg. Rating</div>
+          </div>
+        </div>
+        <div class="home-stat-card">
+          <div class="home-stat-icon amber">⏳</div>
+          <div class="home-stat-info">
+            <div class="home-stat-val">{{ farming_hours }} hrs</div>
+            <div class="home-stat-lbl" data-translate="farmingHours">Farming Hours</div>
+          </div>
+        </div>
+        <div class="home-stat-card">
+          <div class="home-stat-icon blue">✅</div>
+          <div class="home-stat-info">
+            <div class="home-stat-val">{{ completed_transactions }}</div>
+            <div class="home-stat-lbl" data-translate="completedTransactions">Completed Transactions</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Dashboard Grid -->
+      <div class="home-split stagger-3">
+
+        <!-- Left Column (Main Panel) -->
+        <div class="home-split-main">
+
+          <!-- 2. Today's Market Prices Section -->
+          <div class="market-board">
+            <div class="market-board-head">
+              <div class="market-board-title">
+                <span class="market-live-dot"></span>
+                <span data-translate="todayMarketPrices">Today's APMC Market Prices</span>
+              </div>
+              <div class="market-board-date">{% now "F j, Y" %}</div>
+            </div>
+
+            <div class="market-grid">
+              {% for crop in crop_prices %}
+              <div class="market-price-card">
+                <div class="market-crop-info">
+                  <div class="market-crop-name" style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">{{ crop.crop }}</div>
+                  <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 {{ city }} APMC</div>
+                </div>
+                <div class="market-card-price" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">₹{{ crop.price }} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/ 20Kg</span></div>
+                <div class="market-card-bottom" style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: rgba(255,255,255,0.35);">
+                  <span data-translate="minMax">Min-Max</span>: <span style="color: rgba(255,255,255,0.7); font-weight: 600;">₹{{ crop.price_range }}</span>
                 </div>
               </div>
-              <div class="market-card-price" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">{{crop.price}} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/ 20Kg</span></div>
-              <div class="market-card-bottom" style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: rgba(255,255,255,0.35);"><span data-translate="minMax">Min-Max</span>: <span style="color: rgba(255,255,255,0.7); font-weight: 600;">₹{{crop.price_range}}</span></div>
+              {% endfor %}
             </div>
-            {% endfor %}
-
           </div>
+
         </div>
 
-      </div>
+        <!-- Right Column (Sidebar Widgets) -->
+        <div class="home-split-side">
 
-      <!-- Right Column (Sidebar Widgets) -->
-      <div class="home-split-side">
-        
-        <!-- Quick Actions Panel -->
-        <div class="home-quick-panel">
-          <div class="home-quick-head">
-            ⚡ <span data-translate="quickActions">Quick Actions</span>
-          </div>
-          <a href="{% url 'farmer_crops' %}" class="home-quick-item">
-            <span class="home-quick-item-icon">🌱</span>
-            <span data-translate="listCrop">List New Crop</span>
-            <span class="home-quick-item-arrow">➔</span>
-          </a>
-          <a href="{% url 'farmer_tools' %}" class="home-quick-item">
-            <span class="home-quick-item-icon">🚜</span>
-            <span data-translate="addTool">Add Tool</span>
-            <span class="home-quick-item-arrow">➔</span>
-          </a>
-          <a href="{% url 'farmer_blogs' %}" class="home-quick-item">
-            <span class="home-quick-item-icon">✍️</span>
-            <span data-translate="writeBlog">Write Blog</span>
-            <span class="home-quick-item-arrow">➔</span>
-          </a>
-          <a href="{% url 'farmer_profile' %}" class="home-quick-item">
-            <span class="home-quick-item-icon">👤</span>
-            <span data-translate="editProfile">Edit Profile</span>
-            <span class="home-quick-item-arrow">➔</span>
-          </a>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- 8. Government Schemes Widget -->
-    <div class="home-section stagger-4">
-      <div class="home-section-header">
-        <div class="home-section-title">
-          <span class="section-emoji">🏛</span>
-          <span data-translate="govSchemes">Government Schemes</span>
-        </div>
-        <a href="{% url 'gov_info' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
-      </div>
-      
-      <div class="home-scheme-grid">
-        <a href="{% url 'gov_info' %}" class="home-scheme-card">
-          <div class="home-scheme-icon">💰</div>
-          <div class="home-scheme-name">PM-KISAN Samman Nidhi</div>
-          <div class="home-scheme-desc">Get financial benefit of ₹6,000 per year in three equal installments directly to your bank account.</div>
-          <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
-        </a>
-        
-        <a href="{% url 'gov_info' %}" class="home-scheme-card">
-          <div class="home-scheme-icon">🛡️</div>
-          <div class="home-scheme-name">PM Fasal Bima Yojana (PMFBY)</div>
-          <div class="home-scheme-desc">Crop insurance scheme offering financial support to farmers suffering crop loss/damage due to natural calamities.</div>
-          <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
-        </a>
-        
-        <a href="{% url 'gov_info' %}" class="home-scheme-card">
-          <div class="home-scheme-icon">🧪</div>
-          <div class="home-scheme-name">Soil Health Card Scheme</div>
-          <div class="home-scheme-desc">Understand your soil's nutrient health and get customized fertilizer dosage recommendations to improve yield.</div>
-          <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
-        </a>
-      </div>
-    </div>
-
-    <!-- 5. Agricultural News Highlights -->
-    <div class="home-section stagger-5">
-      <div class="home-section-header">
-        <div class="home-section-title">
-          <span class="section-emoji">📰</span>
-          <span data-translate="news">Agricultural News Highlights</span>
-        </div>
-        <a href="{% url 'news' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
-      </div>
-      {% for newss in all_news %}
-      <div class="home-news-grid">
-        <div class="home-news-card">
-          <div class="home-news-gradient" style="background: linear-gradient(135deg, rgba(22,101,52,0.8), rgba(6,78,59,0.9)); display: flex; align-items: center; justify-content: center; font-size: 40px;">🌦️</div>
-          <div class="home-news-body">
-            <span class="home-news-badge weather">Weather</span>
-            <h4 class="home-news-title">{{ newss.title }}</h4>
-            <p class="home-news-desc">{{ newss.description }}</p>
-            <div class="home-news-date">{{ newss.created_at|date:"F j, Y" }}</div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-
-    <!-- 6. Featured Blogs Area -->
-    <div class="home-section stagger-6">
-      <div class="home-section-header">
-        <div class="home-section-title">
-          <span class="section-emoji">✍️</span>
-          <span data-translate="recentBlogs">Recent Blog Posts</span>
-        </div>
-        <a href="{% url 'farmer_blogs' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
-      </div>
-      
-      <div class="home-blog-grid">
-        <!-- Blog Card 1 -->
-         {% for bolg in bolgs %}
-        <div class="home-blog-card">
-          <div class="home-blog-img-wrap">
-            <div class="blog-gradient" style="background: linear-gradient(135deg,#a8edea,#fed6e3);"></div>
-            <div class="home-blog-category" data-translate="farmingTips">Farming Tips</div>
-          </div>
-          <div class="home-blog-body">
-            <h3 class="home-blog-title" data-translate="bestPracticesForWheatCultivati">{{ bolg.title }}</h3>
-            <p class="home-blog-excerpt" data-translate="learnTheMostEffectiveTechnique">{{ bolg.content|truncatewords:20 }}</p>
-            <div class="home-blog-footer">
-              <div class="home-blog-author">
-                <div class="home-blog-author-avatar">R</div>
-                <span>{{ bolg.user.name }}</span>
+          <!-- Weather Card Widget -->
+          <div class="home-weather-card">
+            <div class="home-weather-top">
+              <div class="home-weather-location">📍 {{ city }}</div>
+              <div class="home-weather-label" data-translate="weatherAdvisory">Live Weather</div>
+            </div>
+            <div class="home-weather-main">
+              <div class="home-weather-icon">
+                {% if condition == "Sunny" or condition == "Mostly Sunny" or condition == "Clear" %}☀️
+                {% elif condition == "Rainy" or condition == "Showers" %}🌧️
+                {% elif condition == "Partly Cloudy" or condition == "Mostly Cloudy" or condition == "Cloudy" %}⛅
+                {% else %}🌫️
+                {% endif %}
               </div>
-              <div class="home-blog-date" style="font-size: 11px; color: rgba(255,255,255,0.35);">{{ bolg.created_at|date:"F j, Y" }}</div>
+              <div>
+                <div class="home-weather-temp">{{ temperature }}°C</div>
+                <div class="home-weather-condition">{{ condition }}</div>
+              </div>
+            </div>
+            <div class="home-weather-details">
+              <div class="home-weather-detail">
+                <div class="home-weather-detail-icon">💧</div>
+                <div class="home-weather-detail-val">{{ humidity }}%</div>
+                <div class="home-weather-detail-lbl" data-translate="humidity">Humidity</div>
+              </div>
+              <div class="home-weather-detail">
+                <div class="home-weather-detail-icon">💨</div>
+                <div class="home-weather-detail-val">{{ wind_speed }} km/h</div>
+                <div class="home-weather-detail-lbl" data-translate="wind">Wind</div>
+              </div>
+              <div class="home-weather-detail">
+                <div class="home-weather-detail-icon">🌧️</div>
+                <div class="home-weather-detail-val">{{ rain_probability }}%</div>
+                <div class="home-weather-detail-lbl" data-translate="rainChance">Rain</div>
+              </div>
             </div>
           </div>
-        </div>
-        {% endfor %}
-        
 
-      </div>
-    </div>
-
-    <!-- 10. Footer Section -->
-    <footer class="home-footer stagger-7">
-      <div class="home-footer-grid">
-        <div class="home-footer-col">
-          <div class="home-footer-col-title">Krushi Mitra</div>
-          <p style="font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; margin: 0 0 16px 0;">An integrated digital agriculture platform helping farmers maximize their yield, connect directly to markets, and make data-driven decisions.</p>
-          <div class="home-footer-socials">
-            <a href="#" class="home-footer-social" title="Website">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <!-- Quick Actions Panel -->
+          <div class="home-quick-panel">
+            <div class="home-quick-head">
+              ⚡ <span data-translate="quickActions">Quick Actions</span>
+            </div>
+            <a href="{% url 'farmer_crops' %}" class="home-quick-item">
+              <span class="home-quick-item-icon">🌱</span>
+              <span data-translate="listCrop">List New Crop</span>
+              <span class="home-quick-item-arrow">➔</span>
             </a>
-            <a href="#" class="home-footer-social" title="Twitter">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            <a href="{% url 'farmer_tools' %}" class="home-quick-item">
+              <span class="home-quick-item-icon">🚜</span>
+              <span data-translate="addTool">Add Tool</span>
+              <span class="home-quick-item-arrow">➔</span>
             </a>
-            <a href="#" class="home-footer-social" title="Telegram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <a href="{% url 'farmer_blogs' %}" class="home-quick-item">
+              <span class="home-quick-item-icon">✍️</span>
+              <span data-translate="writeBlog">Write Blog</span>
+              <span class="home-quick-item-arrow">➔</span>
+            </a>
+            <a href="{% url 'farmer_profile' %}" class="home-quick-item">
+              <span class="home-quick-item-icon">👤</span>
+              <span data-translate="editProfile">Edit Profile</span>
+              <span class="home-quick-item-arrow">➔</span>
             </a>
           </div>
+
         </div>
-        <div class="home-footer-col">
-          <div class="home-footer-col-title" data-translate="quickLinks">Quick Links</div>
-          <a href="{% url 'farmer_home' %}" data-translate="home">Home</a>
-          <a href="{% url 'farmer_crops' %}" data-translate="crops">My Crops</a>
-          <a href="{% url 'farmer_tools' %}" data-translate="tools">Tools</a>
-          <a href="{% url 'gov_info' %}">Gov Info 🏛</a>
+
+      </div>
+
+      <!-- 8. Government Schemes Widget -->
+      <div class="home-section stagger-4">
+        <div class="home-section-header">
+          <div class="home-section-title">
+            <span class="section-emoji">🏛</span>
+            <span data-translate="govSchemes">Government Schemes</span>
+          </div>
+          <a href="{% url 'gov_info' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
         </div>
-        <div class="home-footer-col">
-          <div class="home-footer-col-title" data-translate="aiServices">AI Services</div>
-          <a href="{% url 'farmer_chatbot' %}" data-translate="chatbot">AI Chatbot</a>
-          <a href="{% url 'farmer_tools' %}">Price Predictor ML</a>
-        </div>
-        <div class="home-footer-col">
-          <div class="home-footer-col-title" data-translate="support">Support</div>
-          <p style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
-            <span>✉️</span> support@krushimitra.in
-          </p>
-          <p style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0; display: flex; align-items: center; gap: 6px;">
-            <span>📞</span> +91 1800-123-4567
-          </p>
+
+        <div class="home-scheme-grid">
+          <a href="{% url 'gov_info' %}" class="home-scheme-card">
+            <div class="home-scheme-icon">💰</div>
+            <div class="home-scheme-name">PM-KISAN Samman Nidhi</div>
+            <div class="home-scheme-desc">Get financial benefit of ₹6,000 per year in three equal installments directly
+              to your bank account.</div>
+            <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
+          </a>
+
+          <a href="{% url 'gov_info' %}" class="home-scheme-card">
+            <div class="home-scheme-icon">🛡️</div>
+            <div class="home-scheme-name">PM Fasal Bima Yojana (PMFBY)</div>
+            <div class="home-scheme-desc">Crop insurance scheme offering financial support to farmers suffering crop
+              loss/damage due to natural calamities.</div>
+            <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
+          </a>
+
+          <a href="{% url 'gov_info' %}" class="home-scheme-card">
+            <div class="home-scheme-icon">🧪</div>
+            <div class="home-scheme-name">Soil Health Card Scheme</div>
+            <div class="home-scheme-desc">Understand your soil's nutrient health and get customized fertilizer dosage
+              recommendations to improve yield.</div>
+            <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
+          </a>
         </div>
       </div>
-      
-      <div class="home-footer-divider"></div>
-      
-      <div class="home-footer-bottom">
-        <div class="home-footer-copy">
-          &copy; 2026 <a href="{% url 'farmer_home' %}">Krushi Mitra</a>. All rights reserved.
+
+      <!-- 5. Agricultural News Highlights -->
+      <div class="home-section stagger-5">
+        <div class="home-section-header">
+          <div class="home-section-title">
+            <span class="section-emoji">📰</span>
+            <span data-translate="news">Agricultural News Highlights</span>
+          </div>
+          <a href="{% url 'news' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
         </div>
-        <div class="home-footer-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
+        <div class="home-news-grid">
+          {% for newss in all_news %}
+          <div class="home-news-card">
+            {% if newss.image %}
+            <img src="{{ newss.image.url }}" alt="{{ newss.title }}" style="width: 100%; height: 140px; object-fit: cover; display: block;" />
+            {% else %}
+            <div class="home-news-gradient"
+              style="background: linear-gradient(135deg, rgba(22,101,52,0.8), rgba(6,78,59,0.9)); display: flex; align-items: center; justify-content: center; font-size: 40px;">
+              🌦️</div>
+            {% endif %}
+            <div class="home-news-body">
+              <span class="home-news-badge weather">Weather</span>
+              <h4 class="home-news-title">{{ newss.title }}</h4>
+              <p class="home-news-desc">{{ newss.description|truncatewords:20 }}</p>
+              <div class="home-news-date">{{ newss.created_at|date:"F j, Y" }}</div>
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
-    </footer>
 
-  </div><!-- /page-content -->
-</div><!-- /main -->
+      <!-- 6. Featured Blogs Area -->
+      <div class="home-section stagger-6">
+        <div class="home-section-header">
+          <div class="home-section-title">
+            <span class="section-emoji">✍️</span>
+            <span data-translate="recentBlogs">Recent Blog Posts</span>
+          </div>
+          <a href="{% url 'farmer_blogs' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
+        </div>
 
-<!-- Language Modal -->
-<div class="lang-modal-overlay" id="langModal">
-  <div class="lang-modal">
-    <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
-    <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language for the interface</div>
-    <div class="lang-grid" id="langGrid"></div>
-    <div class="lang-modal-actions">
-      <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
-      <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
+        <div class="home-blog-grid">
+          {% for bolg in bolgs %}
+          <div class="home-blog-card">
+            <div class="home-blog-img-wrap">
+              {% if bolg.image %}
+              <img src="{{ bolg.image.url }}" alt="{{ bolg.title }}" style="width: 100%; height: 100%; object-fit: cover;" />
+              {% else %}
+              <div class="blog-gradient"
+                style="background: {% cycle 'linear-gradient(135deg,#1b4332,#081c15)' 'linear-gradient(135deg,#134074,#0b2545)' 'linear-gradient(135deg,#4a1e40,#2d0f25)' 'linear-gradient(135deg,#5c3d2e,#3d251e)' %}; height: 100%;">
+              </div>
+              {% endif %}
+              <div class="home-blog-category" data-translate="farmingTips">Farming Tips</div>
+            </div>
+            <div class="home-blog-body">
+              <h3 class="home-blog-title">{{ bolg.title }}</h3>
+              <p class="home-blog-excerpt">{{ bolg.content|truncatewords:20 }}</p>
+              <div class="home-blog-footer">
+                <div class="home-blog-author">
+                  <div class="home-blog-author-avatar">{{ bolg.user.name|slice:":1"|upper }}</div>
+                  <span>{{ bolg.user.name }}</span>
+                </div>
+                <div class="home-blog-date" style="font-size: 11px; color: rgba(255,255,255,0.35);">
+                  {{bolg.created_at|date:"F j, Y" }}</div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 10. Footer Section -->
+      <footer class="home-footer stagger-7">
+        <div class="home-footer-grid">
+          <div class="home-footer-col">
+            <div class="home-footer-col-title">Krushi Mitra</div>
+            <p style="font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; margin: 0 0 16px 0;">An
+              integrated digital agriculture platform helping farmers maximize their yield, connect directly to markets,
+              and make data-driven decisions.</p>
+            <div class="home-footer-socials">
+              <a href="#" class="home-footer-social" title="Website">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+              </a>
+              <a href="#" class="home-footer-social" title="Twitter">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                </svg>
+              </a>
+              <a href="#" class="home-footer-social" title="Telegram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="home-footer-col">
+            <div class="home-footer-col-title" data-translate="quickLinks">Quick Links</div>
+            <a href="{% url 'farmer_home' %}" data-translate="home">Home</a>
+            <a href="{% url 'farmer_crops' %}" data-translate="crops">My Crops</a>
+            <a href="{% url 'farmer_tools' %}" data-translate="tools">Tools</a>
+            <a href="{% url 'gov_info' %}">Gov Info 🏛</a>
+          </div>
+          <div class="home-footer-col">
+            <div class="home-footer-col-title" data-translate="aiServices">AI Services</div>
+            <a href="{% url 'farmer_chatbot' %}" data-translate="chatbot">AI Chatbot</a>
+            <a href="{% url 'farmer_tools' %}">Price Predictor ML</a>
+          </div>
+          <div class="home-footer-col">
+            <div class="home-footer-col-title" data-translate="support">Support</div>
+            <p
+              style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+              <span>✉️</span> support@krushimitra.in
+            </p>
+            <p
+              style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0; display: flex; align-items: center; gap: 6px;">
+              <span>📞</span> +91 1800-123-4567
+            </p>
+          </div>
+        </div>
+
+        <div class="home-footer-divider"></div>
+
+        <div class="home-footer-bottom">
+          <div class="home-footer-copy">
+            &copy; 2026 <a href="{% url 'farmer_home' %}">Krushi Mitra</a>. All rights reserved.
+          </div>
+          <div class="home-footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+      </footer>
+
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+  <!-- Language Modal -->
+  <div class="lang-modal-overlay" id="langModal">
+    <div class="lang-modal">
+      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
+      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language
+        for the interface</div>
+      <div class="lang-grid" id="langGrid"></div>
+      <div class="lang-modal-actions">
+        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
+        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="{% static 'farmer/js/farmer.js' %}"></script>
-<script src="{% static 'farmer/js/language.js' %}"></script>
-<script src="{% static 'farmer/js/animations.js' %}"></script>
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/language.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
 
 
 </body>
+
 </html>
