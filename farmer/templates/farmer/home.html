@@ -343,30 +343,15 @@
         </div>
 
         <div class="home-scheme-grid">
+          {% for scheme in schemes %}
           <a href="{% url 'gov_info' %}" class="home-scheme-card">
-            <div class="home-scheme-icon">💰</div>
-            <div class="home-scheme-name">PM-KISAN Samman Nidhi</div>
-            <div class="home-scheme-desc">Get financial benefit of ₹6,000 per year in three equal installments directly
-              to your bank account.</div>
+            <div class="home-scheme-icon"></div>
+            <div class="home-scheme-name">{{ scheme.title }}</div>
+            <div class="home-scheme-desc">{{ scheme.description|truncatewords:20  }}</div>
             <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
           </a>
-
-          <a href="{% url 'gov_info' %}" class="home-scheme-card">
-            <div class="home-scheme-icon">🛡️</div>
-            <div class="home-scheme-name">PM Fasal Bima Yojana (PMFBY)</div>
-            <div class="home-scheme-desc">Crop insurance scheme offering financial support to farmers suffering crop
-              loss/damage due to natural calamities.</div>
-            <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
-          </a>
-
-          <a href="{% url 'gov_info' %}" class="home-scheme-card">
-            <div class="home-scheme-icon">🧪</div>
-            <div class="home-scheme-name">Soil Health Card Scheme</div>
-            <div class="home-scheme-desc">Understand your soil's nutrient health and get customized fertilizer dosage
-              recommendations to improve yield.</div>
-            <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
-          </a>
-        </div>
+          {% endfor %}
+        </div>  
       </div>
 
       <!-- 5. Agricultural News Highlights -->

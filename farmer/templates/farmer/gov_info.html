@@ -296,7 +296,7 @@
               <span class="gi-emoji">💰</span>
               <div class="gi-name">{{ info.title }}</div>
             </div>
-            <p class="gi-desc">{{ info.description }}</p>
+            <p class="gi-desc">{{ info.description|truncatewords:50 }}</p>
             <div class="gi-benefit">{{ info.oneline_info }}</div>
             <div class="gi-footer">
               <span class="gi-dept">{{ info.department }}</span>
