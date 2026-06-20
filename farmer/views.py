@@ -278,7 +278,7 @@ def farmer_chatbot(request):
             "Content-Type": "application/json"
         }
         
-        MODEL = "z-ai/glm-4.5-air:free"
+        MODEL = "openai/gpt-oss-20b:free"
 
         data = {
             "model": MODEL,
@@ -293,7 +293,7 @@ def farmer_chatbot(request):
 
                 Rules:
                 - always be friendly
-                - if user ask than always give price of 20kg of any crop
+                - if user ask than always give price of 20kg of user asked crop
                 - dont answer the quesions other than farming,farming tools..etc
                 - creator of model : Jeel Tank
                 - Always call user by name
