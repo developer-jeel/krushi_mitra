@@ -72,10 +72,21 @@
     }
 
     /* Blog gradient classes */
-    .bg-grad-1 { background: linear-gradient(135deg,#1b4332,#081c15); }
-    .bg-grad-2 { background: linear-gradient(135deg,#134074,#0b2545); }
-    .bg-grad-3 { background: linear-gradient(135deg,#4a1e40,#2d0f25); }
-    .bg-grad-4 { background: linear-gradient(135deg,#5c3d2e,#3d251e); }
+    .bg-grad-1 {
+      background: linear-gradient(135deg, #1b4332, #081c15);
+    }
+
+    .bg-grad-2 {
+      background: linear-gradient(135deg, #134074, #0b2545);
+    }
+
+    .bg-grad-3 {
+      background: linear-gradient(135deg, #4a1e40, #2d0f25);
+    }
+
+    .bg-grad-4 {
+      background: linear-gradient(135deg, #5c3d2e, #3d251e);
+    }
   </style>
 </head>
 
@@ -289,12 +300,18 @@
               {% for crop in crop_prices %}
               <div class="market-price-card">
                 <div class="market-crop-info">
-                  <div class="market-crop-name" style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">{{ crop.crop }}</div>
-                  <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 {{ city }} APMC</div>
+                  <div class="market-crop-name"
+                    style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">{{ crop.crop }}</div>
+                  <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍 {{
+                    city }} APMC</div>
                 </div>
-                <div class="market-card-price" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">₹{{ crop.price }} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/ 20Kg</span></div>
-                <div class="market-card-bottom" style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: rgba(255,255,255,0.35);">
-                  <span data-translate="minMax">Min-Max</span>: <span style="color: rgba(255,255,255,0.7); font-weight: 600;">₹{{ crop.price_range }}</span>
+                <div class="market-card-price" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">
+                  ₹{{ crop.price }} <span style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);">/
+                    20Kg</span></div>
+                <div class="market-card-bottom"
+                  style="margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.04); font-size: 11px; color: rgba(255,255,255,0.35);">
+                  <span data-translate="minMax">Min-Max</span>: <span
+                    style="color: rgba(255,255,255,0.7); font-weight: 600;">₹{{ crop.price_range }}</span>
                 </div>
               </div>
               {% endfor %}
@@ -353,11 +370,11 @@
           <a href="{% url 'gov_info' %}" class="home-scheme-card">
             <div class="home-scheme-icon"></div>
             <div class="home-scheme-name">{{ scheme.title }}</div>
-            <div class="home-scheme-desc">{{ scheme.description|truncatewords:20  }}</div>
+            <div class="home-scheme-desc">{{ scheme.description|truncatewords:20 }}</div>
             <div class="home-scheme-link"><span data-translate="learnMore">Learn More</span> ➔</div>
           </a>
           {% endfor %}
-        </div>  
+        </div>
       </div>
 
       <!-- 5. Agricultural News Highlights -->
@@ -373,7 +390,8 @@
           {% for newss in all_news %}
           <div class="home-news-card">
             {% if newss.image %}
-            <img src="{{ newss.image.url }}" alt="{{ newss.title }}" style="width: 100%; height: 140px; object-fit: cover; display: block;" />
+            <img src="{{ newss.image.url }}" alt="{{ newss.title }}"
+              style="width: 100%; height: 140px; object-fit: cover; display: block;" />
             {% else %}
             <div class="home-news-gradient"
               style="background: linear-gradient(135deg, rgba(22,101,52,0.8), rgba(6,78,59,0.9)); display: flex; align-items: center; justify-content: center; font-size: 40px;">
@@ -405,7 +423,8 @@
           <div class="home-blog-card">
             <div class="home-blog-img-wrap">
               {% if bolg.image %}
-              <img src="{{ bolg.image.url }}" alt="{{ bolg.title }}" style="width: 100%; height: 100%; object-fit: cover;" />
+              <img src="{{ bolg.image.url }}" alt="{{ bolg.title }}"
+                style="width: 100%; height: 100%; object-fit: cover;" />
               {% else %}
               <div class="blog-gradient {% cycle 'bg-grad-1' 'bg-grad-2' 'bg-grad-3' 'bg-grad-4' %}"
                 style="height: 100%;">
@@ -431,14 +450,26 @@
       </div>
 
       <!-- 10. Footer Section -->
-      <footer class="home-footer stagger-7" style="padding: 20px 24px; margin-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <footer class="home-footer stagger-7"
+        style="padding: 20px 24px; margin-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
         <div class="home-footer-copy" style="font-size: 12px; color: rgba(255,255,255,0.4);">
-          &copy; 2026 <a href="{% url 'farmer_home' %}" style="color: var(--em-400); text-decoration: none; font-weight: 600;">Krushi Mitra</a>. All rights reserved.
+          &copy; 2026 <a href="{% url 'farmer_home' %}"
+            style="color: var(--em-400); text-decoration: none; font-weight: 600;">Krushi Mitra</a>. All rights
+          reserved.
         </div>
         <div class="home-footer-links" style="display: flex; gap: 16px;">
-          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Privacy Policy</a>
-          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Terms of Service</a>
-          <a href="mailto:support@krushimitra.in" style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Support</a>
+          <a href="#"
+            style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;"
+            onmouseover="this.style.color='rgba(255,255,255,0.8)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.4)'">Privacy Policy</a>
+          <a href="#"
+            style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;"
+            onmouseover="this.style.color='rgba(255,255,255,0.8)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.4)'">Terms of Service</a>
+          <a href="mailto:support@krushimitra.in"
+            style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;"
+            onmouseover="this.style.color='rgba(255,255,255,0.8)'"
+            onmouseout="this.style.color='rgba(255,255,255,0.4)'">Support</a>
         </div>
       </footer>
 
