@@ -425,74 +425,14 @@
       </div>
 
       <!-- 10. Footer Section -->
-      <footer class="home-footer stagger-7">
-        <div class="home-footer-grid">
-          <div class="home-footer-col">
-            <div class="home-footer-col-title">Krushi Mitra</div>
-            <p style="font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; margin: 0 0 16px 0;">An
-              integrated digital agriculture platform helping farmers maximize their yield, connect directly to markets,
-              and make data-driven decisions.</p>
-            <div class="home-footer-socials">
-              <a href="#" class="home-footer-social" title="Website">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="2" y1="12" x2="22" y2="12" />
-                  <path
-                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                </svg>
-              </a>
-              <a href="#" class="home-footer-social" title="Twitter">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path
-                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
-                </svg>
-              </a>
-              <a href="#" class="home-footer-social" title="Telegram">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </a>
-            </div>
-          </div>
-          <div class="home-footer-col">
-            <div class="home-footer-col-title" data-translate="quickLinks">Quick Links</div>
-            <a href="{% url 'farmer_home' %}" data-translate="home">Home</a>
-            <a href="{% url 'farmer_crops' %}" data-translate="crops">My Crops</a>
-            <a href="{% url 'farmer_tools' %}" data-translate="tools">Tools</a>
-            <a href="{% url 'gov_info' %}">Gov Info 🏛</a>
-          </div>
-          <div class="home-footer-col">
-            <div class="home-footer-col-title" data-translate="aiServices">AI Services</div>
-            <a href="{% url 'farmer_chatbot' %}" data-translate="chatbot">AI Chatbot</a>
-            <a href="{% url 'farmer_tools' %}">Price Predictor ML</a>
-          </div>
-          <div class="home-footer-col">
-            <div class="home-footer-col-title" data-translate="support">Support</div>
-            <p
-              style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
-              <span>✉️</span> support@krushimitra.in
-            </p>
-            <p
-              style="font-size: 12.5px; color: rgba(255,255,255,0.6); margin: 0; display: flex; align-items: center; gap: 6px;">
-              <span>📞</span> +91 1800-123-4567
-            </p>
-          </div>
+      <footer class="home-footer stagger-7" style="padding: 20px 24px; margin-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div class="home-footer-copy" style="font-size: 12px; color: rgba(255,255,255,0.4);">
+          &copy; 2026 <a href="{% url 'farmer_home' %}" style="color: var(--em-400); text-decoration: none; font-weight: 600;">Krushi Mitra</a>. All rights reserved.
         </div>
-
-        <div class="home-footer-divider"></div>
-
-        <div class="home-footer-bottom">
-          <div class="home-footer-copy">
-            &copy; 2026 <a href="{% url 'farmer_home' %}">Krushi Mitra</a>. All rights reserved.
-          </div>
-          <div class="home-footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-          </div>
+        <div class="home-footer-links" style="display: flex; gap: 16px;">
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Privacy Policy</a>
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Terms of Service</a>
+          <a href="mailto:support@krushimitra.in" style="font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Support</a>
         </div>
       </footer>
 
