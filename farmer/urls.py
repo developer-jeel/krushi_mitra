@@ -33,9 +33,13 @@ urlpatterns = [
     path('clear_history', views.clear_history, name='clear_history'),
     path('tool_price', views.tool_price, name='tool_price'),
     path('add-tool', views.add_tool, name='add_tool'),
-    path('community_chat', views.community_chat, name='community_chat'),
     path('gov_info', views.govt_info, name='gov_info'),
     path('news', views.farmer_news, name='news'),
+
+    path('community_chat', views.community_chat, name='community_chat'),
+    path('community_chat_delet/<pk>', views.community_chat_delet, name='community_chat_delet'),
+
+
 
 
     path('buyer_home', views.buyer_home, name='buyer_home'),
