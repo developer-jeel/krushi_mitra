@@ -23,16 +23,21 @@ urlpatterns = [
     path('', views.login, name='login'),
     path('farmer_home', views.farmer_home, name='farmer_home'),
     path('farmer_crops', views.farmer_crops, name='farmer_crops'),
+    
     path('farmer_tools', views.farmer_tools, name='farmer_tools'),
+    path('tool_price', views.tool_price, name='tool_price'),
+    path('add-tool', views.add_tool, name='add_tool'),
+
     path('farmer_blogs', views.farmer_blogs, name='farmer_blogs'),
     path('write_blog', views.write_blog, name='write_blog'),
     path('my_posts', views.my_posts, name='my_posts'),
     path('delete_blog', views.delete_blog, name='delete_blog'),
+
     path('farmer_profile', views.farmer_profile, name='farmer_profile'),
+
     path('farmer_chatbot', views.farmer_chatbot, name='farmer_chatbot'),
     path('clear_history', views.clear_history, name='clear_history'),
-    path('tool_price', views.tool_price, name='tool_price'),
-    path('add-tool', views.add_tool, name='add_tool'),
+
     path('gov_info', views.govt_info, name='gov_info'),
     path('news', views.farmer_news, name='news'),
 
