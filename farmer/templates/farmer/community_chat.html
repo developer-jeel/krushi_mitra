@@ -364,7 +364,8 @@
                   </svg>
                   Edit
                 </button>
-                <button type="button" class="wa-msg-menu-item delete" onclick="deleteMessage('{{message.id}}')">
+                <a href="{% url 'community_chat_delet' pk=message.id %}" type="button" class="wa-msg-menu-item delete"
+                  onclick="deleteMessage('{{message.id}}')">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                     <polyline points="3 6 5 6 21 6" />
                     <path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6" />
@@ -372,7 +373,7 @@
                     <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
                   </svg>
                   Delete
-                </button>
+                </a>
               </div>
 
               <div class="wa-meta">
