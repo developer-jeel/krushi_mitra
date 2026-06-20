@@ -155,8 +155,8 @@ def farmer_home(request):
     random.shuffle(crop_prices)
     crop_prices = crop_prices[:6]
     all_news = news.objects.all().order_by('-created_at')[:4]
-    bolgs = bloag.objects.all().order_by('-created_at')[:4]
-    schemes = gov_info.objects.all().order_by('-created_at')[:5]
+    bolgs = bloag.objects.all().order_by('-created_at')[:3]
+    schemes = gov_info.objects.all().order_by('-created_at')[:4]
     context = {"crop_prices": crop_prices,'uid' : uid, 'all_news': all_news, 'bolgs': bolgs, 'schemes': schemes}
 
     return render(request, "farmer/home.html",context)
