@@ -411,8 +411,8 @@ def community_chat(request):
     return render(request, "farmer/community_chat.html", context)
 
 
-def community_chat_delet(pk):
-    community_message.objects.filter(pk=pk).delete()
+def community_chat_delet(request,pk):
+    community_message.objects.filter(id=pk).delete()
     return redirect('community_chat')
 def predict_price(price, category, years, condition):
 

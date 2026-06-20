@@ -37,7 +37,7 @@ urlpatterns = [
     path('news', views.farmer_news, name='news'),
 
     path('community_chat', views.community_chat, name='community_chat'),
-    path('community_chat_delet/<pk>', views.community_chat_delet, name='community_chat_delet'),
+    path('community_chat_delet/<int:pk>', views.community_chat_delet, name='community_chat_delet'),
 
 
 
