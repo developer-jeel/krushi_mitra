@@ -8,7 +8,8 @@ from farmer.views import *
 def buyer_home(request):
     all_crops = crop.objects.filter(is_approved = True)
     print("==================>",all_crops)
-    return render(request, "buyer/home.html")
+    context = {'all_crops' : all_crops}
+    return render(request, "buyer/home.html",context)
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):
