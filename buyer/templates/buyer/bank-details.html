@@ -1,24 +1,117 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bank Details - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/bank-details.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
-    <aside class="sidebar">[SIDEBAR]</aside>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">◀</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item active" data-tooltip="Dashboard">
+          <span class="sidebar-item-icon">📊</span>
+          <span class="sidebar-item-text">Dashboard</span>
+        </a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops">
+          <span class="sidebar-item-icon">🌾</span>
+          <span class="sidebar-item-text">Browse Crops</span>
+        </a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart">
+          <span class="sidebar-item-icon">🛒</span>
+          <span class="sidebar-item-text">Cart</span>
+          <span class="sidebar-item-badge">3</span>
+        </a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders">
+          <span class="sidebar-item-icon">📦</span>
+          <span class="sidebar-item-text">Orders</span>
+        </a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist">
+          <span class="sidebar-item-icon">❤️</span>
+          <span class="sidebar-item-text">Wishlist</span>
+        </a>
+
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
+          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-text">Bulk Orders</span>
+        </a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry">
+          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-text">Export Inquiry</span>
+        </a>
+
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages">
+          <span class="sidebar-item-icon">💬</span>
+          <span class="sidebar-item-text">Messages</span>
+          <span class="sidebar-item-badge">5</span>
+        </a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications">
+          <span class="sidebar-item-icon">🔔</span>
+          <span class="sidebar-item-text">Notifications</span>
+          <span class="sidebar-item-badge">12</span>
+        </a>
+
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile">
+          <span class="sidebar-item-icon">👤</span>
+          <span class="sidebar-item-text">Profile</span>
+        </a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification">
+          <span class="sidebar-item-icon">✅</span>
+          <span class="sidebar-item-text">Verification</span>
+        </a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details">
+          <span class="sidebar-item-icon">🏦</span>
+          <span class="sidebar-item-text">Bank Details</span>
+        </a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings">
+          <span class="sidebar-item-icon">⚙️</span>
+          <span class="sidebar-item-text">Settings</span>
+        </a>
+
+        <div class="sidebar-section-label"
+          style="padding-top:12px;border-top:1px solid var(--border-color);margin-top:8px;">Support</div>
+        <a href="#" class="sidebar-item" data-tooltip="Logout"
+          onclick="showToast('info','Logout','Logging you out...')">
+          <span class="sidebar-item-icon">🚪</span>
+          <span class="sidebar-item-text">Logout</span>
+        </a>
+      </nav>
+    </aside>
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><span class="current">Bank Details</span></div><h1 class="page-title">Bank Details</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><span class="current">Bank Details</span></div>
+            <h1 class="page-title">Bank Details</h1>
+          </div>
+        </div>
         <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
       </header>
       <main class="main-content">
@@ -27,7 +120,8 @@
             <div class="card">
               <div class="flex items-center justify-between mb-4">
                 <h3 class="card-title">🏦 Bank Account Information</h3>
-                <button class="btn btn-sm btn-outline" onclick="showToast('success','Edit Mode','You can now edit bank details.')">✏️ Edit</button>
+                <button class="btn btn-sm btn-outline"
+                  onclick="showToast('success','Edit Mode','You can now edit bank details.')">✏️ Edit</button>
               </div>
               <div class="bank-details-grid">
                 <div class="bank-field"><label>Account Holder Name</label><span>Rajesh Mehta</span></div>
@@ -55,17 +149,26 @@
               <div class="bank-docs">
                 <div class="bank-doc">
                   <div class="bank-doc-icon">📄</div>
-                  <div class="bank-doc-info"><div class="bank-doc-name">Cancelled Cheque</div><div class="bank-doc-meta">Uploaded: 10 Jan 2024</div></div>
+                  <div class="bank-doc-info">
+                    <div class="bank-doc-name">Cancelled Cheque</div>
+                    <div class="bank-doc-meta">Uploaded: 10 Jan 2024</div>
+                  </div>
                   <span class="badge badge-approved">✓</span>
                 </div>
                 <div class="bank-doc">
                   <div class="bank-doc-icon">📄</div>
-                  <div class="bank-doc-info"><div class="bank-doc-name">Passbook Copy</div><div class="bank-doc-meta">Uploaded: 10 Jan 2024</div></div>
+                  <div class="bank-doc-info">
+                    <div class="bank-doc-name">Passbook Copy</div>
+                    <div class="bank-doc-meta">Uploaded: 10 Jan 2024</div>
+                  </div>
                   <span class="badge badge-approved">✓</span>
                 </div>
                 <div class="bank-doc">
                   <div class="bank-doc-icon">📄</div>
-                  <div class="bank-doc-info"><div class="bank-doc-name">PAN Card Copy</div><div class="bank-doc-meta">Uploaded: 10 Jan 2024</div></div>
+                  <div class="bank-doc-info">
+                    <div class="bank-doc-name">PAN Card Copy</div>
+                    <div class="bank-doc-meta">Uploaded: 10 Jan 2024</div>
+                  </div>
                   <span class="badge badge-approved">✓</span>
                 </div>
               </div>
@@ -78,4 +181,5 @@
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+
 </html>

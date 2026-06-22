@@ -1,24 +1,80 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/settings.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
-    <aside class="sidebar">[SIDEBAR]</aside>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><span class="current">Settings</span></div><h1 class="page-title">Settings</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><span class="current">Settings</span></div>
+            <h1 class="page-title">Settings</h1>
+          </div>
+        </div>
         <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
       </header>
       <main class="main-content">
@@ -39,12 +95,16 @@
               <div class="card">
                 <h3 class="card-title">👤 Profile Settings</h3>
                 <div class="form-row mt-4">
-                  <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-input" value="Rajesh Mehta"></div>
-                  <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="rajesh.mehta@example.com"></div>
+                  <div class="form-group"><label class="form-label">Display Name</label><input type="text"
+                      class="form-input" value="Rajesh Mehta"></div>
+                  <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input"
+                      value="rajesh.mehta@example.com"></div>
                 </div>
                 <div class="form-row">
-                  <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" value="+91 98765 43210"></div>
-                  <div class="form-group"><label class="form-label">Business Name</label><input type="text" class="form-input" value="Mehta Agro Traders"></div>
+                  <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input"
+                      value="+91 98765 43210"></div>
+                  <div class="form-group"><label class="form-label">Business Name</label><input type="text"
+                      class="form-input" value="Mehta Agro Traders"></div>
                 </div>
                 <button class="btn btn-primary mt-4">Save Changes</button>
               </div>
@@ -56,13 +116,17 @@
                 <h3 class="card-title">🔒 Security Settings</h3>
                 <div class="form-group mt-4">
                   <label class="form-label">Current Password</label>
-                  <div class="password-field"><input type="password" class="form-input" value="password123"><button class="password-toggle">👁️</button></div>
+                  <div class="password-field"><input type="password" class="form-input" value="password123"><button
+                      class="password-toggle">👁️</button></div>
                 </div>
                 <div class="form-row">
-                  <div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-input" placeholder="Enter new password"></div>
-                  <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-input" placeholder="Confirm new password"></div>
+                  <div class="form-group"><label class="form-label">New Password</label><input type="password"
+                      class="form-input" placeholder="Enter new password"></div>
+                  <div class="form-group"><label class="form-label">Confirm Password</label><input type="password"
+                      class="form-input" placeholder="Confirm new password"></div>
                 </div>
-                <div class="form-check mt-4"><input type="checkbox" checked id="twofa"><label for="twofa">Enable Two-Factor Authentication</label></div>
+                <div class="form-check mt-4"><input type="checkbox" checked id="twofa"><label for="twofa">Enable
+                    Two-Factor Authentication</label></div>
                 <button class="btn btn-primary mt-4">Update Security</button>
               </div>
             </div>
@@ -73,20 +137,36 @@
                 <h3 class="card-title">🔔 Notification Preferences</h3>
                 <div class="settings-toggles mt-4">
                   <div class="toggle-item">
-                    <div><div class="toggle-name">Order Updates</div><div class="toggle-desc">Get notified about order status changes</div></div>
-                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span class="toggle-label">Enabled</span></label>
+                    <div>
+                      <div class="toggle-name">Order Updates</div>
+                      <div class="toggle-desc">Get notified about order status changes</div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span
+                        class="toggle-label">Enabled</span></label>
                   </div>
                   <div class="toggle-item">
-                    <div><div class="toggle-name">Payment Confirmations</div><div class="toggle-desc">Payment success and failure alerts</div></div>
-                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span class="toggle-label">Enabled</span></label>
+                    <div>
+                      <div class="toggle-name">Payment Confirmations</div>
+                      <div class="toggle-desc">Payment success and failure alerts</div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span
+                        class="toggle-label">Enabled</span></label>
                   </div>
                   <div class="toggle-item">
-                    <div><div class="toggle-name">Messages</div><div class="toggle-desc">New message notifications</div></div>
-                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span class="toggle-label">Enabled</span></label>
+                    <div>
+                      <div class="toggle-name">Messages</div>
+                      <div class="toggle-desc">New message notifications</div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span
+                        class="toggle-label">Enabled</span></label>
                   </div>
                   <div class="toggle-item">
-                    <div><div class="toggle-name">Marketing Emails</div><div class="toggle-desc">Product updates and promotions</div></div>
-                    <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span><span class="toggle-label">Disabled</span></label>
+                    <div>
+                      <div class="toggle-name">Marketing Emails</div>
+                      <div class="toggle-desc">Product updates and promotions</div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span><span
+                        class="toggle-label">Disabled</span></label>
                   </div>
                 </div>
               </div>
@@ -98,13 +178,21 @@
                 <h3 class="card-title">🎨 Appearance</h3>
                 <div class="form-group mt-4"><label class="form-label">Theme</label>
                   <div class="theme-options">
-                    <button class="theme-option active" onclick="document.documentElement.setAttribute('data-theme','light');localStorage.setItem('krushi-mitra-theme','light');document.querySelectorAll('.theme-toggle').forEach(t=>t.innerHTML='🌙');showToast('success','Theme','Light mode activated')">☀️ Light</button>
-                    <button class="theme-option" onclick="document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('krushi-mitra-theme','dark');document.querySelectorAll('.theme-toggle').forEach(t=>t.innerHTML='☀️');showToast('success','Theme','Dark mode activated')">🌙 Dark</button>
+                    <button class="theme-option active"
+                      onclick="document.documentElement.setAttribute('data-theme','light');localStorage.setItem('krushi-mitra-theme','light');document.querySelectorAll('.theme-toggle').forEach(t=>t.innerHTML='🌙');showToast('success','Theme','Light mode activated')">☀️
+                      Light</button>
+                    <button class="theme-option"
+                      onclick="document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('krushi-mitra-theme','dark');document.querySelectorAll('.theme-toggle').forEach(t=>t.innerHTML='☀️');showToast('success','Theme','Dark mode activated')">🌙
+                      Dark</button>
                     <button class="theme-option">💻 System</button>
                   </div>
                 </div>
                 <div class="form-group mt-4"><label class="form-label">Sidebar Behavior</label>
-                  <select class="form-select"><option>Fixed sidebar</option><option>Collapsible sidebar</option><option>Mini sidebar</option></select>
+                  <select class="form-select">
+                    <option>Fixed sidebar</option>
+                    <option>Collapsible sidebar</option>
+                    <option>Mini sidebar</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -114,9 +202,27 @@
               <div class="card">
                 <h3 class="card-title">🛡️ Privacy Settings</h3>
                 <div class="settings-toggles mt-4">
-                  <div class="toggle-item"><div><div class="toggle-name">Show Profile to Suppliers</div><div class="toggle-desc">Let suppliers view your business profile</div></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span class="toggle-label">Enabled</span></label></div>
-                  <div class="toggle-item"><div><div class="toggle-name">Share Purchase History</div><div class="toggle-desc">Share anonymous purchase data for insights</div></div><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span><span class="toggle-label">Disabled</span></label></div>
-                  <div class="toggle-item"><div><div class="toggle-name">Activity Status</div><div class="toggle-desc">Show when you're active on the platform</div></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span><span class="toggle-label">Enabled</span></label></div>
+                  <div class="toggle-item">
+                    <div>
+                      <div class="toggle-name">Show Profile to Suppliers</div>
+                      <div class="toggle-desc">Let suppliers view your business profile</div>
+                    </div><label class="toggle-switch"><input type="checkbox" checked><span
+                        class="toggle-slider"></span><span class="toggle-label">Enabled</span></label>
+                  </div>
+                  <div class="toggle-item">
+                    <div>
+                      <div class="toggle-name">Share Purchase History</div>
+                      <div class="toggle-desc">Share anonymous purchase data for insights</div>
+                    </div><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span><span
+                        class="toggle-label">Disabled</span></label>
+                  </div>
+                  <div class="toggle-item">
+                    <div>
+                      <div class="toggle-name">Activity Status</div>
+                      <div class="toggle-desc">Show when you're active on the platform</div>
+                    </div><label class="toggle-switch"><input type="checkbox" checked><span
+                        class="toggle-slider"></span><span class="toggle-label">Enabled</span></label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -149,10 +255,15 @@
             <div class="settings-section" data-section="danger">
               <div class="card" style="border-color:var(--red-500);">
                 <h3 class="card-title" style="color:var(--red-500);">⚠️ Danger Zone</h3>
-                <p class="body-small text-secondary mt-2">Once you delete your account, there is no going back. Please be certain.</p>
+                <p class="body-small text-secondary mt-2">Once you delete your account, there is no going back. Please
+                  be certain.</p>
                 <div class="danger-actions mt-4">
-                  <div class="danger-item"><span>Deactivate Account</span><button class="btn btn-outline btn-sm" onclick="showToast('warning','Account','Account deactivation requested')">Deactivate</button></div>
-                  <div class="danger-item"><span>Delete Account</span><button class="btn btn-danger btn-sm" onclick="showToast('error','Account','Account deletion requested')">Delete Permanently</button></div>
+                  <div class="danger-item"><span>Deactivate Account</span><button class="btn btn-outline btn-sm"
+                      onclick="showToast('warning','Account','Account deactivation requested')">Deactivate</button>
+                  </div>
+                  <div class="danger-item"><span>Delete Account</span><button class="btn btn-danger btn-sm"
+                      onclick="showToast('error','Account','Account deletion requested')">Delete Permanently</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -164,14 +275,15 @@
   <script src="{% static 'buyer/js/app.js' %}"></script>
   <script>
     document.querySelectorAll('.settings-nav-item').forEach(item => {
-      item.addEventListener('click', function() {
+      item.addEventListener('click', function () {
         document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
         this.classList.add('active');
         document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
         const section = document.querySelector(`.settings-section[data-section="${this.dataset.section}"]`);
-        if(section) section.classList.add('active');
+        if (section) section.classList.add('active');
       });
     });
   </script>
 </body>
+
 </html>

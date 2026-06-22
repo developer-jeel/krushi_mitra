@@ -1,31 +1,94 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Orders - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/orders.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
-    <aside class="sidebar">[SIDEBAR]</aside>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><span class="current">Orders</span></div><h1 class="page-title">Orders</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><span class="current">Orders</span></div>
+            <h1 class="page-title">Orders</h1>
+          </div>
+        </div>
         <div class="navbar-right">
-          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search orders..."></div>
+          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search orders...">
+          </div>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
-            <div class="profile-btn dropdown-trigger"><div class="profile-avatar">RM</div><div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div></div>
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div>
+                <div class="profile-name">Rajesh Mehta</div>
+                <div class="profile-role">Wholesale Trader</div>
+              </div>
+            </div>
             <div class="dropdown-menu">
               <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
@@ -39,11 +102,41 @@
       <main class="main-content">
         <!-- Order Stats -->
         <div class="order-stats grid-5 page-reveal">
-          <div class="stat-card green"><div class="stat-card-info"><div class="stat-card-label">Total Orders</div><div class="stat-card-value" data-counter="156">0</div></div><div class="stat-card-icon">📦</div></div>
-          <div class="stat-card blue"><div class="stat-card-info"><div class="stat-card-label">Processing</div><div class="stat-card-value" data-counter="12">0</div></div><div class="stat-card-icon">⏳</div></div>
-          <div class="stat-card amber"><div class="stat-card-info"><div class="stat-card-label">Shipped</div><div class="stat-card-value" data-counter="8">0</div></div><div class="stat-card-icon">🚚</div></div>
-          <div class="stat-card rose"><div class="stat-card-info"><div class="stat-card-label">Delivered</div><div class="stat-card-value" data-counter="134">0</div></div><div class="stat-card-icon">✅</div></div>
-          <div class="stat-card purple"><div class="stat-card-info"><div class="stat-card-label">Cancelled</div><div class="stat-card-value" data-counter="2">0</div></div><div class="stat-card-icon">❌</div></div>
+          <div class="stat-card green">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Total Orders</div>
+              <div class="stat-card-value" data-counter="156">0</div>
+            </div>
+            <div class="stat-card-icon">📦</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Processing</div>
+              <div class="stat-card-value" data-counter="12">0</div>
+            </div>
+            <div class="stat-card-icon">⏳</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Shipped</div>
+              <div class="stat-card-value" data-counter="8">0</div>
+            </div>
+            <div class="stat-card-icon">🚚</div>
+          </div>
+          <div class="stat-card rose">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Delivered</div>
+              <div class="stat-card-value" data-counter="134">0</div>
+            </div>
+            <div class="stat-card-icon">✅</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Cancelled</div>
+              <div class="stat-card-value" data-counter="2">0</div>
+            </div>
+            <div class="stat-card-icon">❌</div>
+          </div>
         </div>
 
         <!-- Filters -->
@@ -58,7 +151,12 @@
               <button class="tab" data-tab="cancelled">Cancelled</button>
             </div>
             <div class="filter-row">
-              <select class="form-select" style="width:auto;"><option>Last 30 days</option><option>Last 90 days</option><option>Last 6 months</option><option>All time</option></select>
+              <select class="form-select" style="width:auto;">
+                <option>Last 30 days</option>
+                <option>Last 90 days</option>
+                <option>Last 6 months</option>
+                <option>All time</option>
+              </select>
               <button class="btn btn-sm btn-secondary">📅 Custom Date</button>
               <button class="btn btn-sm btn-secondary">📥 Export All</button>
             </div>
@@ -69,17 +167,97 @@
         <div class="table-container page-reveal">
           <table class="table">
             <thead>
-              <tr><th>Order ID</th><th>Crop</th><th>Quantity</th><th>Amount</th><th>Date</th><th>Status</th><th>Action</th></tr>
+              <tr>
+                <th>Order ID</th>
+                <th>Crop</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td><td>Basmati Rice</td><td>500 kg</td><td>₹82,500</td><td>15 Jan 2024</td><td><span class="badge badge-processing">Processing</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td><td>Red Chillies</td><td>200 kg</td><td>₹48,000</td><td>12 Jan 2024</td><td><span class="badge badge-approved">Delivered</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td><td>Turmeric</td><td>100 kg</td><td>₹18,500</td><td>10 Jan 2024</td><td><span class="badge badge-active">Shipped</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td><td>Alphonso Mango</td><td>50 boxes</td><td>₹35,000</td><td>08 Jan 2024</td><td><span class="badge badge-cancelled">Cancelled</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td><td>Organic Wheat</td><td>1000 kg</td><td>₹28,000</td><td>05 Jan 2024</td><td><span class="badge badge-approved">Delivered</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0886</a></td><td>Green Chillies</td><td>300 kg</td><td>₹24,000</td><td>02 Jan 2024</td><td><span class="badge badge-pending">Pending</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0885</a></td><td>Byadgi Chillies</td><td>150 kg</td><td>₹36,000</td><td>28 Dec 2023</td><td><span class="badge badge-approved">Delivered</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
-              <tr><td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0884</a></td><td>Fresh Turmeric</td><td>75 kg</td><td>₹13,875</td><td>25 Dec 2023</td><td><span class="badge badge-approved">Delivered</span></td><td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td></tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
+                <td>Basmati Rice</td>
+                <td>500 kg</td>
+                <td>₹82,500</td>
+                <td>15 Jan 2024</td>
+                <td><span class="badge badge-processing">Processing</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
+                <td>Red Chillies</td>
+                <td>200 kg</td>
+                <td>₹48,000</td>
+                <td>12 Jan 2024</td>
+                <td><span class="badge badge-approved">Delivered</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
+                <td>Turmeric</td>
+                <td>100 kg</td>
+                <td>₹18,500</td>
+                <td>10 Jan 2024</td>
+                <td><span class="badge badge-active">Shipped</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
+                <td>Alphonso Mango</td>
+                <td>50 boxes</td>
+                <td>₹35,000</td>
+                <td>08 Jan 2024</td>
+                <td><span class="badge badge-cancelled">Cancelled</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
+                <td>Organic Wheat</td>
+                <td>1000 kg</td>
+                <td>₹28,000</td>
+                <td>05 Jan 2024</td>
+                <td><span class="badge badge-approved">Delivered</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0886</a></td>
+                <td>Green Chillies</td>
+                <td>300 kg</td>
+                <td>₹24,000</td>
+                <td>02 Jan 2024</td>
+                <td><span class="badge badge-pending">Pending</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0885</a></td>
+                <td>Byadgi Chillies</td>
+                <td>150 kg</td>
+                <td>₹36,000</td>
+                <td>28 Dec 2023</td>
+                <td><span class="badge badge-approved">Delivered</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
+              <tr>
+                <td><a href="{% url 'buyer_order_details' %}"
+                    style="color:var(--text-link);font-weight:600;">#ORD-2024-0884</a></td>
+                <td>Fresh Turmeric</td>
+                <td>75 kg</td>
+                <td>₹13,875</td>
+                <td>25 Dec 2023</td>
+                <td><span class="badge badge-approved">Delivered</span></td>
+                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -98,4 +276,5 @@
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+
 </html>

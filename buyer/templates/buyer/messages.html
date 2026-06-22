@@ -1,24 +1,80 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Messages - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/messages.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
-    <aside class="sidebar">[SIDEBAR]</aside>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><span class="current">Messages</span></div><h1 class="page-title">Messages</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><span class="current">Messages</span></div>
+            <h1 class="page-title">Messages</h1>
+          </div>
+        </div>
         <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
       </header>
       <main class="main-content" style="padding-top:calc(var(--navbar-height) + 8px);padding-bottom:0;">
@@ -29,31 +85,47 @@
               <h3>Conversations</h3>
               <span class="online-count">5 active</span>
             </div>
-            <div class="chat-search"><span class="chat-search-icon">🔍</span><input type="text" placeholder="Search conversations..."></div>
+            <div class="chat-search"><span class="chat-search-icon">🔍</span><input type="text"
+                placeholder="Search conversations..."></div>
             <div class="conversations">
               <div class="conversation active">
                 <div class="conv-avatar green">AK</div>
-                <div class="conv-info"><div class="conv-name">Anil Kumar <span class="online-status"></span></div><div class="conv-preview">Sure, I'll check the latest pricing...</div></div>
+                <div class="conv-info">
+                  <div class="conv-name">Anil Kumar <span class="online-status"></span></div>
+                  <div class="conv-preview">Sure, I'll check the latest pricing...</div>
+                </div>
                 <div class="conv-meta"><span class="conv-time">2m</span><span class="conv-badge">3</span></div>
               </div>
               <div class="conversation">
                 <div class="conv-avatar blue">PS</div>
-                <div class="conv-info"><div class="conv-name">Priya Sharma <span class="online-status"></span></div><div class="conv-preview">We have fresh stock available now</div></div>
+                <div class="conv-info">
+                  <div class="conv-name">Priya Sharma <span class="online-status"></span></div>
+                  <div class="conv-preview">We have fresh stock available now</div>
+                </div>
                 <div class="conv-meta"><span class="conv-time">1h</span></div>
               </div>
               <div class="conversation">
                 <div class="conv-avatar amber">RP</div>
-                <div class="conv-info"><div class="conv-name">Rahul Patel <span class="online-status offline"></span></div><div class="conv-preview">Quality report is attached</div></div>
+                <div class="conv-info">
+                  <div class="conv-name">Rahul Patel <span class="online-status offline"></span></div>
+                  <div class="conv-preview">Quality report is attached</div>
+                </div>
                 <div class="conv-meta"><span class="conv-time">3h</span></div>
               </div>
               <div class="conversation">
                 <div class="conv-avatar rose">SK</div>
-                <div class="conv-info"><div class="conv-name">Sunita Kumari <span class="online-status"></span></div><div class="conv-preview">Let me confirm with warehouse</div></div>
+                <div class="conv-info">
+                  <div class="conv-name">Sunita Kumari <span class="online-status"></span></div>
+                  <div class="conv-preview">Let me confirm with warehouse</div>
+                </div>
                 <div class="conv-meta"><span class="conv-time">Yesterday</span></div>
               </div>
               <div class="conversation">
                 <div class="conv-avatar purple">VK</div>
-                <div class="conv-info"><div class="conv-name">Vikram Singh <span class="online-status offline"></span></div><div class="conv-preview">Thanks for the order!</div></div>
+                <div class="conv-info">
+                  <div class="conv-name">Vikram Singh <span class="online-status offline"></span></div>
+                  <div class="conv-preview">Thanks for the order!</div>
+                </div>
                 <div class="conv-meta"><span class="conv-time">2d</span></div>
               </div>
             </div>
@@ -62,14 +134,22 @@
           <!-- Chat Window -->
           <div class="chat-window">
             <div class="chat-header">
-              <div class="chat-user"><div class="conv-avatar green">AK</div><div><div class="chat-username">Anil Kumar</div><div class="chat-user-status">● Online</div></div></div>
-              <div class="chat-actions"><button class="btn btn-sm btn-ghost">📞</button><button class="btn btn-sm btn-ghost">📹</button><button class="btn btn-sm btn-ghost">⋮</button></div>
+              <div class="chat-user">
+                <div class="conv-avatar green">AK</div>
+                <div>
+                  <div class="chat-username">Anil Kumar</div>
+                  <div class="chat-user-status">● Online</div>
+                </div>
+              </div>
+              <div class="chat-actions"><button class="btn btn-sm btn-ghost">📞</button><button
+                  class="btn btn-sm btn-ghost">📹</button><button class="btn btn-sm btn-ghost">⋮</button></div>
             </div>
 
             <div class="chat-messages">
               <div class="message-date-sep">Today</div>
               <div class="message-bubble received">
-                <div class="message-text">Hi Rajesh! I have the latest prices for Basmati Rice. Are you interested?</div>
+                <div class="message-text">Hi Rajesh! I have the latest prices for Basmati Rice. Are you interested?
+                </div>
                 <div class="message-time">09:45 AM</div>
               </div>
               <div class="message-bubble sent">
@@ -77,7 +157,8 @@
                 <div class="message-time">09:48 AM</div>
               </div>
               <div class="message-bubble received">
-                <div class="message-text">Sure! Current price is ₹165/kg for Grade A. Quality is excellent from this season's harvest.</div>
+                <div class="message-text">Sure! Current price is ₹165/kg for Grade A. Quality is excellent from this
+                  season's harvest.</div>
                 <div class="message-time">09:50 AM</div>
               </div>
               <div class="message-bubble sent">
@@ -107,4 +188,5 @@
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+
 </html>

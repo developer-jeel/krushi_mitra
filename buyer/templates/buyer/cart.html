@@ -1,31 +1,93 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cart - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/cart.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
-    <aside class="sidebar">[SIDEBAR same as dashboard]</aside>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><span class="current">Cart</span></div><h1 class="page-title">Shopping Cart</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><span class="current">Cart</span></div>
+            <h1 class="page-title">Shopping Cart</h1>
+          </div>
+        </div>
         <div class="navbar-right">
           <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search..."></div>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
-            <div class="profile-btn dropdown-trigger"><div class="profile-avatar">RM</div><div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div></div>
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div>
+                <div class="profile-name">Rajesh Mehta</div>
+                <div class="profile-role">Wholesale Trader</div>
+              </div>
+            </div>
             <div class="dropdown-menu">
               <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
@@ -41,7 +103,8 @@
         <div class="empty-state" style="display:none;">
           <div class="empty-state-icon">🛒</div>
           <h3 class="empty-state-title">Your cart is empty</h3>
-          <p class="empty-state-text">Looks like you haven't added any crops yet. Browse our marketplace to find premium crops.</p>
+          <p class="empty-state-text">Looks like you haven't added any crops yet. Browse our marketplace to find premium
+            crops.</p>
           <a href="{% url 'buyer_browse_crops' %}" class="btn btn-primary">🌾 Browse Crops</a>
         </div>
 
@@ -49,11 +112,16 @@
         <div class="cart-layout page-reveal">
           <div class="cart-items">
             <div class="cart-header card-header">
-              <div><h3 class="card-title">Cart Items (3)</h3><p class="card-subtitle">Review your selected crops</p></div>
+              <div>
+                <h3 class="card-title">Cart Items (3)</h3>
+                <p class="card-subtitle">Review your selected crops</p>
+              </div>
             </div>
 
             <div class="cart-item card">
-              <div class="cart-item-img"><img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=120&h=90&fit=crop" alt="Basmati Rice"></div>
+              <div class="cart-item-img"><img
+                  src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=120&h=90&fit=crop"
+                  alt="Basmati Rice"></div>
               <div class="cart-item-info">
                 <h4 class="cart-item-name">Premium Basmati Rice - Grade A</h4>
                 <div class="cart-item-meta">🌾 Grains | 📍 Punjab | ⭐ Grade A</div>
@@ -74,12 +142,16 @@
               </div>
               <div class="cart-item-actions">
                 <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);" onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️ Remove</button>
+                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);"
+                  onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
+                  Remove</button>
               </div>
             </div>
 
             <div class="cart-item card">
-              <div class="cart-item-img"><img src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=120&h=90&fit=crop" alt="Alphonso Mango"></div>
+              <div class="cart-item-img"><img
+                  src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=120&h=90&fit=crop"
+                  alt="Alphonso Mango"></div>
               <div class="cart-item-info">
                 <h4 class="cart-item-name">Alphonso Mango (Hapus)</h4>
                 <div class="cart-item-meta">🥭 Fruits | 📍 Maharashtra | ⭐ Premium</div>
@@ -100,12 +172,16 @@
               </div>
               <div class="cart-item-actions">
                 <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);" onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️ Remove</button>
+                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);"
+                  onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
+                  Remove</button>
               </div>
             </div>
 
             <div class="cart-item card">
-              <div class="cart-item-img"><img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=120&h=90&fit=crop" alt="Red Chillies"></div>
+              <div class="cart-item-img"><img
+                  src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=120&h=90&fit=crop"
+                  alt="Red Chillies"></div>
               <div class="cart-item-info">
                 <h4 class="cart-item-name">Byadgi Red Chillies</h4>
                 <div class="cart-item-meta">🌶️ Spices | 📍 Karnataka | ⭐ Grade A</div>
@@ -126,7 +202,9 @@
               </div>
               <div class="cart-item-actions">
                 <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);" onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️ Remove</button>
+                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);"
+                  onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
+                  Remove</button>
               </div>
             </div>
 
@@ -140,7 +218,7 @@
           <div class="cart-summary">
             <div class="card">
               <h3 class="card-title" style="margin-bottom:20px;">Order Summary</h3>
-              
+
               <div class="summary-row">
                 <span>Subtotal (3 items)</span>
                 <span class="subtotal-amount">₹35,500</span>
@@ -171,7 +249,8 @@
                 </div>
               </div>
 
-              <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-lg btn-block" style="margin-top:20px;">Proceed to Checkout →</a>
+              <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-lg btn-block"
+                style="margin-top:20px;">Proceed to Checkout →</a>
             </div>
           </div>
         </div>
@@ -196,4 +275,5 @@
     }
   </script>
 </body>
+
 </html>

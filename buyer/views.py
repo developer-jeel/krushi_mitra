@@ -10,7 +10,7 @@ def buyer_home(request):
     all_crops = crop.objects.filter(is_approved = True)
     print("==================>",all_crops)
     context = {'all_crops' : all_crops}
-    return render(request, "buyer/home.html",context)
+    return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
 def buyer_dashboard(request):

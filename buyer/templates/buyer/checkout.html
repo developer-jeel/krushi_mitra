@@ -1,31 +1,94 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/checkout.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
-    <aside class="sidebar">[SIDEBAR]</aside>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><a href="{% url 'buyer_cart' %}">Cart</a><span class="breadcrumb-sep">›</span><span class="current">Checkout</span></div><h1 class="page-title">Checkout</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><a href="{% url 'buyer_cart' %}">Cart</a><span
+                class="breadcrumb-sep">›</span><span class="current">Checkout</span></div>
+            <h1 class="page-title">Checkout</h1>
+          </div>
+        </div>
         <div class="navbar-right">
           <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search..."></div>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
-            <div class="profile-btn dropdown-trigger"><div class="profile-avatar">RM</div><div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div></div>
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div>
+                <div class="profile-name">Rajesh Mehta</div>
+                <div class="profile-role">Wholesale Trader</div>
+              </div>
+            </div>
             <div class="dropdown-menu">
               <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
@@ -44,12 +107,17 @@
             <div class="card checkout-card">
               <h3 class="card-title">Billing Information</h3>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" value="Rajesh" required></div>
-                <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" value="Mehta" required></div>
+                <div class="form-group"><label class="form-label">First Name</label><input type="text"
+                    class="form-input" value="Rajesh" required></div>
+                <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input"
+                    value="Mehta" required></div>
               </div>
-              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="rajesh.mehta@example.com" required></div>
-              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" value="+91 98765 43210" required></div>
-              <div class="form-group"><label class="form-label">Billing Address</label><textarea class="form-textarea" required>42, Trade Tower, Market Road, Pune - 411001</textarea></div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input"
+                  value="rajesh.mehta@example.com" required></div>
+              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input"
+                  value="+91 98765 43210" required></div>
+              <div class="form-group"><label class="form-label">Billing Address</label><textarea class="form-textarea"
+                  required>42, Trade Tower, Market Road, Pune - 411001</textarea></div>
             </div>
 
             <!-- Shipping -->
@@ -59,14 +127,19 @@
                 <input type="checkbox" checked id="same-billing">
                 <label for="same-billing">Same as billing address</label>
               </div>
-              <div class="form-group"><label class="form-label">Delivery Address</label><textarea class="form-textarea">42, Trade Tower, Market Road, Pune - 411001</textarea></div>
+              <div class="form-group"><label class="form-label">Delivery Address</label><textarea
+                  class="form-textarea">42, Trade Tower, Market Road, Pune - 411001</textarea></div>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" value="Pune"></div>
-                <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input" value="Maharashtra"></div>
+                <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input"
+                    value="Pune"></div>
+                <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input"
+                    value="Maharashtra"></div>
               </div>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">Pincode</label><input type="text" class="form-input" value="411001"></div>
-                <div class="form-group"><label class="form-label">Delivery Instructions</label><input type="text" class="form-input" placeholder="Optional"></div>
+                <div class="form-group"><label class="form-label">Pincode</label><input type="text" class="form-input"
+                    value="411001"></div>
+                <div class="form-group"><label class="form-label">Delivery Instructions</label><input type="text"
+                    class="form-input" placeholder="Optional"></div>
               </div>
             </div>
 
@@ -74,12 +147,20 @@
             <div class="card checkout-card">
               <h3 class="card-title">Business Information</h3>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">Business Name</label><input type="text" class="form-input" value="Mehta Agro Traders"></div>
-                <div class="form-group"><label class="form-label">GST Number</label><input type="text" class="form-input" value="27AABCM1234C1Z5"></div>
+                <div class="form-group"><label class="form-label">Business Name</label><input type="text"
+                    class="form-input" value="Mehta Agro Traders"></div>
+                <div class="form-group"><label class="form-label">GST Number</label><input type="text"
+                    class="form-input" value="27AABCM1234C1Z5"></div>
               </div>
               <div class="form-row">
-                <div class="form-group"><label class="form-label">Business Type</label><select class="form-select"><option>Wholesaler</option><option>Retailer</option><option>Exporter</option><option>Processor</option></select></div>
-                <div class="form-group"><label class="form-label">PAN Number</label><input type="text" class="form-input" value="ABCDE1234F"></div>
+                <div class="form-group"><label class="form-label">Business Type</label><select class="form-select">
+                    <option>Wholesaler</option>
+                    <option>Retailer</option>
+                    <option>Exporter</option>
+                    <option>Processor</option>
+                  </select></div>
+                <div class="form-group"><label class="form-label">PAN Number</label><input type="text"
+                    class="form-input" value="ABCDE1234F"></div>
               </div>
             </div>
           </div>
@@ -117,10 +198,12 @@
 
               <div class="form-check mt-4">
                 <input type="checkbox" id="terms" checked>
-                <label for="terms">I agree to the <a href="#" style="color:var(--text-link);">Terms & Conditions</a> and <a href="#" style="color:var(--text-link);">Return Policy</a></label>
+                <label for="terms">I agree to the <a href="#" style="color:var(--text-link);">Terms & Conditions</a> and
+                  <a href="#" style="color:var(--text-link);">Return Policy</a></label>
               </div>
 
-              <button class="btn btn-primary btn-lg btn-block mt-4" onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
+              <button class="btn btn-primary btn-lg btn-block mt-4"
+                onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
                 🛒 Place Order - ₹37,275
               </button>
             </div>
@@ -133,7 +216,8 @@
             <div class="modal-body" style="padding:40px 24px;">
               <div style="font-size:4rem;margin-bottom:16px;">🎉</div>
               <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">Order Placed Successfully!</h3>
-              <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:20px;">Your order #ORD-2024-0892 has been placed. We'll notify you when it ships.</p>
+              <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:20px;">Your order #ORD-2024-0892
+                has been placed. We'll notify you when it ships.</p>
               <a href="{% url 'buyer_orders' %}" class="btn btn-primary">View My Orders</a>
             </div>
           </div>
@@ -143,4 +227,5 @@
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+
 </html>
