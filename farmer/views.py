@@ -8,6 +8,7 @@ import requests , math ,json,sseclient,random
 from django.contrib.auth.decorators import login_required
 from sklearn.linear_model import LinearRegression 
 from sklearn.ensemble import RandomForestClassifier
+from buyer.models import *
 
 def register(request):
     if request.method == 'POST':
