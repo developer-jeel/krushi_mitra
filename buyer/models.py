@@ -12,7 +12,8 @@ class Buyer(models.Model):
     business_type = models.CharField(max_length=50, blank=True, null=True)
     gst_certificate = models.FileField(upload_to='buyer/documents/gst/', blank=True, null=True)
     gst_no = models.CharField(max_length=15, unique=True, blank=True, null=True)
-    is_verified = models.BooleanField(default=False)   
+    is_verified = models.BooleanField(default=False)
+    enable_update = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -20,7 +21,7 @@ class Buyer(models.Model):
         return f"Buyer: {self.user.name}"
 
 class bank_details(models.Model):
-    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer')
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer_bank')
     pan_no = models.CharField(max_length=20, blank=True, null=True)
     pancard = models.FileField(upload_to='buyer/documents/pancard/', blank=True, null=True)
     passbook = models.FileField(upload_to='buyer/documents/passbook/', blank=True, null=True)
@@ -35,16 +36,18 @@ class bank_details(models.Model):
         return f"Buyer: {self.user.user.name}"
 
 class verification_details(models.Model):
-    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer')
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer_details')
     photo = models.ImageField(upload_to='buyer/profile_photos/', blank=True, null=True)
     msme_no = models.CharField(max_length=50, blank=True, null=True)
     trade_license = models.CharField(max_length=50, blank=True, null=True)
     trade_license_doc = models.FileField(upload_to='buyer/documents/trade_license/', blank=True, null=True)
     adharno = models.CharField(max_length=20, unique=True, blank=True, null=True)
     adharcard = models.FileField(upload_to='buyer/documents/adharcard/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def image_preview(self):
-        if self.image:
+        if self.photo:
             return mark_safe(f'<img src="{self.photo.url}" width="40" style="border-radius:8px;"/>')
         return "—"
     image_preview.short_description = "Icon"
@@ -53,4 +56,4 @@ class verification_details(models.Model):
         return self.user.user.name
 
     class Meta:
-        ordering = ['order']
+        ordering = ['-created_at']
