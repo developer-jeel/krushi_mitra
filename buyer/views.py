@@ -18,7 +18,10 @@ def buyer_dashboard(request):
 
 @check_login(['Buyer'])
 def buyer_browse_crops(request):
-    return render(request, "buyer/browse-crops.html")
+    all_crops = crop.objects.filter(is_approved = True)
+    print("==================>",all_crops)
+    context = {'all_crops' : all_crops}
+    return render(request, "buyer/browse-crops.html",context)
 
 @check_login(['Buyer'])
 def buyer_cart(request):
