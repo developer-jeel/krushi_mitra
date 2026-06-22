@@ -77,7 +77,9 @@ def login(request):
                 user.save()
                 return redirect('farmer_home')
             elif user.role == 'Buyer':
-                return render(request, "farmer/home.html")
+                user.is_active = True
+                user.save()
+                return redirect('buyer_home')
             else:
                 return redirect('home')
 

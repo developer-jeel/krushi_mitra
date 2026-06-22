@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from farmer import views
+from buyer import views
 
 urlpatterns = [
     path('buyer_home', views.buyer_home, name='buyer_home'),
