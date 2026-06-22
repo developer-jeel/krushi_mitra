@@ -32,7 +32,7 @@ class bank_details(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Buyer: {self.user.Buyer.name}"
+        return f"Buyer: {self.user.user.name}"
 
 class verification_details(models.Model):
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer')
@@ -45,7 +45,7 @@ class verification_details(models.Model):
     
     def image_preview(self):
         if self.image:
-            return mark_safe(f'<img src="{self.image.url}" width="40" style="border-radius:8px;"/>')
+            return mark_safe(f'<img src="{self.photo.url}" width="40" style="border-radius:8px;"/>')
         return "—"
     image_preview.short_description = "Icon"
 
