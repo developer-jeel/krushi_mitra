@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/messages.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+  <div class="app-layout">
+    <aside class="sidebar">[SIDEBAR]</aside>
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><span class="current">Messages</span></div><h1 class="page-title">Messages</h1></div></div>
+        <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
+      </header>
+      <main class="main-content" style="padding-top:calc(var(--navbar-height) + 8px);padding-bottom:0;">
+        <div class="chat-layout">
+          <!-- Conversations Sidebar -->
+          <div class="chat-sidebar">
+            <div class="chat-sidebar-header">
+              <h3>Conversations</h3>
+              <span class="online-count">5 active</span>
+            </div>
+            <div class="chat-search"><span class="chat-search-icon">🔍</span><input type="text" placeholder="Search conversations..."></div>
+            <div class="conversations">
+              <div class="conversation active">
+                <div class="conv-avatar green">AK</div>
+                <div class="conv-info"><div class="conv-name">Anil Kumar <span class="online-status"></span></div><div class="conv-preview">Sure, I'll check the latest pricing...</div></div>
+                <div class="conv-meta"><span class="conv-time">2m</span><span class="conv-badge">3</span></div>
+              </div>
+              <div class="conversation">
+                <div class="conv-avatar blue">PS</div>
+                <div class="conv-info"><div class="conv-name">Priya Sharma <span class="online-status"></span></div><div class="conv-preview">We have fresh stock available now</div></div>
+                <div class="conv-meta"><span class="conv-time">1h</span></div>
+              </div>
+              <div class="conversation">
+                <div class="conv-avatar amber">RP</div>
+                <div class="conv-info"><div class="conv-name">Rahul Patel <span class="online-status offline"></span></div><div class="conv-preview">Quality report is attached</div></div>
+                <div class="conv-meta"><span class="conv-time">3h</span></div>
+              </div>
+              <div class="conversation">
+                <div class="conv-avatar rose">SK</div>
+                <div class="conv-info"><div class="conv-name">Sunita Kumari <span class="online-status"></span></div><div class="conv-preview">Let me confirm with warehouse</div></div>
+                <div class="conv-meta"><span class="conv-time">Yesterday</span></div>
+              </div>
+              <div class="conversation">
+                <div class="conv-avatar purple">VK</div>
+                <div class="conv-info"><div class="conv-name">Vikram Singh <span class="online-status offline"></span></div><div class="conv-preview">Thanks for the order!</div></div>
+                <div class="conv-meta"><span class="conv-time">2d</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Window -->
+          <div class="chat-window">
+            <div class="chat-header">
+              <div class="chat-user"><div class="conv-avatar green">AK</div><div><div class="chat-username">Anil Kumar</div><div class="chat-user-status">● Online</div></div></div>
+              <div class="chat-actions"><button class="btn btn-sm btn-ghost">📞</button><button class="btn btn-sm btn-ghost">📹</button><button class="btn btn-sm btn-ghost">⋮</button></div>
+            </div>
+
+            <div class="chat-messages">
+              <div class="message-date-sep">Today</div>
+              <div class="message-bubble received">
+                <div class="message-text">Hi Rajesh! I have the latest prices for Basmati Rice. Are you interested?</div>
+                <div class="message-time">09:45 AM</div>
+              </div>
+              <div class="message-bubble sent">
+                <div class="message-text">Yes, please share the details. I need about 500 kg for this week.</div>
+                <div class="message-time">09:48 AM</div>
+              </div>
+              <div class="message-bubble received">
+                <div class="message-text">Sure! Current price is ₹165/kg for Grade A. Quality is excellent from this season's harvest.</div>
+                <div class="message-time">09:50 AM</div>
+              </div>
+              <div class="message-bubble sent">
+                <div class="message-text">That works for me. Can you arrange delivery to Pune by Friday?</div>
+                <div class="message-time">09:52 AM</div>
+              </div>
+              <div class="message-bubble received">
+                <div class="message-text">Absolutely! I'll process the order and send you the invoice shortly.</div>
+                <div class="message-time">09:54 AM</div>
+              </div>
+              <div class="typing-indicator active">
+                <span></span><span></span><span></span>
+                <span style="font-size:0.75rem;color:var(--text-muted);margin-left:8px;">Anil is typing...</span>
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <button class="chat-attach">📎</button>
+              <button class="chat-emoji">😊</button>
+              <input type="text" class="chat-input" placeholder="Type your message..." autofocus>
+              <button class="btn btn-primary send-message">Send</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

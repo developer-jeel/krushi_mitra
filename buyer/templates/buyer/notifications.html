@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/notifications.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+  <div class="app-layout">
+    <aside class="sidebar">[SIDEBAR]</aside>
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><span class="current">Notifications</span></div><h1 class="page-title">Notifications</h1></div></div>
+        <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
+      </header>
+      <main class="main-content">
+        <div class="section-header page-reveal">
+          <div><h2 class="section-title">🔔 All Notifications</h2><p class="card-subtitle">Stay updated with your latest activities</p></div>
+          <button class="btn btn-sm btn-secondary mark-all-read">✓ Mark All Read</button>
+        </div>
+
+        <div class="notification-filters page-reveal">
+          <button class="notif-filter active">All</button>
+          <button class="notif-filter">Orders</button>
+          <button class="notif-filter">Payments</button>
+          <button class="notif-filter">Messages</button>
+          <button class="notif-filter">Bulk Orders</button>
+          <button class="notif-filter">Export</button>
+        </div>
+
+        <div class="notification-list page-reveal">
+          <div class="notification-card unread">
+            <div class="notif-icon green">📦</div>
+            <div class="notif-content"><div class="notif-title">Order Delivered Successfully</div><div class="notif-text">Your order #ORD-2024-0890 has been delivered. Rate your experience.</div><div class="notif-time">5 minutes ago</div></div>
+            <div class="notif-actions"><button class="mark-read" title="Mark as read">✓</button><button class="archive-notification" title="Archive">🗑️</button></div>
+          </div>
+          <div class="notification-card unread">
+            <div class="notif-icon blue">💬</div>
+            <div class="notif-content"><div class="notif-title">New Message from Anil Kumar</div><div class="notif-text">Anil sent you pricing details for Basmati Rice.</div><div class="notif-time">1 hour ago</div></div>
+            <div class="notif-actions"><button class="mark-read" title="Mark as read">✓</button><button class="archive-notification" title="Archive">🗑️</button></div>
+          </div>
+          <div class="notification-card unread">
+            <div class="notif-icon amber">🌾</div>
+            <div class="notif-content"><div class="notif-title">New Crops Available</div><div class="notif-text">12 new crop listings in your preferred categories.</div><div class="notif-time">3 hours ago</div></div>
+            <div class="notif-actions"><button class="mark-read" title="Mark as read">✓</button><button class="archive-notification" title="Archive">🗑️</button></div>
+          </div>
+          <div class="notification-card read">
+            <div class="notif-icon rose">💳</div>
+            <div class="notif-content"><div class="notif-title">Payment Confirmed</div><div class="notif-text">Payment of ₹82,500 for order #ORD-2024-0891 confirmed.</div><div class="notif-time">Yesterday</div></div>
+            <div class="notif-actions"><button class="archive-notification" title="Archive">🗑️</button></div>
+          </div>
+          <div class="notification-card read">
+            <div class="notif-icon purple">📋</div>
+            <div class="notif-content"><div class="notif-title">Bulk Inquiry Response</div><div class="notif-text">3 sellers responded to your wheat bulk inquiry.</div><div class="notif-time">2 days ago</div></div>
+            <div class="notif-actions"><button class="archive-notification" title="Archive">🗑️</button></div>
+          </div>
+          <div class="notification-card read">
+            <div class="notif-icon green">🌍</div>
+            <div class="notif-content"><div class="notif-title">Export Inquiry Update</div><div class="notif-text">Your export inquiry for UAE has been reviewed by 2 suppliers.</div><div class="notif-time">3 days ago</div></div>
+            <div class="notif-actions"><button class="archive-notification" title="Archive">🗑️</button></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

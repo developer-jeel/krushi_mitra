@@ -1,0 +1,114 @@
+/* ============================================
+   KRUSHI MITRA - NOTIFICATIONS STYLES
+   ============================================ */
+
+.notification-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.notif-filter {
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.notif-filter:hover {
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+}
+
+.notif-filter.active {
+  background: var(--primary-500);
+  color: white;
+  border-color: var(--primary-500);
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  margin-bottom: 6px;
+}
+
+.notification-card.unread {
+  border-left: 3px solid var(--primary-500);
+  background: rgba(16,185,129,0.03);
+}
+
+.notification-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.notif-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.notif-icon.green { background: rgba(16,185,129,0.12); }
+.notif-icon.blue { background: rgba(59,130,246,0.12); }
+.notif-icon.amber { background: rgba(245,158,11,0.12); }
+.notif-icon.rose { background: rgba(244,63,94,0.12); }
+.notif-icon.purple { background: rgba(139,92,246,0.12); }
+
+.notif-content { flex: 1; }
+.notif-title { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.notif-text { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5; }
+.notif-time { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; }
+
+.notif-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.notification-card:hover .notif-actions {
+  opacity: 1;
+}
+
+.notif-actions button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.notif-actions button:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .notif-actions { opacity: 1; }
+}

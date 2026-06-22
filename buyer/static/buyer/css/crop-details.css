@@ -1,0 +1,275 @@
+/* ============================================
+   KRUSHI MITRA - CROP DETAILS STYLES
+   ============================================ */
+
+.product-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+/* Gallery */
+.product-gallery-main {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-card);
+  border: var(--card-border);
+  height: 420px;
+  cursor: crosshair;
+}
+
+.product-gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.thumbnail-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.thumbnail-nav img {
+  width: 80px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+  opacity: 0.6;
+}
+
+.thumbnail-nav img.active,
+.thumbnail-nav img:hover {
+  border-color: var(--primary-500);
+  opacity: 1;
+}
+
+/* Product Info */
+.product-category {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--primary-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.product-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.product-rating {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-rating span {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.product-price-section {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-md);
+}
+
+.product-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.product-price-unit {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+.product-price-discount {
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.product-save-badge {
+  padding: 3px 10px;
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--green-500);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Meta Grid */
+.product-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.product-meta-item {
+  padding: 12px 14px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-md);
+}
+
+.meta-label {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Description */
+.product-description {
+  margin-bottom: 20px;
+}
+
+.product-desc-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.product-desc-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.product-quality {
+  margin-bottom: 20px;
+}
+
+.quality-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quality-tag {
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+/* Price Calculator */
+.calc-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+}
+
+.calc-total {
+  text-align: right;
+}
+
+.calc-total-price {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-500);
+}
+
+/* Qty Selector */
+.qty-selector {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.qty-selector button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  background: var(--bg-card-hover);
+  transition: all var(--transition-fast);
+}
+
+.qty-selector button:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.qty-selector input {
+  width: 80px;
+  height: 40px;
+  text-align: center;
+  border: none;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  -moz-appearance: textfield;
+}
+
+.qty-selector input::-webkit-outer-spin-button,
+.qty-selector input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Product Actions */
+.product-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Related Grid */
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .product-detail-layout { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .product-meta-grid { grid-template-columns: 1fr; }
+  .calc-row { flex-direction: column; align-items: stretch; }
+  .product-actions { flex-direction: column; }
+  .related-grid { grid-template-columns: 1fr; }
+  .product-gallery-main { height: 280px; }
+}

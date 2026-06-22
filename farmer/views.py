@@ -43,7 +43,7 @@ def register(request):
                 Farmer.objects.create(user=user, adharno=aadhar)
             elif role == 'Buyer':
                 gst = request.POST.get('gst')
-                Buyer.objects.create(user=user, adharno=aadhar, gst_no=gst)
+                Buyer.objects.create(user=user, gst_no=gst)
                 
             messages.success(request, 'Registration successful. Please login.')
             return redirect('login')

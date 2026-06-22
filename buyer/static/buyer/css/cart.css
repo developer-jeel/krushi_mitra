@@ -1,0 +1,162 @@
+/* ============================================
+   KRUSHI MITRA - CART STYLES
+   ============================================ */
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
+
+.cart-item:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.cart-item-img {
+  width: 100px;
+  height: 80px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cart-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-item-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.cart-item-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.cart-item-price {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-500);
+}
+
+.cart-item-qty {
+  text-align: center;
+}
+
+.cart-item-qty .qty-selector input {
+  width: 60px;
+}
+
+.cart-item-total {
+  text-align: right;
+  min-width: 100px;
+}
+
+.cart-total-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cart-item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cart-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Summary */
+.cart-summary {
+  position: sticky;
+  top: calc(var(--navbar-height) + 24px);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.summary-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+}
+
+.total-row {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.grand-total {
+  color: var(--primary-500);
+  font-size: 1.25rem;
+}
+
+.discount-row.hidden {
+  display: none;
+}
+
+.coupon-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.coupon-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.coupon-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.coupon-input {
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .cart-layout { grid-template-columns: 1fr; }
+  .cart-summary { position: static; }
+}
+
+@media (max-width: 768px) {
+  .cart-item { flex-wrap: wrap; }
+  .cart-item-actions { flex-direction: row; width: 100%; justify-content: flex-end; }
+}

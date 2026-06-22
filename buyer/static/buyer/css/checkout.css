@@ -1,0 +1,48 @@
+/* ============================================
+   KRUSHI MITRA - CHECKOUT STYLES
+   ============================================ */
+
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+
+.checkout-card {
+  margin-bottom: 16px;
+}
+
+.checkout-summary {
+  position: sticky;
+  top: calc(var(--navbar-height) + 24px);
+}
+
+.checkout-summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.checkout-summary-item.total {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.checkout-summary-item.total span:last-child {
+  color: var(--primary-500);
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 1024px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+  .checkout-summary { position: static; }
+}

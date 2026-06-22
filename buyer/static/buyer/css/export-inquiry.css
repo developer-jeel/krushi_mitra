@@ -1,0 +1,52 @@
+/* ============================================
+   KRUSHI MITRA - EXPORT INQUIRY STYLES
+   ============================================ */
+
+.export-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.export-side {
+  position: sticky;
+  top: calc(var(--navbar-height) + 24px);
+}
+
+.export-tracking {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.tracking-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tracking-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.tracking-flag {
+  font-size: 1.5rem;
+  width: 40px;
+  text-align: center;
+}
+
+.tracking-info { flex: 1; }
+.tracking-title { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
+.tracking-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+@media (max-width: 1024px) {
+  .export-layout { grid-template-columns: 1fr; }
+  .export-side { position: static; }
+}

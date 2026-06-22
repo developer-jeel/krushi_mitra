@@ -1,0 +1,162 @@
+/* ============================================
+   KRUSHI MITRA - PROFILE STYLES
+   ============================================ */
+
+.profile-header {
+  padding: 0;
+  overflow: hidden;
+}
+
+.profile-cover {
+  height: 180px;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800), #0a3622);
+  position: relative;
+}
+
+.profile-cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to top, var(--bg-card), transparent);
+}
+
+.profile-info {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 0 28px 24px;
+  margin-top: -60px;
+  position: relative;
+  z-index: 1;
+}
+
+.profile-photo {
+  position: relative;
+}
+
+.profile-avatar-lg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-400), var(--primary-600));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  border: 4px solid var(--bg-card);
+  box-shadow: var(--shadow-md);
+}
+
+.profile-photo-edit {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.profile-photo-edit:hover {
+  background: var(--primary-500);
+  color: white;
+  border-color: var(--primary-500);
+}
+
+.profile-details { flex: 1; }
+.profile-name-lg { font-size: 1.5rem; font-weight: 800; color: var(--text-primary); }
+.profile-bio { font-size: 0.875rem; color: var(--text-secondary); margin-top: 4px; }
+.profile-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; font-size: 0.8125rem; color: var(--text-muted); }
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.profile-side {
+  position: sticky;
+  top: calc(var(--navbar-height) + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.profile-field label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.profile-field span {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg-card-hover);
+  border-radius: var(--radius-md);
+}
+
+.doc-icon { font-size: 1.2rem; }
+.doc-name { flex: 1; font-size: 0.8125rem; font-weight: 500; color: var(--text-primary); }
+
+.profile-steps { display: flex; flex-direction: column; gap: 8px; }
+
+.step-item {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-item.done { color: var(--green-500); }
+.step-item.pending { color: var(--amber-500); }
+
+@media (max-width: 1024px) {
+  .profile-layout { grid-template-columns: 1fr; }
+  .profile-side { position: static; }
+}
+
+@media (max-width: 768px) {
+  .profile-info { flex-direction: column; align-items: center; text-align: center; margin-top: -40px; }
+  .profile-meta { justify-content: center; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-avatar-lg { width: 80px; height: 80px; font-size: 1.5rem; }
+  .profile-cover { height: 120px; }
+}

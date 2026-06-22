@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Browse Crops - Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/browse-crops.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-item" data-tooltip="Dashboard"><span class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="browse-crops.html" class="sidebar-item active" data-tooltip="Browse Crops"><span class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="cart.html" class="sidebar-item" data-tooltip="Cart"><span class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span class="sidebar-item-badge">3</span></a>
+        <a href="orders.html" class="sidebar-item" data-tooltip="Orders"><span class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="wishlist.html" class="sidebar-item" data-tooltip="Wishlist"><span class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="bulk-order.html" class="sidebar-item" data-tooltip="Bulk Orders"><span class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="export-inquiry.html" class="sidebar-item" data-tooltip="Export Inquiry"><span class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="messages.html" class="sidebar-item" data-tooltip="Messages"><span class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span class="sidebar-item-badge">5</span></a>
+        <a href="notifications.html" class="sidebar-item" data-tooltip="Notifications"><span class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="profile.html" class="sidebar-item" data-tooltip="Profile"><span class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="verification.html" class="sidebar-item" data-tooltip="Verification"><span class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="bank-details.html" class="sidebar-item" data-tooltip="Bank Details"><span class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="settings.html" class="sidebar-item" data-tooltip="Settings"><span class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><a href="browse-crops.html">Marketplace</a><span class="breadcrumb-sep">›</span><span class="current">Browse Crops</span></div>
+            <h1 class="page-title">Browse Crops</h1>
+          </div>
+        </div>
+        <div class="navbar-right">
+          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search crops..." aria-label="Search"></div>
+          <a href="messages.html" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
+          <a href="notifications.html" class="nav-btn" title="Notifications">🔔<span class="badge-dot"></span></a>
+          <button class="theme-toggle">🌙</button>
+          <div class="dropdown">
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div>
+            </div>
+            <div class="dropdown-menu">
+              <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+              <a href="orders.html" class="dropdown-item">📦 My Orders</a>
+              <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger">🚪 Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <!-- Search & Filter Header -->
+        <section class="browse-header page-reveal">
+          <div class="browse-search-area">
+            <div class="browse-search-box">
+              <span class="browse-search-icon">🔍</span>
+              <input type="text" class="browse-search-input" placeholder="Search by crop name, category, location..." aria-label="Search crops">
+              <button class="btn btn-primary browse-search-btn">Search</button>
+            </div>
+            <div class="browse-search-tags">
+              <span class="search-tag">🌾 Grains <button class="tag-remove">✕</button></span>
+              <span class="search-tag">📍 Maharashtra <button class="tag-remove">✕</button></span>
+              <span class="search-tag">⭐ Grade A <button class="tag-remove">✕</button></span>
+              <span class="search-tag active-filters">3 Filters Active</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Filters + Results Layout -->
+        <div class="browse-layout page-reveal">
+          <!-- Filter Sidebar -->
+          <aside class="filter-sidebar card">
+            <div class="filter-header">
+              <h3 class="card-title">Filters</h3>
+              <button class="btn btn-sm btn-ghost clear-filters">Clear All</button>
+            </div>
+
+            <div class="filter-section">
+              <h4 class="filter-title">Category</h4>
+              <div class="filter-options">
+                <label class="form-check"><input type="checkbox" checked> 🌾 Grains (24)</label>
+                <label class="form-check"><input type="checkbox"> 🥭 Fruits (18)</label>
+                <label class="form-check"><input type="checkbox"> 🥬 Vegetables (31)</label>
+                <label class="form-check"><input type="checkbox"> 🌶️ Spices (15)</label>
+                <label class="form-check"><input type="checkbox"> 🧅 Pulses (12)</label>
+                <label class="form-check"><input type="checkbox"> 🌿 Oilseeds (9)</label>
+              </div>
+            </div>
+
+            <div class="filter-section">
+              <h4 class="filter-title">Location</h4>
+              <select class="form-select">
+                <option>All Locations</option>
+                <option>Maharashtra</option>
+                <option>Punjab</option>
+                <option>Gujarat</option>
+                <option>Karnataka</option>
+                <option>Madhya Pradesh</option>
+                <option>Uttar Pradesh</option>
+              </select>
+            </div>
+
+            <div class="filter-section">
+              <h4 class="filter-title">Price Range (per kg)</h4>
+              <div class="filter-range">
+                <input type="number" class="form-input" placeholder="Min ₹" value="10">
+                <span>—</span>
+                <input type="number" class="form-input" placeholder="Max ₹" value="1000">
+              </div>
+            </div>
+
+            <div class="filter-section">
+              <h4 class="filter-title">Quantity Available</h4>
+              <select class="form-select">
+                <option>Any Quantity</option>
+                <option>Less than 100 kg</option>
+                <option>100 - 500 kg</option>
+                <option>500 - 1000 kg</option>
+                <option>1000 - 5000 kg</option>
+                <option>5000+ kg</option>
+              </select>
+            </div>
+
+            <div class="filter-section">
+              <h4 class="filter-title">Quality Grade</h4>
+              <div class="filter-options">
+                <label class="form-check"><input type="radio" name="grade" checked> All Grades</label>
+                <label class="form-check"><input type="radio" name="grade"> ⭐ Grade A</label>
+                <label class="form-check"><input type="radio" name="grade"> ⭐ Grade B</label>
+                <label class="form-check"><input type="radio" name="grade"> ⭐ Premium</label>
+              </div>
+            </div>
+
+            <div class="filter-section">
+              <h4 class="filter-title">Availability</h4>
+              <div class="filter-options">
+                <label class="form-check"><input type="checkbox" checked> In Stock</label>
+                <label class="form-check"><input type="checkbox"> Pre-order</label>
+                <label class="form-check"><input type="checkbox"> Seasonal</label>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-block apply-filters">Apply Filters</button>
+          </aside>
+
+          <!-- Results -->
+          <div class="results-container">
+            <!-- Sort & Count -->
+            <div class="results-header">
+              <div class="results-count">Showing <strong>24</strong> of 128 crops</div>
+              <div class="results-sort">
+                <label class="body-small text-muted">Sort by:</label>
+                <select class="form-select" style="width:auto;padding:6px 30px 6px 12px;">
+                  <option>Latest</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Rating</option>
+                  <option>Popularity</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Crop Grid -->
+            <div class="crop-grid">
+              <div class="crop-card card card-float" data-crop>
+                <div class="crop-card-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=280&fit=crop" alt="Basmati Rice" loading="lazy">
+                  <button class="wishlist-toggle">🤍</button>
+                  <span class="crop-stock-badge in-stock">In Stock</span>
+                </div>
+                <div class="crop-card-body">
+                  <div class="crop-card-category">🌾 Grains</div>
+                  <h3 class="crop-card-name">Premium Basmati Rice</h3>
+                  <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.8, 124 reviews)</span></div>
+                  <div class="crop-card-details">
+                    <span class="crop-detail">📍 Punjab</span>
+                    <span class="crop-detail">📦 5000 kg</span>
+                    <span class="crop-detail">⭐ Grade A</span>
+                  </div>
+                  <div class="crop-card-price">
+                    <span class="price">₹165</span>
+                    <span class="price-unit">/ kg</span>
+                    <span class="price-discount">₹190</span>
+                  </div>
+                  <div class="crop-card-footer">
+                    <span class="crop-seller-status">✅ Verified Seller</span>
+                    <span class="crop-harvest">Harvest: Nov 2024</span>
+                  </div>
+                  <div class="crop-card-actions">
+                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="crop-card card card-float" data-crop>
+                <div class="crop-card-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=400&h=280&fit=crop" alt="Alphonso Mango" loading="lazy">
+                  <button class="wishlist-toggle">🤍</button>
+                  <span class="crop-stock-badge in-stock">In Stock</span>
+                </div>
+                <div class="crop-card-body">
+                  <div class="crop-card-category">🥭 Fruits</div>
+                  <h3 class="crop-card-name">Alphonso Mango (Hapus)</h3>
+                  <div class="crop-card-rating">⭐⭐⭐⭐⭐ <span class="rating-count">(4.9, 89 reviews)</span></div>
+                  <div class="crop-card-details">
+                    <span class="crop-detail">📍 Maharashtra</span>
+                    <span class="crop-detail">📦 200 boxes</span>
+                    <span class="crop-detail">⭐ Premium</span>
+                  </div>
+                  <div class="crop-card-price">
+                    <span class="price">₹700</span>
+                    <span class="price-unit">/ box</span>
+                    <span class="price-discount">₹850</span>
+                  </div>
+                  <div class="crop-card-footer">
+                    <span class="crop-seller-status">✅ Premium Seller</span>
+                    <span class="crop-harvest">Harvest: Apr 2024</span>
+                  </div>
+                  <div class="crop-card-actions">
+                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="crop-card card card-float" data-crop>
+                <div class="crop-card-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=280&fit=crop" alt="Red Chillies" loading="lazy">
+                  <button class="wishlist-toggle">🤍</button>
+                  <span class="crop-stock-badge in-stock">In Stock</span>
+                </div>
+                <div class="crop-card-body">
+                  <div class="crop-card-category">🌶️ Spices</div>
+                  <h3 class="crop-card-name">Byadgi Red Chillies</h3>
+                  <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.7, 56 reviews)</span></div>
+                  <div class="crop-card-details">
+                    <span class="crop-detail">📍 Karnataka</span>
+                    <span class="crop-detail">📦 1000 kg</span>
+                    <span class="crop-detail">⭐ Grade A</span>
+                  </div>
+                  <div class="crop-card-price">
+                    <span class="price">₹240</span>
+                    <span class="price-unit">/ kg</span>
+                    <span class="price-discount">₹280</span>
+                  </div>
+                  <div class="crop-card-footer">
+                    <span class="crop-seller-status">✅ Verified Seller</span>
+                    <span class="crop-harvest">Harvest: Jan 2024</span>
+                  </div>
+                  <div class="crop-card-actions">
+                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="crop-card card card-float" data-crop>
+                <div class="crop-card-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=280&fit=crop" alt="Turmeric" loading="lazy">
+                  <button class="wishlist-toggle">🤍</button>
+                  <span class="crop-stock-badge low-stock">Low Stock</span>
+                </div>
+                <div class="crop-card-body">
+                  <div class="crop-card-category">🌶️ Spices</div>
+                  <h3 class="crop-card-name">Fresh Turmeric (Lakadong)</h3>
+                  <div class="crop-card-rating">⭐⭐⭐⭐⭐ <span class="rating-count">(4.9, 42 reviews)</span></div>
+                  <div class="crop-card-details">
+                    <span class="crop-detail">📍 Meghalaya</span>
+                    <span class="crop-detail">📦 200 kg</span>
+                    <span class="crop-detail">⭐ Premium</span>
+                  </div>
+                  <div class="crop-card-price">
+                    <span class="price">₹185</span>
+                    <span class="price-unit">/ kg</span>
+                    <span class="price-discount">₹220</span>
+                  </div>
+                  <div class="crop-card-footer">
+                    <span class="crop-seller-status">✅ Premium Seller</span>
+                    <span class="crop-harvest">Harvest: Dec 2024</span>
+                  </div>
+                  <div class="crop-card-actions">
+                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="crop-card card card-float" data-crop>
+                <div class="crop-card-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=280&fit=crop" alt="Organic Wheat" loading="lazy">
+                  <button class="wishlist-toggle">🤍</button>
+                  <span class="crop-stock-badge in-stock">In Stock</span>
+                </div>
+                <div class="crop-card-body">
+                  <div class="crop-card-category">🌾 Grains</div>
+                  <h3 class="crop-card-name">Organic Wheat (Sharbati)</h3>
+                  <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.6, 98 reviews)</span></div>
+                  <div class="crop-card-details">
+                    <span class="crop-detail">📍 Madhya Pradesh</span>
+                    <span class="crop-detail">📦 10000 kg</span>
+                    <span class="crop-detail">⭐ Grade A</span>
+                  </div>
+                  <div class="crop-card-price">
+                    <span class="price">₹28</span>
+                    <span class="price-unit">/ kg</span>
+                    <span class="price-discount">₹35</span>
+                  </div>
+                  <div class="crop-card-footer">
+                    <span class="crop-seller-status">✅ Verified Seller</span>
+                    <span class="crop-harvest">Harvest: Mar 2024</span>
+                  </div>
+                  <div class="crop-card-actions">
+                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="crop-card card card-float" data-crop>
+                <div class="crop-card-img-wrapper">
+                  <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=400&h=280&fit=crop" alt="Green Chillies" loading="lazy">
+                  <button class="wishlist-toggle">🤍</button>
+                  <span class="crop-stock-badge in-stock">In Stock</span>
+                </div>
+                <div class="crop-card-body">
+                  <div class="crop-card-category">🥬 Vegetables</div>
+                  <h3 class="crop-card-name">Fresh Green Chillies</h3>
+                  <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.5, 67 reviews)</span></div>
+                  <div class="crop-card-details">
+                    <span class="crop-detail">📍 Gujarat</span>
+                    <span class="crop-detail">📦 800 kg</span>
+                    <span class="crop-detail">⭐ Grade A</span>
+                  </div>
+                  <div class="crop-card-price">
+                    <span class="price">₹80</span>
+                    <span class="price-unit">/ kg</span>
+                    <span class="price-discount">₹100</span>
+                  </div>
+                  <div class="crop-card-footer">
+                    <span class="crop-seller-status">✅ Verified Seller</span>
+                    <span class="crop-harvest">Harvest: Feb 2024</span>
+                  </div>
+                  <div class="crop-card-actions">
+                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+              <button class="page-btn disabled">‹ Prev</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">4</button>
+              <button class="page-btn">5</button>
+              <button class="page-btn">Next ›</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

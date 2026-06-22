@@ -1,475 +1,127 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Profile – Buyer Panel | Krushi Mitra</title>
-  <meta name="description" content="Manage your buyer profile, address, and preferences on Krushi Mitra." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{% static 'buyer/css/buyer.css' %}" />
-  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
-  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/profile.css">
 </head>
-
 <body>
-
-  <!-- ════════════ SIDEBAR ════════════ -->
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <img src="../login/images/krushi_mitra_logo.png" alt="Krushi Mitra" />
-      <div class="brand">Krushi Mitra <span data-translate="buyerPanel">Buyer Panel</span></div>
-    </div>
-    <nav class="sidebar-nav">
-      <div class="nav-section-title" data-translate="main">Main</div>
-      <a href="{% url 'buyer_home' %}" class="nav-item" id="nav-home">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-        <span data-translate="home">Home</span>
-      </a>
-      <a href="{% url 'buyer_purchase_crop' %}" class="nav-item" id="nav-crops">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <path d="M16 10a4 4 0 0 1-8 0" />
-        </svg>
-        <span data-translate="purchaseCrop">Purchase Crop</span>
-      </a>
-      <a href="{% url 'buyer_order_history' %}" class="nav-item" id="nav-orders">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-        </svg>
-        <span data-translate="orderAmpPaymentHistory">Order &amp; Payment History</span>
-      </a>
-      <a href="{% url 'buyer_bulk_order' %}" class="nav-item" id="nav-bulk">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="1" y="3" width="15" height="13" />
-          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-          <circle cx="5.5" cy="18.5" r="2.5" />
-          <circle cx="18.5" cy="18.5" r="2.5" />
-        </svg>
-        <span data-translate="bulkOrderInquiry">Bulk Order Inquiry</span>
-      </a>
-      <div class="nav-section-title" data-translate="account">Account</div>
-      <a href="{% url 'buyer_profile' %}" class="nav-item active" id="nav-profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-        <span data-translate="profile">Profile</span>
-      </a>
-    </nav>
-    <div class="sidebar-bottom">
-      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="2" y1="12" x2="22" y2="12" />
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ════════════ MAIN ════════════ -->
-  <div class="main">
-    <header class="topbar">
-      <div class="topbar-left">
-        <div>
-          <div class="page-title" data-translate="myProfile">My Profile 👤</div>
-          <div class="breadcrumb" data-translate="dashboardProfile">Dashboard / Profile</div>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <button class="topbar-icon-btn" title="Notifications">
-          <i class="fa-solid fa-bell"></i>
-          <span class="badge"></span>
-        </button>
-        <div class="avatar" title="My Profile" data-translate="s">S</div>
-      </div>
-    </header>
-
-    <div class="page-content">
-
-      <!-- Profile Hero -->
-      <div class="profile-hero">
-        <div class="profile-avatar-lg" data-translate="s">S</div>
-        <div class="profile-info">
-          <div class="profile-name">{{uid.name}}</div>
-          <div class="profile-role" data-translate="verifiedBuyerWholesaleTrader">Verified Buyer · Wholesale Trader</div>
-          <div class="profile-badges">
-            {% if uid.buyer.is_verified%}
-            <div class="profile-badge" data-translate="kycVerified">✅ KYC Verified</div>
-            {%else%}
-            <div class="profile-badge" data-translate="kycPending"> KYC Pending</div>
-            {% endif %}
-            <div class="profile-badge" data-translate="premiumMember">⭐ Premium Member</div>
-            <div class="profile-badge" data-translate="bulkBuyer">🚛 Bulk Buyer</div>
-          </div>
-        </div>
-        <div style="margin-left:auto; position:relative; z-index:1;">
-          <button class="btn btn-primary">
-            <i class="fa-solid fa-pen"></i>
-            Edit Profile
-          </button>
-        </div>
-      </div>
-
-      <!-- Profile Stats -->
-      <div class="profile-stats">
-        <div class="profile-stat-card">
-          <div class="profile-stat-val">34</div>
-          <div class="profile-stat-lbl" data-translate="totalOrders">Total Orders</div>
-        </div>
-        <div class="profile-stat-card">
-          <div class="profile-stat-val" data-translate="124l">₹1.24L</div>
-          <div class="profile-stat-lbl" data-translate="totalSpent">Total Spent</div>
-        </div>
-        <div class="profile-stat-card">
-          <div class="profile-stat-val">2</div>
-          <div class="profile-stat-lbl" data-translate="bulkInquiries">Bulk Inquiries</div>
-        </div>
-        <div class="profile-stat-card">
-          <div class="profile-stat-val" data-translate="47">4.7 ⭐</div>
-          <div class="profile-stat-lbl" data-translate="buyerRating">Buyer Rating</div>
-        </div>
-      </div>
-
-      <!-- Personal Information -->
-      <div class="profile-section">
-        <div class="profile-section-title" data-translate="personalInformation">Personal Information</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="fullName">Full Name</label>
-            <input type="text" value="Suresh Mehta" />
-          </div>
-          <div class="form-field">
-            <label data-translate="businessCompanyName">Business / Company Name</label>
-            <input type="text" value="Mehta Agro Traders" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="emailAddress">Email Address</label>
-            <input type="email" value="suresh.mehta@magtrade.in" />
-          </div>
-          <div class="form-field">
-            <label data-translate="mobileNumber">Mobile Number</label>
-            <input type="tel" value="+91 98765 43210" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Delivery Address -->
-      <div class="profile-section">
-        <div class="profile-section-title" data-translate="primaryDeliveryAddress">Primary Delivery Address</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="addressLine1">Address Line 1</label>
-            <input type="text" value="Plot 45, GIDC Estate, Vatva" />
-          </div>
-          <div class="form-field">
-            <label data-translate="addressLine2">Address Line 2</label>
-            <input type="text" value="Near Water Tank, Ahmedabad" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="city">City</label>
-            <input type="text" value="Ahmedabad" />
-          </div>
-          <div class="form-field">
-            <label data-translate="state">State</label>
-            <select>
-              <option selected data-translate="gujarat">Gujarat</option>
-              <option data-translate="maharashtra">Maharashtra</option>
-              <option data-translate="rajasthan">Rajasthan</option>
-              <option data-translate="punjab">Punjab</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="pinCode">PIN Code</label>
-            <input type="text" value="382445" />
-          </div>
-          <div class="form-field">
-            <label data-translate="country">Country</label>
-            <input type="text" value="India" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Change Password -->
-      <div class="profile-section">
-        <div class="profile-section-title" data-translate="changePassword">Change Password</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="currentPassword">Current Password</label>
-            <input type="password" placeholder="••••••••" />
-          </div>
-          <div class="form-field">
-            <label data-translate="newPassword">New Password</label>
-            <input type="password" placeholder="••••••••" />
-          </div>
-        </div>
-        <div class="form-field" style="max-width:50%;">
-          <label data-translate="confirmNewPassword">Confirm New Password</label>
-          <input type="password" placeholder="••••••••" />
-        </div>
-      </div>
-
-      <!-- ── KYC & Verification Link Card ── -->
-      {% if not uid.buyer.is_verified%}
-      <div
-        style="background:linear-gradient(135deg,#1b5e20,#2e7d32);border-radius:var(--radius-lg);padding:24px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:22px;position:relative;overflow:hidden;">
-        <div
-          style="position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.05);">
-        </div>
-        <div
-          style="width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;position:relative;z-index:1;">
-          🛡️</div>
-        <div style="flex:1;position:relative;z-index:1;">
-          <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:3px;" data-translate="kycAmpVerification">KYC &amp; Verification</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-bottom:6px;">Your KYC is <strong
-              style='color:#fbbf24;' data-translate="75Complete">75% complete</strong>. Complete Business Registration &amp; Document upload to get
-            fully verified.</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <span
-              style="font-size:11px;background:rgba(255,255,255,0.15);color:#fff;padding:3px 10px;border-radius:20px;font-weight:600;">✅
-              Identity Verified</span>
-            <span
-              style="font-size:11px;background:rgba(255,255,255,0.15);color:#fff;padding:3px 10px;border-radius:20px;font-weight:600;">✅
-              Bank Verified</span>
-            <span
-              style="font-size:11px;background:rgba(245,158,11,0.3);color:#fbbf24;padding:3px 10px;border-radius:20px;font-weight:600;">⏳
-              Docs Pending</span>
-          </div>
-        </div>
-        <a href="{% url 'kyc' %}" class="btn"
-          style="background:#fff;color:var(--green-dark);font-size:13px;padding:10px 20px;flex-shrink:0;position:relative;z-index:1;">
-          <i class="fa-solid fa-shield-halved"></i> Go to KYC Page
-        </a>
-      </div>
-      {% endif %}
-
-      <!-- ── (old KYC section placeholder) ── -->
-      <div class="profile-section" style="display:none;">
-        <div class="profile-section-title">
-          KYC &amp; Verification
-          <span class="kyc-overall-badge partial" data-translate="partiallyVerified">⚠️ Partially Verified</span>
-        </div>
-
-        <!-- Overview Steps -->
-        <div class="kyc-overview">
-          <div class="kyc-step done">
-            <div class="kyc-step-icon"><i class="fa-solid fa-id-card"></i></div>
-            <div class="kyc-step-label" data-translate="identity">Identity</div>
-          </div>
-          <div class="kyc-step done">
-            <div class="kyc-step-icon"><i class="fa-solid fa-building"></i></div>
-            <div class="kyc-step-label" data-translate="business">Business</div>
-          </div>
-          <div class="kyc-step done">
-            <div class="kyc-step-icon"><i class="fa-solid fa-landmark"></i></div>
-            <div class="kyc-step-label" data-translate="bank">Bank</div>
-          </div>
-          <div class="kyc-step partial">
-            <div class="kyc-step-icon"><i class="fa-solid fa-file-contract"></i></div>
-            <div class="kyc-step-label" data-translate="documents">Documents</div>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+  <div class="app-layout">
+    <aside class="sidebar">[SIDEBAR]</aside>
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><span class="current">Profile</span></div><h1 class="page-title">My Profile</h1></div></div>
+        <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
+      </header>
+      <main class="main-content">
+        <!-- Profile Header -->
+        <div class="profile-header card page-reveal">
+          <div class="profile-cover"></div>
+          <div class="profile-info">
+            <div class="profile-photo">
+              <div class="profile-avatar-lg">RM</div>
+              <button class="profile-photo-edit">📷</button>
+            </div>
+            <div class="profile-details">
+              <h2 class="profile-name-lg">Rajesh Mehta</h2>
+              <p class="profile-bio">Wholesale Trader | 12+ years in agri-commodity trading</p>
+              <div class="profile-meta">
+                <span>📍 Pune, Maharashtra</span>
+                <span>📧 rajesh.mehta@example.com</span>
+                <span>📞 +91 98765 43210</span>
+              </div>
+            </div>
+            <button class="btn btn-primary">✏️ Edit Profile</button>
           </div>
         </div>
 
-        <!-- Identity -->
-        <div class="kyc-sub-title" data-translate="identityVerification">Identity Verification</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="aadhaarCardNumber">Aadhaar Card Number</label>
-            <div class="verified-input-wrap">
-              <input type="text" value="XXXX XXXX 5678" />
+        <!-- Profile Content -->
+        <div class="profile-layout page-reveal">
+          <div class="profile-main">
+            <!-- Personal Info -->
+            <div class="card">
+              <h3 class="card-title">Personal Information</h3>
+              <div class="profile-grid">
+                <div class="profile-field"><label>Full Name</label><span>Rajesh Mehta</span></div>
+                <div class="profile-field"><label>Email</label><span>rajesh.mehta@example.com</span></div>
+                <div class="profile-field"><label>Phone</label><span>+91 98765 43210</span></div>
+                <div class="profile-field"><label>Date of Birth</label><span>15 March 1985</span></div>
+                <div class="profile-field"><label>Gender</label><span>Male</span></div>
+                <div class="profile-field"><label>Language</label><span>Hindi, English, Marathi</span></div>
+              </div>
+            </div>
+
+            <!-- Business Info -->
+            <div class="card">
+              <h3 class="card-title">Business Information</h3>
+              <div class="profile-grid">
+                <div class="profile-field"><label>Business Name</label><span>Mehta Agro Traders</span></div>
+                <div class="profile-field"><label>Business Type</label><span>Wholesale Trader</span></div>
+                <div class="profile-field"><label>GST Number</label><span>27AABCM1234C1Z5</span></div>
+                <div class="profile-field"><label>PAN Number</label><span>ABCDE1234F</span></div>
+                <div class="profile-field"><label>Year Established</label><span>2012</span></div>
+                <div class="profile-field"><label>Annual Turnover</label><span>₹2.5 - 5 Crore</span></div>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="card">
+              <h3 class="card-title">Address</h3>
+              <p style="font-size:0.875rem;color:var(--text-secondary);">42, Trade Tower, Market Road, Shivajinagar, Pune - 411001, Maharashtra</p>
             </div>
           </div>
-          <div class="form-field">
-            <label data-translate="panCardNumber">PAN Card Number</label>
-            <div class="verified-input-wrap">
-              <input type="text" value="AAACP1234A" />
+
+          <div class="profile-side">
+            <!-- Documents -->
+            <div class="card">
+              <h3 class="card-title">📄 Documents</h3>
+              <div class="doc-list">
+                <div class="doc-item">
+                  <span class="doc-icon">🪪</span>
+                  <span class="doc-name">Aadhaar Card</span>
+                  <span class="badge badge-approved">Verified</span>
+                </div>
+                <div class="doc-item">
+                  <span class="doc-icon">📋</span>
+                  <span class="doc-name">GST Certificate</span>
+                  <span class="badge badge-approved">Verified</span>
+                </div>
+                <div class="doc-item">
+                  <span class="doc-icon">🏢</span>
+                  <span class="doc-name">Trade License</span>
+                  <span class="badge badge-pending">Pending</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Completion -->
+            <div class="card">
+              <h3 class="card-title">Profile Completion</h3>
+              <div class="flex items-center justify-between mb-2">
+                <span class="body-small text-muted">75% Complete</span>
+                <span class="body-small font-bold text-green">4 of 5 steps</span>
+              </div>
+              <div class="progress-bar"><div class="progress-bar-fill" style="width:75%"></div></div>
+              <div class="profile-steps mt-4">
+                <div class="step-item done">✓ Personal Info</div>
+                <div class="step-item done">✓ Business Info</div>
+                <div class="step-item done">✓ Contact Details</div>
+                <div class="step-item done">✓ KYC Documents</div>
+                <div class="step-item pending">⏳ Trade License</div>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- Business -->
-        <div class="kyc-sub-title" data-translate="businessVerification">Business Verification</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="gstRegistrationNumber">GST Registration Number</label>
-            <div class="verified-input-wrap">
-              <input type="text" value="24AAACP1234A1Z5" />
-            </div>
-          </div>
-          <div class="form-field">
-            <label data-translate="msmeUdyamRegistrationNumber">MSME / Udyam Registration Number</label>
-            <div class="verified-input-wrap">
-              <input data-translate="egUdyamgj010012345" type="text" placeholder="e.g. UDYAM-GJ-01-0012345" />
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="tradeLicenseNumber">Trade License Number</label>
-            <div class="verified-input-wrap">
-              <input data-translate="egTlahm202304512" type="text" placeholder="e.g. TL/AHM/2023/04512" />
-            </div>
-          </div>
-          <div class="form-field">
-            <label data-translate="typeOfBusiness">Type of Business</label>
-            <select>
-              <option selected data-translate="soleProprietorship">Sole Proprietorship</option>
-              <option data-translate="partnershipFirm">Partnership Firm</option>
-              <option data-translate="privateLimitedCompany">Private Limited Company</option>
-              <option data-translate="llp">LLP</option>
-              <option data-translate="cooperativeSociety">Co-operative Society</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Bank -->
-        <div class="kyc-sub-title" data-translate="bankAccountVerification">Bank Account Verification</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="bankAccountNumber">Bank Account Number</label>
-            <div class="verified-input-wrap">
-              <input type="text" value="XXXXXXXX4321" />
-            </div>
-          </div>
-          <div class="form-field">
-            <label data-translate="ifscCode">IFSC Code</label>
-            <div class="verified-input-wrap">
-              <input type="text" value="SBIN0012345" />
-            </div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label data-translate="bankName">Bank Name</label>
-            <input type="text" value="State Bank of India" />
-          </div>
-          <div class="form-field">
-            <label data-translate="accountHolderName">Account Holder Name</label>
-            <input type="text" value="Suresh Mehta" />
-          </div>
-        </div>
-
-        <!-- Document Upload -->
-        <div class="kyc-sub-title" data-translate="documentUpload">Document Upload</div>
-        <div class="kyc-doc-grid">
-
-          <div class="kyc-doc-card uploaded">
-            <div class="kyc-doc-icon"><i class="fa-solid fa-id-card"></i></div>
-            <div class="kyc-doc-name" data-translate="aadhaarCard">Aadhaar Card</div>
-            <div class="kyc-doc-status" data-translate="uploadedAmpVerified">✅ Uploaded &amp; Verified</div>
-            <button class="btn btn-secondary" style="font-size:11px;padding:5px 12px;margin-top:8px;">
-              <i class="fa-solid fa-eye"></i> View
-            </button>
-          </div>
-
-          <div class="kyc-doc-card uploaded">
-            <div class="kyc-doc-icon"><i class="fa-solid fa-credit-card"></i></div>
-            <div class="kyc-doc-name" data-translate="panCard">PAN Card</div>
-            <div class="kyc-doc-status" data-translate="uploadedAmpVerified">✅ Uploaded &amp; Verified</div>
-            <button class="btn btn-secondary" style="font-size:11px;padding:5px 12px;margin-top:8px;">
-              <i class="fa-solid fa-eye"></i> View
-            </button>
-          </div>
-
-          <div class="kyc-doc-card uploaded">
-            <div class="kyc-doc-icon"><i class="fa-solid fa-file-invoice"></i></div>
-            <div class="kyc-doc-name" data-translate="gstCertificate">GST Certificate</div>
-            <div class="kyc-doc-status" data-translate="uploadedAmpVerified">✅ Uploaded &amp; Verified</div>
-            <button class="btn btn-secondary" style="font-size:11px;padding:5px 12px;margin-top:8px;">
-              <i class="fa-solid fa-eye"></i> View
-            </button>
-          </div>
-
-          <div class="kyc-doc-card pending">
-            <div class="kyc-doc-icon"><i class="fa-solid fa-file-contract"></i></div>
-            <div class="kyc-doc-name" data-translate="businessRegistration">Business Registration</div>
-            <div class="kyc-doc-status" data-translate="notUploaded">⏳ Not Uploaded</div>
-            <label class="btn btn-primary" style="font-size:11px;padding:5px 12px;margin-top:8px;cursor:pointer;">
-              <i class="fa-solid fa-upload"></i> Upload
-              <input type="file" style="display:none;" accept=".pdf,.jpg,.jpeg,.png" />
-            </label>
-          </div>
-
-          <div class="kyc-doc-card uploaded">
-            <div class="kyc-doc-icon"><i class="fa-solid fa-building-columns"></i></div>
-            <div class="kyc-doc-name" data-translate="cancelledChequePassbook">Cancelled Cheque / Passbook</div>
-            <div class="kyc-doc-status" data-translate="uploadedAmpVerified">✅ Uploaded &amp; Verified</div>
-            <button class="btn btn-secondary" style="font-size:11px;padding:5px 12px;margin-top:8px;">
-              <i class="fa-solid fa-eye"></i> View
-            </button>
-          </div>
-
-          <div class="kyc-doc-card">
-            <div class="kyc-doc-icon"><i class="fa-solid fa-shop"></i></div>
-            <div class="kyc-doc-name" data-translate="shopTradeLicense">Shop / Trade License</div>
-            <div class="kyc-doc-status" data-translate="optional">Optional</div>
-            <label class="btn btn-outline" style="font-size:11px;padding:5px 12px;margin-top:8px;cursor:pointer;">
-              <i class="fa-solid fa-upload"></i> Upload
-              <input type="file" style="display:none;" accept=".pdf,.jpg,.jpeg,.png" />
-            </label>
-          </div>
-
-        </div>
-
-        <!-- Info Note -->
-        <div class="kyc-note">
-          <i class="fa-solid fa-circle-info"></i>
-          <span>Your documents are encrypted and stored securely. Verification usually takes <strong>1–2 business
-              days</strong>. Fully verified buyers get access to premium listings and lower transaction fees. For help,
-            contact <strong data-translate="supportkrushimitrain">support@krushimitra.in</strong>.</span>
-        </div>
-      </div>
-
-      <!-- Save / Danger -->
-      <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <button class="btn btn-primary">
-          <i class="fa-solid fa-floppy-disk"></i>
-          Save Changes
-        </button>
-        <button class="btn btn-outline" data-translate="cancel">Cancel</button>
-        <button class="btn btn-danger" style="margin-left:auto;">
-          <i class="fa-solid fa-trash"></i>
-          Delete Account
-        </button>
-      </div>
-
+      </main>
     </div>
   </div>
-
-  
-<!-- Language Modal -->
-<div class="lang-modal-overlay" id="langModal">
-  <div class="lang-modal">
-    <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
-    <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language for the interface</div>
-    <div class="lang-grid" id="langGrid"></div>
-    <div class="lang-modal-actions">
-      <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
-      <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
-    </div>
-  </div>
-</div>
-
-  <script src="{% static 'buyer/js/buyer.js' %}"></script>
-  <script src="{% static 'farmer/js/language.js' %}"></script>
-  <script src="{% static 'farmer/js/animations.js' %}"></script>
+  <script src="js/app.js"></script>
 </body>
-
 </html>

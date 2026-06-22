@@ -1,0 +1,113 @@
+/* ============================================
+   KRUSHI MITRA - WISHLIST STYLES
+   ============================================ */
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.wishlist-card {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.wishlist-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  z-index: 2;
+  transition: all var(--transition-fast);
+  opacity: 0;
+}
+
+.wishlist-card:hover .wishlist-remove {
+  opacity: 1;
+}
+
+.wishlist-remove:hover {
+  background: rgba(239,68,68,0.8);
+}
+
+.wishlist-img {
+  height: 180px;
+  overflow: hidden;
+}
+
+.wishlist-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.wishlist-card:hover .wishlist-img img {
+  transform: scale(1.08);
+}
+
+.wishlist-body {
+  padding: 16px;
+}
+
+.wishlist-category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.wishlist-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.wishlist-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.wishlist-price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.wishlist-price .price-unit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.wishlist-stock {
+  margin-bottom: 12px;
+}
+
+.wishlist-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 1024px) {
+  .wishlist-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .wishlist-grid { grid-template-columns: 1fr; }
+}

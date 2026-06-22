@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Dashboard - Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <!-- Sidebar Backdrop -->
+  <div class="sidebar-backdrop"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <div class="app-layout">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">◀</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-item active" data-tooltip="Dashboard">
+          <span class="sidebar-item-icon">📊</span>
+          <span class="sidebar-item-text">Dashboard</span>
+        </a>
+        <a href="browse-crops.html" class="sidebar-item" data-tooltip="Browse Crops">
+          <span class="sidebar-item-icon">🌾</span>
+          <span class="sidebar-item-text">Browse Crops</span>
+        </a>
+        <a href="cart.html" class="sidebar-item" data-tooltip="Cart">
+          <span class="sidebar-item-icon">🛒</span>
+          <span class="sidebar-item-text">Cart</span>
+          <span class="sidebar-item-badge">3</span>
+        </a>
+        <a href="orders.html" class="sidebar-item" data-tooltip="Orders">
+          <span class="sidebar-item-icon">📦</span>
+          <span class="sidebar-item-text">Orders</span>
+        </a>
+        <a href="wishlist.html" class="sidebar-item" data-tooltip="Wishlist">
+          <span class="sidebar-item-icon">❤️</span>
+          <span class="sidebar-item-text">Wishlist</span>
+        </a>
+
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="bulk-order.html" class="sidebar-item" data-tooltip="Bulk Orders">
+          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-text">Bulk Orders</span>
+        </a>
+        <a href="export-inquiry.html" class="sidebar-item" data-tooltip="Export Inquiry">
+          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-text">Export Inquiry</span>
+        </a>
+
+        <div class="sidebar-section-label">Communication</div>
+        <a href="messages.html" class="sidebar-item" data-tooltip="Messages">
+          <span class="sidebar-item-icon">💬</span>
+          <span class="sidebar-item-text">Messages</span>
+          <span class="sidebar-item-badge">5</span>
+        </a>
+        <a href="notifications.html" class="sidebar-item" data-tooltip="Notifications">
+          <span class="sidebar-item-icon">🔔</span>
+          <span class="sidebar-item-text">Notifications</span>
+          <span class="sidebar-item-badge">12</span>
+        </a>
+
+        <div class="sidebar-section-label">Account</div>
+        <a href="profile.html" class="sidebar-item" data-tooltip="Profile">
+          <span class="sidebar-item-icon">👤</span>
+          <span class="sidebar-item-text">Profile</span>
+        </a>
+        <a href="verification.html" class="sidebar-item" data-tooltip="Verification">
+          <span class="sidebar-item-icon">✅</span>
+          <span class="sidebar-item-text">Verification</span>
+        </a>
+        <a href="bank-details.html" class="sidebar-item" data-tooltip="Bank Details">
+          <span class="sidebar-item-icon">🏦</span>
+          <span class="sidebar-item-text">Bank Details</span>
+        </a>
+        <a href="settings.html" class="sidebar-item" data-tooltip="Settings">
+          <span class="sidebar-item-icon">⚙️</span>
+          <span class="sidebar-item-text">Settings</span>
+        </a>
+
+        <div class="sidebar-section-label" style="padding-top:12px;border-top:1px solid var(--border-color);margin-top:8px;">Support</div>
+        <a href="#" class="sidebar-item" data-tooltip="Logout" onclick="showToast('info','Logout','Logging you out...')">
+          <span class="sidebar-item-icon">🚪</span>
+          <span class="sidebar-item-text">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- ===== MAIN WRAPPER ===== -->
+    <div class="main-wrapper">
+      <!-- ===== NAVBAR ===== -->
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="mobile-menu-btn" aria-label="Menu">☰</button>
+          <div>
+            <div class="breadcrumb">
+              <a href="dashboard.html">Home</a>
+              <span class="breadcrumb-sep">›</span>
+              <span class="current">Dashboard</span>
+            </div>
+            <h1 class="page-title">Dashboard</h1>
+          </div>
+        </div>
+
+        <div class="navbar-right">
+          <div class="search-box" data-search-target>
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search crops, orders..." aria-label="Search">
+          </div>
+
+          <a href="messages.html" class="nav-btn" title="Messages">
+            💬
+            <span class="badge-dot"></span>
+          </a>
+          <a href="notifications.html" class="nav-btn" title="Notifications">
+            🔔
+            <span class="badge-dot"></span>
+          </a>
+
+          <button class="theme-toggle" title="Toggle theme">🌙</button>
+
+          <div class="dropdown">
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div>
+                <div class="profile-name">Rajesh Mehta</div>
+                <div class="profile-role">Wholesale Trader</div>
+              </div>
+            </div>
+            <div class="dropdown-menu">
+              <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+              <a href="orders.html" class="dropdown-item">📦 My Orders</a>
+              <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">🚪 Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== MAIN CONTENT ===== -->
+      <main class="main-content">
+
+        <!-- Hero Banner -->
+        <section class="hero-banner page-reveal stagger-children">
+          <div class="hero-content">
+            <div class="hero-badge">🎉 Welcome back, Rajesh!</div>
+            <h2 class="hero-title">Your Agri Marketplace Hub</h2>
+            <p class="hero-text">Monitor orders, discover premium crops, and manage your procurement all in one place.</p>
+            <div class="hero-actions">
+              <a href="browse-crops.html" class="btn btn-primary btn-lg">🌾 Browse Crops</a>
+              <a href="bulk-order.html" class="btn btn-secondary btn-lg">📋 Bulk Inquiry</a>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="hero-stat-value">₹2.4Cr</span>
+                <span class="hero-stat-label">Total Procured</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">156</span>
+                <span class="hero-stat-label">Total Orders</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">98%</span>
+                <span class="hero-stat-label">Satisfaction</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid grid-6 page-reveal stagger-children">
+          <div class="stat-card green">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Total Orders</div>
+              <div class="stat-card-value" data-counter="156" data-duration="2000">0</div>
+              <div class="stat-card-change up">↑ 12.5% this month</div>
+            </div>
+            <div class="stat-card-icon">📦</div>
+          </div>
+
+          <div class="stat-card blue">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Pending Orders</div>
+              <div class="stat-card-value" data-counter="8" data-duration="1500">0</div>
+              <div class="stat-card-change down">↓ 3 from last week</div>
+            </div>
+            <div class="stat-card-icon">⏳</div>
+          </div>
+
+          <div class="stat-card amber">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Completed Orders</div>
+              <div class="stat-card-value" data-counter="134" data-duration="2000">0</div>
+              <div class="stat-card-change up">↑ 8.2% this month</div>
+            </div>
+            <div class="stat-card-icon">✅</div>
+          </div>
+
+          <div class="stat-card rose">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Wishlist Items</div>
+              <div class="stat-card-value" data-counter="23" data-duration="1000">0</div>
+              <div class="stat-card-change up">↑ 5 new items</div>
+            </div>
+            <div class="stat-card-icon">❤️</div>
+          </div>
+
+          <div class="stat-card purple">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Cart Items</div>
+              <div class="stat-card-value" data-counter="7" data-duration="1000">0</div>
+              <div class="stat-card-change up">↑ 2 added today</div>
+            </div>
+            <div class="stat-card-icon">🛒</div>
+          </div>
+
+          <div class="stat-card cyan">
+            <div class="stat-card-info">
+              <div class="stat-card-label">Total Value</div>
+              <div class="stat-card-value">₹<span data-counter="24000000" data-duration="2500" data-prefix="" data-suffix="">0</span></div>
+              <div class="stat-card-change up">↑ 15.3% growth</div>
+            </div>
+            <div class="stat-card-icon">💰</div>
+          </div>
+        </section>
+
+        <!-- Two Column Layout -->
+        <div class="dashboard-grid-2 page-reveal">
+          <!-- Recent Orders -->
+          <section class="card recent-orders-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Recent Orders</h3>
+                <p class="card-subtitle">Your latest procurement orders</p>
+              </div>
+              <a href="orders.html" class="section-action">View All →</a>
+            </div>
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Crop</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
+                    <td>Basmati Rice</td>
+                    <td>500 kg</td>
+                    <td>₹82,500</td>
+                    <td><span class="badge badge-processing">Processing</span></td>
+                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
+                    <td>Red Chillies</td>
+                    <td>200 kg</td>
+                    <td>₹48,000</td>
+                    <td><span class="badge badge-approved">Delivered</span></td>
+                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
+                    <td>Turmeric</td>
+                    <td>100 kg</td>
+                    <td>₹18,500</td>
+                    <td><span class="badge badge-active">Shipped</span></td>
+                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
+                    <td>Alphonso Mango</td>
+                    <td>50 boxes</td>
+                    <td>₹35,000</td>
+                    <td><span class="badge badge-cancelled">Cancelled</span></td>
+                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
+                    <td>Organic Wheat</td>
+                    <td>1000 kg</td>
+                    <td>₹28,000</td>
+                    <td><span class="badge badge-approved">Delivered</span></td>
+                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Trending Crops -->
+          <section class="card trending-card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">🔥 Trending Crops</h3>
+                <p class="card-subtitle">Most sought-after this season</p>
+              </div>
+              <a href="browse-crops.html" class="section-action">Explore →</a>
+            </div>
+            <div class="trending-list">
+              <div class="trending-item">
+                <div class="trending-rank">1</div>
+                <div class="trending-info">
+                  <div class="trending-name">Basmati Rice</div>
+                  <div class="trending-meta">↑ 24% this week</div>
+                </div>
+                <div class="trending-price">₹165/kg</div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-rank">2</div>
+                <div class="trending-info">
+                  <div class="trending-name">Alphonso Mango</div>
+                  <div class="trending-meta">↑ 18% this week</div>
+                </div>
+                <div class="trending-price">₹700/box</div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-rank">3</div>
+                <div class="trending-info">
+                  <div class="trending-name">Green Chillies</div>
+                  <div class="trending-meta">↑ 12% this week</div>
+                </div>
+                <div class="trending-price">₹80/kg</div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-rank">4</div>
+                <div class="trending-info">
+                  <div class="trending-name">Fresh Turmeric</div>
+                  <div class="trending-meta">↑ 9% this week</div>
+                </div>
+                <div class="trending-price">₹185/kg</div>
+              </div>
+              <div class="trending-item">
+                <div class="trending-rank">5</div>
+                <div class="trending-info">
+                  <div class="trending-name">Organic Wheat</div>
+                  <div class="trending-meta">↑ 7% this week</div>
+                </div>
+                <div class="trending-price">₹28/kg</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Second Row -->
+        <div class="dashboard-grid-3 page-reveal">
+          <!-- Activity Timeline -->
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">📅 Activity Timeline</h3>
+                <p class="card-subtitle">Your recent activities</p>
+              </div>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot green"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Order #ORD-0891 confirmed</div>
+                  <div class="timeline-time">2 hours ago</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot blue"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Added 3 crops to wishlist</div>
+                  <div class="timeline-time">4 hours ago</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot amber"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Bulk inquiry for wheat submitted</div>
+                  <div class="timeline-time">Yesterday</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot rose"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Profile verification completed</div>
+                  <div class="timeline-time">2 days ago</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot purple"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Export inquiry sent to UAE buyer</div>
+                  <div class="timeline-time">3 days ago</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Actions -->
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">⚡ Quick Actions</h3>
+                <p class="card-subtitle">Frequently used operations</p>
+              </div>
+            </div>
+            <div class="quick-actions-grid">
+              <a href="browse-crops.html" class="quick-action-item">
+                <span class="quick-action-icon">🌾</span>
+                <span class="quick-action-label">Browse Crops</span>
+              </a>
+              <a href="cart.html" class="quick-action-item">
+                <span class="quick-action-icon">🛒</span>
+                <span class="quick-action-label">View Cart</span>
+              </a>
+              <a href="bulk-order.html" class="quick-action-item">
+                <span class="quick-action-icon">📋</span>
+                <span class="quick-action-label">Bulk Order</span>
+              </a>
+              <a href="export-inquiry.html" class="quick-action-item">
+                <span class="quick-action-icon">🌍</span>
+                <span class="quick-action-label">Export Inquiry</span>
+              </a>
+              <a href="wishlist.html" class="quick-action-item">
+                <span class="quick-action-icon">❤️</span>
+                <span class="quick-action-label">Wishlist</span>
+              </a>
+              <a href="orders.html" class="quick-action-item">
+                <span class="quick-action-icon">📦</span>
+                <span class="quick-action-label">My Orders</span>
+              </a>
+            </div>
+          </section>
+
+          <!-- Verification Status -->
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">✅ Verification Status</h3>
+                <p class="card-subtitle">Complete your KYC</p>
+              </div>
+              <a href="verification.html" class="section-action">Verify →</a>
+            </div>
+            <div class="verification-status-list">
+              <div class="v-status-item">
+                <span class="v-status-icon approved">✓</span>
+                <span class="v-status-label">Aadhaar</span>
+                <span class="badge badge-approved">Verified</span>
+              </div>
+              <div class="v-status-item">
+                <span class="v-status-icon approved">✓</span>
+                <span class="v-status-label">GST</span>
+                <span class="badge badge-approved">Verified</span>
+              </div>
+              <div class="v-status-item">
+                <span class="v-status-icon pending">⏳</span>
+                <span class="v-status-label">Trade License</span>
+                <span class="badge badge-pending">Pending</span>
+              </div>
+              <div class="v-status-item">
+                <span class="v-status-icon pending">⏳</span>
+                <span class="v-status-label">MSME</span>
+                <span class="badge badge-under-review">Under Review</span>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex items-center justify-between mb-2">
+                <span class="body-small text-muted">Profile Completion</span>
+                <span class="body-small font-bold">75%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-bar-fill" style="width:75%"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Popular Categories -->
+        <section class="page-reveal">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">📂 Popular Categories</h2>
+              <p class="card-subtitle">Top categories by procurement volume</p>
+            </div>
+          </div>
+          <div class="categories-grid grid-5">
+            <div class="category-card card card-float">
+              <div class="category-icon">🌾</div>
+              <div class="category-name">Grains</div>
+              <div class="category-count">24 crops</div>
+            </div>
+            <div class="category-card card card-float">
+              <div class="category-icon">🥭</div>
+              <div class="category-name">Fruits</div>
+              <div class="category-count">18 crops</div>
+            </div>
+            <div class="category-card card card-float">
+              <div class="category-icon">🥬</div>
+              <div class="category-name">Vegetables</div>
+              <div class="category-count">31 crops</div>
+            </div>
+            <div class="category-card card card-float">
+              <div class="category-icon">🌶️</div>
+              <div class="category-name">Spices</div>
+              <div class="category-count">15 crops</div>
+            </div>
+            <div class="category-card card card-float">
+              <div class="category-icon">🧅</div>
+              <div class="category-name">Pulses</div>
+              <div class="category-count">12 crops</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Notifications -->
+        <section class="page-reveal">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">🔔 Recent Notifications</h2>
+              <p class="card-subtitle">Stay updated with latest activities</p>
+            </div>
+            <a href="notifications.html" class="section-action">View All →</a>
+          </div>
+          <div class="notification-mini-list">
+            <div class="notification-mini">
+              <div class="notification-mini-icon green">📦</div>
+              <div class="notification-mini-content">
+                <div class="notification-mini-title">Order delivered successfully</div>
+                <div class="notification-mini-time">5 min ago</div>
+              </div>
+            </div>
+            <div class="notification-mini">
+              <div class="notification-mini-icon blue">💬</div>
+              <div class="notification-mini-content">
+                <div class="notification-mini-title">New message from supplier</div>
+                <div class="notification-mini-time">1 hour ago</div>
+              </div>
+            </div>
+            <div class="notification-mini">
+              <div class="notification-mini-icon amber">🌾</div>
+              <div class="notification-mini-content">
+                <div class="notification-mini-title">New crops available in your area</div>
+                <div class="notification-mini-time">3 hours ago</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+  <div class="app-layout">
+    <aside class="sidebar">[SIDEBAR]</aside>
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><a href="cart.html">Cart</a><span class="breadcrumb-sep">›</span><span class="current">Checkout</span></div><h1 class="page-title">Checkout</h1></div></div>
+        <div class="navbar-right">
+          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search..."></div>
+          <a href="messages.html" class="nav-btn">💬<span class="badge-dot"></span></a>
+          <a href="notifications.html" class="nav-btn">🔔<span class="badge-dot"></span></a>
+          <button class="theme-toggle">🌙</button>
+          <div class="dropdown">
+            <div class="profile-btn dropdown-trigger"><div class="profile-avatar">RM</div><div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div></div>
+            <div class="dropdown-menu">
+              <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+              <a href="orders.html" class="dropdown-item">📦 My Orders</a>
+              <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger">🚪 Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="main-content">
+        <div class="checkout-layout page-reveal">
+          <!-- Billing & Shipping -->
+          <div class="checkout-forms">
+            <!-- Billing -->
+            <div class="card checkout-card">
+              <h3 class="card-title">Billing Information</h3>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" value="Rajesh" required></div>
+                <div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" value="Mehta" required></div>
+              </div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="rajesh.mehta@example.com" required></div>
+              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" value="+91 98765 43210" required></div>
+              <div class="form-group"><label class="form-label">Billing Address</label><textarea class="form-textarea" required>42, Trade Tower, Market Road, Pune - 411001</textarea></div>
+            </div>
+
+            <!-- Shipping -->
+            <div class="card checkout-card">
+              <h3 class="card-title">Shipping Information</h3>
+              <div class="form-check" style="margin-bottom:16px;">
+                <input type="checkbox" checked id="same-billing">
+                <label for="same-billing">Same as billing address</label>
+              </div>
+              <div class="form-group"><label class="form-label">Delivery Address</label><textarea class="form-textarea">42, Trade Tower, Market Road, Pune - 411001</textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" value="Pune"></div>
+                <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input" value="Maharashtra"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Pincode</label><input type="text" class="form-input" value="411001"></div>
+                <div class="form-group"><label class="form-label">Delivery Instructions</label><input type="text" class="form-input" placeholder="Optional"></div>
+              </div>
+            </div>
+
+            <!-- Business -->
+            <div class="card checkout-card">
+              <h3 class="card-title">Business Information</h3>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Business Name</label><input type="text" class="form-input" value="Mehta Agro Traders"></div>
+                <div class="form-group"><label class="form-label">GST Number</label><input type="text" class="form-input" value="27AABCM1234C1Z5"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Business Type</label><select class="form-select"><option>Wholesaler</option><option>Retailer</option><option>Exporter</option><option>Processor</option></select></div>
+                <div class="form-group"><label class="form-label">PAN Number</label><input type="text" class="form-input" value="ABCDE1234F"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="checkout-summary">
+            <div class="card">
+              <h3 class="card-title" style="margin-bottom:16px;">Order Summary</h3>
+              <div class="checkout-summary-item"><span>Basmati Rice (100 kg)</span><span>₹16,500</span></div>
+              <div class="checkout-summary-item"><span>Alphonso Mango (10 boxes)</span><span>₹7,000</span></div>
+              <div class="checkout-summary-item"><span>Red Chillies (50 kg)</span><span>₹12,000</span></div>
+              <div class="summary-divider"></div>
+              <div class="checkout-summary-item"><span>Subtotal</span><span>₹35,500</span></div>
+              <div class="checkout-summary-item"><span>Delivery</span><span class="text-green">Free</span></div>
+              <div class="checkout-summary-item"><span>Tax (GST @ 5%)</span><span>₹1,775</span></div>
+              <div class="summary-divider"></div>
+              <div class="checkout-summary-item total"><span>Grand Total</span><span>₹37,275</span></div>
+
+              <div class="coupon-section mt-4">
+                <div class="coupon-input-group">
+                  <input type="text" class="form-input coupon-input" placeholder="Have a coupon?">
+                  <button class="btn btn-primary btn-sm apply-coupon">Apply</button>
+                </div>
+              </div>
+
+              <div class="checkout-payment mt-4">
+                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:12px;">Payment Method</h4>
+                <div class="payment-options">
+                  <label class="form-check"><input type="radio" name="payment" checked> 💳 Credit/Debit Card</label>
+                  <label class="form-check"><input type="radio" name="payment"> 🏦 Net Banking</label>
+                  <label class="form-check"><input type="radio" name="payment"> 📱 UPI</label>
+                  <label class="form-check"><input type="radio" name="payment"> 📋 Bank Transfer</label>
+                </div>
+              </div>
+
+              <div class="form-check mt-4">
+                <input type="checkbox" id="terms" checked>
+                <label for="terms">I agree to the <a href="#" style="color:var(--text-link);">Terms & Conditions</a> and <a href="#" style="color:var(--text-link);">Return Policy</a></label>
+              </div>
+
+              <button class="btn btn-primary btn-lg btn-block mt-4" onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
+                🛒 Place Order - ₹37,275
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal-overlay" id="success-modal">
+          <div class="modal" style="max-width:420px;text-align:center;">
+            <div class="modal-body" style="padding:40px 24px;">
+              <div style="font-size:4rem;margin-bottom:16px;">🎉</div>
+              <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">Order Placed Successfully!</h3>
+              <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:20px;">Your order #ORD-2024-0892 has been placed. We'll notify you when it ships.</p>
+              <a href="orders.html" class="btn btn-primary">View My Orders</a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
