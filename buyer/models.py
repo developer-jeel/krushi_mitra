@@ -50,7 +50,7 @@ class verification_details(models.Model):
     image_preview.short_description = "Icon"
 
     def __str__(self):
-        return self.user.Buyer.user.name
+        return self.user.user.name
 
     class Meta:
         ordering = ['order']
