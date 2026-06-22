@@ -20,11 +20,22 @@ from buyer import views
 
 urlpatterns = [
     path('buyer_home', views.buyer_home, name='buyer_home'),
-    path('buyer_bulk_order', views.buyer_bulk_order, name='buyer_bulk_order'),
-    path('buyer_order_history', views.buyer_order_history, name='buyer_order_history'),
-    path('buyer_profile', views.buyer_profile, name='buyer_profile'),
-    path('buyer_purchase_crop', views.buyer_purchase_crop, name='buyer_purchase_crop'),
+    path('dashboard/', views.buyer_dashboard, name='buyer_dashboard'),
+    path('browse-crops/', views.buyer_browse_crops, name='buyer_browse_crops'),
+    path('cart/', views.buyer_cart, name='buyer_cart'),
+    path('orders/', views.buyer_orders, name='buyer_orders'),
+    path('wishlist/', views.buyer_wishlist, name='buyer_wishlist'),
+    path('bulk-order/', views.buyer_bulk_order, name='buyer_bulk_order'),
+    path('export-inquiry/', views.buyer_export_inquiry, name='buyer_export_inquiry'),
+    path('messages/', views.buyer_messages, name='buyer_messages'),
+    path('notifications/', views.buyer_notifications, name='buyer_notifications'),
+    path('profile/', views.buyer_profile, name='buyer_profile'),
+    path('verification/', views.buyer_verification, name='buyer_verification'),
+    path('bank-details/', views.buyer_bank_details, name='buyer_bank_details'),
+    path('settings/', views.buyer_settings, name='buyer_settings'),
+    path('checkout/', views.buyer_checkout, name='buyer_checkout'),
+    path('crop-details/', views.buyer_crop_details, name='buyer_crop_details'),
+    path('order-details/', views.buyer_order_details, name='buyer_order_details'),
     path('kyc', views.kyc, name='kyc'),
-
     path('home', views.home, name='home'),
 ]
