@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from farmer import views
+# from buyer.urls import *
 
 urlpatterns = [
     path('register', views.register, name='register'),
@@ -45,14 +46,5 @@ urlpatterns = [
     path('community_chat_delet/<int:pk>', views.community_chat_delet, name='community_chat_delet'),
 
 
-
-
-    path('buyer_home', views.buyer_home, name='buyer_home'),
-    path('buyer_bulk_order', views.buyer_bulk_order, name='buyer_bulk_order'),
-    path('buyer_order_history', views.buyer_order_history, name='buyer_order_history'),
-    path('buyer_profile', views.buyer_profile, name='buyer_profile'),
-    path('buyer_purchase_crop', views.buyer_purchase_crop, name='buyer_purchase_crop'),
-    path('kyc', views.kyc, name='kyc'),
-
-    path('home', views.home, name='home'),
+    # path('home', views.home, name='home'),
 ]

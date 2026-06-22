@@ -3,9 +3,12 @@ from farmer.models import *
 from farmer.views import *
 # Create your views here.
 
+
 @check_login(['Buyer'])
 def buyer_home(request):
-        return render(request, "buyer/home.html")
+    all_crops = crop.objects.filter(is_approved = True)
+    print("==================>",all_crops)
+    return render(request, "buyer/home.html")
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):
