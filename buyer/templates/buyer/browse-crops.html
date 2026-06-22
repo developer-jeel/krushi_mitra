@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -7,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/browse-crops.css">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/browse-crops.css' %}">
 </head>
 <body>
   <div class="sidebar-backdrop"></div>
@@ -29,22 +30,22 @@
       </div>
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
-        <a href="dashboard.html" class="sidebar-item" data-tooltip="Dashboard"><span class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
-        <a href="browse-crops.html" class="sidebar-item active" data-tooltip="Browse Crops"><span class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
-        <a href="cart.html" class="sidebar-item" data-tooltip="Cart"><span class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span class="sidebar-item-badge">3</span></a>
-        <a href="orders.html" class="sidebar-item" data-tooltip="Orders"><span class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
-        <a href="wishlist.html" class="sidebar-item" data-tooltip="Wishlist"><span class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
         <div class="sidebar-section-label">Procurement</div>
-        <a href="bulk-order.html" class="sidebar-item" data-tooltip="Bulk Orders"><span class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
-        <a href="export-inquiry.html" class="sidebar-item" data-tooltip="Export Inquiry"><span class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
         <div class="sidebar-section-label">Communication</div>
-        <a href="messages.html" class="sidebar-item" data-tooltip="Messages"><span class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span class="sidebar-item-badge">5</span></a>
-        <a href="notifications.html" class="sidebar-item" data-tooltip="Notifications"><span class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span class="sidebar-item-badge">12</span></a>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
-        <a href="profile.html" class="sidebar-item" data-tooltip="Profile"><span class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
-        <a href="verification.html" class="sidebar-item" data-tooltip="Verification"><span class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
-        <a href="bank-details.html" class="sidebar-item" data-tooltip="Bank Details"><span class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
-        <a href="settings.html" class="sidebar-item" data-tooltip="Settings"><span class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
       </nav>
     </aside>
 
@@ -53,14 +54,14 @@
         <div class="navbar-left">
           <button class="mobile-menu-btn">☰</button>
           <div>
-            <div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><a href="browse-crops.html">Marketplace</a><span class="breadcrumb-sep">›</span><span class="current">Browse Crops</span></div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><a href="{% url 'buyer_browse_crops' %}">Marketplace</a><span class="breadcrumb-sep">›</span><span class="current">Browse Crops</span></div>
             <h1 class="page-title">Browse Crops</h1>
           </div>
         </div>
         <div class="navbar-right">
           <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search crops..." aria-label="Search"></div>
-          <a href="messages.html" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
-          <a href="notifications.html" class="nav-btn" title="Notifications">🔔<span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
@@ -68,9 +69,9 @@
               <div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div>
             </div>
             <div class="dropdown-menu">
-              <a href="profile.html" class="dropdown-item">👤 My Profile</a>
-              <a href="orders.html" class="dropdown-item">📦 My Orders</a>
-              <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item danger">🚪 Logout</a>
             </div>
@@ -217,8 +218,8 @@
                     <span class="crop-harvest">Harvest: Nov 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
-                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>
               </div>
@@ -248,8 +249,8 @@
                     <span class="crop-harvest">Harvest: Apr 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
-                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>
               </div>
@@ -279,8 +280,8 @@
                     <span class="crop-harvest">Harvest: Jan 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
-                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>
               </div>
@@ -310,8 +311,8 @@
                     <span class="crop-harvest">Harvest: Dec 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
-                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>
               </div>
@@ -341,8 +342,8 @@
                     <span class="crop-harvest">Harvest: Mar 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
-                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>
               </div>
@@ -372,8 +373,8 @@
                     <span class="crop-harvest">Harvest: Feb 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="crop-details.html" class="btn btn-outline btn-sm flex-1">View Details</a>
-                    <a href="cart.html" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
+                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>
               </div>
@@ -394,6 +395,6 @@
       </main>
     </div>
   </div>
-  <script src="js/app.js"></script>
+  <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
 </html>

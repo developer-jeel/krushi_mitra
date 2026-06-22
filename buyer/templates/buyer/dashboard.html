@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -7,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/dashboard.css' %}">
 </head>
 <body>
   <!-- Sidebar Backdrop -->
@@ -33,64 +34,64 @@
 
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
-        <a href="dashboard.html" class="sidebar-item active" data-tooltip="Dashboard">
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item active" data-tooltip="Dashboard">
           <span class="sidebar-item-icon">📊</span>
           <span class="sidebar-item-text">Dashboard</span>
         </a>
-        <a href="browse-crops.html" class="sidebar-item" data-tooltip="Browse Crops">
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops">
           <span class="sidebar-item-icon">🌾</span>
           <span class="sidebar-item-text">Browse Crops</span>
         </a>
-        <a href="cart.html" class="sidebar-item" data-tooltip="Cart">
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart">
           <span class="sidebar-item-icon">🛒</span>
           <span class="sidebar-item-text">Cart</span>
           <span class="sidebar-item-badge">3</span>
         </a>
-        <a href="orders.html" class="sidebar-item" data-tooltip="Orders">
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders">
           <span class="sidebar-item-icon">📦</span>
           <span class="sidebar-item-text">Orders</span>
         </a>
-        <a href="wishlist.html" class="sidebar-item" data-tooltip="Wishlist">
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist">
           <span class="sidebar-item-icon">❤️</span>
           <span class="sidebar-item-text">Wishlist</span>
         </a>
 
         <div class="sidebar-section-label">Procurement</div>
-        <a href="bulk-order.html" class="sidebar-item" data-tooltip="Bulk Orders">
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
           <span class="sidebar-item-icon">📋</span>
           <span class="sidebar-item-text">Bulk Orders</span>
         </a>
-        <a href="export-inquiry.html" class="sidebar-item" data-tooltip="Export Inquiry">
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry">
           <span class="sidebar-item-icon">🌍</span>
           <span class="sidebar-item-text">Export Inquiry</span>
         </a>
 
         <div class="sidebar-section-label">Communication</div>
-        <a href="messages.html" class="sidebar-item" data-tooltip="Messages">
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages">
           <span class="sidebar-item-icon">💬</span>
           <span class="sidebar-item-text">Messages</span>
           <span class="sidebar-item-badge">5</span>
         </a>
-        <a href="notifications.html" class="sidebar-item" data-tooltip="Notifications">
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications">
           <span class="sidebar-item-icon">🔔</span>
           <span class="sidebar-item-text">Notifications</span>
           <span class="sidebar-item-badge">12</span>
         </a>
 
         <div class="sidebar-section-label">Account</div>
-        <a href="profile.html" class="sidebar-item" data-tooltip="Profile">
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile">
           <span class="sidebar-item-icon">👤</span>
           <span class="sidebar-item-text">Profile</span>
         </a>
-        <a href="verification.html" class="sidebar-item" data-tooltip="Verification">
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification">
           <span class="sidebar-item-icon">✅</span>
           <span class="sidebar-item-text">Verification</span>
         </a>
-        <a href="bank-details.html" class="sidebar-item" data-tooltip="Bank Details">
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details">
           <span class="sidebar-item-icon">🏦</span>
           <span class="sidebar-item-text">Bank Details</span>
         </a>
-        <a href="settings.html" class="sidebar-item" data-tooltip="Settings">
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings">
           <span class="sidebar-item-icon">⚙️</span>
           <span class="sidebar-item-text">Settings</span>
         </a>
@@ -111,7 +112,7 @@
           <button class="mobile-menu-btn" aria-label="Menu">☰</button>
           <div>
             <div class="breadcrumb">
-              <a href="dashboard.html">Home</a>
+              <a href="{% url 'buyer_dashboard' %}">Home</a>
               <span class="breadcrumb-sep">›</span>
               <span class="current">Dashboard</span>
             </div>
@@ -125,11 +126,11 @@
             <input type="text" placeholder="Search crops, orders..." aria-label="Search">
           </div>
 
-          <a href="messages.html" class="nav-btn" title="Messages">
+          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">
             💬
             <span class="badge-dot"></span>
           </a>
-          <a href="notifications.html" class="nav-btn" title="Notifications">
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">
             🔔
             <span class="badge-dot"></span>
           </a>
@@ -145,9 +146,9 @@
               </div>
             </div>
             <div class="dropdown-menu">
-              <a href="profile.html" class="dropdown-item">👤 My Profile</a>
-              <a href="orders.html" class="dropdown-item">📦 My Orders</a>
-              <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">🚪 Logout</a>
             </div>
@@ -165,8 +166,8 @@
             <h2 class="hero-title">Your Agri Marketplace Hub</h2>
             <p class="hero-text">Monitor orders, discover premium crops, and manage your procurement all in one place.</p>
             <div class="hero-actions">
-              <a href="browse-crops.html" class="btn btn-primary btn-lg">🌾 Browse Crops</a>
-              <a href="bulk-order.html" class="btn btn-secondary btn-lg">📋 Bulk Inquiry</a>
+              <a href="{% url 'buyer_browse_crops' %}" class="btn btn-primary btn-lg">🌾 Browse Crops</a>
+              <a href="{% url 'buyer_bulk_order' %}" class="btn btn-secondary btn-lg">📋 Bulk Inquiry</a>
             </div>
           </div>
           <div class="hero-visual">
@@ -253,7 +254,7 @@
                 <h3 class="card-title">Recent Orders</h3>
                 <p class="card-subtitle">Your latest procurement orders</p>
               </div>
-              <a href="orders.html" class="section-action">View All →</a>
+              <a href="{% url 'buyer_orders' %}" class="section-action">View All →</a>
             </div>
             <div class="table-container">
               <table class="table">
@@ -269,44 +270,44 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
                     <td>Basmati Rice</td>
                     <td>500 kg</td>
                     <td>₹82,500</td>
                     <td><span class="badge badge-processing">Processing</span></td>
-                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
                     <td>Red Chillies</td>
                     <td>200 kg</td>
                     <td>₹48,000</td>
                     <td><span class="badge badge-approved">Delivered</span></td>
-                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
                     <td>Turmeric</td>
                     <td>100 kg</td>
                     <td>₹18,500</td>
                     <td><span class="badge badge-active">Shipped</span></td>
-                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
                     <td>Alphonso Mango</td>
                     <td>50 boxes</td>
                     <td>₹35,000</td>
                     <td><span class="badge badge-cancelled">Cancelled</span></td>
-                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="order-details.html" style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
                     <td>Organic Wheat</td>
                     <td>1000 kg</td>
                     <td>₹28,000</td>
                     <td><span class="badge badge-approved">Delivered</span></td>
-                    <td><a href="order-details.html" class="btn btn-sm btn-ghost">View</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -320,7 +321,7 @@
                 <h3 class="card-title">🔥 Trending Crops</h3>
                 <p class="card-subtitle">Most sought-after this season</p>
               </div>
-              <a href="browse-crops.html" class="section-action">Explore →</a>
+              <a href="{% url 'buyer_browse_crops' %}" class="section-action">Explore →</a>
             </div>
             <div class="trending-list">
               <div class="trending-item">
@@ -425,27 +426,27 @@
               </div>
             </div>
             <div class="quick-actions-grid">
-              <a href="browse-crops.html" class="quick-action-item">
+              <a href="{% url 'buyer_browse_crops' %}" class="quick-action-item">
                 <span class="quick-action-icon">🌾</span>
                 <span class="quick-action-label">Browse Crops</span>
               </a>
-              <a href="cart.html" class="quick-action-item">
+              <a href="{% url 'buyer_cart' %}" class="quick-action-item">
                 <span class="quick-action-icon">🛒</span>
                 <span class="quick-action-label">View Cart</span>
               </a>
-              <a href="bulk-order.html" class="quick-action-item">
+              <a href="{% url 'buyer_bulk_order' %}" class="quick-action-item">
                 <span class="quick-action-icon">📋</span>
                 <span class="quick-action-label">Bulk Order</span>
               </a>
-              <a href="export-inquiry.html" class="quick-action-item">
+              <a href="{% url 'buyer_export_inquiry' %}" class="quick-action-item">
                 <span class="quick-action-icon">🌍</span>
                 <span class="quick-action-label">Export Inquiry</span>
               </a>
-              <a href="wishlist.html" class="quick-action-item">
+              <a href="{% url 'buyer_wishlist' %}" class="quick-action-item">
                 <span class="quick-action-icon">❤️</span>
                 <span class="quick-action-label">Wishlist</span>
               </a>
-              <a href="orders.html" class="quick-action-item">
+              <a href="{% url 'buyer_orders' %}" class="quick-action-item">
                 <span class="quick-action-icon">📦</span>
                 <span class="quick-action-label">My Orders</span>
               </a>
@@ -459,7 +460,7 @@
                 <h3 class="card-title">✅ Verification Status</h3>
                 <p class="card-subtitle">Complete your KYC</p>
               </div>
-              <a href="verification.html" class="section-action">Verify →</a>
+              <a href="{% url 'buyer_verification' %}" class="section-action">Verify →</a>
             </div>
             <div class="verification-status-list">
               <div class="v-status-item">
@@ -539,7 +540,7 @@
               <h2 class="section-title">🔔 Recent Notifications</h2>
               <p class="card-subtitle">Stay updated with latest activities</p>
             </div>
-            <a href="notifications.html" class="section-action">View All →</a>
+            <a href="{% url 'buyer_notifications' %}" class="section-action">View All →</a>
           </div>
           <div class="notification-mini-list">
             <div class="notification-mini">
@@ -570,6 +571,6 @@
     </div>
   </div>
 
-  <script src="js/app.js"></script>
+  <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
 </html>

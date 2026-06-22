@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -7,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/cart.css' %}">
 </head>
 <body>
   <div class="sidebar-backdrop"></div>
@@ -17,18 +18,18 @@
     <aside class="sidebar">[SIDEBAR same as dashboard]</aside>
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="dashboard.html">Home</a><span class="breadcrumb-sep">›</span><span class="current">Cart</span></div><h1 class="page-title">Shopping Cart</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><span class="current">Cart</span></div><h1 class="page-title">Shopping Cart</h1></div></div>
         <div class="navbar-right">
           <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search..."></div>
-          <a href="messages.html" class="nav-btn">💬<span class="badge-dot"></span></a>
-          <a href="notifications.html" class="nav-btn">🔔<span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger"><div class="profile-avatar">RM</div><div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div></div>
             <div class="dropdown-menu">
-              <a href="profile.html" class="dropdown-item">👤 My Profile</a>
-              <a href="orders.html" class="dropdown-item">📦 My Orders</a>
-              <a href="settings.html" class="dropdown-item">⚙️ Settings</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
               <div class="dropdown-divider"></div>
               <a href="#" class="dropdown-item danger">🚪 Logout</a>
             </div>
@@ -41,7 +42,7 @@
           <div class="empty-state-icon">🛒</div>
           <h3 class="empty-state-title">Your cart is empty</h3>
           <p class="empty-state-text">Looks like you haven't added any crops yet. Browse our marketplace to find premium crops.</p>
-          <a href="browse-crops.html" class="btn btn-primary">🌾 Browse Crops</a>
+          <a href="{% url 'buyer_browse_crops' %}" class="btn btn-primary">🌾 Browse Crops</a>
         </div>
 
         <!-- Cart Content -->
@@ -130,7 +131,7 @@
             </div>
 
             <div class="cart-footer-actions">
-              <a href="browse-crops.html" class="btn btn-ghost">← Continue Shopping</a>
+              <a href="{% url 'buyer_browse_crops' %}" class="btn btn-ghost">← Continue Shopping</a>
               <button class="btn btn-ghost">❤️ Save For Later</button>
             </div>
           </div>
@@ -170,14 +171,14 @@
                 </div>
               </div>
 
-              <a href="checkout.html" class="btn btn-primary btn-lg btn-block" style="margin-top:20px;">Proceed to Checkout →</a>
+              <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-lg btn-block" style="margin-top:20px;">Proceed to Checkout →</a>
             </div>
           </div>
         </div>
       </main>
     </div>
   </div>
-  <script src="js/app.js"></script>
+  <script src="{% static 'buyer/js/app.js' %}"></script>
   <script>
     function updateCartSummary() {
       const items = document.querySelectorAll('.cart-item');

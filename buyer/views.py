@@ -13,24 +13,70 @@ def buyer_home(request):
     return render(request, "buyer/home.html",context)
 
 @check_login(['Buyer'])
-def buyer_bulk_order(request):
-    return render(request, "buyer/bulk_order.html")
+def buyer_dashboard(request):
+    return render(request, "buyer/dashboard.html")
 
 @check_login(['Buyer'])
-def buyer_order_history(request):
-    return render(request, "buyer/order_history.html")
+def buyer_browse_crops(request):
+    return render(request, "buyer/browse-crops.html")
+
+@check_login(['Buyer'])
+def buyer_cart(request):
+    return render(request, "buyer/cart.html")
+
+@check_login(['Buyer'])
+def buyer_orders(request):
+    return render(request, "buyer/orders.html")
+
+@check_login(['Buyer'])
+def buyer_wishlist(request):
+    return render(request, "buyer/wishlist.html")
+
+@check_login(['Buyer'])
+def buyer_bulk_order(request):
+    return render(request, "buyer/bulk-order.html")
+
+@check_login(['Buyer'])
+def buyer_export_inquiry(request):
+    return render(request, "buyer/export-inquiry.html")
+
+@check_login(['Buyer'])
+def buyer_messages(request):
+    return render(request, "buyer/messages.html")
+
+@check_login(['Buyer'])
+def buyer_notifications(request):
+    return render(request, "buyer/notifications.html")
 
 @check_login(['Buyer'])
 def buyer_profile(request):
-    uid = request.uid
-    print("=================>",uid)
-    context = { 'uid' : uid }
-    return render(request, "buyer/profile.html",context)
+    uid = getattr(request, 'uid', None)
+    context = { 'uid' : uid } if uid else {}
+    return render(request, "buyer/profile.html", context)
 
 @check_login(['Buyer'])
-def buyer_purchase_crop(request):
-    return render(request, "buyer/purchase_crop.html")
+def buyer_verification(request):
+    return render(request, "buyer/verification.html")
 
+@check_login(['Buyer'])
+def buyer_bank_details(request):
+    return render(request, "buyer/bank-details.html")
+
+@check_login(['Buyer'])
+def buyer_settings(request):
+    return render(request, "buyer/settings.html")
+
+@check_login(['Buyer'])
+def buyer_checkout(request):
+    return render(request, "buyer/checkout.html")
+
+@check_login(['Buyer'])
+def buyer_crop_details(request):
+    return render(request, "buyer/crop-details.html")
+
+@check_login(['Buyer'])
+def buyer_order_details(request):
+    return render(request, "buyer/order-details.html")
 
 @check_login(['Buyer'])
 def kyc(request):
@@ -73,7 +119,6 @@ def kyc(request):
         return redirect('kyc')
         
     return render(request, "buyer/kyc.html", {'buyer': buyer})
-
 
 def home(request):
     return HttpResponse("Welcome to Krushi Mitra! You are logged in.")  
