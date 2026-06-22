@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from farmer.models import *
 from farmer.views import *
-from models import *
+from .models import *
 # Create your views here.
 
 

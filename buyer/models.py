@@ -28,3 +28,4 @@ class Buyer(models.Model):
 
     def __str__(self):
         return f"Buyer: {self.user.name}"
+
