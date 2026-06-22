@@ -4,7 +4,7 @@ import json
 
 base_dirs = [
     r"c:\Users\LENOVO\Desktop\krushi_mitra\krushi_mitra\farmer\templates\farmer",
-    r"c:\Users\LENOVO\Desktop\krushi_mitra\krushi_mitra\farmer\templates\buyer"
+    r"c:\Users\LENOVO\Desktop\krushi_mitra\krushi_mitra\buyer\templates\buyer"
 ]
 
 translations_to_add = {}
