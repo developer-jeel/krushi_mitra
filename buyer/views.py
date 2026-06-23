@@ -44,7 +44,11 @@ def buyer_cart(request):
         cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first()
 
         if cart_item:
-            pass
+            cart_item.quantity+= int(quantity)
+            cart_item.save()
+            cart_items = CartItem.objects.filter(cart=cart)
+            context = {'cart_items':cart_items,'cart':cart}
+            return render(request, "buyer/cart.html",context)
         else:
             cart_item = CartItem.objects.create(cart=cart,crop=crop_obj,quantity=quantity)
             cart_item.save()
