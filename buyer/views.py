@@ -27,12 +27,17 @@ def buyer_browse_crops(request):
 
 @check_login(['Buyer'])
 def buyer_crop_details(request,pk):
-    return render(request, "buyer/crop-details.html")
+    crp = crop.objects.get(id=pk)
+    context = {'crop' : crp}
+    return render(request, "buyer/crop-details.html",context)
 
 @check_login(['Buyer'])
 def buyer_cart(request):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
+    if request.method == 'POST':
+        quantity = request.POST.get('quantity')
+        
     if cart:
         cart_items = CartItem.objects.filter(cart=cart)
         context = {'cart_items':cart_items,'cart':cart}

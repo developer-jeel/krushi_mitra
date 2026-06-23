@@ -246,7 +246,8 @@
                     <span class="crop-harvest">Harvest: Nov 2024</span>
                   </div>
                   <div class="crop-card-actions">
-                    <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View Details</a>
+                    <a href="{% url 'buyer_crop_details' pk=crop.id %}" class="btn btn-outline btn-sm flex-1">View
+                      Details</a>
                     <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                   </div>
                 </div>

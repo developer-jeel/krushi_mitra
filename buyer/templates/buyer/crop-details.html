@@ -1,55 +1,93 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>Crop Details - Krushi Mitra Buyer Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/crop-details.css' %}">
 </head>
+
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
   <div class="app-layout">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-logo"><div class="sidebar-logo-icon">K</div><div><div class="sidebar-logo-text">Krushi Mitra</div><span class="sidebar-logo-sub">Buyer Panel</span></div></div>
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div><span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
         <button class="sidebar-toggle">◀</button>
       </div>
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
-        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
-        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
-        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span class="sidebar-item-badge">3</span></a>
-        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
-        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item active" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
         <div class="sidebar-section-label">Procurement</div>
-        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
-        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
         <div class="sidebar-section-label">Communication</div>
-        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span class="sidebar-item-badge">5</span></a>
-        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span class="sidebar-item-badge">12</span></a>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
-        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
-        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
-        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
-        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
       </nav>
     </aside>
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button><div><div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span class="breadcrumb-sep">›</span><a href="{% url 'buyer_browse_crops' %}">Marketplace</a><span class="breadcrumb-sep">›</span><span class="current">Crop Details</span></div><h1 class="page-title">Crop Details</h1></div></div>
+        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><a href="{% url 'buyer_browse_crops' %}">Marketplace</a><span
+                class="breadcrumb-sep">›</span><span class="current">Crop Details</span></div>
+            <h1 class="page-title">Crop Details</h1>
+          </div>
+        </div>
         <div class="navbar-right">
-          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search crops..."></div>
+          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search crops...">
+          </div>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
-            <div class="profile-btn dropdown-trigger"><div class="profile-avatar">RM</div><div><div class="profile-name">Rajesh Mehta</div><div class="profile-role">Wholesale Trader</div></div></div>
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div>
+                <div class="profile-name">Rajesh Mehta</div>
+                <div class="profile-role">Wholesale Trader</div>
+              </div>
+            </div>
             <div class="dropdown-menu">
               <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
@@ -60,46 +98,60 @@
           </div>
         </div>
       </header>
+
+
       <main class="main-content">
         <!-- Product Detail Layout -->
+
         <div class="product-detail-layout page-reveal">
           <!-- Gallery -->
           <div class="product-gallery">
             <div class="product-gallery-main">
-              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&h=500&fit=crop" alt="Basmati Rice">
+              <img src="{{crop.image.url}}" alt="Basmati Rice">
             </div>
-            <div class="thumbnail-nav">
-              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop" alt="Thumb 1" class="active">
-              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=50" alt="Thumb 2">
-              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=100" alt="Thumb 3">
-              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=150" alt="Thumb 4">
-            </div>
+            <!-- <div class="thumbnail-nav">
+              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop" alt="Thumb 1"
+                class="active">
+              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=50"
+                alt="Thumb 2">
+              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=100"
+                alt="Thumb 3">
+              <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=150"
+                alt="Thumb 4">
+            </div> -->
           </div>
 
           <!-- Product Info -->
           <div class="product-info">
-            <div class="product-category">🌾 Grains</div>
-            <h1 class="product-name">Premium Basmati Rice - Grade A</h1>
+            <div class="product-category">🌾 {{crop.category}}</div>
+            <h1 class="product-name">{{crop.cropname}} - Grade A</h1>
             <div class="product-rating">⭐⭐⭐⭐☆ <span>4.8</span> <span class="rating-count">(124 reviews)</span></div>
             <div class="product-price-section">
-              <span class="product-price">₹165</span>
-              <span class="product-price-unit">/ kg</span>
-              <span class="product-price-discount">₹190</span>
+              <span class="product-price">₹{{crop.price}}</span>
+              <span class="product-price-unit">/20kg</span>
+              <span class="product-price-discount">₹3000</span>
               <span class="product-save-badge">Save 13%</span>
             </div>
 
             <div class="product-meta-grid">
-              <div class="product-meta-item"><span class="meta-label">Available Quantity</span><span class="meta-value">5,000 kg</span></div>
-              <div class="product-meta-item"><span class="meta-label">Location</span><span class="meta-value">📍 Punjab, India</span></div>
-              <div class="product-meta-item"><span class="meta-label">Quality Grade</span><span class="meta-value">⭐ Grade A</span></div>
-              <div class="product-meta-item"><span class="meta-label">Harvest Date</span><span class="meta-value">📅 November 2024</span></div>
-              <div class="product-meta-item"><span class="meta-label">Seller</span><span class="meta-value" style="color:var(--green-500);">✅ Premium Verified</span></div>
-              <div class="product-meta-item"><span class="meta-label">Stock Status</span><span class="meta-value"><span class="badge badge-approved">In Stock</span></span></div>
+              <div class="product-meta-item"><span class="meta-label">Available Quantity</span><span
+                  class="meta-value">{{crop.quantity}} man</span></div>
+              <div class="product-meta-item"><span class="meta-label">Location</span><span class="meta-value">📍
+                  {{crop.user.city}},
+                  India</span></div>
+              <div class="product-meta-item"><span class="meta-label">Quality Grade</span><span class="meta-value">⭐
+                  Grade A</span></div>
+              <div class="product-meta-item"><span class="meta-label">Harvest Date</span><span class="meta-value">📅
+                  November 2024</span></div>
+              <div class="product-meta-item"><span class="meta-label">Seller</span><span class="meta-value"
+                  style="color:var(--green-500);">✅ Premium Verified</span></div>
+              <div class="product-meta-item"><span class="meta-label">Stock Status</span><span class="meta-value"><span
+                    class="badge badge-approved">In Stock</span></span></div>
             </div>
 
             <div class="product-description">
               <h3 class="product-desc-title">Description</h3>
-              <p class="product-desc-text">Premium quality Basmati rice sourced directly from the fertile farms of Punjab. Long-grained, aromatic, and aged for 12 months to ensure the perfect texture and flavor. Ideal for biryanis, pulaos, and everyday consumption. Chemical-free and organically grown.</p>
+              <p class="product-desc-text">crop.description</p>
             </div>
 
             <div class="product-quality">
@@ -114,91 +166,108 @@
             </div>
 
             <!-- Quantity Selector & Price Calculator -->
-            <div class="price-calculator card" data-unit-price="165">
+            <div class="price-calculator card" data-unit-price="{{crop.price}}">
               <h3 class="product-desc-title">Quantity & Pricing</h3>
               <div class="calc-row">
                 <div class="form-group" style="margin-bottom:0;">
-                  <label class="form-label">Quantity (kg)</label>
+                  <label class="form-label">Quantity (man-20kg)</label>
                   <div class="qty-selector">
                     <button class="qty-minus">−</button>
-                    <input type="number" class="qty-input calc-qty" value="100" min="1" max="5000">
+                    <input type="number" class="qty-input calc-qty" value="0" min="0" max="5000" name="quantity">
                     <button class="qty-plus">+</button>
                   </div>
+                  <input value="{{crop.id}}" name="crop" hidden>
                 </div>
                 <div class="calc-total">
                   <label class="form-label">Total Amount</label>
-                  <div class="calc-total-price">₹16,500</div>
+                  <div class="calc-total-price">₹0</div>
                 </div>
               </div>
             </div>
 
             <div class="product-actions">
-              <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-lg flex-1">🛒 Add to Cart</a>
+              <form action="{% url 'buyer_cart'%}" method="post">
+                {%csrf_token%}
+                <button type="submit" href="{% url 'buyer_cart'%}" class="btn btn-primary btn-lg flex-1">🛒
+                  Add to
+                  Cart</button>
+              </form>
               <a href="{% url 'buyer_checkout' %}" class="btn btn-outline btn-lg flex-1">Buy Now</a>
-              <button class="btn btn-ghost btn-lg wishlist-toggle" style="flex:none;width:52px;height:52px;border-radius:var(--radius-md);border:1px solid var(--border-color);">🤍</button>
+              <button class="btn btn-ghost btn-lg wishlist-toggle"
+                style="flex:none;width:52px;height:52px;border-radius:var(--radius-md);border:1px solid var(--border-color);">🤍</button>
             </div>
           </div>
         </div>
 
+
+
         <!-- Related Crops -->
-        <section class="page-reveal">
+        <!-- <section class="page-reveal">
           <div class="section-header">
-            <div><h2 class="section-title">🌾 Related Crops</h2><p class="card-subtitle">Similar products you might be interested in</p></div>
+            <div>
+              <h2 class="section-title">🌾 Related Crops</h2>
+              <p class="card-subtitle">Similar products you might be interested in</p>
+            </div>
           </div>
           <div class="related-grid">
             <div class="crop-card card card-float">
-              <div class="crop-card-img-wrapper"><img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop" alt="Wheat"><span class="crop-stock-badge in-stock">In Stock</span></div>
+              <div class="crop-card-img-wrapper"><img
+                  src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop"
+                  alt="Wheat"><span class="crop-stock-badge in-stock">In Stock</span></div>
               <div class="crop-card-body">
                 <div class="crop-card-category">🌾 Grains</div>
                 <h4 class="crop-card-name">Organic Wheat</h4>
                 <div class="crop-card-price"><span class="price">₹28</span><span class="price-unit">/ kg</span></div>
                 <div class="crop-card-actions" style="margin-top:10px;">
-                  <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View</a>
                   <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Buy</a>
                 </div>
               </div>
             </div>
             <div class="crop-card card card-float">
-              <div class="crop-card-img-wrapper"><img src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=300&h=200&fit=crop" alt="Mango"><span class="crop-stock-badge in-stock">In Stock</span></div>
+              <div class="crop-card-img-wrapper"><img
+                  src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=300&h=200&fit=crop" alt="Mango"><span
+                  class="crop-stock-badge in-stock">In Stock</span></div>
               <div class="crop-card-body">
                 <div class="crop-card-category">🥭 Fruits</div>
                 <h4 class="crop-card-name">Alphonso Mango</h4>
                 <div class="crop-card-price"><span class="price">₹700</span><span class="price-unit">/ box</span></div>
                 <div class="crop-card-actions" style="margin-top:10px;">
-                  <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View</a>
                   <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Buy</a>
                 </div>
               </div>
             </div>
             <div class="crop-card card card-float">
-              <div class="crop-card-img-wrapper"><img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&h=200&fit=crop" alt="Chillies"><span class="crop-stock-badge in-stock">In Stock</span></div>
+              <div class="crop-card-img-wrapper"><img
+                  src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&h=200&fit=crop"
+                  alt="Chillies"><span class="crop-stock-badge in-stock">In Stock</span></div>
               <div class="crop-card-body">
                 <div class="crop-card-category">🌶️ Spices</div>
                 <h4 class="crop-card-name">Red Chillies</h4>
                 <div class="crop-card-price"><span class="price">₹240</span><span class="price-unit">/ kg</span></div>
                 <div class="crop-card-actions" style="margin-top:10px;">
-                  <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View</a>
                   <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Buy</a>
                 </div>
               </div>
             </div>
             <div class="crop-card card card-float">
-              <div class="crop-card-img-wrapper"><img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=300&h=200&fit=crop" alt="Green Chillies"><span class="crop-stock-badge in-stock">In Stock</span></div>
+              <div class="crop-card-img-wrapper"><img
+                  src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=300&h=200&fit=crop"
+                  alt="Green Chillies"><span class="crop-stock-badge in-stock">In Stock</span></div>
               <div class="crop-card-body">
                 <div class="crop-card-category">🥬 Vegetables</div>
                 <h4 class="crop-card-name">Green Chillies</h4>
                 <div class="crop-card-price"><span class="price">₹80</span><span class="price-unit">/ kg</span></div>
                 <div class="crop-card-actions" style="margin-top:10px;">
-                  <a href="{% url 'buyer_crop_details' %}" class="btn btn-outline btn-sm flex-1">View</a>
                   <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Buy</a>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
       </main>
     </div>
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+
 </html>
