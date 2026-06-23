@@ -102,14 +102,15 @@
 
       <main class="main-content">
         <!-- Product Detail Layout -->
-
-        <div class="product-detail-layout page-reveal">
-          <!-- Gallery -->
-          <div class="product-gallery">
-            <div class="product-gallery-main">
-              <img src="{{crop.image.url}}" alt="Basmati Rice">
-            </div>
-            <!-- <div class="thumbnail-nav">
+        <form action="{% url 'buyer_cart'%}" method="post">
+          {%csrf_token%}
+          <div class="product-detail-layout page-reveal">
+            <!-- Gallery -->
+            <div class="product-gallery">
+              <div class="product-gallery-main">
+                <img src="{{crop.image.url}}" alt="Basmati Rice">
+              </div>
+              <!-- <div class="thumbnail-nav">
               <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop" alt="Thumb 1"
                 class="active">
               <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=50"
@@ -119,90 +120,94 @@
               <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=80&fit=crop&x=150"
                 alt="Thumb 4">
             </div> -->
-          </div>
-
-          <!-- Product Info -->
-          <div class="product-info">
-            <div class="product-category">🌾 {{crop.category}}</div>
-            <h1 class="product-name">{{crop.cropname}} - Grade A</h1>
-            <div class="product-rating">⭐⭐⭐⭐☆ <span>4.8</span> <span class="rating-count">(124 reviews)</span></div>
-            <div class="product-price-section">
-              <span class="product-price">₹{{crop.price}}</span>
-              <span class="product-price-unit">/20kg</span>
-              <span class="product-price-discount">₹3000</span>
-              <span class="product-save-badge">Save 13%</span>
             </div>
 
-            <div class="product-meta-grid">
-              <div class="product-meta-item"><span class="meta-label">Available Quantity</span><span
-                  class="meta-value">{{crop.quantity}} man</span></div>
-              <div class="product-meta-item"><span class="meta-label">Location</span><span class="meta-value">📍
-                  {{crop.user.city}},
-                  India</span></div>
-              <div class="product-meta-item"><span class="meta-label">Quality Grade</span><span class="meta-value">⭐
-                  Grade A</span></div>
-              <div class="product-meta-item"><span class="meta-label">Harvest Date</span><span class="meta-value">📅
-                  November 2024</span></div>
-              <div class="product-meta-item"><span class="meta-label">Seller</span><span class="meta-value"
-                  style="color:var(--green-500);">✅ Premium Verified</span></div>
-              <div class="product-meta-item"><span class="meta-label">Stock Status</span><span class="meta-value"><span
-                    class="badge badge-approved">In Stock</span></span></div>
-            </div>
-
-            <div class="product-description">
-              <h3 class="product-desc-title">Description</h3>
-              <p class="product-desc-text">crop.description</p>
-            </div>
-
-            <div class="product-quality">
-              <h3 class="product-desc-title">Quality Information</h3>
-              <div class="quality-tags">
-                <span class="quality-tag">🌱 Organic</span>
-                <span class="quality-tag">🧪 Lab Tested</span>
-                <span class="quality-tag">🏆 Premium Grade</span>
-                <span class="quality-tag">📦 Fresh Stock</span>
-                <span class="quality-tag">🚜 Farm Direct</span>
+            <!-- Product Info -->
+            <div class="product-info">
+              <div class="product-category">🌾 {{crop.category}}</div>
+              <h1 class="product-name">{{crop.cropname}} - Grade A</h1>
+              <div class="product-rating">⭐⭐⭐⭐☆ <span>4.8</span> <span class="rating-count">(124 reviews)</span></div>
+              <div class="product-price-section">
+                <span class="product-price">₹{{crop.price}}</span>
+                <span class="product-price-unit">/20kg</span>
+                <span class="product-price-discount">₹3000</span>
+                <span class="product-save-badge">Save 13%</span>
               </div>
-            </div>
 
-            <!-- Quantity Selector & Price Calculator -->
-            <div class="price-calculator card" data-unit-price="{{crop.price}}">
-              <h3 class="product-desc-title">Quantity & Pricing</h3>
-              <div class="calc-row">
-                <div class="form-group" style="margin-bottom:0;">
-                  <label class="form-label">Quantity (man-20kg)</label>
-                  <div class="qty-selector">
-                    <button class="qty-minus">−</button>
-                    <input type="number" class="qty-input calc-qty" value="0" min="0" max="5000" name="quantity">
-                    <button class="qty-plus">+</button>
+              <div class="product-meta-grid">
+                <div class="product-meta-item"><span class="meta-label">Available Quantity</span><span
+                    class="meta-value">{{crop.quantity}} man</span></div>
+                <div class="product-meta-item"><span class="meta-label">Location</span><span class="meta-value">📍
+                    {{crop.user.city}},
+                    India</span></div>
+                <div class="product-meta-item"><span class="meta-label">Quality Grade</span><span class="meta-value">⭐
+                    Grade A</span></div>
+                <div class="product-meta-item"><span class="meta-label">Harvest Date</span><span class="meta-value">📅
+                    November 2024</span></div>
+                <div class="product-meta-item"><span class="meta-label">Seller</span><span class="meta-value"
+                    style="color:var(--green-500);">✅ Premium Verified</span></div>
+                <div class="product-meta-item"><span class="meta-label">Stock Status</span><span
+                    class="meta-value"><span class="badge badge-approved">In Stock</span></span></div>
+              </div>
+
+              <div class="product-description">
+                <h3 class="product-desc-title">Description</h3>
+                <p class="product-desc-text">crop.description</p>
+              </div>
+
+              <div class="product-quality">
+                <h3 class="product-desc-title">Quality Information</h3>
+                <div class="quality-tags">
+                  <span class="quality-tag">🌱 Organic</span>
+                  <span class="quality-tag">🧪 Lab Tested</span>
+                  <span class="quality-tag">🏆 Premium Grade</span>
+                  <span class="quality-tag">📦 Fresh Stock</span>
+                  <span class="quality-tag">🚜 Farm Direct</span>
+                </div>
+              </div>
+
+              <!-- Quantity Selector & Price Calculator -->
+              <div class="price-calculator card" data-unit-price="{{ crop.price }}">
+                <h3 class="product-desc-title">Quantity & Pricing</h3>
+
+                <div class="calc-row">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Quantity (man-20kg)</label>
+
+                    <div class="qty-selector">
+                      <a class="qty-minus">−</a>
+
+                      <input type="number" class="qty-input calc-qty" value="1" min="1" max="5000" name="quantity"
+                        required>
+
+                      <a class="qty-plus">+</a>
+                    </div>
                   </div>
-                  <input value="{{crop.id}}" name="crop" hidden>
-                </div>
-                <div class="calc-total">
-                  <label class="form-label">Total Amount</label>
-                  <div class="calc-total-price">₹0</div>
+
+                  <div class="calc-total">
+                    <label class="form-label">Total Amount</label>
+                    <div class="calc-total-price">₹0</div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="product-actions">
-              <form action="{% url 'buyer_cart'%}" method="post">
-                {%csrf_token%}
+              <div class="product-actions">
+                <input value="{{crop.id}}" name="crop" hidden>
                 <button type="submit" href="{% url 'buyer_cart'%}" class="btn btn-primary btn-lg flex-1">🛒
                   Add to
                   Cart</button>
-              </form>
-              <a href="{% url 'buyer_checkout' %}" class="btn btn-outline btn-lg flex-1">Buy Now</a>
-              <button class="btn btn-ghost btn-lg wishlist-toggle"
-                style="flex:none;width:52px;height:52px;border-radius:var(--radius-md);border:1px solid var(--border-color);">🤍</button>
+
+                <a href="{% url 'buyer_checkout' %}" class="btn btn-outline btn-lg flex-1">Buy Now</a>
+                <button class="btn btn-ghost btn-lg wishlist-toggle"
+                  style="flex:none;width:52px;height:52px;border-radius:var(--radius-md);border:1px solid var(--border-color);">🤍</button>
+              </div>
             </div>
           </div>
-        </div>
 
 
 
-        <!-- Related Crops -->
-        <!-- <section class="page-reveal">
+          <!-- Related Crops -->
+          <!-- <section class="page-reveal">
           <div class="section-header">
             <div>
               <h2 class="section-title">🌾 Related Crops</h2>
@@ -264,10 +269,48 @@
             </div>
           </div>
         </section> -->
+        </form>
       </main>
     </div>
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const calculator = document.querySelector(".price-calculator");
+    const qtyInput = document.querySelector(".calc-qty");
+    const totalPrice = document.querySelector(".calc-total-price");
+    const minusBtn = document.querySelector(".qty-minus");
+    const plusBtn = document.querySelector(".qty-plus");
+
+    const unitPrice = Number(calculator.dataset.unitPrice);
+
+    function updatePrice() {
+      let qty = Number(qtyInput.value) || 0;
+      let total = qty * unitPrice;
+
+      totalPrice.innerText = "₹" + total.toLocaleString("en-IN");
+    }
+
+    plusBtn.addEventListener("click", function () {
+      qtyInput.value = Number(qtyInput.value) + 1;
+      updatePrice();
+    });
+
+    minusBtn.addEventListener("click", function () {
+      let qty = Number(qtyInput.value);
+
+      if (qty > 1) {
+        qtyInput.value = qty - 1;
+        updatePrice();
+      }
+    });
+
+    qtyInput.addEventListener("input", updatePrice);
+
+    updatePrice();
+  });
+</script>
 
 </html>

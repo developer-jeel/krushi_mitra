@@ -37,6 +37,20 @@ def buyer_cart(request):
     cart = Cart.objects.get(user = uid)
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
+        crop_id = request.POST.get('crop')
+        print(type(crop_id),"=============================================}",crop_id)
+        crop_obj = crop.objects.get(id=crop_id)
+
+        cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first()
+
+        if cart_item:
+            pass
+        else:
+            cart_item = CartItem.objects.create(cart=cart,crop=crop_obj,quantity=quantity)
+            cart_item.save()
+            cart_items = CartItem.objects.filter(cart=cart)
+            context = {'cart_items':cart_items,'cart':cart}
+            return render(request, "buyer/cart.html",context)
         
     if cart:
         cart_items = CartItem.objects.filter(cart=cart)
