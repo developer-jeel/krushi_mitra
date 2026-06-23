@@ -22,7 +22,11 @@ urlpatterns = [
     path('buyer_home', views.buyer_home, name='buyer_home'),
     path('dashboard/', views.buyer_dashboard, name='buyer_dashboard'),
     path('browse-crops/', views.buyer_browse_crops, name='buyer_browse_crops'),
+
     path('cart/', views.buyer_cart, name='buyer_cart'),
+    path('cart_item_delete/<int:pk>', views.cart_item_delete, name='cart_item_delete'),
+
+
     path('orders/', views.buyer_orders, name='buyer_orders'),
     path('wishlist/', views.buyer_wishlist, name='buyer_wishlist'),
     path('bulk-order/', views.buyer_bulk_order, name='buyer_bulk_order'),

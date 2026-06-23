@@ -41,7 +41,17 @@ def buyer_cart(request):
 
 @check_login(['Buyer'])
 def cart_item_delete(request,pk):
-    pass
+    uid = request.uid
+    cart = Cart.objects.get(user = uid)
+    if cart:
+        cart_items = CartItem.objects.filter(cart=cart)
+        context = {'cart_items':cart_items,'cart':cart}
+        return render(request, "buyer/cart.html",context)
+    else:
+        cart = Cart.objects.create(user = uid)
+        cart.save()
+        return render(request, "buyer/cart.html")
+    return render(request, "buyer/cart.html")
 @check_login(['Buyer'])
 def buyer_orders(request):
     return render(request, "buyer/orders.html")
