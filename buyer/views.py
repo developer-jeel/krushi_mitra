@@ -25,6 +25,18 @@ def buyer_browse_crops(request):
 
 @check_login(['Buyer'])
 def buyer_cart(request):
+    uid = request.uid
+    cart = Cart.objects.get(user = uid)
+    print("================>",cart)
+    if cart:
+        cart_items = CartItem.objects.filter(cart=cart)
+        print("=======================}",cart_items,uid.username)
+        context = {'cart_items':cart_items}
+        return render(request, "buyer/cart.html",context)
+    else:
+        cart = Cart.objects.create(user = uid)
+        cart.save()
+    print("================>",uid)
     return render(request, "buyer/cart.html")
 
 @check_login(['Buyer'])

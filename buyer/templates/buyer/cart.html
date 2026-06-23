@@ -118,26 +118,25 @@
               </div>
             </div>
 
+            {%for item in cart_items%}
             <div class="cart-item card">
-              <div class="cart-item-img"><img
-                  src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=120&h=90&fit=crop"
-                  alt="Basmati Rice"></div>
+              <div class="cart-item-img"><img src="{{item.crop.image.url}}" alt="Basmati Rice"></div>
               <div class="cart-item-info">
-                <h4 class="cart-item-name">Premium Basmati Rice - Grade A</h4>
-                <div class="cart-item-meta">🌾 Grains | 📍 Punjab | ⭐ Grade A</div>
-                <div class="cart-item-price">₹165/kg</div>
+                <h4 class="cart-item-name">{{item.crop.cropname}}</h4>
+                <div class="cart-item-meta">🌾 {{item.crop.category}} | 📍 {{item.crop.user.city}} | ⭐ Grade A</div>
+                <div class="cart-item-price">₹{{item.crop.price}}/20kg</div>
               </div>
               <div class="cart-item-qty">
                 <label class="body-small text-muted">Qty (kg)</label>
                 <div class="qty-selector">
                   <button class="qty-minus">−</button>
-                  <input type="number" class="qty-input cart-qty-input" value="100" min="1" max="5000">
+                  <input type="number" class="qty-input cart-qty-input" value="{{item.quantity}}" min="1" max="5000">
                   <button class="qty-plus">+</button>
                 </div>
               </div>
               <div class="cart-item-total">
                 <label class="body-small text-muted">Total</label>
-                <div class="cart-total-price">₹16,500</div>
+                <div class="cart-total-price">₹{{item.subtotal}}</div>
                 <input type="hidden" class="cart-unit-price" data-price="165">
               </div>
               <div class="cart-item-actions">
@@ -147,66 +146,7 @@
                   Remove</button>
               </div>
             </div>
-
-            <div class="cart-item card">
-              <div class="cart-item-img"><img
-                  src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=120&h=90&fit=crop"
-                  alt="Alphonso Mango"></div>
-              <div class="cart-item-info">
-                <h4 class="cart-item-name">Alphonso Mango (Hapus)</h4>
-                <div class="cart-item-meta">🥭 Fruits | 📍 Maharashtra | ⭐ Premium</div>
-                <div class="cart-item-price">₹700/box</div>
-              </div>
-              <div class="cart-item-qty">
-                <label class="body-small text-muted">Qty (boxes)</label>
-                <div class="qty-selector">
-                  <button class="qty-minus">−</button>
-                  <input type="number" class="qty-input cart-qty-input" value="10" min="1" max="200">
-                  <button class="qty-plus">+</button>
-                </div>
-              </div>
-              <div class="cart-item-total">
-                <label class="body-small text-muted">Total</label>
-                <div class="cart-total-price">₹7,000</div>
-                <input type="hidden" class="cart-unit-price" data-price="700">
-              </div>
-              <div class="cart-item-actions">
-                <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);"
-                  onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
-                  Remove</button>
-              </div>
-            </div>
-
-            <div class="cart-item card">
-              <div class="cart-item-img"><img
-                  src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=120&h=90&fit=crop"
-                  alt="Red Chillies"></div>
-              <div class="cart-item-info">
-                <h4 class="cart-item-name">Byadgi Red Chillies</h4>
-                <div class="cart-item-meta">🌶️ Spices | 📍 Karnataka | ⭐ Grade A</div>
-                <div class="cart-item-price">₹240/kg</div>
-              </div>
-              <div class="cart-item-qty">
-                <label class="body-small text-muted">Qty (kg)</label>
-                <div class="qty-selector">
-                  <button class="qty-minus">−</button>
-                  <input type="number" class="qty-input cart-qty-input" value="50" min="1" max="1000">
-                  <button class="qty-plus">+</button>
-                </div>
-              </div>
-              <div class="cart-item-total">
-                <label class="body-small text-muted">Total</label>
-                <div class="cart-total-price">₹12,000</div>
-                <input type="hidden" class="cart-unit-price" data-price="240">
-              </div>
-              <div class="cart-item-actions">
-                <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);"
-                  onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
-                  Remove</button>
-              </div>
-            </div>
+            {%endfor%}
 
             <div class="cart-footer-actions">
               <a href="{% url 'buyer_browse_crops' %}" class="btn btn-ghost">← Continue Shopping</a>

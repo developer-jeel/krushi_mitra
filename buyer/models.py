@@ -92,8 +92,8 @@ class CartItem(models.Model):
         unique_together = ('cart', 'crop')
 
     def __str__(self):
-        return f"{self.product.name} ({self.quantity})"
+        return f"{self.crop.cropname} ------------------- >({self.quantity})"
 
     @property
     def subtotal(self):
-        return self.product.price * self.quantity
+        return self.crop.price * self.quantity
