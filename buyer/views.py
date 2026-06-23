@@ -38,7 +38,6 @@ def buyer_cart(request):
     if request.method == 'POST':
         quantity = request.POST.get('quantity')
         crop_id = request.POST.get('crop')
-        print(type(crop_id),"=============================================}",crop_id)
         crop_obj = crop.objects.get(id=crop_id)
 
         cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first()
@@ -71,11 +70,20 @@ def buyer_cart(request):
 def cart_item_delete(request,pk):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
-    item = CartItem.objects.get(id = pk)
-    item.delete()
-    cart_items = CartItem.objects.filter(cart=cart)
-    context = {'cart_items':cart_items,'cart':cart}
-    return redirect('buyer_cart')
+    if request.method == 'POST':
+        quantity =int(request.POST.get('quantity'))
+        crop_id = request.POST.get('crop')
+        crop_obj = crop.objects.get(id=crop_id)
+        cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first() 
+        cart_item.quantity = quantity
+        cart_item.save()
+        cart_items = CartItem.objects.filter(cart=cart)
+        return redirect('buyer_cart')
+    else:
+        item = CartItem.objects.get(id = pk)
+        item.delete()
+        cart_items = CartItem.objects.filter(cart=cart)
+        return redirect('buyer_cart')
 
 
 

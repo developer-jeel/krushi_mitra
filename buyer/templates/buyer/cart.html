@@ -119,34 +119,39 @@
             </div>
 
             {%for item in cart_items%}
-            <div class="cart-item card">
-              <div class="cart-item-img"><img src="{{item.crop.image.url}}" alt="Basmati Rice"></div>
-              <div class="cart-item-info">
-                <h4 class="cart-item-name">{{item.crop.cropname}}</h4>
-                <div class="cart-item-meta">🌾 {{item.crop.category}} | 📍 {{item.crop.user.city}} | ⭐ Grade A</div>
-                <span class="cart-item-price">₹{{item.crop.price}}</span>/20kg
-              </div>
-              <div class="cart-item-qty">
-                <label class="body-small text-muted">Qty (kg)</label>
-                <div class="qty-selector">
-                  <button class="qty-minus">−</button>
-                  <input type="number" class="qty-input cart-qty-input" value="{{item.quantity}}" min="1" max="5000">
-                  <button class="qty-plus">+</button>
+            <form action="{% url 'cart_item_delete' pk=item.id%}" method="post">
+              {%csrf_token%}
+              <div class="cart-item card">
+                <div class="cart-item-img"><img src="{{item.crop.image.url}}" alt="Basmati Rice"></div>
+                <div class="cart-item-info">
+                  <h4 class="cart-item-name">{{item.crop.cropname}}</h4>
+                  <div class="cart-item-meta">🌾 {{item.crop.category}} | 📍 {{item.crop.user.city}} | ⭐ Grade A</div>
+                  <span class="cart-item-price">₹{{item.crop.price}}</span>/20kg
+                </div>
+                <div class="cart-item-qty">
+                  <label class="body-small text-muted">Qty (kg)</label>
+                  <div class="qty-selector">
+                    <button class="qty-minus">−</button>
+                    <input type="number" class="qty-input cart-qty-input" value="{{item.quantity}}" min="1" max="5000"
+                      name='quantity'>
+                    <button class="qty-plus">+</button>
+                  </div>
+                </div>
+                <div class="cart-item-total">
+                  <label class="body-small text-muted">Total</label>
+                  <div class="cart-total-price">₹{{item.subtotal}}</div>
+                  <input type="hidden" class="cart-unit-price" data-price="{{item.crop.price}}">
+                  <input type="hidden" value="{{item.crop.id}}" name="crop">
+                </div>
+                <div class="cart-item-actions">
+                  <button class="btn btn-sm btn-ghost">❤️ Save</button>
+                  <a href="{% url 'cart_item_delete' pk=item.id%}" class="btn btn-sm btn-ghost"
+                    style="color:var(--red-500);"
+                    onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
+                    Remove</a>
                 </div>
               </div>
-              <div class="cart-item-total">
-                <label class="body-small text-muted">Total</label>
-                <div class="cart-total-price">₹{{item.subtotal}}</div>
-                <input type="hidden" class="cart-unit-price" data-price="{{item.crop.price}}">
-              </div>
-              <div class="cart-item-actions">
-                <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <a href="{% url 'cart_item_delete' pk=item.id%}" class="btn btn-sm btn-ghost"
-                  style="color:var(--red-500);"
-                  onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
-                  Remove</a>
-              </div>
-            </div>
+            </form>
             {%endfor%}
 
             <div class="cart-footer-actions">
@@ -170,7 +175,7 @@
               </div>
               <div class="summary-row">
                 <span>Tax (GST @ 5%)</span>
-                <span>₹1,775</span>
+                <span id="gst">₹1,775</span>
               </div>
               <div class="summary-row discount-row hidden">
                 <span>Discount (COUPON500)</span>
@@ -179,7 +184,7 @@
               <div class="summary-divider"></div>
               <div class="summary-row total-row">
                 <span>Grand Total</span>
-                <span class="grand-total">₹37,275</span>
+                <span id="total" class="grand-total">₹37,275</span>
               </div>
 
               <div class="coupon-section">
@@ -201,19 +206,40 @@
   <script src="{% static 'buyer/js/app.js' %}"></script>
   <script>
     function updateCartSummary() {
-      const items = document.querySelectorAll('.cart-item');
+
       let subtotal = 0;
-      items.forEach(item => {
-        const price = parseFloat(item.querySelector('.cart-unit-price')?.getAttribute('data-price') || 0);
-        const qty = parseInt(item.querySelector('.qty-input')?.value || 0);
+
+      document.querySelectorAll('.cart-item').forEach(item => {
+        let price = item.querySelector('.cart-unit-price').dataset.price;
+        let qty = item.querySelector('.qty-input').value;
+
         subtotal += price * qty;
       });
-      document.querySelector('.subtotal-amount').textContent = '₹' + subtotal.toLocaleString('en-IN');
-      const tax = Math.round(subtotal * 0.05);
-      const discount = document.querySelector('.discount-row.hidden') ? 0 : 500;
-      const total = subtotal + tax - discount;
-      document.querySelector('.grand-total').textContent = '₹' + total.toLocaleString('en-IN');
+
+      let gst = subtotal * 0.05;
+      let total = subtotal + gst;
+
+      document.querySelector('.subtotal-amount').innerText = '₹' + subtotal;
+      document.getElementById('gst').innerText = '₹' + gst;
+      document.querySelector('.grand-total').innerText = '₹' + total;
     }
+
+    updateCartSummary();
+    function updateSummary() {
+
+      let subtotal = parseFloat(
+        document.querySelector(".subtotal-amount")
+          .innerText.replace("₹", "").replace(/,/g, "")
+      ) || 0;
+
+      let gst = subtotal * 0.05;
+      let total = subtotal + gst;
+
+      document.getElementById("gst").innerText = "₹" + gst.toFixed(2);
+      document.getElementById("total").innerText = "₹" + total.toFixed(2);
+    }
+
+    updateSummary();
   </script>
 </body>
 
