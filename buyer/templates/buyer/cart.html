@@ -124,7 +124,7 @@
               <div class="cart-item-info">
                 <h4 class="cart-item-name">{{item.crop.cropname}}</h4>
                 <div class="cart-item-meta">🌾 {{item.crop.category}} | 📍 {{item.crop.user.city}} | ⭐ Grade A</div>
-                <div class="cart-item-price">₹{{item.crop.price}}/20kg</div>
+                <span class="cart-item-price">₹{{item.crop.price}}</span>/20kg
               </div>
               <div class="cart-item-qty">
                 <label class="body-small text-muted">Qty (kg)</label>
@@ -137,7 +137,7 @@
               <div class="cart-item-total">
                 <label class="body-small text-muted">Total</label>
                 <div class="cart-total-price">₹{{item.subtotal}}</div>
-                <input type="hidden" class="cart-unit-price" data-price="165">
+                <input type="hidden" class="cart-unit-price" data-price="{{item.crop.price}}">
               </div>
               <div class="cart-item-actions">
                 <button class="btn btn-sm btn-ghost">❤️ Save</button>
@@ -161,7 +161,7 @@
 
               <div class="summary-row">
                 <span>Subtotal (3 items)</span>
-                <span class="subtotal-amount">₹35,500</span>
+                <span class="subtotal-amount">₹{{cart.total_price}}</span>
               </div>
               <div class="summary-row">
                 <span>Delivery Charges</span>

@@ -31,7 +31,7 @@ def buyer_cart(request):
     if cart:
         cart_items = CartItem.objects.filter(cart=cart)
         print("=======================}",cart_items,uid.username)
-        context = {'cart_items':cart_items}
+        context = {'cart_items':cart_items,'cart':cart}
         return render(request, "buyer/cart.html",context)
     else:
         cart = Cart.objects.create(user = uid)
@@ -39,6 +39,9 @@ def buyer_cart(request):
     print("================>",uid)
     return render(request, "buyer/cart.html")
 
+@check_login(['Buyer'])
+def cart_item_delete(request,pk):
+    pass
 @check_login(['Buyer'])
 def buyer_orders(request):
     return render(request, "buyer/orders.html")
