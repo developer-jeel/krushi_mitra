@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from requests import request
+from django.shortcuts import render, redirect
 from farmer.models import *
 from farmer.views import *
 from .models import *
@@ -23,35 +24,38 @@ def buyer_browse_crops(request):
     context = {'all_crops' : all_crops}
     return render(request, "buyer/browse-crops.html",context)
 
+
+@check_login(['Buyer'])
+def buyer_crop_details(request,pk):
+    return render(request, "buyer/crop-details.html")
+
 @check_login(['Buyer'])
 def buyer_cart(request):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
-    print("================>",cart)
     if cart:
         cart_items = CartItem.objects.filter(cart=cart)
-        print("=======================}",cart_items,uid.username)
         context = {'cart_items':cart_items,'cart':cart}
         return render(request, "buyer/cart.html",context)
     else:
         cart = Cart.objects.create(user = uid)
         cart.save()
-    print("================>",uid)
     return render(request, "buyer/cart.html")
+
+
 
 @check_login(['Buyer'])
 def cart_item_delete(request,pk):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
-    if cart:
-        cart_items = CartItem.objects.filter(cart=cart)
-        context = {'cart_items':cart_items,'cart':cart}
-        return render(request, "buyer/cart.html",context)
-    else:
-        cart = Cart.objects.create(user = uid)
-        cart.save()
-        return render(request, "buyer/cart.html")
-    return render(request, "buyer/cart.html")
+    item = CartItem.objects.get(id = pk)
+    item.delete()
+    cart_items = CartItem.objects.filter(cart=cart)
+    context = {'cart_items':cart_items,'cart':cart}
+    return redirect('buyer_cart')
+
+
+
 @check_login(['Buyer'])
 def buyer_orders(request):
     return render(request, "buyer/orders.html")
@@ -98,9 +102,6 @@ def buyer_settings(request):
 def buyer_checkout(request):
     return render(request, "buyer/checkout.html")
 
-@check_login(['Buyer'])
-def buyer_crop_details(request):
-    return render(request, "buyer/crop-details.html")
 
 @check_login(['Buyer'])
 def buyer_order_details(request):

@@ -21,7 +21,11 @@ from buyer import views
 urlpatterns = [
     path('buyer_home', views.buyer_home, name='buyer_home'),
     path('dashboard/', views.buyer_dashboard, name='buyer_dashboard'),
+
     path('browse-crops/', views.buyer_browse_crops, name='buyer_browse_crops'),
+    path('crop-details/<int:pk>', views.buyer_crop_details, name='buyer_crop_details'),
+
+
 
     path('cart/', views.buyer_cart, name='buyer_cart'),
     path('cart_item_delete/<int:pk>', views.cart_item_delete, name='cart_item_delete'),
@@ -38,7 +42,6 @@ urlpatterns = [
     path('bank-details/', views.buyer_bank_details, name='buyer_bank_details'),
     path('settings/', views.buyer_settings, name='buyer_settings'),
     path('checkout/', views.buyer_checkout, name='buyer_checkout'),
-    path('crop-details/', views.buyer_crop_details, name='buyer_crop_details'),
     path('order-details/', views.buyer_order_details, name='buyer_order_details'),
     path('kyc', views.kyc, name='kyc'),
     path('home', views.home, name='home'),
