@@ -141,9 +141,10 @@
               </div>
               <div class="cart-item-actions">
                 <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                <button class="btn btn-sm btn-ghost" style="color:var(--red-500);"
+                <a href="{% url 'cart_item_delete' pk=item.id%}" class="btn btn-sm btn-ghost"
+                  style="color:var(--red-500);"
                   onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
-                  Remove</button>
+                  Remove</a>
               </div>
             </div>
             {%endfor%}
