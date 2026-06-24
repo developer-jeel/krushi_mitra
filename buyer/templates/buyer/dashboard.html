@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Dashboard - Krushi Mitra Buyer Panel</title>
+  <title>Dashboar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/dashboard.css' %}">
 </head>
+
 <body>
   <!-- Sidebar Backdrop -->
   <div class="sidebar-backdrop"></div>
@@ -96,8 +99,10 @@
           <span class="sidebar-item-text">Settings</span>
         </a>
 
-        <div class="sidebar-section-label" style="padding-top:12px;border-top:1px solid var(--border-color);margin-top:8px;">Support</div>
-        <a href="#" class="sidebar-item" data-tooltip="Logout" onclick="showToast('info','Logout','Logging you out...')">
+        <div class="sidebar-section-label"
+          style="padding-top:12px;border-top:1px solid var(--border-color);margin-top:8px;">Support</div>
+        <a href="#" class="sidebar-item" data-tooltip="Logout"
+          onclick="showToast('info','Logout','Logging you out...')">
           <span class="sidebar-item-icon">🚪</span>
           <span class="sidebar-item-text">Logout</span>
         </a>
@@ -150,7 +155,8 @@
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
               <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">🚪 Logout</a>
+              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">🚪
+                Logout</a>
             </div>
           </div>
         </div>
@@ -164,7 +170,8 @@
           <div class="hero-content">
             <div class="hero-badge">🎉 Welcome back, Rajesh!</div>
             <h2 class="hero-title">Your Agri Marketplace Hub</h2>
-            <p class="hero-text">Monitor orders, discover premium crops, and manage your procurement all in one place.</p>
+            <p class="hero-text">Monitor orders, discover premium crops, and manage your procurement all in one place.
+            </p>
             <div class="hero-actions">
               <a href="{% url 'buyer_browse_crops' %}" class="btn btn-primary btn-lg">🌾 Browse Crops</a>
               <a href="{% url 'buyer_bulk_order' %}" class="btn btn-secondary btn-lg">📋 Bulk Inquiry</a>
@@ -238,7 +245,8 @@
           <div class="stat-card cyan">
             <div class="stat-card-info">
               <div class="stat-card-label">Total Value</div>
-              <div class="stat-card-value">₹<span data-counter="24000000" data-duration="2500" data-prefix="" data-suffix="">0</span></div>
+              <div class="stat-card-value">₹<span data-counter="24000000" data-duration="2500" data-prefix=""
+                  data-suffix="">0</span></div>
               <div class="stat-card-change up">↑ 15.3% growth</div>
             </div>
             <div class="stat-card-icon">💰</div>
@@ -270,7 +278,8 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}"
+                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
                     <td>Basmati Rice</td>
                     <td>500 kg</td>
                     <td>₹82,500</td>
@@ -278,7 +287,8 @@
                     <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}"
+                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
                     <td>Red Chillies</td>
                     <td>200 kg</td>
                     <td>₹48,000</td>
@@ -286,7 +296,8 @@
                     <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}"
+                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
                     <td>Turmeric</td>
                     <td>100 kg</td>
                     <td>₹18,500</td>
@@ -294,7 +305,8 @@
                     <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}"
+                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
                     <td>Alphonso Mango</td>
                     <td>50 boxes</td>
                     <td>₹35,000</td>
@@ -302,7 +314,8 @@
                     <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
                   <tr>
-                    <td><a href="{% url 'buyer_order_details' %}" style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
+                    <td><a href="{% url 'buyer_order_details' %}"
+                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
                     <td>Organic Wheat</td>
                     <td>1000 kg</td>
                     <td>₹28,000</td>
@@ -573,4 +586,5 @@
 
   <script src="{% static 'buyer/js/app.js' %}"></script>
 </body>
+
 </html>

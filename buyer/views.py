@@ -85,14 +85,20 @@ def cart_item_delete(request,pk):
         cart_items = CartItem.objects.filter(cart=cart)
         return redirect('buyer_cart')
 
-
+@check_login(['Buyer'])
+def buyer_checkout(request):
+    uid = request.uid
+    cart = Cart.objects.get(user = uid)
+    cart_items = CartItem.objects.filter(cart=cart)
+    context = {"uid":uid,"cart":cart,"cart_items":cart_items}
+    return render(request, "buyer/checkout.html",context)
 
 @check_login(['Buyer'])
 def buyer_orders(request):
     return render(request, "buyer/orders.html")
 
 @check_login(['Buyer'])
-def buyer_wishlist(request):
+def buyer_wishlist(request):    
     return render(request, "buyer/wishlist.html")
 
 @check_login(['Buyer'])
@@ -105,7 +111,8 @@ def buyer_export_inquiry(request):
 
 @check_login(['Buyer'])
 def buyer_messages(request):
-    return render(request, "buyer/messages.html")
+    num = 33
+    return render(request, "buyer/messages.html",{'num':num})
 
 @check_login(['Buyer'])
 def buyer_notifications(request):
@@ -128,11 +135,6 @@ def buyer_bank_details(request):
 @check_login(['Buyer'])
 def buyer_settings(request):
     return render(request, "buyer/settings.html")
-
-@check_login(['Buyer'])
-def buyer_checkout(request):
-    return render(request, "buyer/checkout.html")
-
 
 @check_login(['Buyer'])
 def buyer_order_details(request):
