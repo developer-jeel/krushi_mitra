@@ -96,8 +96,7 @@ class Cart(models.Model):
         on_delete=models.CASCADE,
         related_name='cart'
     )
-    final_price = models.IntegerField(blank=True, null=True)
-    tax = models.IntegerField(blank=True, null=True)
+    tax_per = models.IntegerField(blank=True, null=True,default=5)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -107,6 +106,14 @@ class Cart(models.Model):
     @property
     def total_price(self):
         return sum(item.subtotal for item in self.items.all())
+
+    @property
+    def tax(self):
+        return (self.total_price * self.tax_per) / 100
+
+    @property
+    def final_price(self):
+        return self.total_price + self.tax
 
 class CartItem(models.Model):
     cart = models.ForeignKey(
