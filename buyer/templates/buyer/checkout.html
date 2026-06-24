@@ -177,9 +177,10 @@
               <div class="summary-divider"></div>
               <div class="checkout-summary-item"><span>Subtotal</span><span>₹{{cart.total_price}}</span></div>
               <div class="checkout-summary-item"><span>Delivery</span><span class="text-green">Free</span></div>
-              <div class="checkout-summary-item"><span>Tax (GST @ 5%)</span><span>₹1,775</span></div>
+              <div class="checkout-summary-item"><span>Tax (GST @ {{cart.tax_per}}%)</span><span>₹{{cart.tax}}</span>
+              </div>
               <div class="summary-divider"></div>
-              <div class="checkout-summary-item total"><span>Grand Total</span><span>₹{{cart.total_price}}</span></div>
+              <div class="checkout-summary-item total"><span>Grand Total</span><span>₹{{cart.final_price}}</span></div>
 
               <div class="coupon-section mt-4">
                 <div class="coupon-input-group">
@@ -206,7 +207,7 @@
 
               <button class="btn btn-primary btn-lg btn-block mt-4"
                 onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
-                🛒 Place Order - ₹37,275
+                🛒 Place Order - ₹{{cart.final_price}}
               </button>
             </div>
           </div>
