@@ -221,37 +221,42 @@
             <!-- Crop Grid -->
             <div class="crop-grid">
               {%for crop in all_crops %}
-              <div class="crop-card card card-float" data-crop>
-                <div class="crop-card-img-wrapper">
-                  <img src="{{crop.image.url}}" alt="Basmati Rice" loading="lazy">
-                  <button class="wishlist-toggle">🤍</button>
-                  <span class="crop-stock-badge in-stock">In Stock</span>
+              <form action="{% url 'buyer_cart'%}" method="post">
+                {%csrf_token%}
+                <div class="crop-card card card-float" data-crop>
+                  <div class="crop-card-img-wrapper">
+                    <img src="{{crop.image.url}}" alt="Basmati Rice" loading="lazy">
+                    <button class="wishlist-toggle">🤍</button>
+                    <span class="crop-stock-badge in-stock">In Stock</span>
+                  </div>
+                  <div class="crop-card-body">
+                    <div class="crop-card-category">{{crop.category}}</div>
+                    <h3 class="crop-card-name">{{crop.cropname}}</h3>
+                    <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.8, 124 reviews)</span></div>
+                    <div class="crop-card-details">
+                      <span class="crop-detail">📍 {{crop.user.city}}</span>
+                      <span class="crop-detail">📦 {{crop.quantity}} kg</span>
+                      <span class="crop-detail">⭐ Grade A</span>
+                    </div>
+                    <div class="crop-card-price">
+                      <span class="price">₹{{crop.price}}</span>
+                      <span class="price-unit">/ kg</span>
+                      <span class="price-discount">₹{{crop.price}}</span>
+                    </div>
+                    <div class="crop-card-footer">
+                      <span class="crop-seller-status">✅ Verified Seller</span>
+                      <span class="crop-harvest">Harvest: Nov 2024</span>
+                    </div>
+                    <input value="{{crop.id}}" name="crop" hidden>
+                    <div class="crop-card-actions">
+                      <a href="{% url 'buyer_crop_details' pk=crop.id %}" class="btn btn-outline btn-sm flex-1">View
+                        Details</a>
+                      <button href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to
+                        Cart</button>
+                    </div>
+                  </div>
                 </div>
-                <div class="crop-card-body">
-                  <div class="crop-card-category">{{crop.category}}</div>
-                  <h3 class="crop-card-name">{{crop.cropname}}</h3>
-                  <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.8, 124 reviews)</span></div>
-                  <div class="crop-card-details">
-                    <span class="crop-detail">📍 {{crop.user.city}}</span>
-                    <span class="crop-detail">📦 {{crop.quantity}} kg</span>
-                    <span class="crop-detail">⭐ Grade A</span>
-                  </div>
-                  <div class="crop-card-price">
-                    <span class="price">₹{{crop.price}}</span>
-                    <span class="price-unit">/ kg</span>
-                    <span class="price-discount">₹{{crop.price}}</span>
-                  </div>
-                  <div class="crop-card-footer">
-                    <span class="crop-seller-status">✅ Verified Seller</span>
-                    <span class="crop-harvest">Harvest: Nov 2024</span>
-                  </div>
-                  <div class="crop-card-actions">
-                    <a href="{% url 'buyer_crop_details' pk=crop.id %}" class="btn btn-outline btn-sm flex-1">View
-                      Details</a>
-                    <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
-                  </div>
-                </div>
-              </div>
+              </form>
               {%endfor%}
 
               <!-- Pagination -->
