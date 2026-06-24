@@ -36,7 +36,7 @@ def buyer_cart(request):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
     if request.method == 'POST':
-        quantity = request.POST.get('quantity')
+        quantity = request.POST.get('quantity', 1)
         crop_id = request.POST.get('crop')
         crop_obj = crop.objects.get(id=crop_id)
 
@@ -123,9 +123,20 @@ def buyer_orders(request):
     order = Order.objects.filter(user = uid)
     items = OrderItem.objects.filter(order__in=order)
     total_order = len(items)
+    pending_order = len([item for item in items if item.order.status=="Pending"])
+    confirmed_order = len([item for item in items if item.order.status=="Confirmed"])
+    shipped_order = len([item for item in items if item.order.status=="Shipped"])
+    delivered_order = len([item for item in items if item.order.status=="Delivered"])
+    cancelled_order = len([item for item in items if item.order.status=="Cancelled"])
 
-    context = {'uid':uid,'buyr':buyr,'order':order,'items':items,'total_order':total_order}
+    context = {'uid':uid,'buyr':buyr,'order':order,'items':items,
+                'total_order':total_order,'pending_order':pending_order,
+                'shipped_order':shipped_order,'delivered_order':delivered_order,
+                'cancelled_order':cancelled_order
+                }
     return render(request, "buyer/orders.html",context)
+
+
 
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
