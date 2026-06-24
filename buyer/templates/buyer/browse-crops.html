@@ -221,7 +221,7 @@
             <!-- Crop Grid -->
             <div class="crop-grid">
               {%for crop in all_crops %}
-              <form action="{% url 'buyer_cart'%}" method="post">
+              <form action="{% url 'buyer_addto_cart'%}" method="post">
                 {%csrf_token%}
                 <div class="crop-card card card-float" data-crop>
                   <div class="crop-card-img-wrapper">

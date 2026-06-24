@@ -64,7 +64,25 @@ def buyer_cart(request):
         cart.save()
     return render(request, "buyer/cart.html")
 
+@check_login(['Buyer'])
+def buyer_addto_cart(request):
+    uid = request.uid
+    cart = Cart.objects.get(user = uid)
+    if request.method == 'POST':
+        quantity = request.POST.get('quantity', 1)
+        crop_id = request.POST.get('crop')
+        crop_obj = crop.objects.get(id=crop_id)
 
+        cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first()
+
+        if cart_item:
+            cart_item.quantity+= int(quantity)
+            cart_item.save()
+            return redirect('buyer_browse_crops')
+        else:
+            cart_item = CartItem.objects.create(cart=cart,crop=crop_obj,quantity=quantity)
+            cart_item.save()    
+            return redirect('buyer_browse_crops')
 
 @check_login(['Buyer'])
 def cart_item_delete(request,pk):
