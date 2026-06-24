@@ -116,16 +116,8 @@ class Cart(models.Model):
         return self.total_price + self.tax
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(
-        Cart,
-        on_delete=models.CASCADE,
-        related_name='items'
-    )
-    crop = models.ForeignKey(
-        crop,
-        on_delete=models.CASCADE,
-        related_name='crop'
-    )
+    cart = models.ForeignKey(Cart,on_delete=models.CASCADE,related_name='items')
+    crop = models.ForeignKey(crop,on_delete=models.CASCADE,related_name='crop')
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
@@ -138,3 +130,45 @@ class CartItem(models.Model):
     @property
     def subtotal(self):
         return self.crop.price * self.quantity
+
+
+
+class Order(models.Model):
+
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Shipped', 'Shipped'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
+    )
+
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='orders')
+    order_id = models.CharField(max_length=20,unique=True,blank=True)
+    subtotal = models.DecimalField(max_digits=10,decimal_places=2,default=0)
+    tax = models.DecimalField(max_digits=10,decimal_places=2,default=0)
+    total_amount = models.DecimalField(max_digits=10,decimal_places=2,default=0)
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='Pending')
+    payment_method = models.CharField(max_length=50,blank=True,null=True)
+    payment_status = models.CharField(max_length=20,default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            count = Order.objects.count() + 1
+            self.order_id = f"#ORD-{timezone.now().year}-{count:04d}"
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.order_id
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name='items')
+    crop = models.ForeignKey(crop,on_delete=models.SET_NULL,null=True)
+    crop_name = models.CharField(max_length=200)
+    price = models.DecimalField(max_digits=10,decimal_places=2)
+    quantity = models.PositiveIntegerField()
+    subtotal = models.DecimalField(max_digits=10,decimal_places=2)
+    def __str__(self):
+        return self.crop_name
