@@ -120,16 +120,16 @@ def buyer_checkout(request):
 def buyer_orders(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
-    order = Order.objects.get(user = uid)
-    items =OrderItem.objects.filter(order=order)
+    order = Order.objects.filter(user = uid)
+    items = OrderItem.objects.filter(order__in=order)
+    total_order = len(items)
 
-    context = {}
-    return render(request, "buyer/orders.html")
+    context = {'uid':uid,'buyr':buyr,'order':order,'items':items,'total_order':total_order}
+    return render(request, "buyer/orders.html",context)
 
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
     return render(request, "buyer/wishlist.html")
-
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):
