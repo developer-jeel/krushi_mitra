@@ -50,7 +50,7 @@ def buyer_cart(request):
             return render(request, "buyer/cart.html",context)
         else:
             cart_item = CartItem.objects.create(cart=cart,crop=crop_obj,quantity=quantity)
-            cart_item.save()
+            cart_item.save()    
             cart_items = CartItem.objects.filter(cart=cart)
             context = {'cart_items':cart_items,'cart':cart}
             return render(request, "buyer/cart.html",context)
@@ -88,9 +88,10 @@ def cart_item_delete(request,pk):
 @check_login(['Buyer'])
 def buyer_checkout(request):
     uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
-    context = {"uid":uid,"cart":cart,"cart_items":cart_items}
+    context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr}
     return render(request, "buyer/checkout.html",context)
 
 @check_login(['Buyer'])
@@ -100,6 +101,7 @@ def buyer_orders(request):
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
     return render(request, "buyer/wishlist.html")
+
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):

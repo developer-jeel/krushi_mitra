@@ -7,8 +7,40 @@ from django.utils import timezone
 # Create your models here.
 
 class Buyer(models.Model):
+    STATE_CHOICES = [
+        ('Andhra Pradesh', 'Andhra Pradesh'),
+        ('Arunachal Pradesh', 'Arunachal Pradesh'),
+        ('Assam', 'Assam'),
+        ('Bihar', 'Bihar'),
+        ('Chhattisgarh', 'Chhattisgarh'),
+        ('Goa', 'Goa'),
+        ('Gujarat', 'Gujarat'),
+        ('Haryana', 'Haryana'),
+        ('Himachal Pradesh', 'Himachal Pradesh'),
+        ('Jharkhand', 'Jharkhand'),
+        ('Karnataka', 'Karnataka'),
+        ('Kerala', 'Kerala'),
+        ('Madhya Pradesh', 'Madhya Pradesh'),
+        ('Maharashtra', 'Maharashtra'),
+        ('Manipur', 'Manipur'),
+        ('Meghalaya', 'Meghalaya'),
+        ('Mizoram', 'Mizoram'),
+        ('Nagaland', 'Nagaland'),
+        ('Odisha', 'Odisha'),
+        ('Punjab', 'Punjab'),
+        ('Rajasthan', 'Rajasthan'),
+        ('Sikkim', 'Sikkim'),
+        ('Tamil Nadu', 'Tamil Nadu'),
+        ('Telangana', 'Telangana'),
+        ('Tripura', 'Tripura'),
+        ('Uttar Pradesh', 'Uttar Pradesh'),
+        ('Uttarakhand', 'Uttarakhand'),
+        ('West Bengal', 'West Bengal'),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='buyer')
     address = models.TextField(blank=True, null=True)
+    state = models.CharField(max_length=100,choices=STATE_CHOICES,default='Gujarat')
+    pincode = models.CharField(max_length=6,blank=True, null=True)
     business_type = models.CharField(max_length=50, blank=True, null=True)
     gst_certificate = models.FileField(upload_to='buyer/documents/gst/', blank=True, null=True)
     gst_no = models.CharField(max_length=15, unique=True, blank=True, null=True)
@@ -64,6 +96,8 @@ class Cart(models.Model):
         on_delete=models.CASCADE,
         related_name='cart'
     )
+    final_price = models.IntegerField(blank=True, null=True)
+    tax = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

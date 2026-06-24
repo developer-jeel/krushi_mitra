@@ -117,7 +117,7 @@
               <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input"
                   value="{{uid.contact}}" required></div>
               <div class="form-group"><label class="form-label">Billing Address</label><textarea class="form-textarea"
-                  required>{{uid.address}}</textarea></div>
+                  required>{{buyr.address}}</textarea></div>
             </div>
 
             <!-- Shipping -->
@@ -128,16 +128,16 @@
                 <label for="same-billing">Same as billing address</label>
               </div>
               <div class="form-group"><label class="form-label">Delivery Address</label><textarea
-                  class="form-textarea">42, Trade Tower, Market Road, Pune - 411001</textarea></div>
+                  class="form-textarea">{{buyr.address}}</textarea></div>
               <div class="form-row">
                 <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input"
-                    value="Pune"></div>
+                    value="{{uid.city}}"></div>
                 <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input"
-                    value="Maharashtra"></div>
+                    value="{{buyr.state}}"></div>
               </div>
               <div class="form-row">
                 <div class="form-group"><label class="form-label">Pincode</label><input type="text" class="form-input"
-                    value="411001"></div>
+                    value="{{buyr.pincode}}"></div>
                 <div class="form-group"><label class="form-label">Delivery Instructions</label><input type="text"
                     class="form-input" placeholder="Optional"></div>
               </div>
