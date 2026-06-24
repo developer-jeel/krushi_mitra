@@ -167,49 +167,54 @@
 
           <!-- Order Summary -->
           <div class="checkout-summary">
-            <div class="card">
-              <h3 class="card-title" style="margin-bottom:16px;">Order Summary</h3>
-              {%for item in cart_items%}
-              <div class="checkout-summary-item"><span>{{item.crop.cropname}} ({{item.quantity}}
-                  kg)</span><span>₹{{item.subtotal}}</span></div>
-              {%endfor%}
+            <form action="{% url 'buyer_checkout'%}" method="post">
+              {%csrf_token%}
+              <div class="card">
+                <h3 class="card-title" style="margin-bottom:16px;">Order Summary</h3>
+                {%for item in cart_items%}
+                <div class="checkout-summary-item"><span>{{item.crop.cropname}} ({{item.quantity}}
+                    kg)</span><span>₹{{item.subtotal}}</span></div>
+                {%endfor%}
 
-              <div class="summary-divider"></div>
-              <div class="checkout-summary-item"><span>Subtotal</span><span>₹{{cart.total_price}}</span></div>
-              <div class="checkout-summary-item"><span>Delivery</span><span class="text-green">Free</span></div>
-              <div class="checkout-summary-item"><span>Tax (GST @ {{cart.tax_per}}%)</span><span>₹{{cart.tax}}</span>
-              </div>
-              <div class="summary-divider"></div>
-              <div class="checkout-summary-item total"><span>Grand Total</span><span>₹{{cart.final_price}}</span></div>
-
-              <div class="coupon-section mt-4">
-                <div class="coupon-input-group">
-                  <input type="text" class="form-input coupon-input" placeholder="Have a coupon?">
-                  <button class="btn btn-primary btn-sm apply-coupon">Apply</button>
+                <div class="summary-divider"></div>
+                <div class="checkout-summary-item"><span>Subtotal</span><span>₹{{cart.total_price}}</span></div>
+                <div class="checkout-summary-item"><span>Delivery</span><span class="text-green">Free</span></div>
+                <div class="checkout-summary-item"><span>Tax (GST @ {{cart.tax_per}}%)</span><span>₹{{cart.tax}}</span>
                 </div>
-              </div>
-
-              <div class="checkout-payment mt-4">
-                <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:12px;">Payment Method</h4>
-                <div class="payment-options">
-                  <label class="form-check"><input type="radio" name="payment" checked> 💳 Credit/Debit Card</label>
-                  <label class="form-check"><input type="radio" name="payment"> 🏦 Net Banking</label>
-                  <label class="form-check"><input type="radio" name="payment"> 📱 UPI</label>
-                  <label class="form-check"><input type="radio" name="payment"> 📋 Bank Transfer</label>
+                <div class="summary-divider"></div>
+                <div class="checkout-summary-item total"><span>Grand Total</span><span>₹{{cart.final_price}}</span>
                 </div>
-              </div>
 
-              <div class="form-check mt-4">
-                <input type="checkbox" id="terms" checked>
-                <label for="terms">I agree to the <a href="#" style="color:var(--text-link);">Terms & Conditions</a> and
-                  <a href="#" style="color:var(--text-link);">Return Policy</a></label>
-              </div>
+                <div class="coupon-section mt-4">
+                  <div class="coupon-input-group">
+                    <input type="text" class="form-input coupon-input" placeholder="Have a coupon?">
+                    <button class="btn btn-primary btn-sm apply-coupon">Apply</button>
+                  </div>
+                </div>
 
-              <button class="btn btn-primary btn-lg btn-block mt-4"
-                onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
-                🛒 Place Order - ₹{{cart.final_price}}
-              </button>
-            </div>
+                <div class="checkout-payment mt-4">
+                  <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:12px;">Payment Method</h4>
+                  <div class="payment-options">
+                    <label class="form-check"><input type="radio" name="payment" checked> 💳 Credit/Debit Card</label>
+                    <label class="form-check"><input type="radio" name="payment"> 🏦 Net Banking</label>
+                    <label class="form-check"><input type="radio" name="payment"> 📱 UPI</label>
+                    <label class="form-check"><input type="radio" name="payment"> 📋 Bank Transfer</label>
+                  </div>
+                </div>
+
+                <div class="form-check mt-4">
+                  <input type="checkbox" id="terms" checked>
+                  <label for="terms">I agree to the <a href="#" style="color:var(--text-link);">Terms & Conditions</a>
+                    and
+                    <a href="#" style="color:var(--text-link);">Return Policy</a></label>
+                </div>
+
+                <button class="btn btn-primary btn-lg btn-block mt-4"
+                  onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
+                  🛒 Place Order - ₹{{cart.final_price}}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 

@@ -91,11 +91,39 @@ def buyer_checkout(request):
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
+    if request.method == 'POST':
+        payment_method = request.POST.get('payment')
+        con_order = Order.objects.create(
+             user = uid,
+             subtotal = cart.total_price,
+             tax = cart.tax,
+             total_amount = cart.final_price,
+             payment_method = payment_method
+        )
+        con_order.save()
+
+        for item in cart_items:
+            order_item = OrderItem.objects.create(
+                order = con_order,
+                crop = item.crop ,
+                crop_name = item.crop.cropname,
+                price = item.crop.price,
+                quantity = item.quantity,
+                subtotal = item.subtotal
+            )
+        cart_items.delete()
+
     context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr}
     return render(request, "buyer/checkout.html",context)
 
 @check_login(['Buyer'])
 def buyer_orders(request):
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    order = Order.objects.get(user = uid)
+    items =OrderItem.objects.filter(order=order)
+
+    context = {}
     return render(request, "buyer/orders.html")
 
 @check_login(['Buyer'])
