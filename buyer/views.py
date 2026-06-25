@@ -132,6 +132,12 @@ def buyer_checkout(request):
             )
         cart_items.delete()
 
+        notification = notifications.objects.create(
+            user = buyr,
+            notification_type = "Payment",
+            message = f"Payment of ₹{con_order.total_amount} for order {con_order.order_id} confirmed."
+        )
+
     context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr}
     return render(request, "buyer/checkout.html",context)
 
