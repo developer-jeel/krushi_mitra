@@ -96,16 +96,18 @@
         </div>
 
         <div class="notification-list page-reveal">
+          {%for notification in all_notifications%}
           <div class="notification-card unread">
             <div class="notif-icon green">📦</div>
             <div class="notif-content">
-              <div class="notif-title">Order Delivered Successfully</div>
-              <div class="notif-text">Your order #ORD-2024-0890 has been delivered. Rate your experience.</div>
+              <div class="notif-title">{{notification.notification_type}}</div>
+              <div class="notif-text">{{notification.message}}</div>
               <div class="notif-time">5 minutes ago</div>
             </div>
             <div class="notif-actions"><button class="mark-read" title="Mark as read">✓</button><button
                 class="archive-notification" title="Archive">🗑️</button></div>
           </div>
+          {%endfor%}
           <div class="notification-card unread">
             <div class="notif-icon blue">💬</div>
             <div class="notif-content">
