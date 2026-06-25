@@ -1,3 +1,4 @@
+from django.template import context
 from requests import request
 from django.shortcuts import render, redirect
 from farmer.models import *
@@ -175,7 +176,11 @@ def buyer_messages(request):
 
 @check_login(['Buyer'])
 def buyer_notifications(request):
-    return render(request, "buyer/notifications.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    all_notifications = notifications.objects.filter(user=buyr)
+    context={'buyr':buyr,'all_notifications':all_notifications}
+    return render(request, "buyer/notifications.html",context)
 
 @check_login(['Buyer'])
 def buyer_profile(request):
