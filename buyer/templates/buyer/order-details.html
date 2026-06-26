@@ -104,14 +104,14 @@
             <div class="card">
               <div class="flex items-center justify-between mb-4">
                 <h3 class="card-title">Order Status</h3>
-                <span class="badge badge-processing">Processing</span>
+                <span class="badge badge-processing">{{item.order.status}}</span>
               </div>
               <div class="order-timeline">
                 <div class="timeline-step completed">
                   <div class="step-dot">✓</div>
                   <div class="step-info">
                     <div class="step-title">Order Placed</div>
-                    <div class="step-date">15 Jan 2024, 10:30 AM</div>
+                    <!-- <div class="step-date">15 Jan 2024, 10:30 AM</div> -->
                   </div>
                 </div>
                 {%if item.order.payment_status != 'Pending'%}
@@ -123,123 +123,158 @@
                     {%endif%}
                     <div class="step-info">
                       <div class="step-title">Payment Confirmed</div>
-                      <div class="step-date">15 Jan 2024, 10:35 AM</div>
+                      <!-- <div class="step-date">15 Jan 2024, 10:35 AM</div> -->
                     </div>
                   </div>
+                  {%if item.order.payment_status == 'Pending' %}
                   <div class="timeline-step">
                     <div class="step-dot">○</div>
-                    <div class="step-info">
-                      <div class="step-title">Processing</div>
-                      <div class="step-date">Expected: 18 Jan 2024</div>
-                    </div>
-                  </div>
-                  <div class="timeline-step">
-                    <div class="step-dot">○</div>
-                    <div class="step-info">
-                      <div class="step-title">Shipped</div>
-                      <div class="step-date">Awaiting update</div>
-                    </div>
-                  </div>
-                  <div class="timeline-step">
-                    <div class="step-dot">○</div>
-                    <div class="step-info">
-                      <div class="step-title">Delivered</div>
-                      <div class="step-date">Estimated: 22 Jan 2024</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    {%else%}
+                    {%if item.order.status == 'Shipped' or item.order.status == 'Delivered'%}
+                    <div class="timeline-step completed">
+                      <div class="step-dot">✓</div>
+                      {%else%}
+                      <div class="timeline-step active">
+                        <div class="step-dot">●</div>
+                        {%endif%}
+                        {%endif%}
+                        <div class="step-info">
+                          <div class="step-title">Processing</div>
+                          <!-- <div class="step-date">Expected: 18 Jan 2024</div> -->
+                        </div>
+                      </div>
+                      {%if item.order.payment_status == 'Pending' %}
+                      <div class="timeline-step">
+                        <div class="step-dot">○</div>
+                        {%else%}
+                        {%if item.order.status == 'Shipped' or item.order.status == 'Delivered'%}
+                        <div class="timeline-step completed">
+                          <div class="step-dot">✓</div>
+                          {%else%}
+                          <div class="timeline-step active">
+                            <div class="step-dot">●</div>
+                            {%endif%}
+                            {%endif%}
+                            <div class="step-info">
+                              <div class="step-title">Shipped</div>
+                              <!-- <div class="step-date">Awaiting update</div> -->
+                            </div>
+                          </div>
+                          {%if item.order.payment_status == 'Pending' %}
+                          <div class="timeline-step">
+                            <div class="step-dot">○</div>
+                            {%else%}
+                            {%if item.order.status == 'Delivered'%}
+                            <div class="timeline-step completed">
+                              <div class="step-dot">✓</div>
+                              {%else%}
+                              <div class="timeline-step active">
+                                <div class="step-dot">●</div>
+                                {%endif%}
+                                {%endif%}
+                                <div class="step-info">
+                                  <div class="step-title">Delivered</div>
+                                  <!-- <div class="step-date">Estimated: 22 Jan 2024</div> -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
 
-              <!-- Crop Info -->
-              <div class="card">
-                <h3 class="card-title">Crop Information</h3>
-                <div class="crop-info-card">
-                  <div class="crop-info-img"><img
-                      src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=120&h=90&fit=crop"
-                      alt="Basmati Rice"></div>
-                  <div class="crop-info-details">
-                    <h4 class="crop-info-name">Premium Basmati Rice - Grade A</h4>
-                    <div class="crop-info-meta">🌾 Grains | 📍 Punjab | ⭐ Grade A</div>
-                    <div class="crop-info-pricing">
-                      <span>Quantity: <strong>500 kg</strong></span>
-                      <span>Unit Price: <strong>₹165/kg</strong></span>
-                      <span>Total: <strong style="color:var(--primary-500);">₹82,500</strong></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                          <!-- Crop Info -->
+                          <div class="card">
+                            <h3 class="card-title">Crop Information</h3>
+                            <div class="crop-info-card">
+                              <div class="crop-info-img"><img src="{{item.crop.image.url}}" alt="Basmati Rice"></div>
+                              <div class="crop-info-details">
+                                <h4 class="crop-info-name">{{item.crop_name}}</h4>
+                                <div class="crop-info-meta">🌾{{item.crop.category}} | 📍{{item.order.user.city}}</div>
+                                <div class="crop-info-pricing">
+                                  <span>Quantity: <strong>{{item.quantity}} *20kg</strong></span>
+                                  <span>Unit Price: <strong>₹{{item.price}}/kg</strong></span>
+                                  <span>Total: <strong
+                                      style="color:var(--primary-500);">₹{{item.subtotal}}</strong></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-              <!-- Order Notes -->
-              <div class="card">
-                <h3 class="card-title">Order Notes</h3>
-                <div class="order-notes">
-                  <div class="order-note">
-                    <div class="note-icon">📝</div>
-                    <div class="note-content">
-                      <div class="note-text">Please ensure proper packaging for long-distance transport.</div>
-                      <div class="note-time">Added on 15 Jan 2024</div>
-                    </div>
-                  </div>
-                  <div class="order-note">
-                    <div class="note-icon">📦</div>
-                    <div class="note-content">
-                      <div class="note-text">Quality certificate required upon delivery.</div>
-                      <div class="note-time">Added on 15 Jan 2024</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="order-note-input mt-4">
-                  <textarea class="form-textarea" placeholder="Add a note to this order..." rows="2"></textarea>
-                  <button class="btn btn-sm btn-primary mt-2">Add Note</button>
-                </div>
-              </div>
-            </div>
+                          <!-- Order Notes -->
+                          <div class="card">
+                            <h3 class="card-title">Order Notes</h3>
+                            <div class="order-notes">
+                              <div class="order-note">
+                                <div class="note-icon">📝</div>
+                                <div class="note-content">
+                                  <div class="note-text">Please ensure proper packaging for long-distance transport.
+                                  </div>
+                                  <div class="note-time">Added on 15 Jan 2024</div>
+                                </div>
+                              </div>
+                              <div class="order-note">
+                                <div class="note-icon">📦</div>
+                                <div class="note-content">
+                                  <div class="note-text">Quality certificate required upon delivery.</div>
+                                  <div class="note-time">Added on 15 Jan 2024</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="order-note-input mt-4">
+                              <textarea class="form-textarea" placeholder="Add a note to this order..."
+                                rows="2"></textarea>
+                              <button class="btn btn-sm btn-primary mt-2">Add Note</button>
+                            </div>
+                          </div>
+                        </div>
 
-            <!-- Right Column -->
-            <div class="order-detail-side">
-              <!-- Payment -->
-              <div class="card">
-                <h3 class="card-title">Payment Information</h3>
-                <div class="info-row"><span>Payment Status</span><span class="badge badge-approved">Paid</span></div>
-                <div class="info-row"><span>Payment Method</span><span>Net Banking</span></div>
-                <div class="info-row"><span>Transaction ID</span><span
-                    style="font-family:monospace;font-size:0.75rem;">TXN1234567890</span></div>
-                <div class="info-row"><span>Amount Paid</span><span class="font-bold"
-                    style="color:var(--primary-500);">₹82,500</span></div>
-                <div class="info-row"><span>Payment Date</span><span>15 Jan 2024</span></div>
-              </div>
+                        <!-- Right Column -->
+                        <div class="order-detail-side">
+                          <!-- Payment -->
+                          <div class="card">
+                            <h3 class="card-title">Payment Information</h3>
+                            <div class="info-row"><span>Payment Status</span><span
+                                class="badge badge-approved">Paid</span>
+                            </div>
+                            <div class="info-row"><span>Payment Method</span><span>Net Banking</span></div>
+                            <div class="info-row"><span>Transaction ID</span><span
+                                style="font-family:monospace;font-size:0.75rem;">TXN1234567890</span></div>
+                            <div class="info-row"><span>Amount Paid</span><span class="font-bold"
+                                style="color:var(--primary-500);">₹82,500</span></div>
+                            <div class="info-row"><span>Payment Date</span><span>15 Jan 2024</span></div>
+                          </div>
 
-              <!-- Shipping -->
-              <div class="card">
-                <h3 class="card-title">Shipping Information</h3>
-                <div class="info-row"><span>Delivery To</span><span>Rajesh Mehta</span></div>
-                <div class="info-row"><span>Address</span><span style="font-size:0.8125rem;">42, Trade Tower, Market
-                    Road,
-                    Pune - 411001</span></div>
-                <div class="info-row"><span>City</span><span>Pune</span></div>
-                <div class="info-row"><span>State</span><span>Maharashtra</span></div>
-                <div class="info-row"><span>Phone</span><span>+91 98765 43210</span></div>
-              </div>
+                          <!-- Shipping -->
+                          <div class="card">
+                            <h3 class="card-title">Shipping Information</h3>
+                            <div class="info-row"><span>Delivery To</span><span>Rajesh Mehta</span></div>
+                            <div class="info-row"><span>Address</span><span style="font-size:0.8125rem;">42, Trade
+                                Tower,
+                                Market
+                                Road,
+                                Pune - 411001</span></div>
+                            <div class="info-row"><span>City</span><span>Pune</span></div>
+                            <div class="info-row"><span>State</span><span>Maharashtra</span></div>
+                            <div class="info-row"><span>Phone</span><span>+91 98765 43210</span></div>
+                          </div>
 
-              <!-- Billing -->
-              <div class="card">
-                <h3 class="card-title">Billing Information</h3>
-                <div class="info-row"><span>Business</span><span>Mehta Agro Traders</span></div>
-                <div class="info-row"><span>GST</span><span>27AABCM1234C1Z5</span></div>
-                <div class="info-row"><span>PAN</span><span>ABCDE1234F</span></div>
-              </div>
+                          <!-- Billing -->
+                          <div class="card">
+                            <h3 class="card-title">Billing Information</h3>
+                            <div class="info-row"><span>Business</span><span>Mehta Agro Traders</span></div>
+                            <div class="info-row"><span>GST</span><span>27AABCM1234C1Z5</span></div>
+                            <div class="info-row"><span>PAN</span><span>ABCDE1234F</span></div>
+                          </div>
 
-              <!-- Invoice -->
-              <div class="card">
-                <h3 class="card-title">Invoice</h3>
-                <div style="display:flex;gap:8px;">
-                  <button class="btn btn-outline btn-sm flex-1">📄 Preview</button>
-                  <button class="btn btn-primary btn-sm flex-1">⬇ Download</button>
-                </div>
-              </div>
-            </div>
-          </div>
+                          <!-- Invoice -->
+                          <div class="card">
+                            <h3 class="card-title">Invoice</h3>
+                            <div style="display:flex;gap:8px;">
+                              <button class="btn btn-outline btn-sm flex-1">📄 Preview</button>
+                              <button class="btn btn-primary btn-sm flex-1">⬇ Download</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
       </main>
     </div>
   </div>
