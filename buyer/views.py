@@ -165,8 +165,8 @@ def buyer_orders(request):
 def buyer_order_details(request,pk):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
-    items = OrderItem.objects.filter(id=pk)
-    context = {'uid':uid,'buyr':buyr,'items':items}
+    item = OrderItem.objects.get(id=pk)
+    context = {'uid':uid,'buyr':buyr,'item':item}
     return render(request, "buyer/order-details.html",context)
 
 @check_login(['Buyer'])
