@@ -163,7 +163,11 @@ def buyer_orders(request):
 
 @check_login(['Buyer'])
 def buyer_order_details(request,pk):
-    return render(request, "buyer/order-details.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    items = OrderItem.objects.filter(id=pk)
+    context = {'uid':uid,'buyr':buyr,'items':items}
+    return render(request, "buyer/order-details.html",context)
 
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
