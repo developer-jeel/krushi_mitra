@@ -280,14 +280,19 @@
                   {%for item in items%}
                   <tr>
                     <td><a href="{% url 'buyer_order_details' pk=item.id %}"
-                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
-                    <td>Basmati Rice</td>
-                    <td>500 kg</td>
-                    <td>₹82,500</td>
+                        style="color:var(--text-link);font-weight:600;">{{item.order.order_id}}</a></td>
+                    <td>{{item.crop_name}}</td>
+                    <td>{{item.quantity}} * 20kg</td>
+                    <td>₹{{item.subtotal}}</td>
+                    {%if item.order.status == 'Pending' or item.order.status == 'Confirmed' %}
                     <td><span class="badge badge-processing">Processing</span></td>
+                    {%elif item.order.status == 'Delivered' %}
                     <td><span class="badge badge-approved">Delivered</span></td>
+                    {%elif item.order.status == 'Shipped'%}
                     <td><span class="badge badge-active">Shipped</span></td>
+                    {%elif item.order.status == 'Cancelled'%}
                     <td><span class="badge badge-cancelled">Cancelled</span></td>
+                    {%endif%}
 
                     <td><a href="{% url 'buyer_order_details' pk=item.id %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
