@@ -162,7 +162,7 @@ def buyer_orders(request):
     return render(request, "buyer/orders.html",context)
 
 @check_login(['Buyer'])
-def buyer_order_details(request):
+def buyer_order_details(request,pk):
     return render(request, "buyer/order-details.html")
 
 @check_login(['Buyer'])

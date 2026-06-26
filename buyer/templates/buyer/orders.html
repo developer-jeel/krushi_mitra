@@ -179,7 +179,7 @@
             <tbody>
               {%for item in items%}
               <tr>
-                <td><a href="{% url 'buyer_order_details' %}"
+                <td><a href="{% url 'buyer_order_details' pk=item.id%}"
                     style="color:var(--text-link);font-weight:600;">{{item.order.order_id}}</a></td>
                 <td>{{item.crop_name}}</td>
                 <td>{{item.quantity}} * 20kg</td>
@@ -196,7 +196,7 @@
                 {%elif item.order.status == 'Cancelled'%}
                 <td><span class="badge badge-cancelled">Cancelled</span></td>
                 {%endif%}
-                <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View →</a></td>
+                <td><a href="{% url 'buyer_order_details'  pk=item.id%}" class="btn btn-sm btn-ghost">View →</a></td>
               </tr>
               {%endfor%}
             </tbody>

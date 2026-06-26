@@ -30,9 +30,14 @@ urlpatterns = [
     path('cart/', views.buyer_cart, name='buyer_cart'),
     path('buyer_addto_cart/', views.buyer_addto_cart, name='buyer_addto_cart'),
     path('cart_item_delete/<int:pk>', views.cart_item_delete, name='cart_item_delete'),
+    path('checkout/', views.buyer_checkout, name='buyer_checkout'),
 
 
     path('orders/', views.buyer_orders, name='buyer_orders'),
+    path('order-details/<int:pk>', views.buyer_order_details, name='buyer_order_details'),
+
+
+
     path('wishlist/', views.buyer_wishlist, name='buyer_wishlist'),
     path('bulk-order/', views.buyer_bulk_order, name='buyer_bulk_order'),
     path('export-inquiry/', views.buyer_export_inquiry, name='buyer_export_inquiry'),
@@ -42,8 +47,6 @@ urlpatterns = [
     path('verification/', views.buyer_verification, name='buyer_verification'),
     path('bank-details/', views.buyer_bank_details, name='buyer_bank_details'),
     path('settings/', views.buyer_settings, name='buyer_settings'),
-    path('checkout/', views.buyer_checkout, name='buyer_checkout'),
-    path('order-details/', views.buyer_order_details, name='buyer_order_details'),
     path('kyc', views.kyc, name='kyc'),
     path('home', views.home, name='home'),
 ]
