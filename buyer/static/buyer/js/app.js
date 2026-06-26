@@ -3,7 +3,7 @@
    GLOBAL APPLICATION JAVASCRIPT
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
   // ==========================================
   // THEME SYSTEM
@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function initTheme() {
     const savedTheme = localStorage.getItem('krushi-mitra-theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    
+
     const themeToggles = document.querySelectorAll('.theme-toggle');
     themeToggles.forEach(btn => {
       btn.innerHTML = savedTheme === 'dark' ? '☀️' : '🌙';
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const current = document.documentElement.getAttribute('data-theme');
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Desktop collapse
     if (toggleBtn) {
-      toggleBtn.addEventListener('click', function(e) {
+      toggleBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         sidebar.classList.toggle('collapsed');
         mainWrapper.classList.toggle('expanded');
@@ -59,14 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mobile toggle
     if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', function() {
+      mobileMenuBtn.addEventListener('click', function () {
         sidebar.classList.toggle('open');
         if (backdrop) backdrop.classList.toggle('open');
       });
     }
 
     if (backdrop) {
-      backdrop.addEventListener('click', function() {
+      backdrop.addEventListener('click', function () {
         sidebar.classList.remove('open');
         backdrop.classList.remove('open');
       });
@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.dropdown').forEach(dropdown => {
       const trigger = dropdown.querySelector('.dropdown-trigger');
       const menu = dropdown.querySelector('.dropdown-menu');
-      
+
       if (trigger && menu) {
-        trigger.addEventListener('click', function(e) {
+        trigger.addEventListener('click', function (e) {
           e.stopPropagation();
           // Close other dropdowns
           document.querySelectorAll('.dropdown-menu.open').forEach(m => {
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Close dropdowns on outside click
-    document.addEventListener('click', function() {
+    document.addEventListener('click', function () {
       document.querySelectorAll('.dropdown-menu.open').forEach(m => {
         m.classList.remove('open');
       });
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function initModals() {
     // Open modals
     document.querySelectorAll('[data-modal]').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const modalId = this.getAttribute('data-modal');
         const modal = document.getElementById(modalId);
         if (modal) {
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       const closeBtn = overlay.querySelector('.modal-close');
       const closeBtns = overlay.querySelectorAll('[data-dismiss="modal"]');
-      
+
       function closeModal() {
         overlay.classList.remove('open');
         document.body.style.overflow = '';
@@ -141,8 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (closeBtn) closeBtn.addEventListener('click', closeModal);
       closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-      
-      overlay.addEventListener('click', function(e) {
+
+      overlay.addEventListener('click', function (e) {
         if (e.target === overlay) closeModal();
       });
     });
@@ -156,13 +156,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.tabs').forEach(tabContainer => {
       const tabs = tabContainer.querySelectorAll('.tab');
       tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
           const target = this.getAttribute('data-tab');
-          
+
           // Update tab active state
           tabs.forEach(t => t.classList.remove('active'));
           this.classList.add('active');
-          
+
           // Show corresponding content
           const parent = tabContainer.closest('[data-tabs]') || document;
           const contents = parent.querySelectorAll('[data-tab-content]');
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   // TOAST NOTIFICATION SYSTEM
   // ==========================================
-  window.showToast = function(type, title, message, duration = 4000) {
+  window.showToast = function (type, title, message, duration = 4000) {
     const container = document.querySelector('.toast-container');
     if (!container) {
       const newContainer = document.createElement('div');
@@ -191,9 +191,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
-    
+
     const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-    
+
     toast.innerHTML = `
       <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
       <div class="toast-content">
@@ -204,14 +204,14 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
 
     document.querySelector('.toast-container').appendChild(toast);
-    
+
     // Trigger animation
     requestAnimationFrame(() => {
       toast.classList.add('show');
     });
 
     // Close handler
-    toast.querySelector('.toast-close').addEventListener('click', function() {
+    toast.querySelector('.toast-close').addEventListener('click', function () {
       toast.classList.remove('show');
       setTimeout(() => toast.remove(), 300);
     });
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initCounters() {
     const counterElements = document.querySelectorAll('[data-counter]');
-    
+
     if (counterElements.length === 0) return;
 
     const observer = new IntersectionObserver((entries) => {
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const duration = parseInt(el.getAttribute('data-duration')) || 2000;
           const prefix = el.getAttribute('data-prefix') || '';
           const suffix = el.getAttribute('data-suffix') || '';
-          
+
           animateCounter(el, target, duration, prefix, suffix);
           observer.unobserve(el);
         }
@@ -253,22 +253,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function animateCounter(element, target, duration, prefix, suffix) {
     const start = performance.now();
-    
+
     function update(currentTime) {
       const elapsed = currentTime - start;
       const progress = Math.min(elapsed / duration, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(easeOut * target);
-      
+
       element.textContent = prefix + current.toLocaleString() + suffix;
-      
+
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
         element.textContent = prefix + target.toLocaleString() + suffix;
       }
     }
-    
+
     requestAnimationFrame(update);
   }
   initCounters();
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initScrollReveal() {
     const revealElements = document.querySelectorAll('[data-reveal]');
-    
+
     if (revealElements.length === 0) return;
 
     const observer = new IntersectionObserver((entries) => {
@@ -287,12 +287,12 @@ document.addEventListener('DOMContentLoaded', function() {
           const el = entry.target;
           const animation = el.getAttribute('data-reveal') || 'fadeInUp';
           const delay = el.getAttribute('data-delay') || '0';
-          
+
           el.style.animationDelay = delay + 'ms';
           el.style.animationName = animation;
           el.style.animationDuration = '0.6s';
           el.style.animationFillMode = 'both';
-          
+
           observer.unobserve(el);
         }
       });
@@ -312,10 +312,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInputs = document.querySelectorAll('.search-box input');
 
     searchInputs.forEach(input => {
-      input.addEventListener('input', function() {
+      input.addEventListener('input', function () {
         const query = this.value.toLowerCase().trim();
         const searchTarget = this.closest('[data-search-target]');
-        
+
         if (searchTarget) {
           const items = searchTarget.querySelectorAll('[data-search-item]');
           items.forEach(item => {
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Global search overlay
     const globalSearch = document.querySelector('.global-search');
     if (globalSearch) {
-      document.addEventListener('keydown', function(e) {
+      document.addEventListener('keydown', function (e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
           e.preventDefault();
           globalSearch.classList.add('open');
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      globalSearch.addEventListener('click', function(e) {
+      globalSearch.addEventListener('click', function (e) {
         if (e.target === this) {
           this.classList.remove('open');
         }
@@ -357,13 +357,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const input = container.querySelector('.qty-input');
       const minus = container.querySelector('.qty-minus');
       const plus = container.querySelector('.qty-plus');
-      
+
       if (!input || !minus || !plus) return;
 
       const min = parseInt(input.getAttribute('min') || 1);
       const max = parseInt(input.getAttribute('max') || 99999);
 
-      minus.addEventListener('click', function() {
+      minus.addEventListener('click', function () {
         let val = parseInt(input.value) || min;
         if (val > min) {
           input.value = val - 1;
@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      plus.addEventListener('click', function() {
+      plus.addEventListener('click', function () {
         let val = parseInt(input.value) || min;
         if (val < max) {
           input.value = val + 1;
@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
-      input.addEventListener('change', function() {
+      input.addEventListener('change', function () {
         let val = parseInt(this.value) || min;
         if (val < min) this.value = min;
         if (val > max) this.value = max;
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initCartQuantity() {
     document.querySelectorAll('.cart-qty-input').forEach(input => {
-      input.addEventListener('change', function() {
+      input.addEventListener('change', function () {
         const row = this.closest('.cart-item');
         if (row) {
           const price = parseFloat(row.querySelector('.cart-unit-price')?.getAttribute('data-price') || 0);
@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const unitPrice = parseFloat(calc.getAttribute('data-unit-price') || 0);
 
     if (qtyInput && priceDisplay) {
-      qtyInput.addEventListener('input', function() {
+      qtyInput.addEventListener('input', function () {
         const qty = parseFloat(this.value) || 1;
         priceDisplay.textContent = '₹' + (unitPrice * qty).toLocaleString('en-IN');
       });
@@ -444,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function initCoupon() {
     const couponBtns = document.querySelectorAll('.apply-coupon');
     couponBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const input = this.closest('.coupon-section')?.querySelector('.coupon-input');
         if (input && input.value.trim()) {
           const discountEl = document.querySelector('.discount-amount');
@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initRipple() {
     document.querySelectorAll('.btn, .sidebar-item, .nav-btn, .stat-card').forEach(el => {
-      el.addEventListener('click', function(e) {
+      el.addEventListener('click', function (e) {
         const ripple = document.createElement('span');
         ripple.className = 'ripple-effect';
         const rect = this.getBoundingClientRect();
@@ -514,7 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function handleResponsive() {
     const sidebar = document.querySelector('.sidebar');
     const backdrop = document.querySelector('.sidebar-backdrop');
-    
+
     function checkWidth() {
       if (window.innerWidth > 768) {
         if (sidebar) sidebar.classList.remove('open');
@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (pageContent) {
       pageContent.style.opacity = '0';
       pageContent.style.transform = 'translateY(20px)';
-      
+
       requestAnimationFrame(() => {
         pageContent.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         pageContent.style.opacity = '1';
@@ -551,9 +551,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function initFilters() {
     const applyFilters = document.querySelectorAll('.apply-filters');
     applyFilters.forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         showToast('info', 'Filters Applied', 'Showing filtered results');
-        
+
         const grid = document.querySelector('.crop-grid');
         if (grid) {
           grid.querySelectorAll('.crop-card').forEach(card => {
@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const clearFilters = document.querySelectorAll('.clear-filters');
     clearFilters.forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const filterForm = this.closest('.filter-sidebar') || this.closest('[data-filter-form]');
         if (filterForm) {
           filterForm.querySelectorAll('input, select').forEach(el => {
@@ -587,12 +587,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initPagination() {
     document.querySelectorAll('.pagination .page-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         if (this.classList.contains('disabled')) return;
-        
+
         document.querySelectorAll('.pagination .page-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        
+
         // Scroll to top of results
         const results = document.querySelector('.results-container');
         if (results) {
@@ -612,7 +612,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const draftBtn = form.querySelector('.save-draft');
 
       if (submitBtn) {
-        submitBtn.addEventListener('click', function(e) {
+        submitBtn.addEventListener('click', function (e) {
           e.preventDefault();
           this.innerHTML = '<span class="spinner spinner-sm"></span> Submitting...';
           this.disabled = true;
@@ -620,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function() {
           setTimeout(() => {
             this.innerHTML = '✅ Submitted Successfully';
             showToast('success', 'Inquiry Submitted', 'Your inquiry has been submitted successfully.');
-            
+
             setTimeout(() => {
               this.innerHTML = 'Submit Inquiry';
               this.disabled = false;
@@ -631,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       if (draftBtn) {
-        draftBtn.addEventListener('click', function(e) {
+        draftBtn.addEventListener('click', function (e) {
           e.preventDefault();
           showToast('info', 'Draft Saved', 'Your inquiry has been saved as draft.');
         });
@@ -645,11 +645,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initWishlistToggles() {
     document.querySelectorAll('.wishlist-toggle').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         this.classList.toggle('active');
         const isActive = this.classList.contains('active');
         this.innerHTML = isActive ? '❤️' : '🤍';
-        
+
         if (isActive) {
           showToast('success', 'Added to Wishlist', 'Item added to your wishlist.');
         } else {
@@ -667,9 +667,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-maxlength]').forEach(textarea => {
       const max = parseInt(textarea.getAttribute('data-maxlength'));
       const counter = textarea.parentElement?.querySelector('.char-count');
-      
+
       if (counter) {
-        textarea.addEventListener('input', function() {
+        textarea.addEventListener('input', function () {
           const remaining = max - this.value.length;
           counter.textContent = `${remaining} characters remaining`;
           counter.style.color = remaining < 20 ? 'var(--red-500)' : 'var(--text-muted)';
@@ -685,11 +685,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function initAccordion() {
     document.querySelectorAll('.accordion').forEach(accordion => {
       accordion.querySelectorAll('.accordion-header').forEach(header => {
-        header.addEventListener('click', function() {
+        header.addEventListener('click', function () {
           const item = this.closest('.accordion-item');
           const content = item.querySelector('.accordion-content');
           const isOpen = item.classList.contains('open');
-          
+
           // Close others
           accordion.querySelectorAll('.accordion-item.open').forEach(i => {
             if (i !== item) {
@@ -716,7 +716,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initFormValidation() {
     document.querySelectorAll('.needs-validation').forEach(form => {
-      form.addEventListener('submit', function(e) {
+      form.addEventListener('submit', function (e) {
         e.preventDefault();
         let valid = true;
 
@@ -724,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (!field.value.trim()) {
             field.classList.add('error');
             valid = false;
-            
+
             const errorEl = field.parentElement.querySelector('.form-error');
             if (errorEl) errorEl.textContent = 'This field is required';
           } else {
@@ -744,7 +744,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Clear errors on input
     document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
-      field.addEventListener('input', function() {
+      field.addEventListener('input', function () {
         this.classList.remove('error');
         const errorEl = this.parentElement.querySelector('.form-error');
         if (errorEl) errorEl.textContent = '';
@@ -758,7 +758,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initTooltips() {
     document.querySelectorAll('[data-tooltip]').forEach(el => {
-      el.addEventListener('mouseenter', function() {
+      el.addEventListener('mouseenter', function () {
         // Tooltips handled via CSS pseudo-elements for collapsed sidebar
       });
     });
@@ -783,7 +783,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function initTypingIndicator() {
     const chatInputs = document.querySelectorAll('.chat-input');
     chatInputs.forEach(input => {
-      input.addEventListener('input', function() {
+      input.addEventListener('input', function () {
         const indicator = document.querySelector('.typing-indicator');
         if (indicator) {
           if (this.value.trim()) {
@@ -802,10 +802,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initSendMessage() {
     document.querySelectorAll('.send-message').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const chatContainer = document.querySelector('.chat-messages');
         const input = document.querySelector('.chat-input');
-        
+
         if (!chatContainer || !input || !input.value.trim()) return;
 
         const message = input.value.trim();
@@ -813,9 +813,9 @@ document.addEventListener('DOMContentLoaded', function() {
         bubble.className = 'message-bubble sent';
         bubble.innerHTML = `
           <div class="message-text">${message}</div>
-          <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+          <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
         `;
-        
+
         chatContainer.appendChild(bubble);
         input.value = '';
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -833,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function() {
           ];
           reply.innerHTML = `
             <div class="message-text">${replies[Math.floor(Math.random() * replies.length)]}</div>
-            <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
           `;
           chatContainer.appendChild(reply);
           chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -848,7 +848,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initNotificationActions() {
     document.querySelectorAll('.mark-read').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const card = this.closest('.notification-card');
         if (card) {
           card.classList.remove('unread');
@@ -859,7 +859,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('.archive-notification').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const card = this.closest('.notification-card');
         if (card) {
           card.style.transition = 'all 0.3s ease';
@@ -872,7 +872,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.querySelectorAll('.mark-all-read').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         document.querySelectorAll('.notification-card.unread').forEach(card => {
           card.classList.remove('unread');
           card.classList.add('read');
@@ -888,7 +888,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initSettingsToggles() {
     document.querySelectorAll('.toggle-switch input').forEach(toggle => {
-      toggle.addEventListener('change', function() {
+      toggle.addEventListener('change', function () {
         const label = this.closest('.toggle-switch')?.querySelector('.toggle-label');
         if (label) {
           label.textContent = this.checked ? 'Enabled' : 'Disabled';
@@ -906,8 +906,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!mainImage) return;
 
     const gallery = document.querySelector('.product-gallery-main');
-    
-    gallery.addEventListener('mousemove', function(e) {
+
+    gallery.addEventListener('mousemove', function (e) {
       const rect = this.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -915,7 +915,7 @@ document.addEventListener('DOMContentLoaded', function() {
       mainImage.style.transform = 'scale(2)';
     });
 
-    gallery.addEventListener('mouseleave', function() {
+    gallery.addEventListener('mouseleave', function () {
       mainImage.style.transformOrigin = 'center center';
       mainImage.style.transform = 'scale(1)';
     });
@@ -923,7 +923,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Thumbnail navigation
     const thumbs = document.querySelectorAll('.thumbnail-nav img');
     thumbs.forEach(thumb => {
-      thumb.addEventListener('click', function() {
+      thumb.addEventListener('click', function () {
         const src = this.getAttribute('src');
         mainImage.setAttribute('src', src);
         thumbs.forEach(t => t.classList.remove('active'));
@@ -951,7 +951,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initQuickActions() {
     document.querySelectorAll('.quick-actions-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const menu = this.nextElementSibling;
         if (menu && menu.classList.contains('dropdown-menu')) {
           menu.classList.toggle('open');
@@ -966,7 +966,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initPasswordToggle() {
     document.querySelectorAll('.password-toggle').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const input = this.closest('.password-field')?.querySelector('input');
         if (input) {
           const type = input.type === 'password' ? 'text' : 'password';
@@ -1023,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initInquiryHistory() {
     document.querySelectorAll('.inquiry-card').forEach(card => {
-      card.addEventListener('click', function() {
+      card.addEventListener('click', function () {
         this.classList.toggle('expanded');
         const details = this.querySelector('.inquiry-details');
         if (details) {
@@ -1039,11 +1039,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initImageUpload() {
     document.querySelectorAll('.image-upload input[type="file"]').forEach(input => {
-      input.addEventListener('change', function() {
+      input.addEventListener('change', function () {
         const preview = this.closest('.image-upload')?.querySelector('.upload-preview');
         if (preview && this.files && this.files[0]) {
           const reader = new FileReader();
-          reader.onload = function(e) {
+          reader.onload = function (e) {
             preview.src = e.target.result;
             preview.style.display = 'block';
           };
@@ -1059,7 +1059,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ==========================================
   function initDocumentPreview() {
     document.querySelectorAll('.doc-preview-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const docName = this.getAttribute('data-doc') || 'Document';
         showToast('info', 'Document Preview', `Previewing: ${docName}`);
       });
