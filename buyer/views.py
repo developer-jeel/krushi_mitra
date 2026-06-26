@@ -9,14 +9,19 @@ from .models import *
 
 @check_login(['Buyer'])
 def buyer_home(request):
-    all_crops = crop.objects.filter(is_approved = True)
-    print("==================>",all_crops)
-    context = {'all_crops' : all_crops}
+   
     return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
 def buyer_dashboard(request):
-    return render(request, "buyer/dashboard.html")
+    uid = request.uid
+    order = Order.objects.filter(user = uid).order_by('-created_at')[:4]
+    items = OrderItem.objects.filter(order__in=order)[:6]
+    all_crops = crop.objects.filter(is_approved = True)
+    print("==================>",items)
+    
+    context = {'all_crops' : all_crops,'items':items}
+    return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
 def buyer_browse_crops(request):

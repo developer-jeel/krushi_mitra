@@ -277,51 +277,21 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {%for item in items%}
                   <tr>
-                    <td><a href="{% url 'buyer_order_details' %}"
+                    <td><a href="{% url 'buyer_order_details' pk=item.id %}"
                         style="color:var(--text-link);font-weight:600;">#ORD-2024-0891</a></td>
                     <td>Basmati Rice</td>
                     <td>500 kg</td>
                     <td>₹82,500</td>
                     <td><span class="badge badge-processing">Processing</span></td>
-                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'buyer_order_details' %}"
-                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0890</a></td>
-                    <td>Red Chillies</td>
-                    <td>200 kg</td>
-                    <td>₹48,000</td>
                     <td><span class="badge badge-approved">Delivered</span></td>
-                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'buyer_order_details' %}"
-                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0889</a></td>
-                    <td>Turmeric</td>
-                    <td>100 kg</td>
-                    <td>₹18,500</td>
                     <td><span class="badge badge-active">Shipped</span></td>
-                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
-                  </tr>
-                  <tr>
-                    <td><a href="{% url 'buyer_order_details' %}"
-                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0888</a></td>
-                    <td>Alphonso Mango</td>
-                    <td>50 boxes</td>
-                    <td>₹35,000</td>
                     <td><span class="badge badge-cancelled">Cancelled</span></td>
-                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
+
+                    <td><a href="{% url 'buyer_order_details' pk=item.id %}" class="btn btn-sm btn-ghost">View</a></td>
                   </tr>
-                  <tr>
-                    <td><a href="{% url 'buyer_order_details' %}"
-                        style="color:var(--text-link);font-weight:600;">#ORD-2024-0887</a></td>
-                    <td>Organic Wheat</td>
-                    <td>1000 kg</td>
-                    <td>₹28,000</td>
-                    <td><span class="badge badge-approved">Delivered</span></td>
-                    <td><a href="{% url 'buyer_order_details' %}" class="btn btn-sm btn-ghost">View</a></td>
-                  </tr>
+                  {%endfor%}
                 </tbody>
               </table>
             </div>
