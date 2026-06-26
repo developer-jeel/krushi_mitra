@@ -161,7 +161,9 @@ def buyer_orders(request):
                 }
     return render(request, "buyer/orders.html",context)
 
-
+@check_login(['Buyer'])
+def buyer_order_details(request):
+    return render(request, "buyer/order-details.html")
 
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
@@ -205,10 +207,6 @@ def buyer_bank_details(request):
 @check_login(['Buyer'])
 def buyer_settings(request):
     return render(request, "buyer/settings.html")
-
-@check_login(['Buyer'])
-def buyer_order_details(request):
-    return render(request, "buyer/order-details.html")
 
 @check_login(['Buyer'])
 def kyc(request):
