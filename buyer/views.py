@@ -12,15 +12,33 @@ def buyer_home(request):
    
     return render(request, "buyer/dashboard.html",context)
 
+def format_indian_number(value):
+    value = float(value)
+
+    if value >= 10000000:  # 1 Crore
+        return f"{value / 10000000:.2f} Cr"
+    elif value >= 100000:  # 1 Lakh
+        return f"{value / 100000:.2f} Lakh"
+    elif value >= 1000:  # 1 Thousand
+        return f"{value / 1000:.2f} K"
+    else:
+        return f"{value:.2f}"
+
 @check_login(['Buyer'])
 def buyer_dashboard(request):
     uid = request.uid
-    order = Order.objects.filter(user = uid).order_by('-created_at')[:4]
-    items = OrderItem.objects.filter(order__in=order)[:6]
+    orders = Order.objects.filter(user = uid).order_by('-created_at')
+    items = OrderItem.objects.filter(order__in=orders)[:6]
+    total_value = 0
+    for order in orders:
+        total_value+= order.total_amount
+    
+    formatted_total = format_indian_number(total_value)
+
     all_crops = crop.objects.filter(is_approved = True)
     print("==================>",items)
-    
-    context = {'all_crops' : all_crops,'items':items}
+
+    context = {'all_crops' : all_crops,'items':items,'total_value':total_value,'formatted_total':formatted_total}
     return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
