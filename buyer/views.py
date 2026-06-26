@@ -9,9 +9,7 @@ from .models import *
 
 @check_login(['Buyer'])
 def buyer_home(request):
-   
-    return render(request, "buyer/dashboard.html",context)
-
+    return redirect("buyer_dashboard")
 def format_indian_number(value):
     value = float(value)
 
@@ -27,18 +25,20 @@ def format_indian_number(value):
 @check_login(['Buyer'])
 def buyer_dashboard(request):
     uid = request.uid
-    orders = Order.objects.filter(user = uid).order_by('-created_at')
-    items = OrderItem.objects.filter(order__in=orders)[:6]
+    orders = Order.objects.filter(user = uid).order_by('-id')
+    items = OrderItem.objects.filter(order__in=orders).order_by('-id')[:6]
+    item_count = OrderItem.objects.filter(order__in=orders).count()
+    pending_count = OrderItem.objects.filter(order__in=orders, order__status='Pending').count()    
+    complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()    
+
     total_value = 0
     for order in orders:
         total_value+= order.total_amount
-    
     formatted_total = format_indian_number(total_value)
 
     all_crops = crop.objects.filter(is_approved = True)
-    print("==================>",items)
 
-    context = {'all_crops' : all_crops,'items':items,'total_value':total_value,'formatted_total':formatted_total}
+    context = {'all_crops' : all_crops,'items':items,'total_value':total_value,'formatted_total':formatted_total,'item_count':item_count,'pending_count':pending_count,'complated':complated}
     return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
@@ -160,6 +160,7 @@ def buyer_checkout(request):
             notification_type = "Payment",
             message = f"Payment of ₹{con_order.total_amount} for order {con_order.order_id} confirmed."
         )
+        return redirect("buyer_dashboard")
 
     context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr}
     return render(request, "buyer/checkout.html",context)

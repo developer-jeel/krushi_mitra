@@ -184,7 +184,7 @@
                 <span class="hero-stat-label">Total Procured</span>
               </div>
               <div class="hero-stat">
-                <span class="hero-stat-value">156</span>
+                <span class="hero-stat-value">{{item_count}}</span>
                 <span class="hero-stat-label">Total Orders</span>
               </div>
               <div class="hero-stat">
@@ -200,7 +200,7 @@
           <div class="stat-card green">
             <div class="stat-card-info">
               <div class="stat-card-label">Total Orders</div>
-              <div class="stat-card-value" data-counter="156" data-duration="2000">0</div>
+              <div class="stat-card-value" data-counter="{{item_count}}" data-duration="2000">0</div>
               <div class="stat-card-change up">↑ 12.5% this month</div>
             </div>
             <div class="stat-card-icon">📦</div>
@@ -209,7 +209,7 @@
           <div class="stat-card blue">
             <div class="stat-card-info">
               <div class="stat-card-label">Pending Orders</div>
-              <div class="stat-card-value" data-counter="8" data-duration="1500">0</div>
+              <div class="stat-card-value" data-counter="{{pending_count}}" data-duration="1500">0</div>
               <div class="stat-card-change down">↓ 3 from last week</div>
             </div>
             <div class="stat-card-icon">⏳</div>
@@ -218,7 +218,7 @@
           <div class="stat-card amber">
             <div class="stat-card-info">
               <div class="stat-card-label">Completed Orders</div>
-              <div class="stat-card-value" data-counter="134" data-duration="2000">0</div>
+              <div class="stat-card-value" data-counter="{{complated}}" data-duration="2000">0</div>
               <div class="stat-card-change up">↑ 8.2% this month</div>
             </div>
             <div class="stat-card-icon">✅</div>
