@@ -191,8 +191,8 @@ class notifications(models.Model):
     def __str__(self):
         return f"{self.user} : {self.notification_type}"
 
-class wishlist():
-    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer')
+class saved(models.Model):
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='saved_by')
     crop = models.ForeignKey(crop,on_delete=models.SET_NULL,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
