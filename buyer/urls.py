@@ -26,7 +26,6 @@ urlpatterns = [
     path('crop-details/<int:pk>', views.buyer_crop_details, name='buyer_crop_details'),
 
 
-
     path('cart/', views.buyer_cart, name='buyer_cart'),
     path('buyer_addto_cart/', views.buyer_addto_cart, name='buyer_addto_cart'),
     path('cart_item_delete/<int:pk>', views.cart_item_delete, name='cart_item_delete'),
@@ -35,10 +34,10 @@ urlpatterns = [
 
     path('orders/', views.buyer_orders, name='buyer_orders'),
     path('order-details/<int:pk>', views.buyer_order_details, name='buyer_order_details'),
-
-
-
     path('wishlist/', views.buyer_wishlist, name='buyer_wishlist'),
+    path('add_wishlist/<int:pk>', views.add_wishlist, name='add_wishlist'),
+
+
     path('bulk-order/', views.buyer_bulk_order, name='buyer_bulk_order'),
     path('export-inquiry/', views.buyer_export_inquiry, name='buyer_export_inquiry'),
     path('messages/', views.buyer_messages, name='buyer_messages'),

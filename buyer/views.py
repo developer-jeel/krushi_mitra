@@ -198,6 +198,20 @@ def buyer_wishlist(request):
     return render(request, "buyer/wishlist.html")
 
 @check_login(['Buyer'])
+def add_wishlist(request,pk): 
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    crop_ = crop.objects.get(id=pk)
+
+    saved_crop = crop.objects.get(user=uid,crop=crop_)
+
+    if saved_crop:
+        saved_crop.delete()
+    else:
+        save_crop = saved.objects.create(user=uid,crop=crop_)
+    return redirect('buyer_wishlist')
+
+@check_login(['Buyer'])
 def buyer_bulk_order(request):
     return render(request, "buyer/bulk-order.html")
 

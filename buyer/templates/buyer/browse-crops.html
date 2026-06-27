@@ -226,7 +226,7 @@
                 <div class="crop-card card card-float" data-crop>
                   <div class="crop-card-img-wrapper">
                     <img src="{{crop.image.url}}" alt="Basmati Rice" loading="lazy">
-                    <button class="wishlist-toggle">🤍</button>
+                    <a href="{% url 'add_wishlist' pk=crop.id %}" class="wishlist-toggle">🤍</a>
                     <span class="crop-stock-badge in-stock">In Stock</span>
                   </div>
                   <div class="crop-card-body">
@@ -240,6 +240,7 @@
                     </div>
                     <div class="crop-card-price">
                       <span class="price">₹{{crop.price}}</span>
+
                       <span class="price-unit">/ kg</span>
                       <span class="price-discount">₹{{crop.price}}</span>
                     </div>
