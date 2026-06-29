@@ -43,9 +43,12 @@ def buyer_dashboard(request):
 
 @check_login(['Buyer'])
 def buyer_browse_crops(request):
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
     all_crops = crop.objects.filter(is_approved = True)
+    saved_crops = saved.objects.filter( user=buyr).values_list('crop_id', flat=True)
     print("==================>",all_crops)
-    context = {'all_crops' : all_crops}
+    context = {'all_crops' : all_crops,"saved_crops":saved_crops}
     return render(request, "buyer/browse-crops.html",context)
 
 

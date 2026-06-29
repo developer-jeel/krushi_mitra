@@ -226,7 +226,11 @@
                 <div class="crop-card card card-float" data-crop>
                   <div class="crop-card-img-wrapper">
                     <img src="{{crop.image.url}}" alt="Basmati Rice" loading="lazy">
+                    {%if crop.id not in saved_crops%}
                     <a href="{% url 'add_wishlist' pk=crop.id %}" class="wishlist-toggle">🤍</a>
+                    {%else%}
+                    <a href="{% url 'add_wishlist' pk=crop.id %}" class="wishlist-toggle active">❤️</a>
+                    {%endif%}
                     <span class="crop-stock-badge in-stock">In Stock</span>
                   </div>
                   <div class="crop-card-body">
