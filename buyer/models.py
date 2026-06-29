@@ -197,4 +197,4 @@ class saved(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.name} added {self.crop.cropname} in wishlist"
+        return f"{self.user.user.name} added {self.crop.cropname} in wishlist"

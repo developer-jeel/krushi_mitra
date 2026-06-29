@@ -203,13 +203,14 @@ def add_wishlist(request,pk):
     buyr = Buyer.objects.get(user=uid)
     crop_ = crop.objects.get(id=pk)
 
-    saved_crop = crop.objects.get(user=uid,crop=crop_)
+    saved_crop = saved.objects.filter(user=buyr, crop=crop_).first()
 
     if saved_crop:
         saved_crop.delete()
     else:
-        save_crop = saved.objects.create(user=uid,crop=crop_)
+        save_crop = saved.objects.create(user=buyr,crop=crop_)
     return redirect('buyer_wishlist')
+    
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):
