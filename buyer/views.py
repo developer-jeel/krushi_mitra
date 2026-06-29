@@ -195,7 +195,11 @@ def buyer_order_details(request,pk):
 
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
-    return render(request, "buyer/wishlist.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    saved_crops = saved.objects.filter(user=buyr)
+    context={'saved_crops':saved_crops}
+    return render(request, "buyer/wishlist.html",context)
 
 @check_login(['Buyer'])
 def add_wishlist(request,pk): 
@@ -210,7 +214,7 @@ def add_wishlist(request,pk):
     else:
         save_crop = saved.objects.create(user=buyr,crop=crop_)
     return redirect('buyer_wishlist')
-    
+
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):

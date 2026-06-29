@@ -110,108 +110,32 @@
         </div>
 
         <div class="wishlist-grid page-reveal">
+          {%for saved_crop in saved_crops%}
           <div class="wishlist-card card card-float">
             <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
-            <div class="wishlist-img"><img
-                src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=200&fit=crop"
-                alt="Basmati Rice"></div>
+            <div class="wishlist-img"><img src="{{saved_crop.crop.image.url}}" alt="{{saved_crop.crop.cropname}}"></div>
             <div class="wishlist-body">
-              <div class="wishlist-category">🌾 Grains</div>
-              <h4 class="wishlist-name">Premium Basmati Rice</h4>
-              <div class="wishlist-meta">📍 Punjab | ⭐ Grade A</div>
-              <div class="wishlist-price">₹165<span class="price-unit">/ kg</span></div>
+              <div class="wishlist-category">🌾 {{saved_crop.crop.category}}</div>
+              <h4 class="wishlist-name">{{saved_crop.crop.cropname}}</h4>
+              <div class="wishlist-meta">📍 {{saved_crop.crop.user.city}} | ⭐ Grade A</div>
+              <div class="wishlist-price">₹{{saved_crop.crop.price}}<span class="price-unit">/ 20kg</span></div>
+              {%if saved_crop.crop.quantity >= 10%}
               <div class="wishlist-stock"><span class="badge badge-approved">In Stock</span></div>
+              {%elif saved_crop.crop.quantity == 0 %}
+              <div class="wishlist-stock"><span class="badge badge-pending" style="background-color: red;">Out of
+                  Stock</span></div>
+              {%else%}
+              <div class="wishlist-stock"><span class="badge badge-pending">Low Stock</span></div>
+              {%endif%}
               <div class="wishlist-actions">
                 <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
                 <a href="{% url 'buyer_crop_details' pk=1 %}" class="btn btn-outline btn-sm flex-1">View</a>
               </div>
             </div>
           </div>
-
-          <div class="wishlist-card card card-float">
-            <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
-            <div class="wishlist-img"><img
-                src="https://images.unsplash.com/photo-1553279768-865429fa0078?w=300&h=200&fit=crop" alt="Mango"></div>
-            <div class="wishlist-body">
-              <div class="wishlist-category">🥭 Fruits</div>
-              <h4 class="wishlist-name">Alphonso Mango (Hapus)</h4>
-              <div class="wishlist-meta">📍 Maharashtra | ⭐ Premium</div>
-              <div class="wishlist-price">₹700<span class="price-unit">/ box</span></div>
-              <div class="wishlist-stock"><span class="badge badge-approved">In Stock</span></div>
-              <div class="wishlist-actions">
-                <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="wishlist-card card card-float">
-            <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
-            <div class="wishlist-img"><img
-                src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&h=200&fit=crop" alt="Chillies">
-            </div>
-            <div class="wishlist-body">
-              <div class="wishlist-category">🌶️ Spices</div>
-              <h4 class="wishlist-name">Byadgi Red Chillies</h4>
-              <div class="wishlist-meta">📍 Karnataka | ⭐ Grade A</div>
-              <div class="wishlist-price">₹240<span class="price-unit">/ kg</span></div>
-              <div class="wishlist-stock"><span class="badge badge-approved">In Stock</span></div>
-              <div class="wishlist-actions">
-                <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="wishlist-card card card-float">
-            <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
-            <div class="wishlist-img"><img
-                src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop" alt="Turmeric">
-            </div>
-            <div class="wishlist-body">
-              <div class="wishlist-category">🌶️ Spices</div>
-              <h4 class="wishlist-name">Lakadong Turmeric</h4>
-              <div class="wishlist-meta">📍 Meghalaya | ⭐ Premium</div>
-              <div class="wishlist-price">₹185<span class="price-unit">/ kg</span></div>
-              <div class="wishlist-stock"><span class="badge badge-pending">Low Stock</span></div>
-              <div class="wishlist-actions">
-                <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="wishlist-card card card-float">
-            <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
-            <div class="wishlist-img"><img
-                src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop&x=50"
-                alt="Wheat"></div>
-            <div class="wishlist-body">
-              <div class="wishlist-category">🌾 Grains</div>
-              <h4 class="wishlist-name">Organic Wheat (Sharbati)</h4>
-              <div class="wishlist-meta">📍 MP | ⭐ Grade A</div>
-              <div class="wishlist-price">₹28<span class="price-unit">/ kg</span></div>
-              <div class="wishlist-stock"><span class="badge badge-approved">In Stock</span></div>
-              <div class="wishlist-actions">
-                <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="wishlist-card card card-float">
-            <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
-            <div class="wishlist-img"><img
-                src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=300&h=200&fit=crop"
-                alt="Green Chillies"></div>
-            <div class="wishlist-body">
-              <div class="wishlist-category">🥬 Vegetables</div>
-              <h4 class="wishlist-name">Fresh Green Chillies</h4>
-              <div class="wishlist-meta">📍 Gujarat | ⭐ Grade A</div>
-              <div class="wishlist-price">₹80<span class="price-unit">/ kg</span></div>
-              <div class="wishlist-stock"><span class="badge badge-approved">In Stock</span></div>
-              <div class="wishlist-actions">
-                <a href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to Cart</a>
-              </div>
-            </div>
-          </div>
+          {%endfor%}
         </div>
+
       </main>
     </div>
   </div>
