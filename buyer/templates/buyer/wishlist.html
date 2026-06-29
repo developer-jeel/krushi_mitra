@@ -83,9 +83,9 @@
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
-              <div class="profile-avatar">RM</div>
+              <div class="profile-avatar">{{ uid.name|slice:":1"|upper }}</div>
               <div>
-                <div class="profile-name">Rajesh Mehta</div>
+                <div class="profile-name">{{uid.name}}</div>
                 <div class="profile-role">Wholesale Trader</div>
               </div>
             </div>
@@ -103,16 +103,20 @@
         <div class="section-header page-reveal">
           <div>
             <h2 class="section-title">❤️ Saved Crops</h2>
-            <p class="card-subtitle">You have <strong>8</strong> items in your wishlist</p>
+            <p class="card-subtitle">You have <strong>{{total_saved}}</strong> items in your wishlist</p>
           </div>
-          <button class="btn btn-sm btn-ghost" onclick="showToast('info','Cleared','Wishlist cleared')">🗑️ Clear
-            All</button>
+          <form action="{% url 'add_wishlist' pk=1%}" method="post">
+            {%csrf_token%}
+            <button class="btn btn-sm btn-ghost" onclick="showToast('info','Cleared','Wishlist cleared')">🗑️ Clear
+              All</button>
+          </form>
         </div>
 
         <div class="wishlist-grid page-reveal">
           {%for saved_crop in saved_crops%}
           <div class="wishlist-card card card-float">
-            <button class="wishlist-remove" onclick="this.closest('.wishlist-card').remove()">✕</button>
+            <a href="{% url 'add_wishlist' pk=saved_crop.crop.id%}" class="wishlist-remove"
+              onclick="this.closest('.wishlist-card').remove()">✕</a>
             <div class="wishlist-img"><img src="{{saved_crop.crop.image.url}}" alt="{{saved_crop.crop.cropname}}"></div>
             <div class="wishlist-body">
               <div class="wishlist-category">🌾 {{saved_crop.crop.category}}</div>

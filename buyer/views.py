@@ -198,7 +198,8 @@ def buyer_wishlist(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     saved_crops = saved.objects.filter(user=buyr)
-    context={'saved_crops':saved_crops}
+    total_saved = len(saved_crops)
+    context={'saved_crops':saved_crops,'total_saved':total_saved,'uid':uid}
     return render(request, "buyer/wishlist.html",context)
 
 @check_login(['Buyer'])
@@ -206,14 +207,20 @@ def add_wishlist(request,pk):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     crop_ = crop.objects.get(id=pk)
-
-    saved_crop = saved.objects.filter(user=buyr, crop=crop_).first()
-
-    if saved_crop:
-        saved_crop.delete()
+    if request.method == 'POST':
+        saved_crop = saved.objects.filter(user=buyr)
+        if saved_crop:
+            saved_crop.delete()
+            return redirect('buyer_wishlist')
+        else: 
+            return redirect('buyer_wishlist')
     else:
-        save_crop = saved.objects.create(user=buyr,crop=crop_)
-    return redirect('buyer_wishlist')
+        saved_crop = saved.objects.filter(user=buyr, crop=crop_).first()
+        if saved_crop:
+            saved_crop.delete()
+        else:
+            save_crop = saved.objects.create(user=buyr,crop=crop_)
+        return redirect('buyer_wishlist')
 
 
 @check_login(['Buyer'])
