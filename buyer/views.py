@@ -310,4 +310,5 @@ def kyc(request):
 @check_login(['Buyer'])
 def buyer_premium(request):
     uid = request.uid
-    return render(request, "buyer/premium.html", {'uid': uid})
+    plans = premium_plans.objects.get()
+    return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans})

@@ -191,13 +191,14 @@
                     <h2 class="plan-name">Standard</h2>
                     <div class="plan-price">
                       <span class="plan-currency">₹</span>
-                      <span class="plan-amount" id="std-amount">99</span>
-                      <span class="plan-period" id="std-period">/ Month</span>
+                      <span class="plan-amount" id="std-amount">{{plans.standard_price}}</span>
+                      <span class="plan-period" id="std-period">{{plans.standard_dis}}/ Month</span>
                     </div>
                     <div class="plan-original-price" id="std-original" style="display:none">
-                      <s>₹99/mo</s>
+                      <s>₹{{plans.standard_price}}/mo</s>
                     </div>
-                    <div class="plan-yearly-note" id="std-yearly-note" style="display:none">₹948 billed yearly</div>
+                    <div class="plan-yearly-note" id="std-yearly-note" style="display:none">₹{{plans.standard_yearly}}
+                      billed yearly</div>
                     <p class="plan-subtitle">Best for growing buyers</p>
                   </div>
                   <ul class="plan-features">

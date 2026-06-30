@@ -108,6 +108,18 @@ class premium_plans(models.Model):
         yearly_price = self.premium_price * 12
         return yearly_price - (yearly_price * self.year_dis / 100)
     
+    @property
+    def standard_dis(self):
+        yearly_price = self.standard_price * 12
+        yearly_dic = yearly_price- (yearly_price * self.year_dis / 100)
+        return yearly_dic//12
+
+    @property
+    def premium_dis(self):
+        yearly_price = self.premium_price * 12
+        yearly_dic = yearly_price- (yearly_price * self.year_dis / 100)
+        return yearly_dic//12
+    
     def __str__(self):
         return f"standard_price:{self.standard_price} and premium_price :{self.premium_price}"
         
