@@ -307,9 +307,6 @@ def kyc(request):
         
     return render(request, "buyer/kyc.html", {'buyer': buyer})
 
-def home(request):
-    return HttpResponse("Welcome to Krushi Mitra! You are logged in.")  
-
 @check_login(['Buyer'])
 def buyer_premium(request):
     uid = request.uid

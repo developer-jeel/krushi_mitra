@@ -28,7 +28,7 @@
             <div class="sidebar-logo-text">Krushi Mitra</div>
             <span class="sidebar-logo-sub">Buyer Panel</span>
           </div>
-        </div>  
+        </div>
         <button class="sidebar-toggle">◀</button>
       </div>
       <nav class="sidebar-nav">
@@ -120,7 +120,8 @@
             <div class="glow-bg"></div>
             <div class="hero-content">
               <div class="premium-crown">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
                   <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
                 </svg>
               </div>
@@ -136,7 +137,8 @@
             <!-- Billing Toggle -->
             <div class="billing-toggle-wrap">
               <span class="billing-label" id="lbl-monthly">Monthly</span>
-              <button class="billing-toggle" id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle yearly billing">
+              <button class="billing-toggle" id="billing-toggle" role="switch" aria-checked="false"
+                aria-label="Toggle yearly billing">
                 <span class="billing-toggle-thumb"></span>
               </button>
               <span class="billing-label" id="lbl-yearly">Yearly</span>
@@ -178,78 +180,84 @@
               </div>
 
               <!-- STANDARD (highlighted) -->
-              <div class="plan-card plan-standard glass-panel fade-up plan-featured"
-                   data-monthly="99" data-yearly="79" data-monthly-total="99" data-yearly-total="948">
-                <div class="card-glow"></div>
-                <div class="popular-ribbon">⭐ MOST POPULAR</div>
-                <div class="plan-tier-label">🔵 STANDARD</div>
-                <div class="plan-header">
-                  <h2 class="plan-name">Standard</h2>
-                  <div class="plan-price">
-                    <span class="plan-currency">₹</span>
-                    <span class="plan-amount" id="std-amount">99</span>
-                    <span class="plan-period" id="std-period">/ Month</span>
+              <form action="{% url 'buyer_premium'%}" method="post">
+                {%csrf_token%}
+                <div class="plan-card plan-standard glass-panel fade-up plan-featured" data-monthly="99"
+                  data-yearly="79" data-monthly-total="99" data-yearly-total="948">
+                  <div class="card-glow"></div>
+                  <div class="popular-ribbon">⭐ MOST POPULAR</div>
+                  <div class="plan-tier-label">🔵 STANDARD</div>
+                  <div class="plan-header">
+                    <h2 class="plan-name">Standard</h2>
+                    <div class="plan-price">
+                      <span class="plan-currency">₹</span>
+                      <span class="plan-amount" id="std-amount">99</span>
+                      <span class="plan-period" id="std-period">/ Month</span>
+                    </div>
+                    <div class="plan-original-price" id="std-original" style="display:none">
+                      <s>₹99/mo</s>
+                    </div>
+                    <div class="plan-yearly-note" id="std-yearly-note" style="display:none">₹948 billed yearly</div>
+                    <p class="plan-subtitle">Best for growing buyers</p>
                   </div>
-                  <div class="plan-original-price" id="std-original" style="display:none">
-                    <s>₹99/mo</s>
-                  </div>
-                  <div class="plan-yearly-note" id="std-yearly-note" style="display:none">₹948 billed yearly</div>
-                  <p class="plan-subtitle">Best for growing buyers</p>
+                  <ul class="plan-features">
+                    <li class="feat-yes">✔ Buy up to 5000 KG</li>
+                    <li class="feat-yes">✔ Bulk Purchase Unlock</li>
+                    <li class="feat-yes">✔ AI Buying Advisor</li>
+                    <li class="feat-yes">✔ Real-Time Price Alerts</li>
+                    <li class="feat-yes">✔ Wishlist Alerts</li>
+                    <li class="feat-yes">✔ Priority Orders</li>
+                    <li class="feat-yes">✔ Faster Checkout</li>
+                    <li class="feat-yes">✔ Premium Support</li>
+                    <li class="feat-no">✘ Export Reports</li>
+                    <li class="feat-no">✘ Zero Platform Fee</li>
+                  </ul>
+                  <button class="plan-btn plan-btn-standard ripple-btn">Upgrade to Standard</button>
+                  <div class="plan-assurance">✔ Cancel Anytime &nbsp;|&nbsp; ✔ Secure Payments</div>
                 </div>
-                <ul class="plan-features">
-                  <li class="feat-yes">✔ Buy up to 5000 KG</li>
-                  <li class="feat-yes">✔ Bulk Purchase Unlock</li>
-                  <li class="feat-yes">✔ AI Buying Advisor</li>
-                  <li class="feat-yes">✔ Real-Time Price Alerts</li>
-                  <li class="feat-yes">✔ Wishlist Alerts</li>
-                  <li class="feat-yes">✔ Priority Orders</li>
-                  <li class="feat-yes">✔ Faster Checkout</li>
-                  <li class="feat-yes">✔ Premium Support</li>
-                  <li class="feat-no">✘ Export Reports</li>
-                  <li class="feat-no">✘ Zero Platform Fee</li>
-                </ul>
-                <button class="plan-btn plan-btn-standard ripple-btn">Upgrade to Standard</button>
-                <div class="plan-assurance">✔ Cancel Anytime &nbsp;|&nbsp; ✔ Secure Payments</div>
-              </div>
+              </form>
 
               <!-- PREMIUM (gold) -->
-              <div class="plan-card plan-premium glass-panel fade-up"
-                   data-monthly="199" data-yearly="159" data-monthly-total="199" data-yearly-total="1908">
-                <div class="card-glow"></div>
-                <div class="gold-crown-badge">👑</div>
-                <div class="plan-tier-label gold-label">👑 PREMIUM</div>
-                <div class="plan-header">
-                  <h2 class="plan-name gold-name">Premium</h2>
-                  <div class="plan-price">
-                    <span class="plan-currency gold-currency">₹</span>
-                    <span class="plan-amount gold-amount" id="pm-amount">199</span>
-                    <span class="plan-period" id="pm-period">/ Month</span>
+              <form action="{% url 'buyer_premium'%}" method="post">
+                {%csrf_token%}
+                <div class="plan-card plan-premium glass-panel fade-up" data-monthly="199" data-yearly="159"
+                  data-monthly-total="199" data-yearly-total="1908">
+                  <div class="card-glow"></div>
+                  <div class="gold-crown-badge">👑</div>
+                  <div class="plan-tier-label gold-label">👑 PREMIUM</div>
+                  <div class="plan-header">
+                    <h2 class="plan-name gold-name">Premium</h2>
+                    <div class="plan-price">
+                      <span class="plan-currency gold-currency">₹</span>
+                      <span class="plan-amount gold-amount" id="pm-amount">199</span>
+                      <span class="plan-period" id="pm-period">/ Month</span>
+                    </div>
+                    <div class="plan-original-price" id="pm-original" style="display:none">
+                      <s>₹199/mo</s>
+                    </div>
+                    <div class="plan-yearly-note" id="pm-yearly-note" style="display:none">₹1,908 billed yearly</div>
+                    <p class="plan-subtitle">For serious bulk buyers</p>
                   </div>
-                  <div class="plan-original-price" id="pm-original" style="display:none">
-                    <s>₹199/mo</s>
-                  </div>
-                  <div class="plan-yearly-note" id="pm-yearly-note" style="display:none">₹1,908 billed yearly</div>
-                  <p class="plan-subtitle">For serious bulk buyers</p>
+                  <ul class="plan-features">
+                    <li class="feat-yes">✔ Buy up to 50,000 KG (Unlimited)</li>
+                    <li class="feat-yes">✔ Everything in Standard</li>
+                    <li class="feat-yes">✔ Export Reports
+                      <span class="export-badges">
+                        <span class="badge-tag">PDF</span>
+                        <span class="badge-tag">Excel</span>
+                        <span class="badge-tag">CSV</span>
+                      </span>
+                    </li>
+                    <li class="feat-yes">✔ Zero Platform Fee</li>
+                    <li class="feat-yes">✔ Highest Priority Orders</li>
+                    <li class="feat-yes">✔ Premium Buyer Badge</li>
+                    <li class="feat-yes">✔ Advanced Purchase Analytics</li>
+                    <li class="feat-yes">✔ Dedicated Premium Support</li>
+                  </ul>
+                  <button class="plan-btn plan-btn-premium ripple-btn shimmer-btn">Go Premium</button>
+                  <div class="plan-assurance gold-assurance">✔ No Hidden Charges &nbsp;|&nbsp; ✔ Secure Payments</div>
                 </div>
-                <ul class="plan-features">
-                  <li class="feat-yes">✔ Buy up to 50,000 KG (Unlimited)</li>
-                  <li class="feat-yes">✔ Everything in Standard</li>
-                  <li class="feat-yes">✔ Export Reports
-                    <span class="export-badges">
-                      <span class="badge-tag">PDF</span>
-                      <span class="badge-tag">Excel</span>
-                      <span class="badge-tag">CSV</span>
-                    </span>
-                  </li>
-                  <li class="feat-yes">✔ Zero Platform Fee</li>
-                  <li class="feat-yes">✔ Highest Priority Orders</li>
-                  <li class="feat-yes">✔ Premium Buyer Badge</li>
-                  <li class="feat-yes">✔ Advanced Purchase Analytics</li>
-                  <li class="feat-yes">✔ Dedicated Premium Support</li>
-                </ul>
-                <button class="plan-btn plan-btn-premium ripple-btn shimmer-btn">Go Premium</button>
-                <div class="plan-assurance gold-assurance">✔ No Hidden Charges &nbsp;|&nbsp; ✔ Secure Payments</div>
-              </div>
+              </form>
 
             </div>
           </section>
@@ -386,7 +394,8 @@
               </div>
               <div class="testimonial-card glass-panel fade-up" style="transition-delay:0.1s">
                 <div class="stars">★★★★★</div>
-                <p class="quote">"Zero platform fees completely cover the ₹199/month cost. The priority orders are blazing fast!"</p>
+                <p class="quote">"Zero platform fees completely cover the ₹199/month cost. The priority orders are
+                  blazing fast!"</p>
                 <div class="author">- Amit P., Wholesaler</div>
               </div>
               <div class="testimonial-card glass-panel fade-up" style="transition-delay:0.2s">
@@ -403,19 +412,32 @@
             <div class="faq-accordion glass-panel">
               <div class="faq-item">
                 <button class="faq-question">Can I cancel my subscription anytime? <span class="arrow">▼</span></button>
-                <div class="faq-answer"><p>Yes, you can cancel your subscription at any time from your account settings. There are no hidden cancellation fees.</p></div>
+                <div class="faq-answer">
+                  <p>Yes, you can cancel your subscription at any time from your account settings. There are no hidden
+                    cancellation fees.</p>
+                </div>
               </div>
               <div class="faq-item">
                 <button class="faq-question">How does the AI Buying Advisor work? <span class="arrow">▼</span></button>
-                <div class="faq-answer"><p>Our AI analyzes market trends and historical data to suggest the best times and prices for your specific crop needs.</p></div>
+                <div class="faq-answer">
+                  <p>Our AI analyzes market trends and historical data to suggest the best times and prices for your
+                    specific crop needs.</p>
+                </div>
               </div>
               <div class="faq-item">
-                <button class="faq-question">What is the difference between Standard and Premium? <span class="arrow">▼</span></button>
-                <div class="faq-answer"><p>Standard gives you bulk buying tools and AI features. Premium adds Export Reports (PDF/Excel/CSV), Zero Platform Fee, a Premium Buyer Badge, advanced analytics, and a dedicated support manager.</p></div>
+                <button class="faq-question">What is the difference between Standard and Premium? <span
+                    class="arrow">▼</span></button>
+                <div class="faq-answer">
+                  <p>Standard gives you bulk buying tools and AI features. Premium adds Export Reports (PDF/Excel/CSV),
+                    Zero Platform Fee, a Premium Buyer Badge, advanced analytics, and a dedicated support manager.</p>
+                </div>
               </div>
               <div class="faq-item">
                 <button class="faq-question">Is the payment secure? <span class="arrow">▼</span></button>
-                <div class="faq-answer"><p>Absolutely. We use industry-standard encryption and partner with trusted payment gateways to ensure your details are 100% safe.</p></div>
+                <div class="faq-answer">
+                  <p>Absolutely. We use industry-standard encryption and partner with trusted payment gateways to ensure
+                    your details are 100% safe.</p>
+                </div>
               </div>
             </div>
           </section>
@@ -439,4 +461,5 @@
   <script src="{% static 'buyer/js/app.js' %}"></script>
   <script src="{% static 'buyer/js/premium.js' %}"></script>
 </body>
+
 </html>

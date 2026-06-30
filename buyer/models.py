@@ -93,6 +93,24 @@ class verification_details(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+class premium_plans(models.Model):
+    standard_price = models.IntegerField(blank=True, null=True,default=99)
+    premium_price = models.IntegerField(blank=True, null=True,default=199)
+    year_dis = models.IntegerField(blank=True, null=True,default=20)
+
+    @property
+    def standard_yearly(self):
+        yearly_price = self.standard_price * 12
+        return yearly_price - (yearly_price * self.year_dis / 100)
+
+    @property
+    def premium_yearly(self):
+        yearly_price = self.premium_price * 12
+        return yearly_price - (yearly_price * self.year_dis / 100)
+    
+    def __str__(self):
+        return f"standard_price:{self.standard_price} and premium_price :{self.premium_price}"
+        
 class premium_buyer(models.Model):
     PREMIUM_CHOOSE =  (
         ('Standard', 'Standard'),
