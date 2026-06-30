@@ -95,9 +95,14 @@ class premium_buyer(models.Model):
         ('Standard', 'Standard'),
         ('Premium', 'Premium'),
     )
+    PREMIUM_TYPE =  (
+        ('Monthly', 'Monthly'),
+        ('Yearly', 'Yearly'),
+    )
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='Premium_user')
     Premium_type = models.CharField(max_length=20,choices=PREMIUM_CHOOSE)
-    purchase
+    purchase_date = models.DateTimeField(auto_now_add=True)
+
 
 
 class Cart(models.Model):
