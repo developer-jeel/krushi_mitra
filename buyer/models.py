@@ -2,6 +2,8 @@ from django.db import models
 from farmer.models import *
 from django.utils.html import mark_safe
 from django.utils import timezone
+from dateutil.relativedelta import relativedelta
+
 
 
 # Create your models here.
@@ -45,6 +47,7 @@ class Buyer(models.Model):
     gst_certificate = models.FileField(upload_to='buyer/documents/gst/', blank=True, null=True)
     gst_no = models.CharField(max_length=15, unique=True, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    is_premiume = models.BooleanField(default=False)
     enable_update = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -95,15 +98,26 @@ class premium_buyer(models.Model):
         ('Standard', 'Standard'),
         ('Premium', 'Premium'),
     )
-    PREMIUM_TYPE =  (
+    PREMIUM_TYPECHOOSE =  (
         ('Monthly', 'Monthly'),
         ('Yearly', 'Yearly'),
     )
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='Premium_user')
-    Premium_type = models.CharField(max_length=20,choices=PREMIUM_CHOOSE)
+    premium_type = models.CharField(max_length=20,choices=PREMIUM_CHOOSE)
+    premium_time = models.CharField(max_length=20,choices=PREMIUM_TYPECHOOSE)
     purchase_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.user.user.username} buys {self.premium_type} in {self.premium_time} way"
 
+    @property
+    def end_date(self):
+        if self.premium_time == "Monthly":
+            return self.purchase_date + relativedelta(months=1)
+        elif self.premium_time == "Yearly":
+            return self.purchase_date + relativedelta(years=1)
+
+    
 
 class Cart(models.Model):
     user = models.OneToOneField(
