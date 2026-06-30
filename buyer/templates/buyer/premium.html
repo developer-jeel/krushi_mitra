@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Premium Membership - Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/premium.css' %}">
+</head>
+
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+
+  <div class="app-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>  
+        <button class="sidebar-toggle">◀</button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
+            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops"><span
+            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-badge">3</span></a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
+            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
+            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+        <div class="sidebar-section-label">Procurement</div>
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
+            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
+            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-badge">5</span></a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-badge">12</span></a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
+            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
+            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
+            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
+            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+      </nav>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="mobile-menu-btn">☰</button>
+          <div>
+            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
+                class="breadcrumb-sep">›</span><span class="current">Premium Membership</span></div>
+            <h1 class="page-title">Premium Membership</h1>
+          </div>
+        </div>
+        <div class="navbar-right">
+          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search crops..."
+              aria-label="Search"></div>
+          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">🔔<span
+              class="badge-dot"></span></a>
+          <button class="theme-toggle">🌙</button>
+          <div class="dropdown">
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">RM</div>
+              <div>
+                <div class="profile-name">{{uid.name}}</div>
+                <div class="profile-role">Wholesale Trader</div>
+              </div>
+            </div>
+            <div class="dropdown-menu">
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_premium' %}" class="dropdown-item">👑 Premium Membership</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger">🚪 Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="premium-container">
+
+          <!-- Floating Particles -->
+          <div class="particles-bg" aria-hidden="true">
+            <span class="particle"></span><span class="particle"></span><span class="particle"></span>
+            <span class="particle"></span><span class="particle"></span><span class="particle"></span>
+            <span class="particle"></span><span class="particle"></span>
+          </div>
+
+          <!-- Hero Section -->
+          <header class="premium-hero">
+            <div class="glow-bg"></div>
+            <div class="hero-content">
+              <div class="premium-crown">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
+                </svg>
+              </div>
+              <h1 class="premium-title">Choose Your Plan</h1>
+              <p class="premium-subtitle">Unlock exclusive buying tools and save more money. Upgrade anytime.</p>
+            </div>
+          </header>
+
+          <!-- ── THREE PRICING PLANS ── -->
+          <section class="pricing-section fade-up" id="pricing-plans">
+            <div class="plans-grid">
+
+              <!-- FREE -->
+              <div class="plan-card plan-free glass-panel fade-up">
+                <div class="plan-tier-label">🟢 FREE</div>
+                <div class="plan-header">
+                  <h2 class="plan-name">Free</h2>
+                  <div class="plan-price">
+                    <span class="plan-currency">₹</span>
+                    <span class="plan-amount">0</span>
+                  </div>
+                  <p class="plan-subtitle">Forever Free</p>
+                </div>
+                <ul class="plan-features">
+                  <li class="feat-yes">✔ Buy up to 1000 KG</li>
+                  <li class="feat-yes">✔ Browse Crops</li>
+                  <li class="feat-yes">✔ Wishlist</li>
+                  <li class="feat-yes">✔ Basic Search</li>
+                  <li class="feat-yes">✔ Basic Order Tracking</li>
+                  <li class="feat-yes">✔ Government Schemes</li>
+                  <li class="feat-yes">✔ Community Access</li>
+                  <li class="feat-yes">✔ Basic Support</li>
+                  <li class="feat-no">✘ Bulk Purchase</li>
+                  <li class="feat-no">✘ AI Buying Advisor</li>
+                  <li class="feat-no">✘ Real-Time Price Alerts</li>
+                  <li class="feat-no">✘ Wishlist Alerts</li>
+                  <li class="feat-no">✘ Priority Orders</li>
+                  <li class="feat-no">✘ Export Reports</li>
+                  <li class="feat-no">✘ Zero Platform Fee</li>
+                </ul>
+                <button class="plan-btn plan-btn-free" disabled>Current Plan</button>
+              </div>
+
+              <!-- STANDARD (highlighted) -->
+              <div class="plan-card plan-standard glass-panel fade-up plan-featured">
+                <div class="popular-ribbon">⭐ MOST POPULAR</div>
+                <div class="plan-tier-label">🔵 STANDARD</div>
+                <div class="plan-header">
+                  <h2 class="plan-name">Standard</h2>
+                  <div class="plan-price">
+                    <span class="plan-currency">₹</span>
+                    <span class="plan-amount">99</span>
+                    <span class="plan-period">/ Month</span>
+                  </div>
+                  <p class="plan-subtitle">Best for growing buyers</p>
+                </div>
+                <ul class="plan-features">
+                  <li class="feat-yes">✔ Buy up to 5000 KG</li>
+                  <li class="feat-yes">✔ Bulk Purchase Unlock</li>
+                  <li class="feat-yes">✔ AI Buying Advisor</li>
+                  <li class="feat-yes">✔ Real-Time Price Alerts</li>
+                  <li class="feat-yes">✔ Wishlist Alerts</li>
+                  <li class="feat-yes">✔ Priority Orders</li>
+                  <li class="feat-yes">✔ Faster Checkout</li>
+                  <li class="feat-yes">✔ Premium Support</li>
+                  <li class="feat-no">✘ Export Reports</li>
+                  <li class="feat-no">✘ Zero Platform Fee</li>
+                </ul>
+                <button class="plan-btn plan-btn-standard ripple-btn">Upgrade to Standard</button>
+                <div class="plan-assurance">✔ Cancel Anytime &nbsp;|&nbsp; ✔ Secure Payments</div>
+              </div>
+
+              <!-- PREMIUM (gold) -->
+              <div class="plan-card plan-premium glass-panel fade-up">
+                <div class="gold-crown-badge">👑</div>
+                <div class="plan-tier-label gold-label">👑 PREMIUM</div>
+                <div class="plan-header">
+                  <h2 class="plan-name gold-name">Premium</h2>
+                  <div class="plan-price">
+                    <span class="plan-currency gold-currency">₹</span>
+                    <span class="plan-amount gold-amount">199</span>
+                    <span class="plan-period">/ Month</span>
+                  </div>
+                  <p class="plan-subtitle">For serious bulk buyers</p>
+                </div>
+                <ul class="plan-features">
+                  <li class="feat-yes">✔ Buy up to 50,000 KG (Unlimited)</li>
+                  <li class="feat-yes">✔ Everything in Standard</li>
+                  <li class="feat-yes">✔ Export Reports
+                    <span class="export-badges">
+                      <span class="badge-tag">PDF</span>
+                      <span class="badge-tag">Excel</span>
+                      <span class="badge-tag">CSV</span>
+                    </span>
+                  </li>
+                  <li class="feat-yes">✔ Zero Platform Fee</li>
+                  <li class="feat-yes">✔ Highest Priority Orders</li>
+                  <li class="feat-yes">✔ Premium Buyer Badge</li>
+                  <li class="feat-yes">✔ Advanced Purchase Analytics</li>
+                  <li class="feat-yes">✔ Dedicated Premium Support</li>
+                </ul>
+                <button class="plan-btn plan-btn-premium ripple-btn shimmer-btn">Go Premium</button>
+                <div class="plan-assurance gold-assurance">✔ No Hidden Charges &nbsp;|&nbsp; ✔ Secure Payments</div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ── FEATURES SECTION ── -->
+          <section class="features-section">
+            <h2 class="section-title fade-up">Premium Features</h2>
+            <div class="features-grid">
+              <div class="feature-card glass-panel fade-up">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Buying Advisor</h3>
+                <p>Get smart recommendations and market insights.</p>
+              </div>
+              <div class="feature-card glass-panel fade-up" style="transition-delay:0.1s">
+                <div class="feature-icon">🔔</div>
+                <h3>Real-Time Price Alerts</h3>
+                <p>Never miss a drop with instant notifications.</p>
+              </div>
+              <div class="feature-card glass-panel fade-up" style="transition-delay:0.2s">
+                <div class="feature-icon">❤️</div>
+                <h3>Wishlist Alerts</h3>
+                <p>Track your favorite items with precision.</p>
+              </div>
+              <div class="feature-card glass-panel fade-up" style="transition-delay:0.3s">
+                <div class="feature-icon">🚀</div>
+                <h3>Priority Orders</h3>
+                <p>Jump to the front of the fulfillment queue.</p>
+              </div>
+              <div class="feature-card glass-panel fade-up" style="transition-delay:0.4s">
+                <div class="feature-icon">📄</div>
+                <h3>Export Reports</h3>
+                <p>Download detailed buying histories and analytics.</p>
+              </div>
+              <div class="feature-card glass-panel fade-up" style="transition-delay:0.5s">
+                <div class="feature-icon">💰</div>
+                <h3>Zero Platform Fee</h3>
+                <p>Save more on every single transaction.</p>
+              </div>
+              <div class="feature-card glass-panel fade-up" style="transition-delay:0.6s">
+                <div class="feature-icon">📦</div>
+                <h3>Higher Quantity Limit</h3>
+                <p>Order in bulk without any restrictions.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── COMPARISON TABLE ── -->
+          <section class="comparison-section fade-up">
+            <h2 class="section-title">Free vs Standard vs Premium</h2>
+            <div class="table-container glass-panel">
+              <table class="compare-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th class="col-free">🟢 Free</th>
+                    <th class="col-standard">🔵 Standard</th>
+                    <th class="col-premium premium-col">👑 Premium</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Buy Limit</td>
+                    <td class="col-free">1,000 KG</td>
+                    <td class="col-standard">5,000 KG</td>
+                    <td class="col-premium premium-col">Unlimited</td>
+                  </tr>
+                  <tr>
+                    <td>Bulk Purchase</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-yes">✔</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>AI Buying Advisor</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-yes">✔</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Real-Time Price Alerts</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-yes">✔</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Wishlist Alerts</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-yes">✔</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Priority Orders</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-yes">✔</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Export Reports</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-no">✘</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Zero Platform Fee</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-no">✘</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Premium Badge</td>
+                    <td class="col-free"><span class="tbl-no">✘</span></td>
+                    <td class="col-standard"><span class="tbl-no">✘</span></td>
+                    <td class="col-premium premium-col"><span class="tbl-yes">✔</span></td>
+                  </tr>
+                  <tr>
+                    <td>Support</td>
+                    <td class="col-free">Basic</td>
+                    <td class="col-standard">Premium</td>
+                    <td class="col-premium premium-col">Dedicated</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ── TESTIMONIALS ── -->
+          <section class="testimonials-section">
+            <h2 class="section-title fade-up">What Our Premium Buyers Say</h2>
+            <div class="testimonials-grid">
+              <div class="testimonial-card glass-panel fade-up">
+                <div class="stars">★★★★★</div>
+                <p class="quote">"The AI Advisor has saved me thousands on bulk purchases. Best decision ever."</p>
+                <div class="author">- Rajesh K., Premium Buyer</div>
+              </div>
+              <div class="testimonial-card glass-panel fade-up" style="transition-delay:0.1s">
+                <div class="stars">★★★★★</div>
+                <p class="quote">"Zero platform fees completely cover the ₹199/month cost. The priority orders are blazing fast!"</p>
+                <div class="author">- Amit P., Wholesaler</div>
+              </div>
+              <div class="testimonial-card glass-panel fade-up" style="transition-delay:0.2s">
+                <div class="stars">★★★★★</div>
+                <p class="quote">"Price alerts help me buy exactly when the market is lowest. Highly recommended."</p>
+                <div class="author">- Suresh S., Retailer</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── FAQ ── -->
+          <section class="faq-section fade-up">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-accordion glass-panel">
+              <div class="faq-item">
+                <button class="faq-question">Can I cancel my subscription anytime? <span class="arrow">▼</span></button>
+                <div class="faq-answer"><p>Yes, you can cancel your subscription at any time from your account settings. There are no hidden cancellation fees.</p></div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-question">How does the AI Buying Advisor work? <span class="arrow">▼</span></button>
+                <div class="faq-answer"><p>Our AI analyzes market trends and historical data to suggest the best times and prices for your specific crop needs.</p></div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-question">What is the difference between Standard and Premium? <span class="arrow">▼</span></button>
+                <div class="faq-answer"><p>Standard gives you bulk buying tools and AI features. Premium adds Export Reports (PDF/Excel/CSV), Zero Platform Fee, a Premium Buyer Badge, advanced analytics, and a dedicated support manager.</p></div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-question">Is the payment secure? <span class="arrow">▼</span></button>
+                <div class="faq-answer"><p>Absolutely. We use industry-standard encryption and partner with trusted payment gateways to ensure your details are 100% safe.</p></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── BOTTOM CTA ── -->
+          <section class="cta-section fade-up">
+            <div class="cta-card glass-panel">
+              <h2>Ready to elevate your buying experience?</h2>
+              <p>Join thousands of premium buyers on Krushi Mitra today.</p>
+              <div class="cta-btns">
+                <button class="plan-btn plan-btn-standard ripple-btn">Upgrade to Standard — ₹99/mo</button>
+                <button class="plan-btn plan-btn-premium ripple-btn shimmer-btn">Go Premium — ₹199/mo</button>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="{% static 'buyer/js/app.js' %}"></script>
+  <script src="{% static 'buyer/js/premium.js' %}"></script>
+</body>
+</html>

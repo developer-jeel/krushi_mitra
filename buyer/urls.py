@@ -48,4 +48,5 @@ urlpatterns = [
     path('settings/', views.buyer_settings, name='buyer_settings'),
     path('kyc', views.kyc, name='kyc'),
     path('home', views.home, name='home'),
+    path('premium/', views.buyer_premium, name='buyer_premium'),
 ]
