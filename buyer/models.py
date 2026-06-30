@@ -90,6 +90,13 @@ class verification_details(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+class premium_buyer(models.Model):
+    PREMIUM_CHOOSE =  (
+        ('Standard', 'Standard'),
+        ('Premium', 'Premium'),
+    )
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='Premium_user')
+
 class Cart(models.Model):
     user = models.OneToOneField(
         User,

@@ -132,6 +132,17 @@
 
           <!-- ── THREE PRICING PLANS ── -->
           <section class="pricing-section fade-up" id="pricing-plans">
+
+            <!-- Billing Toggle -->
+            <div class="billing-toggle-wrap">
+              <span class="billing-label" id="lbl-monthly">Monthly</span>
+              <button class="billing-toggle" id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle yearly billing">
+                <span class="billing-toggle-thumb"></span>
+              </button>
+              <span class="billing-label" id="lbl-yearly">Yearly</span>
+              <span class="billing-save-pill" id="billing-save-pill">Save 20%</span>
+            </div>
+
             <div class="plans-grid">
 
               <!-- FREE -->
@@ -167,7 +178,8 @@
               </div>
 
               <!-- STANDARD (highlighted) -->
-              <div class="plan-card plan-standard glass-panel fade-up plan-featured">
+              <div class="plan-card plan-standard glass-panel fade-up plan-featured"
+                   data-monthly="99" data-yearly="79" data-monthly-total="99" data-yearly-total="948">
                 <div class="card-glow"></div>
                 <div class="popular-ribbon">⭐ MOST POPULAR</div>
                 <div class="plan-tier-label">🔵 STANDARD</div>
@@ -175,9 +187,13 @@
                   <h2 class="plan-name">Standard</h2>
                   <div class="plan-price">
                     <span class="plan-currency">₹</span>
-                    <span class="plan-amount">99</span>
-                    <span class="plan-period">/ Month</span>
+                    <span class="plan-amount" id="std-amount">99</span>
+                    <span class="plan-period" id="std-period">/ Month</span>
                   </div>
+                  <div class="plan-original-price" id="std-original" style="display:none">
+                    <s>₹99/mo</s>
+                  </div>
+                  <div class="plan-yearly-note" id="std-yearly-note" style="display:none">₹948 billed yearly</div>
                   <p class="plan-subtitle">Best for growing buyers</p>
                 </div>
                 <ul class="plan-features">
@@ -197,7 +213,8 @@
               </div>
 
               <!-- PREMIUM (gold) -->
-              <div class="plan-card plan-premium glass-panel fade-up">
+              <div class="plan-card plan-premium glass-panel fade-up"
+                   data-monthly="199" data-yearly="159" data-monthly-total="199" data-yearly-total="1908">
                 <div class="card-glow"></div>
                 <div class="gold-crown-badge">👑</div>
                 <div class="plan-tier-label gold-label">👑 PREMIUM</div>
@@ -205,9 +222,13 @@
                   <h2 class="plan-name gold-name">Premium</h2>
                   <div class="plan-price">
                     <span class="plan-currency gold-currency">₹</span>
-                    <span class="plan-amount gold-amount">199</span>
-                    <span class="plan-period">/ Month</span>
+                    <span class="plan-amount gold-amount" id="pm-amount">199</span>
+                    <span class="plan-period" id="pm-period">/ Month</span>
                   </div>
+                  <div class="plan-original-price" id="pm-original" style="display:none">
+                    <s>₹199/mo</s>
+                  </div>
+                  <div class="plan-yearly-note" id="pm-yearly-note" style="display:none">₹1,908 billed yearly</div>
                   <p class="plan-subtitle">For serious bulk buyers</p>
                 </div>
                 <ul class="plan-features">

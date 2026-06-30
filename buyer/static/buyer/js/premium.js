@@ -262,4 +262,82 @@ document.addEventListener('DOMContentLoaded', () => {
 
   planAmounts.forEach(el => counterObserver.observe(el));
 
+  /* ── 16. YEARLY / MONTHLY BILLING TOGGLE ────────────── */
+  const toggleBtn   = document.getElementById('billing-toggle');
+  const savePill    = document.getElementById('billing-save-pill');
+  const lblMonthly  = document.getElementById('lbl-monthly');
+  const lblYearly   = document.getElementById('lbl-yearly');
+
+  if (toggleBtn) {
+    let isYearly = false;
+
+    // Pricing data per plan
+    const plans = [
+      {
+        amountEl:  document.getElementById('std-amount'),
+        periodEl:  document.getElementById('std-period'),
+        origEl:    document.getElementById('std-original'),
+        noteEl:    document.getElementById('std-yearly-note'),
+        monthly:   99,
+        yearly:    79,
+        yearlyAmt: '948',
+      },
+      {
+        amountEl:  document.getElementById('pm-amount'),
+        periodEl:  document.getElementById('pm-period'),
+        origEl:    document.getElementById('pm-original'),
+        noteEl:    document.getElementById('pm-yearly-note'),
+        monthly:   199,
+        yearly:    159,
+        yearlyAmt: '1,908',
+      },
+    ];
+
+    function flipPrices(yearly) {
+      plans.forEach(p => {
+        if (!p.amountEl) return;
+
+        // Trigger flip animation
+        p.amountEl.classList.remove('price-flip');
+        void p.amountEl.offsetWidth; // reflow
+        p.amountEl.classList.add('price-flip');
+
+        // After half the flip duration update the number
+        setTimeout(() => {
+          if (yearly) {
+            p.amountEl.textContent = p.yearly;
+            if (p.periodEl) p.periodEl.textContent = '/ mo · billed yearly';
+            if (p.origEl)   p.origEl.style.display = 'block';
+            if (p.noteEl)   p.noteEl.style.display = 'block';
+          } else {
+            p.amountEl.textContent = p.monthly;
+            if (p.periodEl) p.periodEl.textContent = '/ Month';
+            if (p.origEl)   p.origEl.style.display = 'none';
+            if (p.noteEl)   p.noteEl.style.display = 'none';
+          }
+        }, 175);
+      });
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      isYearly = !isYearly;
+
+      // Toggle aria state
+      toggleBtn.setAttribute('aria-checked', isYearly ? 'true' : 'false');
+
+      // Label active state
+      if (lblMonthly) lblMonthly.classList.toggle('active', !isYearly);
+      if (lblYearly)  lblYearly.classList.toggle('active',  isYearly);
+
+      // Save pill spring in/out
+      if (savePill) savePill.classList.toggle('visible', isYearly);
+
+      // Flip prices
+      flipPrices(isYearly);
+    });
+
+    // Set initial active label
+    if (lblMonthly) lblMonthly.classList.add('active');
+  }
+
 });
