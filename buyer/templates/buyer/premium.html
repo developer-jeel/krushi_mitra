@@ -182,8 +182,9 @@
               <!-- STANDARD (highlighted) -->
               <form action="{% url 'buyer_premium'%}" method="post">
                 {%csrf_token%}
-                <div class="plan-card plan-standard glass-panel fade-up plan-featured" data-monthly="99"
-                  data-yearly="79" data-monthly-total="99" data-yearly-total="948">
+                <div class="plan-card plan-standard glass-panel fade-up plan-featured"
+                  data-monthly="{{plans.standard_price}}" data-yearly="{{plans.standard_dis}}"
+                  data-monthly-total="{{plans.standard_price}}" data-yearly-total="{{plans.standard_yearly}}">
                   <div class="card-glow"></div>
                   <div class="popular-ribbon">⭐ MOST POPULAR</div>
                   <div class="plan-tier-label">🔵 STANDARD</div>
@@ -461,6 +462,83 @@
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
   <script src="{% static 'buyer/js/premium.js' %}"></script>
+  <script>
+    const toggleBtn = document.getElementById('billing-toggle');
+    const savePill = document.getElementById('billing-save-pill');
+    const lblMonthly = document.getElementById('lbl-monthly');
+    const lblYearly = document.getElementById('lbl-yearly');
+
+    if (toggleBtn) {
+      let isYearly = false;
+
+      // Pricing data per plan
+      const plans = [
+        {
+          amountEl: document.getElementById('std-amount'),
+          periodEl: document.getElementById('std-period'),
+          origEl: document.getElementById('std-original'),
+          noteEl: document.getElementById('std-yearly-note'),
+          monthly: 99,
+          yearly: "{{ plans.premium_dis }}",
+          yearlyAmt: '0',
+        },
+        {
+          amountEl: document.getElementById('pm-amount'),
+          periodEl: document.getElementById('pm-period'),
+          origEl: document.getElementById('pm-original'),
+          noteEl: document.getElementById('pm-yearly-note'),
+          monthly: 199,
+          yearly: 159,
+          yearlyAmt: '1,908',
+        },
+      ];
+      function flipPrices(yearly) {
+        plans.forEach(p => {
+          if (!p.amountEl) return;
+
+          // Trigger flip animation
+          p.amountEl.classList.remove('price-flip');
+          void p.amountEl.offsetWidth; // reflow
+          p.amountEl.classList.add('price-flip');
+
+          // After half the flip duration update the number
+          setTimeout(() => {
+            if (yearly) {
+              p.amountEl.textContent = p.yearly;
+              if (p.periodEl) p.periodEl.textContent = '/ mo · billed yearly';
+              if (p.origEl) p.origEl.style.display = 'block';
+              if (p.noteEl) p.noteEl.style.display = 'block';
+            } else {
+              p.amountEl.textContent = p.monthly;
+              if (p.periodEl) p.periodEl.textContent = '/ Month';
+              if (p.origEl) p.origEl.style.display = 'none';
+              if (p.noteEl) p.noteEl.style.display = 'none';
+            }
+          }, 175);
+        });
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        isYearly = !isYearly;
+
+        // Toggle aria state
+        toggleBtn.setAttribute('aria-checked', isYearly ? 'true' : 'false');
+
+        // Label active state
+        if (lblMonthly) lblMonthly.classList.toggle('active', !isYearly);
+        if (lblYearly) lblYearly.classList.toggle('active', isYearly);
+
+        // Save pill spring in/out
+        if (savePill) savePill.classList.toggle('visible', isYearly);
+
+        // Flip prices
+        flipPrices(isYearly);
+      });
+
+      // Set initial active label
+      if (lblMonthly) lblMonthly.classList.add('active');
+    }
+  </script>
 </body>
 
 </html>

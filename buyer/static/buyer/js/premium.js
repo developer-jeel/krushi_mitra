@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── 3. FAQ ACCORDION ────────────────────────────────── */
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
-      const answer   = btn.nextElementSibling;
+      const answer = btn.nextElementSibling;
       const isActive = btn.classList.contains('active');
 
       document.querySelectorAll('.faq-question.active').forEach(other => {
@@ -55,14 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── 4. BUTTON RIPPLE EFFECT ─────────────────────────── */
   document.querySelectorAll('.ripple-btn').forEach(btn => {
     btn.addEventListener('click', function (e) {
-      const rect   = this.getBoundingClientRect();
+      const rect = this.getBoundingClientRect();
       const circle = document.createElement('span');
-      const size   = Math.max(rect.width, rect.height);
+      const size = Math.max(rect.width, rect.height);
       circle.classList.add('ripple');
       circle.style.cssText = `
         width:${size}px; height:${size}px;
         left:${e.clientX - rect.left - size / 2}px;
-        top:${e.clientY - rect.top  - size / 2}px;
+        top:${e.clientY - rect.top - size / 2}px;
       `;
       this.appendChild(circle);
       circle.addEventListener('animationend', () => circle.remove());
@@ -113,13 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const isFeatured = card.classList.contains('plan-standard');
 
     card.addEventListener('mousemove', e => {
-      const rect  = card.getBoundingClientRect();
-      const cx    = rect.left + rect.width  / 2;
-      const cy    = rect.top  + rect.height / 2;
-      const dx    = (e.clientX - cx) / (rect.width  / 2);
-      const dy    = (e.clientY - cy) / (rect.height / 2);
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
       const maxRot = isFeatured ? 7 : 9;
-      const lift   = isFeatured ? -16 : -12;
+      const lift = isFeatured ? -16 : -12;
 
       card.style.transform = `
         translateY(${lift}px)
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         glowEl.style.left = `${x}px`;
-        glowEl.style.top  = `${y}px`;
+        glowEl.style.top = `${y}px`;
         glowEl.style.opacity = '0.7';
       }
     });
@@ -245,12 +245,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const counterObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const el     = entry.target;
+      const el = entry.target;
       const target = parseInt(el.textContent, 10);
       if (isNaN(target) || target === 0) return;
-      let current  = 0;
-      const step   = Math.ceil(target / 30);
-      const tick   = () => {
+      let current = 0;
+      const step = Math.ceil(target / 30);
+      const tick = () => {
         current = Math.min(current + step, target);
         el.textContent = current;
         if (current < target) requestAnimationFrame(tick);
@@ -263,81 +263,5 @@ document.addEventListener('DOMContentLoaded', () => {
   planAmounts.forEach(el => counterObserver.observe(el));
 
   /* ── 16. YEARLY / MONTHLY BILLING TOGGLE ────────────── */
-  const toggleBtn   = document.getElementById('billing-toggle');
-  const savePill    = document.getElementById('billing-save-pill');
-  const lblMonthly  = document.getElementById('lbl-monthly');
-  const lblYearly   = document.getElementById('lbl-yearly');
-
-  if (toggleBtn) {
-    let isYearly = false;
-
-    // Pricing data per plan
-    const plans = [
-      {
-        amountEl:  document.getElementById('std-amount'),
-        periodEl:  document.getElementById('std-period'),
-        origEl:    document.getElementById('std-original'),
-        noteEl:    document.getElementById('std-yearly-note'),
-        monthly:   99,
-        yearly:    79,
-        yearlyAmt: '948',
-      },
-      {
-        amountEl:  document.getElementById('pm-amount'),
-        periodEl:  document.getElementById('pm-period'),
-        origEl:    document.getElementById('pm-original'),
-        noteEl:    document.getElementById('pm-yearly-note'),
-        monthly:   199,
-        yearly:    159,
-        yearlyAmt: '1,908',
-      },
-    ];
-
-    function flipPrices(yearly) {
-      plans.forEach(p => {
-        if (!p.amountEl) return;
-
-        // Trigger flip animation
-        p.amountEl.classList.remove('price-flip');
-        void p.amountEl.offsetWidth; // reflow
-        p.amountEl.classList.add('price-flip');
-
-        // After half the flip duration update the number
-        setTimeout(() => {
-          if (yearly) {
-            p.amountEl.textContent = p.yearly;
-            if (p.periodEl) p.periodEl.textContent = '/ mo · billed yearly';
-            if (p.origEl)   p.origEl.style.display = 'block';
-            if (p.noteEl)   p.noteEl.style.display = 'block';
-          } else {
-            p.amountEl.textContent = p.monthly;
-            if (p.periodEl) p.periodEl.textContent = '/ Month';
-            if (p.origEl)   p.origEl.style.display = 'none';
-            if (p.noteEl)   p.noteEl.style.display = 'none';
-          }
-        }, 175);
-      });
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      isYearly = !isYearly;
-
-      // Toggle aria state
-      toggleBtn.setAttribute('aria-checked', isYearly ? 'true' : 'false');
-
-      // Label active state
-      if (lblMonthly) lblMonthly.classList.toggle('active', !isYearly);
-      if (lblYearly)  lblYearly.classList.toggle('active',  isYearly);
-
-      // Save pill spring in/out
-      if (savePill) savePill.classList.toggle('visible', isYearly);
-
-      // Flip prices
-      flipPrices(isYearly);
-    });
-
-    // Set initial active label
-    if (lblMonthly) lblMonthly.classList.add('active');
-  }
 
 });
