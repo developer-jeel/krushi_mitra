@@ -443,14 +443,34 @@
                 <span class="quick-action-icon">🛒</span>
                 <span class="quick-action-label">View Cart</span>
               </a>
+              {% if buyr.is_premiume %}
               <a href="{% url 'buyer_bulk_order' %}" class="quick-action-item">
                 <span class="quick-action-icon">📋</span>
                 <span class="quick-action-label">Bulk Order</span>
               </a>
+              {% if premium_type.premium_type == 'Premium' %}
               <a href="{% url 'buyer_export_inquiry' %}" class="quick-action-item">
                 <span class="quick-action-icon">🌍</span>
                 <span class="quick-action-label">Export Inquiry</span>
               </a>
+              {% else %}
+              <a href="#" class="quick-action-item"
+                onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
+                <span class="quick-action-icon">🔒</span>
+                <span class="quick-action-label">Export Inquiry</span>
+              </a>
+              {% endif %}
+              {% else %}
+              <a href="#" class="quick-action-item" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
+                <span class="quick-action-icon">🔒</span>
+                <span class="quick-action-label">Bulk Orders (Upgrade To Unlock)</span>
+              </a>
+              <a href="#" class="quick-action-item"
+                onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
+                <span class="quick-action-icon">🔒</span>
+                <span class="quick-action-label">Export Inquiry</span>
+              </a>
+              {% endif %}
               <a href="{% url 'buyer_wishlist' %}" class="quick-action-item">
                 <span class="quick-action-icon">❤️</span>
                 <span class="quick-action-label">Wishlist</span>
