@@ -150,8 +150,15 @@ class premium_buyer(models.Model):
     
     @property
     def is_expired(self):
+        if self.premium_type == "Free":
+            return False
         return timezone.now() > self.end_date
 
+    def check_subscription(self):
+        if self.is_expired:
+            self.premium_type = "Free"
+            self.premium_time = "Monthly"
+            self.save()
     
 
 class Cart(models.Model):

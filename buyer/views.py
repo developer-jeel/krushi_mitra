@@ -10,6 +10,7 @@ from .models import *
 @check_login(['Buyer'])
 def buyer_home(request):
     return redirect("buyer_dashboard")
+
 def format_indian_number(value):
     value = float(value)
 
@@ -21,6 +22,11 @@ def format_indian_number(value):
         return f"{value / 1000:.2f} K"
     else:
         return f"{value:.2f}"
+
+def chek_premium(buyr):
+    premium_buyr = premium_buyer.objects.get(user=buyr)
+    if premium_buyr:
+        premium_buyr.
 
 @check_login(['Buyer'])
 def buyer_dashboard(request):
