@@ -132,7 +132,7 @@ def cart_item_delete(request,pk):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
     if request.method == 'POST':
-        quantity =int(request.POST.get('quantity'))
+        quantity = int(request.POST.get('quantity'))
         crop_id = request.POST.get('crop')
         crop_obj = crop.objects.get(id=crop_id)
         cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first() 
@@ -177,7 +177,7 @@ def buyer_checkout(request):
             )
             total_quantity += (item.quantity * 20)
         cart_items.delete()
-        cart.total_kg = total_quantity
+        cart.total_kg += total_quantity
         cart.save()
         notification = notifications.objects.create(
             user = buyr,

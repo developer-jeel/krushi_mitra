@@ -125,6 +125,7 @@ class premium_plans(models.Model):
         
 class premium_buyer(models.Model):
     PREMIUM_CHOOSE =  (
+        ('Free', 'Free'),
         ('Standard', 'Standard'),
         ('Premium', 'Premium'),
     )
@@ -135,7 +136,7 @@ class premium_buyer(models.Model):
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='Premium_user')
     premium_type = models.CharField(max_length=20,choices=PREMIUM_CHOOSE)
     premium_time = models.CharField(max_length=20,choices=PREMIUM_TYPECHOOSE)
-    purchase_date = models.DateTimeField(auto_now_add=True)
+    purchase_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.user.username} buys {self.premium_type} in {self.premium_time} way"
@@ -146,6 +147,10 @@ class premium_buyer(models.Model):
             return self.purchase_date + relativedelta(months=1)
         elif self.premium_time == "Yearly":
             return self.purchase_date + relativedelta(years=1)
+    
+    @property
+    def is_expired(self):
+        return timezone.now() > self.end_date
 
     
 

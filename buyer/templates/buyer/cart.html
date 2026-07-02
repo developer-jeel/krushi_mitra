@@ -219,7 +219,7 @@
                   <button class="btn btn-primary btn-sm apply-coupon">Apply</button>
                 </div>
               </div>
-              {%if cart.cart_limit > total_qty and cart.cart_limit > cart.total_kg%}
+              {%if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium'%}
               <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-lg btn-block"
                 style="margin-top:20px;">Proceed to Checkout →</a>
               {%else%}
