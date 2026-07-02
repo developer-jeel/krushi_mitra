@@ -311,4 +311,5 @@ def kyc(request):
 def buyer_premium(request):
     uid = request.uid
     plans = premium_plans.objects.get()
-    return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans})
+    buyr = Buyer.objects.get(user=uid)
+    return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr})
