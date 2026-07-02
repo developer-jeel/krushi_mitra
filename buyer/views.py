@@ -47,12 +47,13 @@ def buyer_dashboard(request):
 def buyer_browse_crops(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    cart = Cart.objects.get(user = uid)
     all_crops = crop.objects.filter(is_approved = True)
     saved_crops = saved.objects.filter( user=buyr).values_list('crop_id', flat=True)
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
     print("==================>",all_crops)
-    context = {'all_crops' : all_crops,"saved_crops":saved_crops,'premium_type':premium_type,'buyr':buyr}
+    context = {'all_crops' : all_crops,"saved_crops":saved_crops,'premium_type':premium_type,'buyr':buyr,'cart':cart}
     return render(request, "buyer/browse-crops.html",context)
 
 
@@ -60,9 +61,10 @@ def buyer_browse_crops(request):
 def buyer_crop_details(request,pk):
     uid = request.uid
     crp = crop.objects.get(id=pk)
+    cart = Cart.objects.get(user = uid)
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    context = {'crop' : crp,'premium_type':premium_type,'buyr':buyr}
+    context = {'crop' : crp,'premium_type':premium_type,'buyr':buyr,'cart':cart}
     return render(request, "buyer/crop-details.html",context)
 
 @check_login(['Buyer'])
@@ -147,6 +149,7 @@ def buyer_checkout(request):
     cart_items = CartItem.objects.filter(cart=cart)
     premium_type = premium_buyer.objects.get(user=buyr)
     total_quantity = 0
+    quantity_limit = cart.cart_limit
     if request.method == 'POST':
         payment_method = request.POST.get('payment')
         con_order = Order.objects.create(

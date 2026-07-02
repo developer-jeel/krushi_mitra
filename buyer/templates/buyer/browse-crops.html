@@ -281,8 +281,14 @@
                     <div class="crop-card-actions">
                       <a href="{% url 'buyer_crop_details' pk=crop.id %}" class="btn btn-outline btn-sm flex-1">View
                         Details</a>
-                      <button href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to
+                      {% if cart.cart_limit > cart.total_kg %} <button href="{% url 'buyer_cart' %}"
+                        class="btn btn-primary btn-sm flex-1">🛒 Add to
                         Cart</button>
+                      {%else%}
+                      <a href="#" class="btn btn-primary btn-sm flex-1" style="background-color: gray;"
+                        onclick="alert('Limit over'); return false;">🛒 Add to
+                        Cart</a>
+                      {%endif%}
                     </div>
                   </div>
                 </div>
