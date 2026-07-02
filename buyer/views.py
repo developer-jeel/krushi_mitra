@@ -29,7 +29,9 @@ def buyer_dashboard(request):
     items = OrderItem.objects.filter(order__in=orders).order_by('-id')[:6]
     item_count = OrderItem.objects.filter(order__in=orders).count()
     pending_count = OrderItem.objects.filter(order__in=orders, order__status='Pending').count()    
-    complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()    
+    complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)    
 
     total_value = 0
     for order in orders:
@@ -38,7 +40,7 @@ def buyer_dashboard(request):
 
     all_crops = crop.objects.filter(is_approved = True)
 
-    context = {'all_crops' : all_crops,'items':items,'total_value':total_value,'formatted_total':formatted_total,'item_count':item_count,'pending_count':pending_count,'complated':complated}
+    context = {'buyr':buyr,'premium_type':premium_type,'all_crops' : all_crops,'items':items,'total_value':total_value,'formatted_total':formatted_total,'item_count':item_count,'pending_count':pending_count,'complated':complated}
     return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
@@ -47,21 +49,28 @@ def buyer_browse_crops(request):
     buyr = Buyer.objects.get(user=uid)
     all_crops = crop.objects.filter(is_approved = True)
     saved_crops = saved.objects.filter( user=buyr).values_list('crop_id', flat=True)
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     print("==================>",all_crops)
-    context = {'all_crops' : all_crops,"saved_crops":saved_crops}
+    context = {'all_crops' : all_crops,"saved_crops":saved_crops,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/browse-crops.html",context)
 
 
 @check_login(['Buyer'])
 def buyer_crop_details(request,pk):
+    uid = request.uid
     crp = crop.objects.get(id=pk)
-    context = {'crop' : crp}
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    context = {'crop' : crp,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/crop-details.html",context)
 
 @check_login(['Buyer'])
 def buyer_cart(request):
     uid = request.uid
     cart = Cart.objects.get(user = uid)
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     if request.method == 'POST':
         quantity = request.POST.get('quantity', 1)
         crop_id = request.POST.get('crop')
@@ -73,18 +82,18 @@ def buyer_cart(request):
             cart_item.quantity+= int(quantity)
             cart_item.save()
             cart_items = CartItem.objects.filter(cart=cart)
-            context = {'cart_items':cart_items,'cart':cart}
+            context = {'cart_items':cart_items,'cart':cart,'premium_type':premium_type,'buyr':buyr}
             return render(request, "buyer/cart.html",context)
         else:
             cart_item = CartItem.objects.create(cart=cart,crop=crop_obj,quantity=quantity)
             cart_item.save()    
             cart_items = CartItem.objects.filter(cart=cart)
-            context = {'cart_items':cart_items,'cart':cart}
+            context = {'cart_items':cart_items,'cart':cart,'premium_type':premium_type,'buyr':buyr}
             return render(request, "buyer/cart.html",context)
         
     if cart:
         cart_items = CartItem.objects.filter(cart=cart)
-        context = {'cart_items':cart_items,'cart':cart}
+        context = {'cart_items':cart_items,'cart':cart,'premium_type':premium_type,'buyr':buyr}
         return render(request, "buyer/cart.html",context)
     else:
         cart = Cart.objects.create(user = uid)
@@ -136,6 +145,7 @@ def buyer_checkout(request):
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
+    premium_type = premium_buyer.objects.get(user=buyr)
     if request.method == 'POST':
         payment_method = request.POST.get('payment')
         con_order = Order.objects.create(
@@ -165,13 +175,14 @@ def buyer_checkout(request):
         )
         return redirect("buyer_dashboard")
 
-    context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr}
+    context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/checkout.html",context)
 
 @check_login(['Buyer'])
 def buyer_orders(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     order = Order.objects.filter(user = uid)
     items = OrderItem.objects.filter(order__in=order)
     total_order = len(items)
@@ -184,7 +195,7 @@ def buyer_orders(request):
     context = {'uid':uid,'buyr':buyr,'order':order,'items':items,
                 'total_order':total_order,'pending_order':pending_order,
                 'shipped_order':shipped_order,'delivered_order':delivered_order,
-                'cancelled_order':cancelled_order
+                'cancelled_order':cancelled_order,'premium_type':premium_type,'buyr':buyr
                 }
     return render(request, "buyer/orders.html",context)
 
@@ -192,17 +203,19 @@ def buyer_orders(request):
 def buyer_order_details(request,pk):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     item = OrderItem.objects.get(id=pk)
-    context = {'uid':uid,'buyr':buyr,'item':item}
+    context = {'uid':uid,'buyr':buyr,'item':item,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/order-details.html",context)
 
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     saved_crops = saved.objects.filter(user=buyr)
     total_saved = len(saved_crops)
-    context={'saved_crops':saved_crops,'total_saved':total_saved,'uid':uid}
+    context={'saved_crops':saved_crops,'total_saved':total_saved,'uid':uid,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/wishlist.html",context)
 
 @check_login(['Buyer'])
@@ -228,42 +241,63 @@ def add_wishlist(request,pk):
 
 @check_login(['Buyer'])
 def buyer_bulk_order(request):
-    return render(request, "buyer/bulk-order.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    return render(request, "buyer/bulk-order.html",{'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
 def buyer_export_inquiry(request):
-    return render(request, "buyer/export-inquiry.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    return render(request, "buyer/export-inquiry.html",{'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
 def buyer_messages(request):
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     num = 33
-    return render(request, "buyer/messages.html",{'num':num})
+    return render(request, "buyer/messages.html",{'num':num,'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
 def buyer_notifications(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
     all_notifications = notifications.objects.filter(user=buyr)
-    context={'buyr':buyr,'all_notifications':all_notifications}
+    context={'buyr':buyr,'all_notifications':all_notifications,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/notifications.html",context)
 
 @check_login(['Buyer'])
 def buyer_profile(request):
     uid = getattr(request, 'uid', None)
-    context = { 'uid' : uid } if uid else {}
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    context = { 'uid' : uid,'premium_type':premium_type,'buyr':buyr } if uid else {}
     return render(request, "buyer/profile.html", context)
 
 @check_login(['Buyer'])
 def buyer_verification(request):
-    return render(request, "buyer/verification.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    return render(request, "buyer/verification.html",{'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
 def buyer_bank_details(request):
-    return render(request, "buyer/bank-details.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    return render(request, "buyer/bank-details.html",{'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
 def buyer_settings(request):
-    return render(request, "buyer/settings.html")
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    return render(request, "buyer/settings.html",{'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
 def kyc(request):
