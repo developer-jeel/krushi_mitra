@@ -146,6 +146,7 @@ def buyer_checkout(request):
     cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
     premium_type = premium_buyer.objects.get(user=buyr)
+    total_quantity = 0
     if request.method == 'POST':
         payment_method = request.POST.get('payment')
         con_order = Order.objects.create(
@@ -166,8 +167,10 @@ def buyer_checkout(request):
                 quantity = item.quantity,
                 subtotal = item.subtotal
             )
+            total_quantity += (item.quantity * 20)
         cart_items.delete()
-
+        cart.total_kg = total_quantity
+        cart.save()
         notification = notifications.objects.create(
             user = buyr,
             notification_type = "Payment",

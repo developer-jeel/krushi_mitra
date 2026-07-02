@@ -195,7 +195,9 @@
             </p>
             <div class="hero-actions">
               <a href="{% url 'buyer_browse_crops' %}" class="btn btn-primary btn-lg">🌾 Browse Crops</a>
+              {% if buyr.is_premiume %}
               <a href="{% url 'buyer_bulk_order' %}" class="btn btn-secondary btn-lg">📋 Bulk Inquiry</a>
+              {%endif%}
             </div>
           </div>
           <div class="hero-visual">

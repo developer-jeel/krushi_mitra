@@ -156,6 +156,7 @@ class Cart(models.Model):
         related_name='cart'
     )
     tax_per = models.IntegerField(blank=True, null=True,default=5)
+    total_kg = models.IntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
