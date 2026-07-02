@@ -74,8 +74,9 @@ def buyer_cart(request):
     buyr = Buyer.objects.get(user=uid)
     cart_items = CartItem.objects.filter(cart=cart)
     total_qty = 0
-    total_qty = [total_qty+(itme.quantity * 20) for itme in cart_items]
-    total_qty = total_qty[0]
+    if cart_items:
+        total_qty = [total_qty+(itme.quantity * 20) for itme in cart_items]
+        total_qty = total_qty[0]
     premium_type = premium_buyer.objects.get(user=buyr)
     if request.method == 'POST':
         quantity = request.POST.get('quantity', 1)
