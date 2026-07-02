@@ -142,7 +142,7 @@
                 <span class="billing-toggle-thumb"></span>
               </button>
               <span class="billing-label" id="lbl-yearly">Yearly</span>
-              <span class="billing-save-pill" id="billing-save-pill">Save 20%</span>
+              <span class="billing-save-pill" id="billing-save-pill">Save {{plans.year_dis}}%</span>
             </div>
 
             <div class="plans-grid">
@@ -193,7 +193,7 @@
                     <div class="plan-price">
                       <span class="plan-currency">₹</span>
                       <span class="plan-amount" id="std-amount">{{plans.standard_price}}</span>
-                      <span class="plan-period" id="std-period">{{plans.standard_dis}}/ Month</span>
+                      <span class="plan-period" id="std-period">/ Month</span>
                     </div>
                     <div class="plan-original-price" id="std-original" style="display:none">
                       <s>₹{{plans.standard_price}}/mo</s>
@@ -231,13 +231,14 @@
                     <h2 class="plan-name gold-name">Premium</h2>
                     <div class="plan-price">
                       <span class="plan-currency gold-currency">₹</span>
-                      <span class="plan-amount gold-amount" id="pm-amount">199</span>
+                      <span class="plan-amount gold-amount" id="pm-amount">{{ plans.premium_price }}</span>
                       <span class="plan-period" id="pm-period">/ Month</span>
                     </div>
                     <div class="plan-original-price" id="pm-original" style="display:none">
                       <s>₹199/mo</s>
                     </div>
-                    <div class="plan-yearly-note" id="pm-yearly-note" style="display:none">₹1,908 billed yearly</div>
+                    <div class="plan-yearly-note" id="pm-yearly-note" style="display:none">₹{{ plans.premium_yearly }}
+                      billed yearly</div>
                     <p class="plan-subtitle">For serious bulk buyers</p>
                   </div>
                   <ul class="plan-features">
@@ -478,18 +479,18 @@
           periodEl: document.getElementById('std-period'),
           origEl: document.getElementById('std-original'),
           noteEl: document.getElementById('std-yearly-note'),
-          monthly: 99,
+          monthly: "{{ plans.standard_price}}",
           yearly: "{{ plans.standard_dis }}",
-          yearlyAmt: '0',
+          yearlyAmt: "{{ plans.standard_yearly }}",
         },
         {
           amountEl: document.getElementById('pm-amount'),
           periodEl: document.getElementById('pm-period'),
           origEl: document.getElementById('pm-original'),
           noteEl: document.getElementById('pm-yearly-note'),
-          monthly: 199,
+          monthly: "{{ plans.premium_price }}",
           yearly: "{{ plans.premium_dis }}",
-          yearlyAmt: '1,908',
+          yearlyAmt: "{{ plans.premium_yearl }}",
         },
       ];
       function flipPrices(yearly) {
