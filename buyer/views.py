@@ -24,10 +24,18 @@ def format_indian_number(value):
         return f"{value:.2f}"
 
 def chek_premium(buyr):
-    premium_buyr = premium_buyer.objects.get(user=buyr)
-    if premium_buyr:
-        premium_buyr.
+    premium_buyr = premium_buyer.objects.filter(user=buyr).first()
 
+    if premium_buyr is None:
+        premium_buyr = premium_buyer.objects.create(
+            user=buyr,
+            premium_type="Free",
+            premium_time="Monthly"
+        )
+
+    premium_buyr.check_subscription()
+    return premium_buyr
+    
 @check_login(['Buyer'])
 def buyer_dashboard(request):
     uid = request.uid
@@ -38,7 +46,7 @@ def buyer_dashboard(request):
     complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)    
-
+    premium_buyr = chek_premium(buyr)
     total_value = 0
     for order in orders:
         total_value+= order.total_amount
