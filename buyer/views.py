@@ -312,4 +312,6 @@ def buyer_premium(request):
     uid = request.uid
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
-    return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr})
+    premium_type = premium_buyer.objects.get(user=buyr)
+    print("==========================================================]",premium_type)
+    return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})

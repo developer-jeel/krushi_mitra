@@ -43,10 +43,32 @@
         <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
             class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
         <div class="sidebar-section-label">Procurement</div>
-        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders"><span
-            class="sidebar-item-icon">📋</span><span class="sidebar-item-text">Bulk Orders</span></a>
-        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry"><span
-            class="sidebar-item-icon">🌍</span><span class="sidebar-item-text">Export Inquiry</span></a>
+        {% if buyr.is_premiume %}
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
+          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-text">Bulk Orders</span>
+        </a>
+        {% if premium_type.premium_type == 'Premium' %}
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item">
+          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-text">Export Inquiry</span>
+        </a>
+        {% else %}
+        <a href="#" class="sidebar-item disabled-link" onclick="return false;">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
+        </a>
+        {% endif %}
+        {% else %}
+        <a href="#" class="sidebar-item disabled-link" onclick="return false;">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Bulk Orders (Uograde To Unlock)</span>
+        </a>
+        <a href="#" class="sidebar-item disabled-link" onclick="return false;">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
+        </a>
+        {% endif %}
         <div class="sidebar-section-label">Communication</div>
         <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
             class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
