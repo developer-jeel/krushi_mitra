@@ -47,6 +47,9 @@ def buyer_dashboard(request):
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)    
     premium_buyr = chek_premium(buyr)
+    if premium_buyr.premium_type == "Free":
+        buyr.is_premiume = False
+        buyr.save()
     total_value = 0
     for order in orders:
         total_value+= order.total_amount
@@ -374,3 +377,12 @@ def buyer_premium(request):
     premium_type = premium_buyer.objects.get(user=buyr)
     print("==========================================================]",premium_type)
     return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
+
+@check_login(['Buyer'])
+def premium_checkout(request):
+    uid = request.uid
+    plans = premium_plans.objects.get()
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    print("==========================================================]",premium_type)
+    return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})

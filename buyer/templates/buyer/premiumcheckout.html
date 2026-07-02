@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Checkout — Premium Membership | Krushi Mitra</title>
+  <meta name="description"
+    content="Complete your Krushi Mitra Premium Membership securely. Choose Standard or Premium plan with monthly or yearly billing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'buyer/css/premiumcheckout.css' %}">
+</head>
+
+<body>
+
+  <!-- Animated Background Particles -->
+  <div class="bg-particles" aria-hidden="true">
+    <span class="bg-particle"></span><span class="bg-particle"></span>
+    <span class="bg-particle"></span><span class="bg-particle"></span>
+    <span class="bg-particle"></span><span class="bg-particle"></span>
+    <span class="bg-particle"></span><span class="bg-particle"></span>
+    <span class="bg-particle"></span><span class="bg-particle"></span>
+  </div>
+
+  <!-- Ambient Glow Orbs -->
+  <div class="glow-orb glow-orb-1" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb-2" aria-hidden="true"></div>
+  <div class="glow-orb glow-orb-3" aria-hidden="true"></div>
+
+  <!-- ==================== TOP HEADER ==================== -->
+  <header class="checkout-header slide-down" id="checkoutHeader">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="{% url 'buyer_premium' %}" class="back-btn" id="backBtn" aria-label="Back to Plans">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          <span>Back</span>
+        </a>
+      </div>
+
+      <div class="header-center">
+        <div class="header-logo">
+          <div class="header-logo-icon">K</div>
+          <div>
+            <div class="header-logo-text">Krushi Mitra</div>
+            <div class="header-logo-sub">Premium Checkout</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="secure-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+          <span>Secure</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress-bar-wrap">
+      <div class="progress-steps">
+        <div class="progress-step completed" id="step1">
+          <div class="step-circle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <span class="step-label">Choose Plan</span>
+        </div>
+        <div class="progress-line active-line" id="line1"></div>
+        <div class="progress-step active" id="step2">
+          <div class="step-circle"><span>2</span></div>
+          <span class="step-label">Checkout</span>
+        </div>
+        <div class="progress-line" id="line2"></div>
+        <div class="progress-step" id="step3">
+          <div class="step-circle"><span>3</span></div>
+          <span class="step-label">Payment</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="checkout-main">
+
+    <div class="checkout-container">
+      <!-- Page Title -->
+
+
+      <!-- ========== LEFT COLUMN - FORM ========== -->
+      <div class="checkout-left">
+
+        <!-- SELECTED PLAN CARD -->
+        <section class="section-block plan-selected-card glass-card fade-up" id="selectedPlanCard"
+          aria-label="Selected Plan">
+          <div class="card-inner-glow"></div>
+          <div class="section-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+            Selected Plan
+          </div>
+
+          <div class="plan-display" id="planDisplay">
+            <div class="plan-crown-wrap">
+              <div class="plan-crown-icon" id="planCrownIcon">&#128081;</div>
+            </div>
+            <div class="plan-display-info">
+              <div class="plan-display-top">
+                <h2 class="plan-display-name" id="planDisplayName">Standard</h2>
+                <div class="plan-badges">
+                  <span class="plan-type-badge" id="planTypeBadge">&#128309; Standard</span>
+                  <span class="plan-cycle-badge" id="planCycleBadge">Monthly</span>
+                </div>
+              </div>
+              <div class="plan-display-price-row">
+                <div class="plan-display-price">
+                  <span class="plan-display-currency">&#8377;</span>
+                  <span class="plan-display-amount" id="planDisplayAmount">99</span>
+                  <span class="plan-display-period" id="planDisplayPeriod">/month</span>
+                </div>
+                <span class="plan-yearly-save-pill" id="planYearlySavePill" style="display:none">Save 15%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BILLING TOGGLE — inside plan card -->
+          <div class="plan-billing-toggle-wrap">
+            <div class="plan-billing-toggle-inner">
+              <span class="plan-billing-lbl active" id="planLblMonthly">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Monthly
+              </span>
+              <button class="plan-billing-toggle-btn" id="planBillingToggle" role="switch" aria-checked="false" aria-label="Toggle billing cycle between monthly and yearly">
+                <span class="plan-toggle-thumb"></span>
+              </button>
+              <span class="plan-billing-lbl" id="planLblYearly">
+                Yearly
+                <span class="plan-billing-save-badge" id="planBillingSaveBadge">Save 15%</span>
+              </span>
+            </div>
+            <p class="plan-billing-note" id="planBillingNote">Billed &#8377;<span id="planBillingAmount">99</span>/month · Cancel anytime</p>
+          </div>
+
+          <button class="change-plan-btn" id="changePlanBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Change Plan
+          </button>
+        </section>
+
+        <!-- BUYER INFORMATION -->
+        <section class="section-block glass-card fade-up" id="buyerInfoSection" aria-label="Buyer Information">
+          <div class="card-inner-glow"></div>
+          <div class="section-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            Buyer Information
+          </div>
+          <form class="buyer-form" id="buyerForm" novalidate autocomplete="off">
+            <div class="form-row">
+              <div class="form-group">
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </span>
+                  <input type="text" id="buyerName" class="form-input" placeholder=" " autocomplete="name" required>
+                  <label class="form-label" for="buyerName">Full Name <span class="req-star">*</span></label>
+                  <span class="input-focus-bar"></span>
+                </div>
+                <span class="form-error" id="nameError">Please enter your full name.</span>
+              </div>
+              <div class="form-group">
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </span>
+                  <input type="email" id="buyerEmail" class="form-input" placeholder=" " autocomplete="email" required>
+                  <label class="form-label" for="buyerEmail">Email Address <span class="req-star">*</span></label>
+                  <span class="input-focus-bar"></span>
+                </div>
+                <span class="form-error" id="emailError">Please enter a valid email address.</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </span>
+                  <input type="tel" id="buyerPhone" class="form-input" placeholder=" " autocomplete="tel" required
+                    maxlength="10">
+                  <label class="form-label" for="buyerPhone">Phone Number <span class="req-star">*</span></label>
+                  <span class="input-focus-bar"></span>
+                </div>
+                <span class="form-error" id="phoneError">Please enter a valid 10-digit phone number.</span>
+              </div>
+              <div class="form-group">
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg>
+                  </span>
+                  <input type="text" id="companyName" class="form-input" placeholder=" " autocomplete="organization">
+                  <label class="form-label" for="companyName">Company Name <span
+                      class="optional-tag">(Optional)</span></label>
+                  <span class="input-focus-bar"></span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                      <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                  </span>
+                  <input type="text" id="gstNumber" class="form-input" placeholder=" " maxlength="15"
+                    style="text-transform:uppercase">
+                  <label class="form-label" for="gstNumber">GST Number <span
+                      class="optional-tag">(Optional)</span></label>
+                  <span class="input-focus-bar"></span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- PAYMENT METHOD -->
+        <section class="section-block glass-card fade-up" id="paymentMethodSection" aria-label="Payment Method">
+          <div class="card-inner-glow"></div>
+          <div class="section-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+              <line x1="1" y1="10" x2="23" y2="10" />
+            </svg>
+            Payment Method
+          </div>
+          <div class="payment-methods-grid" id="paymentMethodsGrid" role="radiogroup"
+            aria-label="Select payment method">
+
+            <button class="payment-method-card active" data-method="upi" role="radio" aria-checked="true" id="pm-upi">
+              <div class="pm-glow"></div>
+              <div class="pm-icon upi-icon">UPI</div>
+              <div class="pm-label">UPI</div>
+              <div class="pm-sub">GPay · PhonePe · Paytm</div>
+              <div class="pm-check-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+            </button>
+
+            <button class="payment-method-card" data-method="credit" role="radio" aria-checked="false" id="pm-credit">
+              <div class="pm-glow"></div>
+              <div class="pm-icon credit-icon">
+                <svg width="26" height="26" viewBox="0 0 48 48" fill="none">
+                  <rect x="4" y="10" width="40" height="28" rx="5" stroke="#FDBA2D" stroke-width="2.5" fill="none" />
+                  <line x1="4" y1="20" x2="44" y2="20" stroke="#FDBA2D" stroke-width="2.5" />
+                  <rect x="8" y="27" width="10" height="5" rx="1.5" fill="#FDBA2D" />
+                </svg>
+              </div>
+              <div class="pm-label">Credit Card</div>
+              <div class="pm-sub">Visa · Mastercard · Amex</div>
+              <div class="pm-check-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+            </button>
+
+            <button class="payment-method-card" data-method="debit" role="radio" aria-checked="false" id="pm-debit">
+              <div class="pm-glow"></div>
+              <div class="pm-icon debit-icon">
+                <svg width="26" height="26" viewBox="0 0 48 48" fill="none">
+                  <rect x="4" y="10" width="40" height="28" rx="5" stroke="#6478FF" stroke-width="2.5" fill="none" />
+                  <line x1="4" y1="20" x2="44" y2="20" stroke="#6478FF" stroke-width="2.5" />
+                  <rect x="8" y="27" width="10" height="5" rx="1.5" fill="#6478FF" />
+                </svg>
+              </div>
+              <div class="pm-label">Debit Card</div>
+              <div class="pm-sub">All major banks</div>
+              <div class="pm-check-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+            </button>
+
+            <button class="payment-method-card" data-method="netbanking" role="radio" aria-checked="false"
+              id="pm-netbanking">
+              <div class="pm-glow"></div>
+              <div class="pm-icon netbank-icon">
+                <svg width="26" height="26" viewBox="0 0 48 48" fill="none">
+                  <rect x="8" y="24" width="6" height="14" fill="#FF9800" />
+                  <rect x="20" y="18" width="6" height="20" fill="#FF9800" />
+                  <rect x="32" y="12" width="6" height="26" fill="#FF9800" />
+                  <line x1="6" y1="40" x2="42" y2="40" stroke="#FF9800" stroke-width="2.5" />
+                </svg>
+              </div>
+              <div class="pm-label">Net Banking</div>
+              <div class="pm-sub">SBI · HDFC · ICICI</div>
+              <div class="pm-check-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+            </button>
+          </div>
+        </section>
+
+        <!-- COUPON SECTION -->
+
+
+        <!-- TRUST BADGES -->
+        <section class="trust-section fade-up" id="trustSection" aria-label="Trust Badges">
+          <div class="trust-card glass-card">
+            <div class="trust-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <div class="trust-text"><strong>256-bit SSL</strong><span>Secure</span></div>
+          </div>
+          <div class="trust-card glass-card">
+            <div class="trust-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="trust-text"><strong>Instant</strong><span>Activation</span></div>
+          </div>
+          <div class="trust-card glass-card">
+            <div class="trust-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+            </div>
+            <div class="trust-text"><strong>Safe</strong><span>Payment</span></div>
+          </div>
+          <div class="trust-card glass-card">
+            <div class="trust-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+            </div>
+            <div class="trust-text"><strong>24x7</strong><span>Support</span></div>
+          </div>
+        </section>
+
+        <!-- MOBILE PAY BUTTON -->
+        <div class="pay-btn-mobile-wrap" id="payBtnMobileWrap">
+          <button class="pay-btn ripple-btn" id="payBtnMobile" aria-label="Proceed to Secure Payment">
+            <span class="pay-btn-lock">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </span>
+            <span class="pay-btn-text">Proceed to Secure Payment</span>
+            <span class="pay-btn-amount" id="payBtnMobileAmount">&#8377;116.82</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ========== RIGHT COLUMN - ORDER SUMMARY ========== -->
+      <aside class="checkout-right" id="orderSummaryAside">
+        <div class="order-summary-sticky" id="orderSummarySticky">
+
+          <!-- Order Summary Card -->
+          <div class="order-summary-card glass-card fade-up" id="orderSummaryCard" aria-label="Order Summary">
+            <div class="card-inner-glow gold-glow"></div>
+            <div class="summary-header">
+              <h3 class="summary-title">Order Summary</h3>
+              <span class="summary-crown">&#128081;</span>
+            </div>
+
+            <div class="summary-plan-row">
+              <div class="summary-plan-info">
+                <span class="summary-plan-name" id="summaryPlanName">Standard Plan</span>
+                <span class="summary-cycle-badge" id="summaryCycleBadge">Monthly</span>
+              </div>
+            </div>
+
+            <div class="summary-line-items">
+              <div class="summary-line">
+                <span class="summary-line-label">Plan Price</span>
+                <span class="summary-line-value" id="summaryPlanPrice">&#8377;99.00</span>
+              </div>
+              <div class="summary-line discount-line" id="summaryDiscountLine" style="display:none">
+                <span class="summary-line-label discount-label">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                  </svg>
+                  Coupon Discount
+                </span>
+                <span class="summary-line-value discount-value" id="summaryDiscountValue">-&#8377;0</span>
+              </div>
+              <div class="summary-line" id="summaryYearlySavingsLine" style="display:none">
+                <span class="summary-line-label discount-label">Yearly Savings</span>
+                <span class="summary-line-value discount-value" id="summaryYearlySavings">-&#8377;0</span>
+              </div>
+              <div class="summary-line">
+                <span class="summary-line-label">GST (18%)</span>
+                <span class="summary-line-value" id="summaryGST">&#8377;17.82</span>
+              </div>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total-row">
+              <span class="summary-total-label">Total Amount</span>
+              <span class="summary-total-amount" id="summaryTotal">&#8377;116.82</span>
+            </div>
+
+            <div class="summary-badges-row">
+              <div class="summary-green-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Instant Activation
+              </div>
+              <div class="summary-secure-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Secure Payment
+              </div>
+            </div>
+
+            <!-- Desktop Pay Button -->
+            <button class="pay-btn ripple-btn" id="payBtnDesktop" aria-label="Proceed to Secure Payment">
+              <span class="pay-btn-lock">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+              <span class="pay-btn-text">Proceed to Secure Payment</span>
+              <span class="pay-btn-amount" id="payBtnDesktopAmount">&#8377;116.82</span>
+            </button>
+
+            <p class="pay-btn-note">By proceeding, you agree to our <a href="#" class="inline-link">Terms</a> and <a
+                href="#" class="inline-link">Privacy Policy</a>.</p>
+          </div>
+          <section class="section-block glass-card fade-up" id="couponSection" aria-label="Coupon Code">
+            <div class="card-inner-glow"></div>
+            <div class="section-label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                <line x1="7" y1="7" x2="7.01" y2="7" />
+              </svg>
+              Have a Coupon?
+            </div>
+            <div class="coupon-input-row">
+              <div class="coupon-input-wrap" id="couponInputWrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" class="coupon-icon-svg">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                  <line x1="7" y1="7" x2="7.01" y2="7" />
+                </svg>
+                <input type="text" id="couponInput" class="coupon-input" placeholder="Enter coupon code e.g. KRUSHI20"
+                  maxlength="20" autocomplete="off">
+              </div>
+              <button class="coupon-apply-btn" id="couponApplyBtn">Apply</button>
+            </div>
+            <div class="coupon-success" id="couponSuccess" style="display:none">
+              <div class="coupon-success-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div class="coupon-success-text">
+                <strong>Coupon Applied!</strong>
+                <span id="couponDiscountText">You saved &#8377;0</span>
+              </div>
+              <button class="coupon-remove-btn" id="couponRemoveBtn" aria-label="Remove coupon">&#10005;</button>
+            </div>
+            <div class="coupon-error" id="couponError" style="display:none">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+              <span id="couponErrorText">Invalid coupon code. Please try again.</span>
+            </div>
+          </section>
+
+          <!-- Help Card -->
+          <div class="help-card glass-card fade-up" id="helpCard" aria-label="Help and Support">
+            <div class="card-inner-glow"></div>
+            <div class="help-header">
+              <div class="help-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+              </div>
+              <div>
+                <h4 class="help-title">Need Help?</h4>
+                <p class="help-sub">24x7 Support Available</p>
+              </div>
+            </div>
+            <div class="help-actions">
+              <a href="#" class="help-action-btn" id="liveChatBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+                Live Chat
+              </a>
+              <a href="mailto:support@krushimitra.com" class="help-action-btn" id="emailSupportBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                Email Support
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="checkout-footer" id="checkoutFooter">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="#" class="footer-link">Terms &amp; Conditions</a>
+        <span class="footer-sep">·</span>
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <span class="footer-sep">·</span>
+        <a href="#" class="footer-link">Refund Policy</a>
+      </div>
+      <div class="footer-secure">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        Secured by 256-bit SSL Encryption &nbsp;·&nbsp; Krushi Mitra &copy; 2024
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SUCCESS OVERLAY ==================== -->
+  <div class="success-overlay" id="successOverlay" style="display:none" role="dialog" aria-modal="true"
+    aria-label="Payment Successful">
+    <div class="success-modal glass-card">
+      <div class="success-anim-wrap" id="successAnimWrap">
+        <div class="success-circle-svg">
+          <svg viewBox="0 0 52 52" fill="none" width="80" height="80">
+            <circle class="success-ring" cx="26" cy="26" r="23" stroke="#14D99A" stroke-width="2.5" fill="none" />
+            <polyline class="success-check" points="14,26 22,34 38,18" stroke="#14D99A" stroke-width="3.5"
+              stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          </svg>
+        </div>
+      </div>
+      <h2 class="success-title">Payment Successful! &#127881;</h2>
+      <p class="success-sub">Your Premium Membership has been activated. Welcome to Krushi Mitra Premium!</p>
+      <div class="success-plan-badge" id="successPlanBadge">&#128081; Standard Plan — Active</div>
+      <a href="{% url 'buyer_dashboard' %}" class="success-cta-btn" id="successCtaBtn">Go to Dashboard</a>
+    </div>
+  </div>
+
+  <script src="{% static 'buyer/js/premiumcheckout.js' %}"></script>
+</body>
+
+</html>
