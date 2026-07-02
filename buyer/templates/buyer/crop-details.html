@@ -218,9 +218,16 @@
 
               <div class="product-actions">
                 <input value="{{crop.id}}" name="crop" hidden>
+                {%if cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium'%}
                 <button type="submit" href="{% url 'buyer_cart'%}" class="btn btn-primary btn-lg flex-1">🛒
                   Add to
                   Cart</button>
+                {%else%}
+                <a href="#" class="btn btn-primary btn-lg flex-1" style="background-color: gray;"
+                  onclick="alert('Limit over'); return false;">🛒 Add to
+                  Cart</a>
+                {%endif%}
+
 
                 <a href="{% url 'buyer_checkout' %}" class="btn btn-outline btn-lg flex-1">Buy Now</a>
                 <button class="btn btn-ghost btn-lg wishlist-toggle"
