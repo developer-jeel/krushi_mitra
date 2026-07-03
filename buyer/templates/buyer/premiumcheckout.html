@@ -131,7 +131,8 @@
                   <span class="plan-display-amount" id="planDisplayAmount">99</span>
                   <span class="plan-display-period" id="planDisplayPeriod">/month</span>
                 </div>
-                <span class="plan-yearly-save-pill" id="planYearlySavePill" style="display:none">Save 15%</span>
+                <span class="plan-yearly-save-pill" id="planYearlySavePill" style="display:none">Save
+                  {{plans.year_dis}}%</span>
               </div>
             </div>
           </div>
@@ -140,10 +141,17 @@
           <div class="plan-billing-toggle-wrap">
             <div class="plan-billing-toggle-inner">
               <span class="plan-billing-lbl active" id="planLblMonthly">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
                 Monthly
               </span>
-              <button class="plan-billing-toggle-btn" id="planBillingToggle" role="switch" aria-checked="false" aria-label="Toggle billing cycle between monthly and yearly">
+              <button class="plan-billing-toggle-btn" id="planBillingToggle" role="switch" aria-checked="false"
+                aria-label="Toggle billing cycle between monthly and yearly">
                 <span class="plan-toggle-thumb"></span>
               </button>
               <span class="plan-billing-lbl" id="planLblYearly">
@@ -151,7 +159,8 @@
                 <span class="plan-billing-save-badge" id="planBillingSaveBadge">Save 15%</span>
               </span>
             </div>
-            <p class="plan-billing-note" id="planBillingNote">Billed &#8377;<span id="planBillingAmount">99</span>/month · Cancel anytime</p>
+            <p class="plan-billing-note" id="planBillingNote">Billed &#8377;<span id="planBillingAmount">99</span>/month
+              · Cancel anytime</p>
           </div>
 
           <button class="change-plan-btn" id="changePlanBtn">
@@ -620,7 +629,526 @@
     </div>
   </div>
 
-  <script src="{% static 'buyer/js/premiumcheckout.js' %}"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      /* ============================================================
+         PLAN DATA (values injected by backend Python/Jinja templating)
+         ============================================================ */
+      const PLANS = {
+        standard: {
+          name: 'Standard',
+          crown: '⭐',
+          badge: '🔵 Standard',
+          monthly: '{{plans.standard_price}}',
+          yearly_per: '{{plans.standard_dis}}',     // per-month price if billed yearly
+          yearly_total: '{{plans.standard_yearly}}',
+          desc: 'Best for growing buyers — unlock bulk tools, AI advisor and more.',
+          features: [
+            '✔ Buy up to 5,000 KG',
+            '✔ Bulk Purchase Unlock',
+            '✔ AI Buying Advisor',
+            '✔ Real-Time Price Alerts',
+            '✔ Wishlist Alerts',
+            '✔ Priority Orders',
+            '✔ Faster Checkout',
+            '✔ Premium Support',
+          ],
+        },
+        premium: {
+          name: 'Premium',
+          crown: '👑',
+          badge: '👑 Premium',
+          monthly: '{{plans.premium_price}}',
+          yearly_per: '{{plans.premium_dis}}',
+          yearly_total: '{{plans.premium_yearly}}',
+          desc: 'For serious bulk buyers — unlimited KG, zero fees, and dedicated support.',
+          features: [
+            '✔ Buy up to 50,000 KG (Unlimited)',
+            '✔ Everything in Standard',
+            '✔ Export Reports (PDF / Excel / CSV)',
+            '✔ Zero Platform Fee',
+            '✔ Highest Priority Orders',
+            '✔ Premium Buyer Badge',
+            '✔ Advanced Purchase Analytics',
+            '✔ Dedicated Premium Support',
+          ],
+        },
+      };
+
+      const GST_RATE = 0;
+      const COUPONS = {
+        KRUSHI20: { type: 'percent', value: 20, label: '20% off' },
+        SAVE50: { type: 'flat', value: 50, label: '₹50 off' },
+        WELCOME10: { type: 'percent', value: 10, label: '10% off' },
+      };
+
+      // Injected by backend: '{{plan}}' resolves to 'Standard' or 'Premium'
+      const BACKEND_PLAN = '{{plan}}';
+
+      /* ============================================================
+         STATE
+         ============================================================ */
+      const state = {
+        plan: BACKEND_PLAN === 'Premium' ? 'premium' : 'standard',
+        isYearly: new URLSearchParams(window.location.search).get('cycle') === 'yearly',
+        couponCode: null,
+        couponDiscount: 0,
+        paymentMethod: 'upi',
+      };
+
+      /* ============================================================
+         DOM HELPERS
+         ============================================================ */
+      const $ = (id) => document.getElementById(id);
+      const $$ = (sel) => document.querySelectorAll(sel);
+      const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+      const show = (el) => { if (el) el.style.display = ''; };
+      const hide = (el) => { if (el) el.style.display = 'none'; };
+
+      function shake(el) {
+        if (!el) return;
+        el.animate(
+          [
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-8px)' },
+            { transform: 'translateX(8px)' },
+            { transform: 'translateX(-6px)' },
+            { transform: 'translateX(6px)' },
+            { transform: 'translateX(0)' },
+          ],
+          { duration: 400, easing: 'ease-in-out' }
+        );
+      }
+
+      function triggerRipple(el, e) {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 2;
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple-effect';
+        ripple.style.cssText = `width:${size}px;height:${size}px;left:${(e.clientX - rect.left) - size / 2}px;top:${(e.clientY - rect.top) - size / 2}px;`;
+        el.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove());
+      }
+
+      /* ============================================================
+         INIT
+         ============================================================ */
+      document.addEventListener('DOMContentLoaded', () => {
+        initScrollReveal();
+        initProgressLine();
+        initPlanCard();
+        initBillingToggles();
+        initPaymentMethods();
+        initCoupon();
+        initBuyerForm();
+        initPayButtons();
+        initRippleButtons();
+        initStickyHeader();
+        renderAll();
+      });
+
+      function renderAll() {
+        renderPlanCard();
+        updateSummary(); // also updates billing note
+      }
+
+      /* ============================================================
+         SCROLL REVEAL
+         ============================================================ */
+      function initScrollReveal() {
+        const items = $$('.fade-up');
+        if (!items.length) return;
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const delay = parseFloat(el.dataset.delay || 0);
+            setTimeout(() => el.classList.add('visible'), delay * 1000);
+            observer.unobserve(el);
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        items.forEach((el, i) => {
+          el.dataset.delay = (i * 0.07).toFixed(2);
+          observer.observe(el);
+        });
+      }
+
+      function initProgressLine() {
+        const line1 = $('line1');
+        if (line1) setTimeout(() => line1.classList.add('active-line'), 300);
+      }
+
+      /* ============================================================
+         PLAN CARD
+         ============================================================ */
+      function initPlanCard() {
+        const changePlanBtn = $('changePlanBtn');
+        if (changePlanBtn) changePlanBtn.addEventListener('click', () => window.history.back());
+      }
+
+      function renderPlanCard() {
+        const p = PLANS[state.plan];
+        if (!p) return;
+        const amount = state.isYearly ? p.yearly_per : p.monthly;
+
+        setText('planDisplayName', p.name);
+        setText('planCrownIcon', p.crown);
+        setText('planTypeBadge', p.badge);
+        setText('planCycleBadge', state.isYearly ? 'Yearly' : 'Monthly');
+        setText('planDisplayAmount', amount);
+        setText('planDisplayPeriod', state.isYearly ? '/mo · billed yearly' : '/month');
+        setText('planDisplayDesc', p.desc);
+
+        const featEl = $('planDisplayFeatures');
+        if (featEl) featEl.innerHTML = p.features.map((f) => `<li>${f}</li>`).join('');
+
+        const crownEl = $('planCrownIcon');
+        if (crownEl && state.plan === 'premium') {
+          crownEl.style.background = 'linear-gradient(135deg, rgba(253,186,45,0.25), rgba(253,186,45,0.08))';
+          crownEl.style.borderColor = 'rgba(253,186,45,0.4)';
+        }
+      }
+
+      /* ============================================================
+         BILLING TOGGLES (in-card + optional standalone, kept in sync)
+         ============================================================ */
+      function initBillingToggles() {
+        const toggles = [
+          { btn: $('planBillingToggle'), mon: $('planLblMonthly'), year: $('planLblYearly'), activeClass: 'on' },
+          { btn: $('billingToggle'), mon: $('lblMonthly'), year: $('lblYearly'), activeClass: 'active-toggle' },
+        ].filter((t) => t.btn);
+
+        function applyState() {
+          toggles.forEach(({ btn, mon, year, activeClass }) => {
+            btn.classList.toggle(activeClass, state.isYearly);
+            btn.setAttribute('aria-checked', String(state.isYearly));
+            if (mon) mon.classList.toggle('active', !state.isYearly);
+            if (year) year.classList.toggle('active', state.isYearly);
+          });
+          const pill = $('planYearlySavePill');
+          if (pill) pill.style.display = state.isYearly ? 'inline-flex' : 'none';
+          const saveTag = $('billingSaveTag');
+          if (saveTag) saveTag.classList.toggle('show', state.isYearly);
+        }
+
+        function setYearly(val) {
+          if (state.isYearly === val) return;
+          state.isYearly = val;
+          applyState();
+          renderAll();
+        }
+
+        toggles.forEach(({ btn, mon, year }) => {
+          btn.addEventListener('click', () => setYearly(!state.isYearly));
+          if (mon) mon.addEventListener('click', () => setYearly(false));
+          if (year) year.addEventListener('click', () => setYearly(true));
+        });
+
+        applyState();
+      }
+
+      function updateBillingNote() {
+        const p = PLANS[state.plan];
+        const amount = state.isYearly ? p.yearly_per : p.monthly;
+
+        const span = $('billingTotalSpan');
+        const note = $('billingNote');
+        if (span) span.textContent = amount;
+        if (note) {
+          note.textContent = state.isYearly
+            ? `Billed ₹${p.yearly_total} per year (₹${p.yearly_per}/mo). Cancel anytime.`
+            : `Billed ₹${amount} per month. Cancel anytime.`;
+        }
+
+        const planBillingNote = $('planBillingNote');
+        if (planBillingNote) {
+          planBillingNote.innerHTML = state.isYearly
+            ? `Billed &#8377;${p.yearly_total}/year &nbsp;·&nbsp; <strong style="color:var(--success)">Save &#8377;${(p.monthly - p.yearly_per) * 12}</strong> vs monthly &nbsp;·&nbsp; Cancel anytime`
+            : `Billed &#8377;<span id="planBillingAmount">${amount}</span>/month &nbsp;·&nbsp; Cancel anytime`;
+        }
+      }
+
+      /* ============================================================
+         PAYMENT METHODS
+         ============================================================ */
+      function initPaymentMethods() {
+        const cards = $$('.payment-method-card');
+        cards.forEach((card) => {
+          card.addEventListener('click', () => {
+            cards.forEach((c) => { c.classList.remove('active'); c.setAttribute('aria-checked', 'false'); });
+            card.classList.add('active');
+            card.setAttribute('aria-checked', 'true');
+            state.paymentMethod = card.dataset.method;
+
+            card.style.transform = 'scale(0.96)';
+            setTimeout(() => { card.style.transform = ''; }, 150);
+          });
+        });
+      }
+
+      /* ============================================================
+         COUPON
+         ============================================================ */
+      function initCoupon() {
+        const applyBtn = $('couponApplyBtn');
+        const input = $('couponInput');
+        const removeBtn = $('couponRemoveBtn');
+        if (!applyBtn || !input) return;
+
+        applyBtn.addEventListener('click', applyCoupon);
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); } });
+        if (removeBtn) removeBtn.addEventListener('click', removeCoupon);
+      }
+
+      function applyCoupon() {
+        const input = $('couponInput');
+        const code = (input.value || '').trim().toUpperCase();
+        const successEl = $('couponSuccess');
+        const errorEl = $('couponError');
+        const errorText = $('couponErrorText');
+
+        hide(successEl);
+        hide(errorEl);
+
+        if (!code) {
+          show(errorEl);
+          if (errorText) errorText.textContent = 'Please enter a coupon code.';
+          return;
+        }
+
+        const coupon = COUPONS[code];
+        if (!coupon) {
+          show(errorEl);
+          if (errorText) errorText.textContent = `"${code}" is not a valid coupon code.`;
+          shake($('couponInputWrap'));
+          return;
+        }
+
+        const p = PLANS[state.plan];
+        const price = state.isYearly ? p.yearly_per : p.monthly;
+        const discount = coupon.type === 'percent'
+          ? Math.round(price * coupon.value / 100)
+          : Math.min(coupon.value, price);
+
+        state.couponCode = code;
+        state.couponDiscount = discount;
+
+        setText('couponDiscountText', `You saved ₹${discount} (${coupon.label})`);
+        show(successEl);
+
+        input.disabled = true;
+        const applyBtn = $('couponApplyBtn');
+        if (applyBtn) { applyBtn.disabled = true; applyBtn.style.opacity = '0.5'; }
+
+        updateSummary();
+      }
+
+      function removeCoupon() {
+        state.couponCode = null;
+        state.couponDiscount = 0;
+        hide($('couponSuccess'));
+
+        const input = $('couponInput');
+        const applyBtn = $('couponApplyBtn');
+        if (input) { input.value = ''; input.disabled = false; }
+        if (applyBtn) { applyBtn.disabled = false; applyBtn.style.opacity = ''; }
+
+        updateSummary();
+      }
+
+      /* ============================================================
+         BUYER FORM VALIDATION
+         ============================================================ */
+      const VALIDATORS = {
+        buyerName: (val) => val.trim().length >= 2,
+        buyerEmail: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()),
+        buyerPhone: (val) => /^\d{10}$/.test(val.trim()),
+      };
+
+      function initBuyerForm() {
+        const form = $('buyerForm');
+        if (!form) return;
+
+        Object.keys(VALIDATORS).forEach((id) => {
+          const input = $(id);
+          if (input) input.addEventListener('blur', () => validateField(input));
+        });
+
+        const phoneInput = $('buyerPhone');
+        if (phoneInput) {
+          phoneInput.addEventListener('input', () => {
+            phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+          });
+        }
+
+        const gstInput = $('gstNumber');
+        if (gstInput) gstInput.addEventListener('input', () => { gstInput.value = gstInput.value.toUpperCase(); });
+      }
+
+      function validateField(input) {
+        const group = input.closest('.form-group');
+        const validator = VALIDATORS[input.id];
+        if (!group || !validator) return true;
+
+        const valid = validator(input.value);
+        group.classList.toggle('error', !valid);
+        group.classList.toggle('valid', valid);
+
+        if (input.id === 'buyerEmail' && !valid) {
+          const errEl = $('emailError');
+          if (errEl) errEl.textContent = input.value.trim() ? 'Please enter a valid email address.' : 'Email is required.';
+        }
+        return valid;
+      }
+
+      function validateForm() {
+        return Object.keys(VALIDATORS)
+          .map((id) => $(id))
+          .filter(Boolean)
+          .map(validateField)
+          .every(Boolean);
+      }
+
+      /* ============================================================
+         PAY BUTTONS
+         ============================================================ */
+      function initPayButtons() {
+        [$('payBtnDesktop'), $('payBtnMobile')].forEach((btn) => {
+          if (btn) btn.addEventListener('click', handlePayClick);
+        });
+      }
+
+      function handlePayClick(e) {
+        if (!validateForm()) {
+          const firstError = document.querySelector('.form-group.error');
+          if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          shake(firstError);
+          return;
+        }
+        triggerRipple(e.currentTarget, e);
+        simulatePaymentFlow();
+      }
+
+      function simulatePaymentFlow() {
+        const btn = $('payBtnDesktop') || $('payBtnMobile');
+        if (!btn) return;
+        const textEl = btn.querySelector('.pay-btn-text');
+        const origText = textEl.textContent;
+
+        textEl.textContent = 'Processing…';
+        btn.disabled = true;
+        btn.style.opacity = '0.8';
+
+        setTimeout(() => {
+          showSuccessOverlay();
+          textEl.textContent = origText;
+          btn.disabled = false;
+          btn.style.opacity = '';
+        }, 1800);
+      }
+
+      /* ============================================================
+         SUCCESS OVERLAY
+         ============================================================ */
+      function showSuccessOverlay() {
+        const overlay = $('successOverlay');
+        if (!overlay) return;
+
+        const badge = $('successPlanBadge');
+        if (badge) {
+          const p = PLANS[state.plan];
+          badge.textContent = `${p.crown} ${p.name} Plan — Active`;
+        }
+
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        ['.success-ring', '.success-check'].forEach((sel) => {
+          const el = overlay.querySelector(sel);
+          if (!el) return;
+          el.style.animation = 'none';
+          void el.offsetWidth;
+          el.style.animation = sel === '.success-ring' ? 'drawRing 0.8s ease forwards' : 'drawCheck 0.5s 0.6s ease forwards';
+        });
+
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) hideSuccessOverlay(); }, { once: true });
+      }
+
+      function hideSuccessOverlay() {
+        const overlay = $('successOverlay');
+        if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+      }
+
+      /* ============================================================
+         ORDER SUMMARY
+         ============================================================ */
+      function updateSummary() {
+        const p = PLANS[state.plan];
+        const basePrice = state.isYearly ? p.yearly_total : p.monthly;
+        const subtotal = Math.max(0, basePrice - state.couponDiscount);
+        const gst = parseFloat((subtotal * GST_RATE).toFixed(2));
+        const total = parseFloat((subtotal + gst).toFixed(2));
+
+        setText('summaryPlanName', `${p.name} Plan`);
+        setText('summaryCycleBadge', state.isYearly ? 'Yearly' : 'Monthly');
+        setText('summaryPlanPrice', `₹${basePrice}.00`);
+        setText('summaryGST', `₹${gst}`);
+
+        const discLine = $('summaryDiscountLine');
+        if (discLine) {
+          if (state.couponDiscount > 0) {
+            show(discLine);
+            setText('summaryDiscountValue', `-₹${state.couponDiscount}`);
+          } else {
+            hide(discLine);
+          }
+        }
+
+        const yearlySavLine = $('summaryYearlySavingsLine');
+        if (yearlySavLine) {
+          if (state.isYearly) {
+            show(yearlySavLine);
+            setText('summaryYearlySavings', `-₹${(p.monthly - p.yearly_per) * 12}`);
+          } else {
+            hide(yearlySavLine);
+          }
+        }
+
+        [$('summaryTotal'), $('payBtnDesktopAmount'), $('payBtnMobileAmount')].forEach((el) => {
+          if (!el) return;
+          el.classList.remove('price-change');
+          void el.offsetWidth;
+          el.classList.add('price-change');
+          el.textContent = `₹${total}`;
+        });
+
+        updateBillingNote();
+      }
+
+      /* ============================================================
+         RIPPLE BUTTONS
+         ============================================================ */
+      function initRippleButtons() {
+        $$('.ripple-btn').forEach((btn) => btn.addEventListener('click', (e) => triggerRipple(btn, e)));
+      }
+
+      /* ============================================================
+         STICKY HEADER SHADOW ON SCROLL
+         ============================================================ */
+      function initStickyHeader() {
+        const header = $('checkoutHeader');
+        if (!header) return;
+        window.addEventListener('scroll', () => {
+          header.style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,0.5)' : '';
+        }, { passive: true });
+      }
+    })();
+
+  </script>
 </body>
 
 </html>
