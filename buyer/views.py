@@ -389,5 +389,8 @@ def premium_checkout(request):
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    
+    if request.method == 'POST':
+        plan = request.POST.get('plan')
+        print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}",plan)
+        return redirect('buyer_dashboard')
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
