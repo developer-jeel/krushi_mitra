@@ -101,7 +101,12 @@
 
 
         <!-- ========== LEFT COLUMN - FORM ========== -->
-
+        <!-- Hidden inputs: JS keeps these in sync before form submit -->
+        <input type="hidden" name="plan" id="hiddenPlan" value="{{plan}}">
+        <input type="hidden" name="billing_cycle" id="hiddenBillingCycle" value="Monthly">
+        <input type="hidden" name="payment_method" id="hiddenPaymentMethod" value="upi">
+        <input type="hidden" name="total" id="hiddenTotal" value="">
+        <input type="hidden" name="coupon_code" id="hiddenCouponCode" value="">
         <div class="checkout-left">
 
           <!-- SELECTED PLAN CARD -->
@@ -307,9 +312,9 @@
             </div>
           </section>
 
-          <!-- MOBILE PAY BUTTON -->
+          <!-- MOBILE PAY BUTTON: type=submit so it submits the main form -->
           <div class="pay-btn-mobile-wrap" id="payBtnMobileWrap">
-            <button class="pay-btn ripple-btn" id="payBtnMobile" aria-label="Proceed to Secure Payment">
+            <button type="submit" class="pay-btn ripple-btn" id="payBtnMobile" aria-label="Proceed to Secure Payment">
               <span class="pay-btn-lock">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                   stroke-linecap="round" stroke-linejoin="round">
@@ -321,7 +326,6 @@
               <span class="pay-btn-amount" id="payBtnMobileAmount">&#8377;116.82</span>
             </button>
           </div>
-          <input type="hidden" name="plan" value="Standard">
         </div>
 
 
@@ -390,7 +394,7 @@
                 </div>
               </div>
 
-              <!-- Desktop Pay Button -->
+              <!-- Desktop Pay Button: type=submit, total moved to hidden input -->
               <button type="submit" class="pay-btn ripple-btn" id="payBtnDesktop"
                 aria-label="Proceed to Secure Payment">
                 <span class="pay-btn-lock">
@@ -650,7 +654,6 @@
         initBillingToggles();
         initPaymentMethods();
         initCoupon();
-        initBuyerForm();
         initPayButtons();
         initRippleButtons();
         initStickyHeader();
@@ -747,6 +750,9 @@
           state.isYearly = val;
           applyState();
           renderAll();
+          // Keep hidden billing_cycle input in sync
+          const bcHidden = $('hiddenBillingCycle');
+          if (bcHidden) bcHidden.value = state.isYearly ? 'Yearly' : 'Monthly';
         }
 
         toggles.forEach(({ btn, mon, year }) => {
@@ -790,6 +796,9 @@
             card.classList.add('active');
             card.setAttribute('aria-checked', 'true');
             state.paymentMethod = card.dataset.method;
+            // Keep hidden input in sync with selected payment method
+            const pmHidden = $('hiddenPaymentMethod');
+            if (pmHidden) pmHidden.value = state.paymentMethod;
 
             card.style.transform = 'scale(0.96)';
             setTimeout(() => { card.style.transform = ''; }, 150);
@@ -850,6 +859,9 @@
         input.disabled = true;
         const applyBtn = $('couponApplyBtn');
         if (applyBtn) { applyBtn.disabled = true; applyBtn.style.opacity = '0.5'; }
+        // Keep hidden coupon input in sync
+        const ccHidden = $('hiddenCouponCode');
+        if (ccHidden) ccHidden.value = code;
 
         updateSummary();
       }
@@ -863,65 +875,16 @@
         const applyBtn = $('couponApplyBtn');
         if (input) { input.value = ''; input.disabled = false; }
         if (applyBtn) { applyBtn.disabled = false; applyBtn.style.opacity = ''; }
+        // Clear coupon hidden input
+        const ccHidden = $('hiddenCouponCode');
+        if (ccHidden) ccHidden.value = '';
 
         updateSummary();
       }
 
-      /* ============================================================
-         BUYER FORM VALIDATION
-         ============================================================ */
-      const VALIDATORS = {
-        buyerName: (val) => val.trim().length >= 2,
-        buyerEmail: (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()),
-        buyerPhone: (val) => /^\d{10}$/.test(val.trim()),
-      };
-
-      function initBuyerForm() {
-        const form = $('buyerForm');
-        if (!form) return;
-
-        Object.keys(VALIDATORS).forEach((id) => {
-          const input = $(id);
-          if (input) input.addEventListener('blur', () => validateField(input));
-        });
-
-        const phoneInput = $('buyerPhone');
-        if (phoneInput) {
-          phoneInput.addEventListener('input', () => {
-            phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
-          });
-        }
-
-        const gstInput = $('gstNumber');
-        if (gstInput) gstInput.addEventListener('input', () => { gstInput.value = gstInput.value.toUpperCase(); });
-      }
-
-      function validateField(input) {
-        const group = input.closest('.form-group');
-        const validator = VALIDATORS[input.id];
-        if (!group || !validator) return true;
-
-        const valid = validator(input.value);
-        group.classList.toggle('error', !valid);
-        group.classList.toggle('valid', valid);
-
-        if (input.id === 'buyerEmail' && !valid) {
-          const errEl = $('emailError');
-          if (errEl) errEl.textContent = input.value.trim() ? 'Please enter a valid email address.' : 'Email is required.';
-        }
-        return valid;
-      }
-
-      function validateForm() {
-        return Object.keys(VALIDATORS)
-          .map((id) => $(id))
-          .filter(Boolean)
-          .map(validateField)
-          .every(Boolean);
-      }
 
       /* ============================================================
-         PAY BUTTONS
+         PAY BUTTONS — update hidden inputs then allow real form submit
          ============================================================ */
       function initPayButtons() {
         [$('payBtnDesktop'), $('payBtnMobile')].forEach((btn) => {
@@ -930,36 +893,34 @@
       }
 
       function handlePayClick(e) {
-        if (!validateForm()) {
-          const firstError = document.querySelector('.form-group.error');
-          if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          shake(firstError);
-          return;
+        // Populate all hidden inputs with current JS state before form submits
+        const planHidden = $('hiddenPlan');
+        if (planHidden) planHidden.value = BACKEND_PLAN;
+
+        const bcHidden = $('hiddenBillingCycle');
+        if (bcHidden) bcHidden.value = state.isYearly ? 'yearly' : 'monthly';
+
+        const pmHidden = $('hiddenPaymentMethod');
+        if (pmHidden) pmHidden.value = state.paymentMethod;
+
+        const totalHidden = $('hiddenTotal');
+        if (totalHidden) {
+          // Read the computed total from the summary display
+          const totalEl = $('summaryTotal');
+          if (totalEl) totalHidden.value = totalEl.textContent.replace('₹', '').trim();
         }
+
+        const ccHidden = $('hiddenCouponCode');
+        if (ccHidden) ccHidden.value = state.couponCode || '';
+
+        // Trigger ripple animation (form will still submit normally)
         triggerRipple(e.currentTarget, e);
-        simulatePaymentFlow();
-      }
-
-      function simulatePaymentFlow() {
-        const btn = $('payBtnDesktop') || $('payBtnMobile');
-        if (!btn) return;
-        const textEl = btn.querySelector('.pay-btn-text');
-        const origText = textEl.textContent;
-
-        textEl.textContent = 'Processing…';
-        btn.disabled = true;
-        btn.style.opacity = '0.8';
-
-        setTimeout(() => {
-          showSuccessOverlay();
-          textEl.textContent = origText;
-          btn.disabled = false;
-          btn.style.opacity = '';
-        }, 1800);
+        // Do NOT call e.preventDefault() — let the form submit to Django
       }
 
       /* ============================================================
-         SUCCESS OVERLAY
+         SUCCESS OVERLAY — kept for potential future use but no longer
+         triggered automatically; Django handles the success redirect.
          ============================================================ */
       function showSuccessOverlay() {
         const overlay = $('successOverlay');
@@ -1032,6 +993,10 @@
           el.classList.add('price-change');
           el.textContent = `₹${total}`;
         });
+
+        // Keep hidden total input in sync whenever summary updates
+        const totalHidden = $('hiddenTotal');
+        if (totalHidden) totalHidden.value = total;
 
         updateBillingNote();
       }

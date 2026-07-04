@@ -1,3 +1,4 @@
+import string
 from django.template import context
 from requests import request
 from django.shortcuts import render, redirect
@@ -375,11 +376,8 @@ def buyer_premium(request):
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    print("==========================================================]",premium_type)
     if request.method == 'POST':
         plan = request.POST.get('plan')
-        print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}",plan)
-        print(request.POST)
         return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type,'plan':plan})
     return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
 
@@ -388,9 +386,20 @@ def premium_checkout(request):
     uid = request.uid
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    alrady_premium = premium_buyer.objects.get(user=buyr)
+    print("]]]]]]]]]]]]]]]]]]]", request.method)
     if request.method == 'POST':
         plan = request.POST.get('plan')
-        print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}",plan)
-        return redirect('buyer_dashboard')
-    return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
+        total = request.POST.get('total')
+        billing_cycle = request.POST.get('billing_cycle').capitalize()
+        payment_method = request.POST.get('payment_method')
+        coupon_code = request.POST.get('coupon_code')
+        print("++++++++++++++++++++++++}",plan ,total,billing_cycle,payment_method,coupon_code)
+        if alrady_premium:
+            alrady_premium.premium_type = plan
+            alrady_premium.premium_time = billing_cycle
+            alrady_premium.purchase_date = timezone.now()
+            alrady_premium.save()
+
+        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})
+    return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})
