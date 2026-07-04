@@ -376,6 +376,11 @@ def buyer_premium(request):
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
     print("==========================================================]",premium_type)
+    if request.method == 'POST':
+        plan = request.POST.get('plan')
+        print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}",plan)
+        print(request.POST)
+        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type,'plan':plan})
     return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
 
 @check_login(['Buyer'])
@@ -384,9 +389,5 @@ def premium_checkout(request):
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    if request.method == 'POST':
-        plan = request.POST.get('plan')
-        print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}",plan)
-        print(request.POST)
-        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type,'plan':plan})
+    
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})

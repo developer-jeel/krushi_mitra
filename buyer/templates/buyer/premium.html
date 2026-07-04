@@ -245,7 +245,7 @@
               </form>
 
               <!-- PREMIUM (gold) -->
-              <form action="{% url 'premium_checkout'%}" method="post">
+              <form action="{% url 'buyer_premium'%}" method="post">
                 {%csrf_token%}
                 <div class="plan-card plan-premium glass-panel fade-up" data-monthly="199" data-yearly="159"
                   data-monthly-total="199" data-yearly-total="1908">
