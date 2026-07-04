@@ -400,6 +400,14 @@ def premium_checkout(request):
             alrady_premium.premium_time = billing_cycle
             alrady_premium.purchase_date = timezone.now()
             alrady_premium.save()
+        
+        else:
+            buy_premium = premium_buyer.objects.create(
+                user=buyr,
+                premium_type=plan,
+                premium_time=billing_cycle,
+                purchase_date = timezone.now()
+            )
 
         return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})
