@@ -204,7 +204,7 @@
               </div>
 
               <!-- STANDARD (highlighted) -->
-              <form action="{% url 'premium_checkout'%}" method="post">
+              <form action="{% url 'buyer_premium'%}" method="post">
                 {%csrf_token%}
                 <div class="plan-card plan-standard glass-panel fade-up plan-featured"
                   data-monthly="{{plans.standard_price}}" data-yearly="{{plans.standard_dis}}"

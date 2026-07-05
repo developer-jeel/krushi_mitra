@@ -387,19 +387,26 @@ def premium_checkout(request):
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
     alrady_premium = premium_buyer.objects.get(user=buyr)
-    print("]]]]]]]]]]]]]]]]]]]", request.method)
     if request.method == 'POST':
         plan = request.POST.get('plan')
         total = request.POST.get('total')
-        billing_cycle = request.POST.get('billing_cycle').capitalize()
+        billing_cycle = request.POST.get('billing_cycle')
         payment_method = request.POST.get('payment_method')
         coupon_code = request.POST.get('coupon_code')
+        cart = Cart.objects.get(user = uid)
         print("++++++++++++++++++++++++}",plan ,total,billing_cycle,payment_method,coupon_code)
+        
+        if not plan or not billing_cycle:
+            messages.error(request, "Invalid checkout data. Please select a plan again.")
+            return redirect('buyer_premium')
+            
         if alrady_premium:
             alrady_premium.premium_type = plan
             alrady_premium.premium_time = billing_cycle
             alrady_premium.purchase_date = timezone.now()
             alrady_premium.save()
+            cart.cart_limit = 5000
+            cart.save()
         
         else:
             buy_premium = premium_buyer.objects.create(
@@ -408,6 +415,17 @@ def premium_checkout(request):
                 premium_time=billing_cycle,
                 purchase_date = timezone.now()
             )
+            buy_premium_his = premium_history.objects.create(
+                user = buyr,
+                plan = plan,
+                billing_cycle = billing_cycle,
+                payment_method = payment_method,
+                price = total,
+                coupon_code = coupon_code,
+                start_date =  timezone.now()
+            )
 
-        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})
+            cart.cart_limit = 5000
+            cart.save()
+        return redirect('buyer_dashboard')
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})

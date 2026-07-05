@@ -161,6 +161,26 @@ class premium_buyer(models.Model):
             self.save()
     
 
+class premium_history(models.Model):
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='premium_buyer_history')
+    plan = models.CharField(max_length=20)
+    billing_cycle = models.CharField(max_length=20)
+    payment_method = models.CharField(max_length=20)
+    price = models.IntegerField()
+    coupon_code = models.CharField(max_length=20)
+    start_date = models.DateTimeField(default=timezone.now)
+
+    
+    @property
+    def end_date(self):
+        if self.premium_time == "Monthly":
+            return self.start_date + relativedelta(months=1)
+        elif self.premium_time == "Yearly":
+            return self.start_date + relativedelta(years=1)
+
+    def __str__(self):
+        return f"{self.user.user.username} buys {self.plan} in {self.billing_cycle} way at {self.price}"
+
 class Cart(models.Model):
     user = models.OneToOneField(
         User,
