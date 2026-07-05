@@ -391,6 +391,7 @@ def premium_checkout(request):
         plan = request.POST.get('plan')
         total = request.POST.get('total')
         billing_cycle = request.POST.get('billing_cycle')
+        billing_cycle = billing_cycle.capitalize()
         payment_method = request.POST.get('payment_method')
         coupon_code = request.POST.get('coupon_code')
         cart = Cart.objects.get(user = uid)
@@ -407,6 +408,17 @@ def premium_checkout(request):
             alrady_premium.save()
             cart.cart_limit = 5000
             cart.save()
+
+            buy_premium_his = premium_history.objects.create(
+                user = buyr,
+                plan = plan,
+                billing_cycle = billing_cycle,
+                payment_method = payment_method,
+                price = total,
+                coupon_code = coupon_code,
+                start_date =  timezone.now()
+            )
+            buy_premium_his.save()
         
         else:
             buy_premium = premium_buyer.objects.create(
@@ -424,6 +436,7 @@ def premium_checkout(request):
                 coupon_code = coupon_code,
                 start_date =  timezone.now()
             )
+            buy_premium_his.save()
 
             cart.cart_limit = 5000
             cart.save()

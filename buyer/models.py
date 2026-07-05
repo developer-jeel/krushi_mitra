@@ -172,7 +172,7 @@ class premium_history(models.Model):
 
     
     @property
-    def end_date(self):
+    def ending_date(self):
         if self.premium_time == "Monthly":
             return self.start_date + relativedelta(months=1)
         elif self.premium_time == "Yearly":
