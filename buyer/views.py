@@ -46,11 +46,14 @@ def buyer_dashboard(request):
     pending_count = OrderItem.objects.filter(order__in=orders, order__status='Pending').count()    
     complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()
     buyr = Buyer.objects.get(user=uid)
+    cart = Cart.objects.get(user = uid)
     premium_type = premium_buyer.objects.get(user=buyr)    
     premium_buyr = chek_premium(buyr)
     if premium_buyr.premium_type == "Free":
         buyr.is_premiume = False
         buyr.save()
+        cart.cart_limit = 1000
+        cart.save()
     total_value = 0
     for order in orders:
         total_value+= order.total_amount
