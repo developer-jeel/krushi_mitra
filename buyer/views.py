@@ -471,3 +471,20 @@ def premium_checkout(request):
             cart.save()
         return redirect('buyer_dashboard')
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium, "coupons": json.dumps(list(coupon_data))})
+
+@check_login(['Buyer'])
+def current_plan(request):
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    premium_type = premium_buyer.objects.get(user=buyr)
+    cart = Cart.objects.get(user=uid)
+    cart_used = cart.total_kg or 0
+    cart_limit = cart.cart_limit or 1
+    cart_usage_pct = min(int((cart_used / cart_limit) * 100), 100)
+    return render(request, "buyer/current_plan.html", {
+        'buyr': buyr,
+        'premium_type': premium_type,
+        'cart': cart,
+        'cart_used': cart_used,
+        'cart_usage_pct': cart_usage_pct,
+    })

@@ -1,8 +1,637 @@
 /* ============================================
-   KRUSHI MITRA - CURRENT PLAN PAGE
-   Extends the global style.css design system.
-   Uses only existing CSS variables.
+   KRUSHI MITRA — CURRENT PLAN
+   Unique Premium UI  |  Uses existing variables
    ============================================ */
+
+/* ── Ambient background orbs ─────────────────── */
+.cp-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+  animation: cpOrbDrift 10s ease-in-out infinite alternate;
+}
+.cp-orb-1 { width: 340px; height: 340px; background: var(--primary-500); top: 8%; right: 12%; animation-delay: 0s; }
+.cp-orb-2 { width: 260px; height: 260px; background: var(--amber-500);  bottom: 20%; left: 8%;  animation-delay: 3s; }
+.cp-orb-3 { width: 200px; height: 200px; background: var(--purple-500); top: 55%; right: 25%; animation-delay: 6s; }
+
+@keyframes cpOrbDrift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, -30px) scale(1.1); }
+}
+
+/* ── Membership Card (replaces plain hero) ───── */
+.cp-card {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(135deg,
+    rgba(16,185,129,0.12) 0%,
+    rgba(15,26,46,0.85) 40%,
+    rgba(15,26,46,0.95) 100%);
+  border: 1px solid rgba(52,211,153,0.18);
+  border-radius: 24px;
+  padding: 36px 40px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: fadeInUp 0.6s ease both;
+  box-shadow: 0 0 0 1px rgba(52,211,153,0.06),
+              0 24px 60px rgba(0,0,0,0.35),
+              inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* Animated gradient border */
+.cp-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 25px;
+  background: linear-gradient(135deg,
+    rgba(52,211,153,0.5),
+    transparent 40%,
+    rgba(245,158,11,0.3) 100%);
+  z-index: -1;
+  animation: cpBorderGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes cpBorderGlow {
+  0%   { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+/* Decorative honeycomb mesh in corner */
+.cp-card-mesh {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  opacity: 0.06;
+  background-image: radial-gradient(circle, var(--primary-400) 1px, transparent 1px);
+  background-size: 22px 22px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ── Card inner layout ───────────────────────── */
+.cp-card-body {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.cp-card-left { flex: 1; min-width: 240px; }
+.cp-card-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+
+/* Plan type chip */
+.cp-plan-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(16,185,129,0.08));
+  border: 1px solid rgba(52,211,153,0.3);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary-300);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+
+.cp-plan-chip-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--primary-400);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Plan name */
+.cp-plan-name {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #ffffff 30%, var(--primary-300) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+
+.cp-plan-price {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.cp-plan-price strong {
+  color: var(--primary-300);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+/* Meta pills row */
+.cp-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cp-meta-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  min-width: 110px;
+}
+
+.cp-meta-pill-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+}
+
+.cp-meta-pill-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* ── Progress ring (right side of card) ──────── */
+.cp-ring-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.cp-ring-svg { transform: rotate(-90deg); }
+
+.cp-ring-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.07);
+  stroke-width: 10;
+}
+
+.cp-ring-fill {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 376;   /* 2π × 60 */
+  stroke-dashoffset: 376;
+  transition: stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1);
+  stroke: url(#ringGrad);
+  filter: drop-shadow(0 0 8px rgba(52,211,153,0.6));
+}
+
+.cp-ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cp-ring-pct {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.cp-ring-lbl {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.4);
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.cp-ring-caption {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  max-width: 120px;
+}
+
+/* ── Cart usage meter ─────────────────────────── */
+.cp-cart-meter {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  padding: 22px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  backdrop-filter: blur(12px);
+  animation: fadeInUp 0.5s 0.1s ease both;
+}
+
+.cp-cart-meter-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(244,63,94,0.2), rgba(244,63,94,0.08));
+  border: 1px solid rgba(244,63,94,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.cp-cart-meter-info { flex: 1; min-width: 140px; }
+
+.cp-cart-meter-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.cp-cart-meter-nums {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.cp-cart-meter-nums small {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.cp-cart-bar-wrap { flex: 1; min-width: 180px; }
+
+.cp-cart-bar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.cp-cart-bar-pct {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--rose-500);
+}
+
+.cp-cart-bar-limit {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.cp-cart-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cp-cart-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  width: 0%;
+  transition: width 1.4s cubic-bezier(.4,0,.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cp-cart-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  animation: cpShine 2.5s infinite;
+}
+
+@keyframes cpShine {
+  to { left: 200%; }
+}
+
+/* ── Section label ──────────────────────────── */
+.cp-section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cp-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}
+
+/* ── Two-col layout ─────────────────────────── */
+.cp-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.5s 0.2s ease both;
+}
+
+/* ── Benefit pills (unique horizontal style) ─── */
+.cp-benefit-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cp-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  transition: all var(--transition-base);
+  cursor: default;
+}
+
+.cp-pill:hover {
+  border-color: rgba(52,211,153,0.3);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(52,211,153,0.08);
+}
+
+.cp-pill-emoji {
+  font-size: 1.3rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.03));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(16,185,129,0.12);
+  transition: transform var(--transition-base);
+}
+
+.cp-pill:hover .cp-pill-emoji { transform: scale(1.12) rotate(6deg); }
+
+.cp-pill-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.cp-pill-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* ── Right panel cards ─────────────────────── */
+.cp-panel {
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 14px;
+}
+
+.cp-panel:last-child { margin-bottom: 0; }
+
+.cp-panel-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: 0.01em;
+}
+
+.cp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.82rem;
+}
+
+.cp-row:last-of-type { border-bottom: none; }
+.cp-row-label { color: var(--text-muted); }
+.cp-row-value { font-weight: 600; color: var(--text-primary); }
+
+/* ── Timeline (compact horizontal dots) ──────── */
+.cp-htimeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  padding-left: 22px;
+}
+
+.cp-htimeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border-color);
+  border-radius: 1px;
+}
+
+.cp-hstep {
+  position: relative;
+  padding: 0 0 14px 16px;
+  cursor: default;
+}
+
+.cp-hstep:last-child { padding-bottom: 0; }
+
+.cp-hstep-dot {
+  position: absolute;
+  left: -22px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background: var(--bg-body);
+  z-index: 1;
+  transition: all var(--transition-base);
+}
+
+.cp-hstep.done .cp-hstep-dot {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+}
+
+.cp-hstep.now .cp-hstep-dot {
+  background: var(--bg-card);
+  border-color: var(--primary-500);
+  border-width: 3px;
+  box-shadow: 0 0 0 4px rgba(16,185,129,0.15), 0 0 12px rgba(16,185,129,0.4);
+}
+
+.cp-hstep-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.cp-hstep.now .cp-hstep-title { color: var(--primary-500); }
+
+.cp-hstep-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* ── Action bar ─────────────────────────────── */
+.cp-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: 16px;
+  padding: 16px 22px;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.5s 0.3s ease both;
+}
+
+.cp-actions-left { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ── FAQ ────────────────────────────────────── */
+.cp-faq-wrap {
+  animation: fadeInUp 0.5s 0.4s ease both;
+  margin-bottom: 8px;
+}
+
+.cp-faq-heading {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.cp-faq-list { max-width: 740px; margin: 0 auto; }
+
+.cp-faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cp-faq-item.open {
+  border-color: rgba(16,185,129,0.25);
+  box-shadow: 0 4px 20px rgba(16,185,129,0.06);
+}
+
+.cp-faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  gap: 12px;
+}
+
+.cp-faq-q:hover { background: var(--bg-card-hover); }
+.cp-faq-item.open .cp-faq-q { color: var(--primary-500); }
+
+.cp-faq-chevron {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.cp-faq-item.open .cp-faq-chevron { transform: rotate(180deg); color: var(--primary-500); }
+
+.cp-faq-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.38s cubic-bezier(.4,0,.2,1);
+}
+
+.cp-faq-body.open { max-height: 200px; }
+
+.cp-faq-a {
+  padding: 0 18px 14px;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  border-top: 1px solid var(--border-light);
+  padding-top: 12px;
+}
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 1000px) {
+  .cp-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .cp-card { padding: 24px 20px; }
+  .cp-card-right { display: none; }
+  .cp-card-body { gap: 20px; }
+  .cp-plan-name { font-size: 2.2rem; }
+  .cp-benefit-list { grid-template-columns: 1fr; }
+  .cp-cart-meter { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .cp-actions { flex-direction: column; align-items: stretch; }
+  .cp-actions-left { flex-direction: column; }
+  .cp-actions-left .btn,
+  .cp-actions > .btn { width: 100%; justify-content: center; }
+}
+
 
 /* ---- Hero plan banner (mirrors .hero-banner pattern) ---- */
 .plan-hero {
@@ -220,7 +849,7 @@
 /* ---- Stat Cards (usage section) ---- */
 .cp-stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   margin-bottom: 28px;
   animation: fadeInUp 0.6s 0.1s ease both;
@@ -255,6 +884,7 @@
 .cp-stat-card.amber::before { background: var(--amber-500); }
 .cp-stat-card.blue::before { background: var(--blue-500); }
 .cp-stat-card.purple::before { background: var(--purple-500); }
+.cp-stat-card.rose::before { background: var(--rose-500); }
 
 .cp-stat-top {
   display: flex;
@@ -277,6 +907,7 @@
 .cp-stat-card.amber .cp-stat-icon { background: rgba(245,158,11,0.12); color: var(--amber-500); }
 .cp-stat-card.blue .cp-stat-icon { background: rgba(59,130,246,0.12); color: var(--blue-500); }
 .cp-stat-card.purple .cp-stat-icon { background: rgba(139,92,246,0.12); color: var(--purple-500); }
+.cp-stat-card.rose .cp-stat-icon { background: rgba(244,63,94,0.12); color: var(--rose-500); }
 
 .cp-stat-value {
   font-size: 1.6rem;
@@ -318,7 +949,7 @@
   display: grid;
   grid-template-columns: 1fr 340px;
   gap: 20px;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   animation: fadeInUp 0.6s 0.2s ease both;
 }
 
@@ -499,7 +1130,7 @@
   border: var(--card-border);
   border-radius: var(--radius-lg);
   padding: 20px 24px;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   animation: fadeInUp 0.6s 0.3s ease both;
 }
 
@@ -609,7 +1240,7 @@
 
 /* ---- Responsive ---- */
 @media (max-width: 1100px) {
-  .cp-stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .cp-stat-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 900px) {

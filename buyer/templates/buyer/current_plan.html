@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Current Plan – Krushi Mitra Buyer Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Global design system (sidebar, navbar, cards, buttons, variables) -->
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
+  <!-- Current plan-specific styles (only unique components, reuses all variables) -->
+  <link rel="stylesheet" href="{% static 'buyer/css/current_plan.css' %}">
+</head>
+
+<body>
+
+  <!-- Sidebar backdrop (mobile) -->
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+
+  <div class="app-layout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" aria-label="Toggle sidebar">◀</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard">
+          <span class="sidebar-item-icon">📊</span>
+          <span class="sidebar-item-text">Dashboard</span>
+        </a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops">
+          <span class="sidebar-item-icon">🌾</span>
+          <span class="sidebar-item-text">Browse Crops</span>
+        </a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart">
+          <span class="sidebar-item-icon">🛒</span>
+          <span class="sidebar-item-text">Cart</span>
+        </a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders">
+          <span class="sidebar-item-icon">📦</span>
+          <span class="sidebar-item-text">Orders</span>
+        </a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist">
+          <span class="sidebar-item-icon">❤️</span>
+          <span class="sidebar-item-text">Wishlist</span>
+        </a>
+
+        <div class="sidebar-section-label">Procurement</div>
+        {% if buyr.is_premiume %}
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
+          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-text">Bulk Orders</span>
+        </a>
+        {% if premium_type.premium_type == 'Premium' %}
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry">
+          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-text">Export Inquiry</span>
+        </a>
+        {% else %}
+        <a href="#" class="sidebar-item disabled-link" onclick="showToast('warning','Premium Only','Export Inquiry is available for Premium users only.'); return false;">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
+        </a>
+        {% endif %}
+        {% else %}
+        <a href="#" class="sidebar-item disabled-link" onclick="showToast('warning','Upgrade Required','Upgrade to unlock Bulk Orders.'); return false;">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Bulk Orders (Upgrade)</span>
+        </a>
+        <a href="#" class="sidebar-item disabled-link" onclick="showToast('warning','Premium Only','Export Inquiry is available for Premium users only.'); return false;">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
+        </a>
+        {% endif %}
+
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages">
+          <span class="sidebar-item-icon">💬</span>
+          <span class="sidebar-item-text">Messages</span>
+        </a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications">
+          <span class="sidebar-item-icon">🔔</span>
+          <span class="sidebar-item-text">Notifications</span>
+        </a>
+
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile">
+          <span class="sidebar-item-icon">👤</span>
+          <span class="sidebar-item-text">Profile</span>
+        </a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification">
+          <span class="sidebar-item-icon">✅</span>
+          <span class="sidebar-item-text">Verification</span>
+        </a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details">
+          <span class="sidebar-item-icon">🏦</span>
+          <span class="sidebar-item-text">Bank Details</span>
+        </a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings">
+          <span class="sidebar-item-icon">⚙️</span>
+          <span class="sidebar-item-text">Settings</span>
+        </a>
+
+        <div class="sidebar-section-label" style="padding-top:12px; border-top:1px solid var(--border-color); margin-top:8px;">Premium</div>
+        <a href="{% url 'buyer_premium' %}" class="sidebar-item" data-tooltip="Upgrade Plan">
+          <span class="sidebar-item-icon">⭐</span>
+          <span class="sidebar-item-text">Upgrade Plan</span>
+        </a>
+        <a href="#" class="sidebar-item active" data-tooltip="Current Plan">
+          <span class="sidebar-item-icon">👑</span>
+          <span class="sidebar-item-text">Current Plan</span>
+        </a>
+
+        <div class="sidebar-section-label" style="padding-top:12px; border-top:1px solid var(--border-color); margin-top:8px;">Support</div>
+        <a href="#" class="sidebar-item" data-tooltip="Logout" onclick="showToast('info','Logout','Logging you out...')">
+          <span class="sidebar-item-icon">🚪</span>
+          <span class="sidebar-item-text">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- ===== MAIN WRAPPER ===== -->
+    <div class="main-wrapper">
+
+      <!-- ===== NAVBAR ===== -->
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="mobile-menu-btn" aria-label="Open menu">☰</button>
+          <div>
+            <div class="breadcrumb">
+              <a href="{% url 'buyer_dashboard' %}">Home</a>
+              <span class="breadcrumb-sep">›</span>
+              <a href="{% url 'buyer_premium' %}">Premium</a>
+              <span class="breadcrumb-sep">›</span>
+              <span class="current">Current Plan</span>
+            </div>
+            <h1 class="page-title">Current Plan</h1>
+          </div>
+        </div>
+
+        <div class="navbar-right">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search crops, orders..." aria-label="Search">
+          </div>
+          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">🔔<span class="badge-dot"></span></a>
+          <button class="theme-toggle" title="Toggle theme">🌙</button>
+
+          <div class="dropdown">
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">{{ buyr.user.username|slice:":2"|upper }}</div>
+              <div>
+                <div class="profile-name">{{ buyr.user.username }}</div>
+                <div class="profile-role">{{ buyr.business_type|default:"Buyer" }}</div>
+              </div>
+            </div>
+            <div class="dropdown-menu">
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_premium' %}" class="dropdown-item">⭐ Upgrade Plan</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">🚪 Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== MAIN CONTENT ===== -->
+      <main class="main-content" style="position:relative;">
+
+        <!-- Ambient background orbs -->
+        <div class="cp-orb cp-orb-1"></div>
+        <div class="cp-orb cp-orb-2"></div>
+        <div class="cp-orb cp-orb-3"></div>
+
+        <!-- ── MEMBERSHIP CARD ──────────────────────── -->
+        <div class="cp-card">
+          <div class="cp-card-mesh"></div>
+          <div class="cp-card-body">
+
+            <!-- Left: Plan info -->
+            <div class="cp-card-left">
+              <div class="cp-plan-chip">
+                <span class="cp-plan-chip-dot"></span>
+                Active &nbsp;·&nbsp; Premium Membership
+              </div>
+              <div class="cp-plan-name">{{ premium_type.premium_type }}</div>
+              <div class="cp-plan-price">
+                <strong>₹{{ premium_type.price|default:"—" }}</strong>
+                &nbsp;/ {{ premium_type.premium_time }}
+              </div>
+              <div class="cp-meta-row">
+                <div class="cp-meta-pill">
+                  <span class="cp-meta-pill-label">Billing</span>
+                  <span class="cp-meta-pill-value">{{ premium_type.premium_time }}</span>
+                </div>
+                <div class="cp-meta-pill">
+                  <span class="cp-meta-pill-label">Member Since</span>
+                  <span class="cp-meta-pill-value">{{ premium_type.purchase_date|date:"d M Y" }}</span>
+                </div>
+                <div class="cp-meta-pill">
+                  <span class="cp-meta-pill-label">Renews On</span>
+                  <span class="cp-meta-pill-value">{{ premium_type.end_date|date:"d M Y" }}</span>
+                </div>
+                <div class="cp-meta-pill">
+                  <span class="cp-meta-pill-label">Status</span>
+                  <span class="cp-meta-pill-value" style="color:{% if premium_type.is_expired %}var(--red-500){% else %}#6ee7b7{% endif %};">
+                    {% if premium_type.is_expired %}Expired{% else %}Active{% endif %}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: SVG Progress ring -->
+            <div class="cp-card-right">
+              <div class="cp-ring-wrap">
+                <svg class="cp-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+                  <defs>
+                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#34d399"/>
+                      <stop offset="100%" stop-color="#f59e0b"/>
+                    </linearGradient>
+                  </defs>
+                  <circle class="cp-ring-track" cx="70" cy="70" r="60"/>
+                  <circle class="cp-ring-fill" cx="70" cy="70" r="60" data-percent="67"/>
+                </svg>
+                <div class="cp-ring-inner">
+                  <span class="cp-ring-pct">0%</span>
+                  <span class="cp-ring-lbl">Period Used</span>
+                </div>
+              </div>
+              <div class="cp-ring-caption">67% of billing period completed</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── CART USAGE METER ──────────────────────── -->
+        <div class="cp-cart-meter">
+          <div class="cp-cart-meter-icon">🛒</div>
+          <div class="cp-cart-meter-info">
+            <div class="cp-cart-meter-title">Cart Capacity Used</div>
+            <div class="cp-cart-meter-nums">
+              {{ cart_used }} KG
+              <small>/ {{ cart.cart_limit }} KG limit</small>
+            </div>
+          </div>
+          <div class="cp-cart-bar-wrap">
+            <div class="cp-cart-bar-top">
+              <span class="cp-cart-bar-pct">{{ cart_usage_pct }}%</span>
+              <span class="cp-cart-bar-limit">{{ cart.cart_limit }} KG max</span>
+            </div>
+            <div class="cp-cart-bar-track">
+              <div class="cp-cart-bar-fill" data-width="{{ cart_usage_pct }}%"
+                style="{% if cart_usage_pct >= 90 %}background:linear-gradient(90deg,var(--red-500),var(--red-600));{% elif cart_usage_pct >= 60 %}background:linear-gradient(90deg,var(--amber-500),var(--amber-600));{% else %}background:linear-gradient(90deg,var(--rose-500),var(--primary-500));{% endif %}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── BENEFITS + RIGHT PANEL ────────────────── -->
+        <div class="cp-layout">
+
+          <!-- Left: Benefits pill grid -->
+          <div>
+            <div class="cp-section-label">🌟 Your Premium Benefits</div>
+            <div class="cp-benefit-list">
+              <div class="cp-pill">
+                <div class="cp-pill-emoji">🤖</div>
+                <div>
+                  <div class="cp-pill-text">Unlimited AI Assistant</div>
+                  <div class="cp-pill-sub">Smart crop recommendations 24/7</div>
+                </div>
+              </div>
+              <div class="cp-pill">
+                <div class="cp-pill-emoji">🌍</div>
+                <div>
+                  <div class="cp-pill-text">Export Inquiry</div>
+                  <div class="cp-pill-sub">Reach global buyers freely</div>
+                </div>
+              </div>
+              <div class="cp-pill">
+                <div class="cp-pill-emoji">👑</div>
+                <div>
+                  <div class="cp-pill-text">Premium Badge</div>
+                  <div class="cp-pill-sub">Stand out to top-tier sellers</div>
+                </div>
+              </div>
+              <div class="cp-pill">
+                <div class="cp-pill-emoji">🎧</div>
+                <div>
+                  <div class="cp-pill-text">Priority Support</div>
+                  <div class="cp-pill-sub">Faster response, dedicated team</div>
+                </div>
+              </div>
+              <div class="cp-pill">
+                <div class="cp-pill-emoji">📊</div>
+                <div>
+                  <div class="cp-pill-text">Advanced Analytics</div>
+                  <div class="cp-pill-sub">Deep market & price insights</div>
+                </div>
+              </div>
+              <div class="cp-pill">
+                <div class="cp-pill-emoji">🚀</div>
+                <div>
+                  <div class="cp-pill-text">Early Access</div>
+                  <div class="cp-pill-sub">First to try new features</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Billing + Timeline panels -->
+          <div>
+            <!-- Billing -->
+            <div class="cp-panel">
+              <div class="cp-panel-title">💳 Billing Information</div>
+              <div class="cp-row">
+                <span class="cp-row-label">Billing Cycle</span>
+                <span class="cp-row-value">{{ premium_type.premium_time }}</span>
+              </div>
+              <div class="cp-row">
+                <span class="cp-row-label">Payment Method</span>
+                <span class="cp-row-value">UPI / Card</span>
+              </div>
+              <div class="cp-row">
+                <span class="cp-row-label">Plan Amount</span>
+                <span class="cp-row-value" style="color:var(--primary-500);">₹{{ premium_type.price|default:"—" }}</span>
+              </div>
+              <div class="cp-row">
+                <span class="cp-row-label">Purchase Date</span>
+                <span class="cp-row-value">{{ premium_type.purchase_date|date:"d M Y" }}</span>
+              </div>
+              <div class="cp-row">
+                <span class="cp-row-label">Renewal Date</span>
+                <span class="cp-row-value">{{ premium_type.end_date|date:"d M Y" }}</span>
+              </div>
+              <div style="margin-top:14px;">
+                <button class="btn btn-outline btn-block" onclick="showToast('info','Invoice','Generating your invoice...')">
+                  📄 Download Invoice
+                </button>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="cp-panel">
+              <div class="cp-panel-title">📅 Membership Timeline</div>
+              <div class="cp-htimeline">
+                <div class="cp-hstep done">
+                  <div class="cp-hstep-dot"></div>
+                  <div class="cp-hstep-title">Plan Purchased</div>
+                  <div class="cp-hstep-time">{{ premium_type.purchase_date|date:"d M Y, h:i A" }}</div>
+                </div>
+                <div class="cp-hstep done">
+                  <div class="cp-hstep-dot"></div>
+                  <div class="cp-hstep-title">Payment Successful</div>
+                  <div class="cp-hstep-time">{{ premium_type.purchase_date|date:"d M Y, h:i A" }}</div>
+                </div>
+                <div class="cp-hstep now">
+                  <div class="cp-hstep-dot"></div>
+                  <div class="cp-hstep-title">Premium Activated</div>
+                  <div class="cp-hstep-time">{{ premium_type.purchase_date|date:"d M Y" }}</div>
+                </div>
+                <div class="cp-hstep">
+                  <div class="cp-hstep-dot"></div>
+                  <div class="cp-hstep-title">Renewal Date</div>
+                  <div class="cp-hstep-time">{{ premium_type.end_date|date:"d M Y" }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ACTION BAR ───────────────────────────── -->
+        <div class="cp-actions">
+          <div class="cp-actions-left">
+            <a href="{% url 'buyer_premium' %}" class="btn btn-primary">🔄 Renew Plan</a>
+            <a href="{% url 'buyer_premium' %}" class="btn btn-secondary" style="border-color:var(--amber-500);color:var(--amber-500);">⬆️ Upgrade Plan</a>
+            <button class="btn btn-secondary" onclick="showToast('info','Billing','Redirecting to billing settings...')">📅 Change Billing</button>
+          </div>
+          <button class="btn btn-danger" onclick="showToast('warning','Cancel','Are you sure? Contact support to cancel.')">❌ Cancel Membership</button>
+        </div>
+
+        <!-- ── FAQ ──────────────────────────────────── -->
+        <div class="cp-faq-wrap">
+          <div class="cp-faq-heading">Frequently Asked Questions</div>
+          <div class="cp-faq-list">
+
+            <div class="cp-faq-item">
+              <div class="cp-faq-q"><span>How do I renew my premium membership?</span><span class="cp-faq-chevron">▼</span></div>
+              <div class="cp-faq-body"><div class="cp-faq-a">Click the <strong>Renew Plan</strong> button above, or go to the Premium page. Your plan renews automatically if auto-renew is enabled. We'll remind you 7 days before expiry.</div></div>
+            </div>
+
+            <div class="cp-faq-item">
+              <div class="cp-faq-q"><span>How do I cancel my membership?</span><span class="cp-faq-chevron">▼</span></div>
+              <div class="cp-faq-body"><div class="cp-faq-a">Click <strong>Cancel Membership</strong> above or contact support. You'll keep premium access until the end of your current billing cycle.</div></div>
+            </div>
+
+            <div class="cp-faq-item">
+              <div class="cp-faq-q"><span>Can I upgrade my plan anytime?</span><span class="cp-faq-chevron">▼</span></div>
+              <div class="cp-faq-body"><div class="cp-faq-a">Yes! Upgrade from Standard to Premium anytime. The unused portion of your current plan is pro-rated and credited to the new plan.</div></div>
+            </div>
+
+            <div class="cp-faq-item">
+              <div class="cp-faq-q"><span>Is a refund available?</span><span class="cp-faq-chevron">▼</span></div>
+              <div class="cp-faq-body"><div class="cp-faq-a">First-time yearly subscribers get a 7-day money-back guarantee. Monthly plans are non-refundable but can be cancelled at any time.</div></div>
+            </div>
+
+            <div class="cp-faq-item">
+              <div class="cp-faq-q"><span>Can I switch from monthly to yearly billing?</span><span class="cp-faq-chevron">▼</span></div>
+              <div class="cp-faq-body"><div class="cp-faq-a">Absolutely. Click <strong>Change Billing</strong> above or contact support. Switching to yearly saves up to 20% on the total annual cost.</div></div>
+            </div>
+
+          </div>
+        </div>
+
+      </main><!-- /main-content -->
+    </div><!-- /main-wrapper -->
+  </div><!-- /app-layout -->
+
+  <!-- Global app.js -->
+  <script src="{% static 'buyer/js/app.js' %}"></script>
+  <!-- Page-specific animations -->
+  <script src="{% static 'buyer/js/current_plan.js' %}"></script>
+
+</body>
+</html>

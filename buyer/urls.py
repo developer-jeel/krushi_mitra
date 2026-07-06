@@ -49,4 +49,5 @@ urlpatterns = [
     path('kyc', views.kyc, name='kyc'),
     path('premium/', views.buyer_premium, name='buyer_premium'),
     path('premium_checkout/', views.premium_checkout, name='premium_checkout'),
+    path('current_plan/', views.current_plan, name='current_plan'),
 ]
