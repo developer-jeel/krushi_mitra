@@ -1,3 +1,6 @@
+import buyer
+import buyer
+import buyer
 import string , json
 from django.template import context
 from requests import request
@@ -29,7 +32,7 @@ def format_indian_number(value):
 def chek_premium(buyr):
     premium_buyr = premium_buyer.objects.filter(user=buyr).first()
 
-    if premium_buyr is None:
+    if not premium_buyr:
         premium_buyr = premium_buyer.objects.create(
             user=buyr,
             premium_type="Free",
@@ -49,8 +52,8 @@ def buyer_dashboard(request):
     complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
-    premium_type = premium_buyer.objects.get(user=buyr)    
     premium_buyr = chek_premium(buyr)
+    premium_type = premium_buyer.objects.get(user=buyr)    
     if premium_buyr.premium_type == "Free":
         buyr.is_premiume = False
         buyr.save()
