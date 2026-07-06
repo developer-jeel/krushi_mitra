@@ -1,10 +1,12 @@
-import string
+import string , json
 from django.template import context
 from requests import request
 from django.shortcuts import render, redirect
 from farmer.models import *
 from farmer.views import *
 from .models import *
+from django.core.serializers.json import DjangoJSONEncoder
+
 # Create your views here.
 
 
@@ -379,9 +381,19 @@ def buyer_premium(request):
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
+    coupons = premium_coupon.objects.filter(is_active=True).values('code','discount_type','discount_value','label')
+    coupon_data = {
+    c["code"]: {
+        "type": c["discount_type"],
+        "value": float(c["discount_value"]),
+        "label": c["label"],
+    }
+    for c in coupons
+    }
+    print("=====================>",coupon_data)
     if request.method == 'POST':
         plan = request.POST.get('plan')
-        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type,'plan':plan})
+        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type,'plan':plan, 'coupons': json.dumps(coupon_data),})
     return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
 
 @check_login(['Buyer'])
@@ -390,6 +402,17 @@ def premium_checkout(request):
     plans = premium_plans.objects.get()
     buyr = Buyer.objects.get(user=uid)
     alrady_premium = premium_buyer.objects.get(user=buyr)
+    coupons = premium_coupon.objects.filter(is_active=True).values('code','discount_type','discount_value','label')
+    coupon_data = {
+    c["code"]: {
+        "type": c["discount_type"],
+        "value": c["discount_value"],
+        "label": c["label"],
+    }
+    for c in coupons
+    }
+    print("=====================>",coupon_data)
+
     if request.method == 'POST':
         plan = request.POST.get('plan')
         total = request.POST.get('total')
@@ -444,4 +467,4 @@ def premium_checkout(request):
             cart.cart_limit = 5000
             cart.save()
         return redirect('buyer_dashboard')
-    return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium})
+    return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium, "coupons": json.dumps(list(coupon_data))})

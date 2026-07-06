@@ -43,6 +43,7 @@
           <span>Back</span>
         </a>
       </div>
+      <pre>{{ coupons }}</pre>
 
       <div class="header-center">
         <div class="header-logo">
@@ -589,436 +590,443 @@
       };
 
       const GST_RATE = 0;
-      const COUPONS = {
-        KRUSHI20: { type: 'percent', value: 20, label: '20% off' },
-        SAVE50: { type: 'flat', value: 50, label: '₹50 off' },
-        WELCOME10: { type: 'percent', value: 10, label: '10% off' },
-      };
+      const COUPONS = {{ coupons| safe}};
 
-      // Injected by backend: '{{plan}}' resolves to 'Standard' or 'Premium'
-      const BACKEND_PLAN = '{{plan}}';
+    // Injected by backend: '{{plan}}' resolves to 'Standard' or 'Premium'
+    const BACKEND_PLAN = '{{plan}}';
 
-      /* ============================================================
-         STATE
-         ============================================================ */
-      const state = {
-        plan: BACKEND_PLAN === 'Premium' ? 'premium' : 'standard',
-        isYearly: new URLSearchParams(window.location.search).get('cycle') === 'yearly',
-        couponCode: null,
-        couponDiscount: 0,
-        paymentMethod: 'upi',
-      };
+    /* ============================================================
+       STATE
+       ============================================================ */
+    const state = {
+      plan: BACKEND_PLAN === 'Premium' ? 'premium' : 'standard',
+      isYearly: new URLSearchParams(window.location.search).get('cycle') === 'yearly',
+      couponCode: null,
+      couponDiscount: 0,
+      paymentMethod: 'upi',
+    };
 
-      /* ============================================================
-         DOM HELPERS
-         ============================================================ */
-      const $ = (id) => document.getElementById(id);
-      const $$ = (sel) => document.querySelectorAll(sel);
-      const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
-      const show = (el) => { if (el) el.style.display = ''; };
-      const hide = (el) => { if (el) el.style.display = 'none'; };
+    /* ============================================================
+       DOM HELPERS
+       ============================================================ */
+    const $ = (id) => document.getElementById(id);
+    const $$ = (sel) => document.querySelectorAll(sel);
+    const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+    const show = (el) => { if (el) el.style.display = ''; };
+    const hide = (el) => { if (el) el.style.display = 'none'; };
 
-      function shake(el) {
-        if (!el) return;
-        el.animate(
-          [
-            { transform: 'translateX(0)' },
-            { transform: 'translateX(-8px)' },
-            { transform: 'translateX(8px)' },
-            { transform: 'translateX(-6px)' },
-            { transform: 'translateX(6px)' },
-            { transform: 'translateX(0)' },
-          ],
-          { duration: 400, easing: 'ease-in-out' }
-        );
+    function shake(el) {
+      if (!el) return;
+      el.animate(
+        [
+          { transform: 'translateX(0)' },
+          { transform: 'translateX(-8px)' },
+          { transform: 'translateX(8px)' },
+          { transform: 'translateX(-6px)' },
+          { transform: 'translateX(6px)' },
+          { transform: 'translateX(0)' },
+        ],
+        { duration: 400, easing: 'ease-in-out' }
+      );
+    }
+
+    function triggerRipple(el, e) {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 2;
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-effect';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${(e.clientX - rect.left) - size / 2}px;top:${(e.clientY - rect.top) - size / 2}px;`;
+      el.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    /* ============================================================
+       INIT
+       ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollReveal();
+      initProgressLine();
+      initPlanCard();
+      initBillingToggles();
+      initPaymentMethods();
+      initCoupon();
+      initPayButtons();
+      initRippleButtons();
+      initStickyHeader();
+      renderAll();
+    });
+
+    function renderAll() {
+      renderPlanCard();
+      updateSummary(); // also updates billing note
+    }
+
+    /* ============================================================
+       SCROLL REVEAL
+       ============================================================ */
+    function initScrollReveal() {
+      const items = $$('.fade-up');
+      if (!items.length) return;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const delay = parseFloat(el.dataset.delay || 0);
+          setTimeout(() => el.classList.add('visible'), delay * 1000);
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      items.forEach((el, i) => {
+        el.dataset.delay = (i * 0.07).toFixed(2);
+        observer.observe(el);
+      });
+    }
+
+    function initProgressLine() {
+      const line1 = $('line1');
+      if (line1) setTimeout(() => line1.classList.add('active-line'), 300);
+    }
+
+    /* ============================================================
+       PLAN CARD
+       ============================================================ */
+    function initPlanCard() {
+      const changePlanBtn = $('changePlanBtn');
+      if (changePlanBtn) changePlanBtn.addEventListener('click', () => window.history.back());
+    }
+
+    function renderPlanCard() {
+      const p = PLANS[state.plan];
+      if (!p) return;
+      const amount = state.isYearly ? p.yearly_per : p.monthly;
+
+      setText('planDisplayName', p.name);
+      setText('planCrownIcon', p.crown);
+      setText('planTypeBadge', p.badge);
+      setText('planCycleBadge', state.isYearly ? 'Yearly' : 'Monthly');
+      setText('planDisplayAmount', amount);
+      setText('planDisplayPeriod', state.isYearly ? '/mo · billed yearly' : '/month');
+      setText('planDisplayDesc', p.desc);
+
+      const featEl = $('planDisplayFeatures');
+      if (featEl) featEl.innerHTML = p.features.map((f) => `<li>${f}</li>`).join('');
+
+      const crownEl = $('planCrownIcon');
+      if (crownEl && state.plan === 'premium') {
+        crownEl.style.background = 'linear-gradient(135deg, rgba(253,186,45,0.25), rgba(253,186,45,0.08))';
+        crownEl.style.borderColor = 'rgba(253,186,45,0.4)';
+      }
+    }
+
+    /* ============================================================
+       BILLING TOGGLES (in-card + optional standalone, kept in sync)
+       ============================================================ */
+    function initBillingToggles() {
+      const toggles = [
+        { btn: $('planBillingToggle'), mon: $('planLblMonthly'), year: $('planLblYearly'), activeClass: 'on' },
+        { btn: $('billingToggle'), mon: $('lblMonthly'), year: $('lblYearly'), activeClass: 'active-toggle' },
+      ].filter((t) => t.btn);
+
+      function applyState() {
+        toggles.forEach(({ btn, mon, year, activeClass }) => {
+          btn.classList.toggle(activeClass, state.isYearly);
+          btn.setAttribute('aria-checked', String(state.isYearly));
+          if (mon) mon.classList.toggle('active', !state.isYearly);
+          if (year) year.classList.toggle('active', state.isYearly);
+        });
+        const pill = $('planYearlySavePill');
+        if (pill) pill.style.display = state.isYearly ? 'inline-flex' : 'none';
+        const saveTag = $('billingSaveTag');
+        if (saveTag) saveTag.classList.toggle('show', state.isYearly);
       }
 
-      function triggerRipple(el, e) {
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height) * 2;
-        const ripple = document.createElement('span');
-        ripple.className = 'ripple-effect';
-        ripple.style.cssText = `width:${size}px;height:${size}px;left:${(e.clientX - rect.left) - size / 2}px;top:${(e.clientY - rect.top) - size / 2}px;`;
-        el.appendChild(ripple);
-        ripple.addEventListener('animationend', () => ripple.remove());
-      }
-
-      /* ============================================================
-         INIT
-         ============================================================ */
-      document.addEventListener('DOMContentLoaded', () => {
-        initScrollReveal();
-        initProgressLine();
-        initPlanCard();
-        initBillingToggles();
-        initPaymentMethods();
-        initCoupon();
-        initPayButtons();
-        initRippleButtons();
-        initStickyHeader();
+      function setYearly(val) {
+        if (state.isYearly === val) return;
+        state.isYearly = val;
+        applyState();
         renderAll();
+        // Keep hidden billing_cycle input in sync
+        const bcHidden = $('hiddenBillingCycle');
+        if (bcHidden) bcHidden.value = state.isYearly ? 'Yearly' : 'Monthly';
+      }
+
+      toggles.forEach(({ btn, mon, year }) => {
+        btn.addEventListener('click', () => setYearly(!state.isYearly));
+        if (mon) mon.addEventListener('click', () => setYearly(false));
+        if (year) year.addEventListener('click', () => setYearly(true));
       });
 
-      function renderAll() {
-        renderPlanCard();
-        updateSummary(); // also updates billing note
+      applyState();
+    }
+
+    function updateBillingNote() {
+      const p = PLANS[state.plan];
+      const amount = state.isYearly ? p.yearly_per : p.monthly;
+
+      const span = $('billingTotalSpan');
+      const note = $('billingNote');
+      if (span) span.textContent = amount;
+      if (note) {
+        note.textContent = state.isYearly
+          ? `Billed ₹${p.yearly_total} per year (₹${p.yearly_per}/mo). Cancel anytime.`
+          : `Billed ₹${amount} per month. Cancel anytime.`;
       }
 
-      /* ============================================================
-         SCROLL REVEAL
-         ============================================================ */
-      function initScrollReveal() {
-        const items = $$('.fade-up');
-        if (!items.length) return;
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            const el = entry.target;
-            const delay = parseFloat(el.dataset.delay || 0);
-            setTimeout(() => el.classList.add('visible'), delay * 1000);
-            observer.unobserve(el);
-          });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      const planBillingNote = $('planBillingNote');
+      if (planBillingNote) {
+        planBillingNote.innerHTML = state.isYearly
+          ? `Billed &#8377;${p.yearly_total}/year &nbsp;·&nbsp; <strong style="color:var(--success)">Save &#8377;${(p.monthly - p.yearly_per) * 12}</strong> vs monthly &nbsp;·&nbsp; Cancel anytime`
+          : `Billed &#8377;<span id="planBillingAmount">${amount}</span>/month &nbsp;·&nbsp; Cancel anytime`;
+      }
+    }
 
-        items.forEach((el, i) => {
-          el.dataset.delay = (i * 0.07).toFixed(2);
-          observer.observe(el);
+    /* ============================================================
+       PAYMENT METHODS
+       ============================================================ */
+    function initPaymentMethods() {
+      const cards = $$('.payment-method-card');
+      cards.forEach((card) => {
+        card.addEventListener('click', () => {
+          cards.forEach((c) => { c.classList.remove('active'); c.setAttribute('aria-checked', 'false'); });
+          card.classList.add('active');
+          card.setAttribute('aria-checked', 'true');
+          state.paymentMethod = card.dataset.method;
+          // Keep hidden input in sync with selected payment method
+          const pmHidden = $('hiddenPaymentMethod');
+          if (pmHidden) pmHidden.value = state.paymentMethod;
+
+          card.style.transform = 'scale(0.96)';
+          setTimeout(() => { card.style.transform = ''; }, 150);
         });
+      });
+    }
+
+    /* ============================================================
+       COUPON
+       ============================================================ */
+    function initCoupon() {
+      const applyBtn = $('couponApplyBtn');
+      const input = $('couponInput');
+      const removeBtn = $('couponRemoveBtn');
+      if (!applyBtn || !input) return;
+
+      applyBtn.addEventListener('click', applyCoupon);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); } });
+      if (removeBtn) removeBtn.addEventListener('click', removeCoupon);
+    }
+
+    function applyCoupon() {
+      const input = $('couponInput');
+      const code = (input.value || '').trim().toUpperCase();
+      const successEl = $('couponSuccess');
+      const errorEl = $('couponError');
+      const errorText = $('couponErrorText');
+
+      hide(successEl);
+      hide(errorEl);
+
+      if (!code) {
+        show(errorEl);
+        if (errorText) errorText.textContent = 'Please enter a coupon code.';
+        return;
       }
 
-      function initProgressLine() {
-        const line1 = $('line1');
-        if (line1) setTimeout(() => line1.classList.add('active-line'), 300);
+      const coupon = COUPONS[code];
+      if (!coupon) {
+        show(errorEl);
+        if (errorText) errorText.textContent = `"${code}" is not a valid coupon code.`;
+        shake($('couponInputWrap'));
+        return;
       }
 
-      /* ============================================================
-         PLAN CARD
-         ============================================================ */
-      function initPlanCard() {
-        const changePlanBtn = $('changePlanBtn');
-        if (changePlanBtn) changePlanBtn.addEventListener('click', () => window.history.back());
+      const p = PLANS[state.plan];
+      const price = state.isYearly ? p.yearly_total : p.monthly;
+      const discount = coupon.type === 'percent'
+        ? Math.round(price * coupon.value / 100)
+        : Math.min(coupon.value, price);
+
+      state.couponCode = code;
+      state.couponDiscount = discount;
+
+      setText('couponDiscountText', `You saved ₹${discount} (${coupon.label})`);
+      show(successEl);
+
+      input.disabled = true;
+      const applyBtn = $('couponApplyBtn');
+      if (applyBtn) { applyBtn.disabled = true; applyBtn.style.opacity = '0.5'; }
+      // Keep hidden coupon input in sync
+      const ccHidden = $('hiddenCouponCode');
+      if (ccHidden) ccHidden.value = code;
+
+      updateSummary();
+    }
+
+    function removeCoupon() {
+      state.couponCode = null;
+      state.couponDiscount = 0;
+      hide($('couponSuccess'));
+
+      const input = $('couponInput');
+      const applyBtn = $('couponApplyBtn');
+      if (input) { input.value = ''; input.disabled = false; }
+      if (applyBtn) { applyBtn.disabled = false; applyBtn.style.opacity = ''; }
+      // Clear coupon hidden input
+      const ccHidden = $('hiddenCouponCode');
+      if (ccHidden) ccHidden.value = '';
+
+      updateSummary();
+    }
+
+
+    /* ============================================================
+       PAY BUTTONS — update hidden inputs then allow real form submit
+       ============================================================ */
+    function initPayButtons() {
+      [$('payBtnDesktop'), $('payBtnMobile')].forEach((btn) => {
+        if (btn) btn.addEventListener('click', handlePayClick);
+      });
+    }
+
+    function handlePayClick(e) {
+      // Populate all hidden inputs with current JS state before form submits
+      const planHidden = $('hiddenPlan');
+      if (planHidden) planHidden.value = BACKEND_PLAN;
+
+      const bcHidden = $('hiddenBillingCycle');
+      if (bcHidden) bcHidden.value = state.isYearly ? 'yearly' : 'monthly';
+
+      const pmHidden = $('hiddenPaymentMethod');
+      if (pmHidden) pmHidden.value = state.paymentMethod;
+
+      const totalHidden = $('hiddenTotal');
+      if (totalHidden) {
+        // Read the computed total from the summary display
+        const totalEl = $('summaryTotal');
+        if (totalEl) totalHidden.value = totalEl.textContent.replace('₹', '').trim();
       }
 
-      function renderPlanCard() {
+      const ccHidden = $('hiddenCouponCode');
+      if (ccHidden) ccHidden.value = state.couponCode || '';
+
+      // Trigger ripple animation (form will still submit normally)
+      triggerRipple(e.currentTarget, e);
+      // Do NOT call e.preventDefault() — let the form submit to Django
+    }
+
+    /* ============================================================
+       SUCCESS OVERLAY — kept for potential future use but no longer
+       triggered automatically; Django handles the success redirect.
+       ============================================================ */
+    function showSuccessOverlay() {
+      const overlay = $('successOverlay');
+      if (!overlay) return;
+
+      const badge = $('successPlanBadge');
+      if (badge) {
         const p = PLANS[state.plan];
-        if (!p) return;
-        const amount = state.isYearly ? p.yearly_per : p.monthly;
+        badge.textContent = `${p.crown} ${p.name} Plan — Active`;
+      }
 
-        setText('planDisplayName', p.name);
-        setText('planCrownIcon', p.crown);
-        setText('planTypeBadge', p.badge);
-        setText('planCycleBadge', state.isYearly ? 'Yearly' : 'Monthly');
-        setText('planDisplayAmount', amount);
-        setText('planDisplayPeriod', state.isYearly ? '/mo · billed yearly' : '/month');
-        setText('planDisplayDesc', p.desc);
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
 
-        const featEl = $('planDisplayFeatures');
-        if (featEl) featEl.innerHTML = p.features.map((f) => `<li>${f}</li>`).join('');
+      ['.success-ring', '.success-check'].forEach((sel) => {
+        const el = overlay.querySelector(sel);
+        if (!el) return;
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = sel === '.success-ring' ? 'drawRing 0.8s ease forwards' : 'drawCheck 0.5s 0.6s ease forwards';
+      });
 
-        const crownEl = $('planCrownIcon');
-        if (crownEl && state.plan === 'premium') {
-          crownEl.style.background = 'linear-gradient(135deg, rgba(253,186,45,0.25), rgba(253,186,45,0.08))';
-          crownEl.style.borderColor = 'rgba(253,186,45,0.4)';
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) hideSuccessOverlay(); }, { once: true });
+    }
+
+    function hideSuccessOverlay() {
+      const overlay = $('successOverlay');
+      if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+
+    /* ============================================================
+       ORDER SUMMARY
+       ============================================================ */
+    function updateSummary() {
+      const p = PLANS[state.plan];
+      const basePrice = state.isYearly ? p.yearly_total : p.monthly;
+      
+      if (state.couponCode) {
+        const coupon = COUPONS[state.couponCode];
+        if (coupon) {
+          state.couponDiscount = coupon.type === 'percent'
+            ? Math.round(basePrice * coupon.value / 100)
+            : Math.min(coupon.value, basePrice);
+          setText('couponDiscountText', `You saved ₹${state.couponDiscount} (${coupon.label})`);
         }
       }
 
-      /* ============================================================
-         BILLING TOGGLES (in-card + optional standalone, kept in sync)
-         ============================================================ */
-      function initBillingToggles() {
-        const toggles = [
-          { btn: $('planBillingToggle'), mon: $('planLblMonthly'), year: $('planLblYearly'), activeClass: 'on' },
-          { btn: $('billingToggle'), mon: $('lblMonthly'), year: $('lblYearly'), activeClass: 'active-toggle' },
-        ].filter((t) => t.btn);
+      const subtotal = Math.max(0, basePrice - state.couponDiscount);
+      const gst = parseFloat((subtotal * GST_RATE).toFixed(2));
+      const total = parseFloat((subtotal + gst).toFixed(2));
 
-        function applyState() {
-          toggles.forEach(({ btn, mon, year, activeClass }) => {
-            btn.classList.toggle(activeClass, state.isYearly);
-            btn.setAttribute('aria-checked', String(state.isYearly));
-            if (mon) mon.classList.toggle('active', !state.isYearly);
-            if (year) year.classList.toggle('active', state.isYearly);
-          });
-          const pill = $('planYearlySavePill');
-          if (pill) pill.style.display = state.isYearly ? 'inline-flex' : 'none';
-          const saveTag = $('billingSaveTag');
-          if (saveTag) saveTag.classList.toggle('show', state.isYearly);
-        }
+      setText('summaryPlanName', `${p.name} Plan`);
+      setText('summaryCycleBadge', state.isYearly ? 'Yearly' : 'Monthly');
+      setText('summaryPlanPrice', `₹${basePrice}.00`);
+      setText('summaryGST', `₹${gst}`);
 
-        function setYearly(val) {
-          if (state.isYearly === val) return;
-          state.isYearly = val;
-          applyState();
-          renderAll();
-          // Keep hidden billing_cycle input in sync
-          const bcHidden = $('hiddenBillingCycle');
-          if (bcHidden) bcHidden.value = state.isYearly ? 'Yearly' : 'Monthly';
-        }
-
-        toggles.forEach(({ btn, mon, year }) => {
-          btn.addEventListener('click', () => setYearly(!state.isYearly));
-          if (mon) mon.addEventListener('click', () => setYearly(false));
-          if (year) year.addEventListener('click', () => setYearly(true));
-        });
-
-        applyState();
-      }
-
-      function updateBillingNote() {
-        const p = PLANS[state.plan];
-        const amount = state.isYearly ? p.yearly_per : p.monthly;
-
-        const span = $('billingTotalSpan');
-        const note = $('billingNote');
-        if (span) span.textContent = amount;
-        if (note) {
-          note.textContent = state.isYearly
-            ? `Billed ₹${p.yearly_total} per year (₹${p.yearly_per}/mo). Cancel anytime.`
-            : `Billed ₹${amount} per month. Cancel anytime.`;
-        }
-
-        const planBillingNote = $('planBillingNote');
-        if (planBillingNote) {
-          planBillingNote.innerHTML = state.isYearly
-            ? `Billed &#8377;${p.yearly_total}/year &nbsp;·&nbsp; <strong style="color:var(--success)">Save &#8377;${(p.monthly - p.yearly_per) * 12}</strong> vs monthly &nbsp;·&nbsp; Cancel anytime`
-            : `Billed &#8377;<span id="planBillingAmount">${amount}</span>/month &nbsp;·&nbsp; Cancel anytime`;
+      const discLine = $('summaryDiscountLine');
+      if (discLine) {
+        if (state.couponDiscount > 0) {
+          show(discLine);
+          setText('summaryDiscountValue', `-₹${state.couponDiscount}`);
+        } else {
+          hide(discLine);
         }
       }
 
-      /* ============================================================
-         PAYMENT METHODS
-         ============================================================ */
-      function initPaymentMethods() {
-        const cards = $$('.payment-method-card');
-        cards.forEach((card) => {
-          card.addEventListener('click', () => {
-            cards.forEach((c) => { c.classList.remove('active'); c.setAttribute('aria-checked', 'false'); });
-            card.classList.add('active');
-            card.setAttribute('aria-checked', 'true');
-            state.paymentMethod = card.dataset.method;
-            // Keep hidden input in sync with selected payment method
-            const pmHidden = $('hiddenPaymentMethod');
-            if (pmHidden) pmHidden.value = state.paymentMethod;
-
-            card.style.transform = 'scale(0.96)';
-            setTimeout(() => { card.style.transform = ''; }, 150);
-          });
-        });
-      }
-
-      /* ============================================================
-         COUPON
-         ============================================================ */
-      function initCoupon() {
-        const applyBtn = $('couponApplyBtn');
-        const input = $('couponInput');
-        const removeBtn = $('couponRemoveBtn');
-        if (!applyBtn || !input) return;
-
-        applyBtn.addEventListener('click', applyCoupon);
-        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); } });
-        if (removeBtn) removeBtn.addEventListener('click', removeCoupon);
-      }
-
-      function applyCoupon() {
-        const input = $('couponInput');
-        const code = (input.value || '').trim().toUpperCase();
-        const successEl = $('couponSuccess');
-        const errorEl = $('couponError');
-        const errorText = $('couponErrorText');
-
-        hide(successEl);
-        hide(errorEl);
-
-        if (!code) {
-          show(errorEl);
-          if (errorText) errorText.textContent = 'Please enter a coupon code.';
-          return;
+      const yearlySavLine = $('summaryYearlySavingsLine');
+      if (yearlySavLine) {
+        if (state.isYearly) {
+          show(yearlySavLine);
+          setText('summaryYearlySavings', `-₹${(p.monthly - p.yearly_per) * 12}`);
+        } else {
+          hide(yearlySavLine);
         }
-
-        const coupon = COUPONS[code];
-        if (!coupon) {
-          show(errorEl);
-          if (errorText) errorText.textContent = `"${code}" is not a valid coupon code.`;
-          shake($('couponInputWrap'));
-          return;
-        }
-
-        const p = PLANS[state.plan];
-        const price = state.isYearly ? p.yearly_per : p.monthly;
-        const discount = coupon.type === 'percent'
-          ? Math.round(price * coupon.value / 100)
-          : Math.min(coupon.value, price);
-
-        state.couponCode = code;
-        state.couponDiscount = discount;
-
-        setText('couponDiscountText', `You saved ₹${discount} (${coupon.label})`);
-        show(successEl);
-
-        input.disabled = true;
-        const applyBtn = $('couponApplyBtn');
-        if (applyBtn) { applyBtn.disabled = true; applyBtn.style.opacity = '0.5'; }
-        // Keep hidden coupon input in sync
-        const ccHidden = $('hiddenCouponCode');
-        if (ccHidden) ccHidden.value = code;
-
-        updateSummary();
       }
 
-      function removeCoupon() {
-        state.couponCode = null;
-        state.couponDiscount = 0;
-        hide($('couponSuccess'));
+      [$('summaryTotal'), $('payBtnDesktopAmount'), $('payBtnMobileAmount')].forEach((el) => {
+        if (!el) return;
+        el.classList.remove('price-change');
+        void el.offsetWidth;
+        el.classList.add('price-change');
+        el.textContent = `₹${total}`;
+      });
 
-        const input = $('couponInput');
-        const applyBtn = $('couponApplyBtn');
-        if (input) { input.value = ''; input.disabled = false; }
-        if (applyBtn) { applyBtn.disabled = false; applyBtn.style.opacity = ''; }
-        // Clear coupon hidden input
-        const ccHidden = $('hiddenCouponCode');
-        if (ccHidden) ccHidden.value = '';
+      // Keep hidden total input in sync whenever summary updates
+      const totalHidden = $('hiddenTotal');
+      if (totalHidden) totalHidden.value = total;
 
-        updateSummary();
-      }
+      updateBillingNote();
+    }
 
+    /* ============================================================
+       RIPPLE BUTTONS
+       ============================================================ */
+    function initRippleButtons() {
+      $$('.ripple-btn').forEach((btn) => btn.addEventListener('click', (e) => triggerRipple(btn, e)));
+    }
 
-      /* ============================================================
-         PAY BUTTONS — update hidden inputs then allow real form submit
-         ============================================================ */
-      function initPayButtons() {
-        [$('payBtnDesktop'), $('payBtnMobile')].forEach((btn) => {
-          if (btn) btn.addEventListener('click', handlePayClick);
-        });
-      }
-
-      function handlePayClick(e) {
-        // Populate all hidden inputs with current JS state before form submits
-        const planHidden = $('hiddenPlan');
-        if (planHidden) planHidden.value = BACKEND_PLAN;
-
-        const bcHidden = $('hiddenBillingCycle');
-        if (bcHidden) bcHidden.value = state.isYearly ? 'yearly' : 'monthly';
-
-        const pmHidden = $('hiddenPaymentMethod');
-        if (pmHidden) pmHidden.value = state.paymentMethod;
-
-        const totalHidden = $('hiddenTotal');
-        if (totalHidden) {
-          // Read the computed total from the summary display
-          const totalEl = $('summaryTotal');
-          if (totalEl) totalHidden.value = totalEl.textContent.replace('₹', '').trim();
-        }
-
-        const ccHidden = $('hiddenCouponCode');
-        if (ccHidden) ccHidden.value = state.couponCode || '';
-
-        // Trigger ripple animation (form will still submit normally)
-        triggerRipple(e.currentTarget, e);
-        // Do NOT call e.preventDefault() — let the form submit to Django
-      }
-
-      /* ============================================================
-         SUCCESS OVERLAY — kept for potential future use but no longer
-         triggered automatically; Django handles the success redirect.
-         ============================================================ */
-      function showSuccessOverlay() {
-        const overlay = $('successOverlay');
-        if (!overlay) return;
-
-        const badge = $('successPlanBadge');
-        if (badge) {
-          const p = PLANS[state.plan];
-          badge.textContent = `${p.crown} ${p.name} Plan — Active`;
-        }
-
-        overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-
-        ['.success-ring', '.success-check'].forEach((sel) => {
-          const el = overlay.querySelector(sel);
-          if (!el) return;
-          el.style.animation = 'none';
-          void el.offsetWidth;
-          el.style.animation = sel === '.success-ring' ? 'drawRing 0.8s ease forwards' : 'drawCheck 0.5s 0.6s ease forwards';
-        });
-
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) hideSuccessOverlay(); }, { once: true });
-      }
-
-      function hideSuccessOverlay() {
-        const overlay = $('successOverlay');
-        if (overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
-      }
-
-      /* ============================================================
-         ORDER SUMMARY
-         ============================================================ */
-      function updateSummary() {
-        const p = PLANS[state.plan];
-        const basePrice = state.isYearly ? p.yearly_total : p.monthly;
-        const subtotal = Math.max(0, basePrice - state.couponDiscount);
-        const gst = parseFloat((subtotal * GST_RATE).toFixed(2));
-        const total = parseFloat((subtotal + gst).toFixed(2));
-
-        setText('summaryPlanName', `${p.name} Plan`);
-        setText('summaryCycleBadge', state.isYearly ? 'Yearly' : 'Monthly');
-        setText('summaryPlanPrice', `₹${basePrice}.00`);
-        setText('summaryGST', `₹${gst}`);
-
-        const discLine = $('summaryDiscountLine');
-        if (discLine) {
-          if (state.couponDiscount > 0) {
-            show(discLine);
-            setText('summaryDiscountValue', `-₹${state.couponDiscount}`);
-          } else {
-            hide(discLine);
-          }
-        }
-
-        const yearlySavLine = $('summaryYearlySavingsLine');
-        if (yearlySavLine) {
-          if (state.isYearly) {
-            show(yearlySavLine);
-            setText('summaryYearlySavings', `-₹${(p.monthly - p.yearly_per) * 12}`);
-          } else {
-            hide(yearlySavLine);
-          }
-        }
-
-        [$('summaryTotal'), $('payBtnDesktopAmount'), $('payBtnMobileAmount')].forEach((el) => {
-          if (!el) return;
-          el.classList.remove('price-change');
-          void el.offsetWidth;
-          el.classList.add('price-change');
-          el.textContent = `₹${total}`;
-        });
-
-        // Keep hidden total input in sync whenever summary updates
-        const totalHidden = $('hiddenTotal');
-        if (totalHidden) totalHidden.value = total;
-
-        updateBillingNote();
-      }
-
-      /* ============================================================
-         RIPPLE BUTTONS
-         ============================================================ */
-      function initRippleButtons() {
-        $$('.ripple-btn').forEach((btn) => btn.addEventListener('click', (e) => triggerRipple(btn, e)));
-      }
-
-      /* ============================================================
-         STICKY HEADER SHADOW ON SCROLL
-         ============================================================ */
-      function initStickyHeader() {
-        const header = $('checkoutHeader');
-        if (!header) return;
-        window.addEventListener('scroll', () => {
-          header.style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,0.5)' : '';
-        }, { passive: true });
-      }
-    })();
+    /* ============================================================
+       STICKY HEADER SHADOW ON SCROLL
+       ============================================================ */
+    function initStickyHeader() {
+      const header = $('checkoutHeader');
+      if (!header) return;
+      window.addEventListener('scroll', () => {
+        header.style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,0.5)' : '';
+      }, { passive: true });
+    }
+    }) ();
 
   </script>
 </body>
