@@ -53,12 +53,18 @@ def buyer_dashboard(request):
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
     premium_buyr = chek_premium(buyr)
-    premium_type = premium_buyer.objects.get(user=buyr)    
-    if premium_buyr.premium_type == "Free":
+    premium_type = premium_buyer.objects.get(user=buyr) 
+    print('================>',premium_type)   
+    if premium_type.premium_type == "Free":
         buyr.is_premiume = False
         buyr.save()
         cart.cart_limit = 1000
         cart.save()
+        print('================>',premium_type.premium_type)
+    else:
+        buyr.is_premiume = True
+        print('================>',premium_type.premium_type)
+        buyr.save()
     total_value = 0
     for order in orders:
         total_value+= order.total_amount
@@ -469,6 +475,8 @@ def premium_checkout(request):
 
             cart.cart_limit = 5000
             cart.save()
+            buyr.is_premiume = True
+            buyr.save()
         return redirect('buyer_dashboard')
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium, "coupons": json.dumps(list(coupon_data))})
 

@@ -43,7 +43,7 @@
         <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
             class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
         <div class="sidebar-section-label">Procurement</div>
-         {% if buyr.is_premiume %}
+        {% if buyr.is_premiume %}
         <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
           <span class="sidebar-item-icon">📋</span>
           <span class="sidebar-item-text">Bulk Orders</span>
@@ -120,7 +120,11 @@
               </div>
             </div>
             <button class="btn btn-primary">✏️ Edit Profile</button>
+            {% if buyr.is_premiume %}
+            <a href="{% url 'current_plan' %}" class="btn btn-primary">current plan</a>
+            {% else %}
             <a href="{% url 'buyer_premium' %}" class="btn btn-primary">Upgrade</a>
+            {% endif %}
           </div>
         </div>
 
