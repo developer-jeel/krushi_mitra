@@ -54,16 +54,13 @@ def buyer_dashboard(request):
     cart = Cart.objects.get(user = uid)
     premium_buyr = chek_premium(buyr)
     premium_type = premium_buyer.objects.get(user=buyr) 
-    print('================>',premium_type)   
     if premium_type.premium_type == "Free":
         buyr.is_premiume = False
         buyr.save()
         cart.cart_limit = 1000
         cart.save()
-        print('================>',premium_type.premium_type)
     else:
         buyr.is_premiume = True
-        print('================>',premium_type.premium_type)
         buyr.save()
     total_value = 0
     for order in orders:
