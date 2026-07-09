@@ -53,7 +53,7 @@ def buyer_dashboard(request):
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
     premium_buyr = chek_premium(buyr)
-    premium_type = premium_buyer.objects.get(user=buyr) 
+    premium_type = premium_buyer.objects.get(user=buyr)
     if premium_type.premium_type == "Free":
         buyr.is_premiume = False
         buyr.save()
@@ -69,7 +69,8 @@ def buyer_dashboard(request):
 
     all_crops = crop.objects.filter(is_approved = True)
 
-    context = {'buyr':buyr,'premium_type':premium_type,'all_crops' : all_crops,'items':items,'total_value':total_value,'formatted_total':formatted_total,'item_count':item_count,'pending_count':pending_count,'complated':complated}
+    context = {'buyr':buyr,'premium_type':premium_type,'all_crops' : all_crops,'items':items,'total_value':total_value,
+    'formatted_total':formatted_total,'item_count':item_count,'pending_count':pending_count,'complated':complated}
     return render(request, "buyer/dashboard.html",context)
 
 @check_login(['Buyer'])
@@ -474,6 +475,11 @@ def premium_checkout(request):
             cart.save()
             buyr.is_premiume = True
             buyr.save()
+        notification = notifications.objects.create(
+        user = buyr,
+        notification_type = "Premium",
+        message = f"You buy {plan} plan at ₹{total} in {billing_cycle} term.")
+        notification.save()
         return redirect('buyer_dashboard')
     return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium, "coupons": json.dumps(list(coupon_data))})
 
@@ -483,13 +489,15 @@ def current_plan(request):
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
     cart = Cart.objects.get(user=uid)
-    cart_used = cart.total_kg or 0
-    cart_limit = cart.cart_limit or 1
+    cart_used = cart.total_kg
+    cart_limit = cart.cart_limit
     cart_usage_pct = min(int((cart_used / cart_limit) * 100), 100)
+    last_buy = premium_history.objects.filter(user=buyr).first()
     return render(request, "buyer/current_plan.html", {
         'buyr': buyr,
         'premium_type': premium_type,
         'cart': cart,
         'cart_used': cart_used,
         'cart_usage_pct': cart_usage_pct,
+        'last_buy':last_buy
     })

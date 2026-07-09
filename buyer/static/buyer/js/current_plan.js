@@ -9,7 +9,30 @@ document.addEventListener('DOMContentLoaded', function () {
   var fill = document.querySelector('.cp-ring-fill');
   var pctEl = document.querySelector('.cp-ring-pct');
   if (fill && pctEl) {
-    var target = parseInt(fill.getAttribute('data-percent') || '0', 10);
+    var startStr = fill.getAttribute('data-start');
+    var endStr = fill.getAttribute('data-end');
+    var target = 0;
+
+    if (startStr && endStr) {
+      var start = new Date(startStr);
+      var end = new Date(endStr);
+      var now = new Date();
+      if (now >= end) {
+        target = 100;
+      } else if (now <= start) {
+        target = 0;
+      } else {
+        target = Math.floor(((now - start) / (end - start)) * 100);
+      }
+    } else {
+      target = parseInt(fill.getAttribute('data-percent') || '0', 10);
+    }
+
+    var captionEl = document.querySelector('.cp-ring-caption-dynamic');
+    if (captionEl) {
+      captionEl.textContent = target + '% of billing period completed';
+    }
+
     var circumference = 377; // 2 * PI * 60
     var offset = circumference - (target / 100) * circumference;
     setTimeout(function () { fill.style.strokeDashoffset = offset; }, 350);

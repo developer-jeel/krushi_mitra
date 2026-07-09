@@ -295,6 +295,7 @@ class notifications(models.Model):
         ("Bulk","Bulk"),
         ("Export","Export"),
         ("Kyc","Kyc"),
+        ("Premium","Premium"),
                             )
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='buyer')
     notification_type = models.CharField(max_length=20,choices=NOTIFICATIONS_TYPES)
