@@ -320,6 +320,8 @@ def buyer_export_inquiry(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
+    print("=====================================================",request.method)
+    print("=====================================================",request.POST)
     
     if request.method == 'POST':
         country = request.POST.get('country')
