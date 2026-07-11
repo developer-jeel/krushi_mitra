@@ -13,9 +13,28 @@ from django.core.serializers.json import DjangoJSONEncoder
 # Create your views here.
 
 
+
 @check_login(['Buyer'])
 def buyer_home(request):
     return redirect("buyer_dashboard")
+
+def premium_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        try:
+            buyer = Buyer.objects.get(user=request.uid)
+        except Buyer.DoesNotExist:
+            messages.error(request, "Only buyers can access this page.")
+            return redirect("login")   # ya home page
+
+        premium = premium_buyer.objects.filter(user=buyer).first()
+
+        if not premium or premium.premium_type == "Free" or premium.is_expired:
+            messages.error(request, "This feature is available for Premium users only.")
+            return redirect("buyer_premium")
+
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
 
 def format_indian_number(value):
     value = float(value)
@@ -281,6 +300,7 @@ def add_wishlist(request,pk):
 
 
 @check_login(['Buyer'])
+@premium_required
 def buyer_bulk_order(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
@@ -316,6 +336,7 @@ def buyer_bulk_order(request):
     return render(request, "buyer/bulk-order.html", {'premium_type': premium_type, 'buyr': buyr, 'inquiries': inquiries})
 
 @check_login(['Buyer'])
+@premium_required
 def buyer_export_inquiry(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)

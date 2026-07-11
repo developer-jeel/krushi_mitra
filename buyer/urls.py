@@ -47,6 +47,7 @@ urlpatterns = [
     path('bank-details/', views.buyer_bank_details, name='buyer_bank_details'),
     path('settings/', views.buyer_settings, name='buyer_settings'),
     path('kyc', views.kyc, name='kyc'),
+    
     path('premium/', views.buyer_premium, name='buyer_premium'),
     path('premium_checkout/', views.premium_checkout, name='premium_checkout'),
     path('current_plan/', views.current_plan, name='current_plan'),
