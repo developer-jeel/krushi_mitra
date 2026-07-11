@@ -107,16 +107,20 @@
           <div class="profile-cover"></div>
           <div class="profile-info">
             <div class="profile-photo">
-              <div class="profile-avatar-lg">RM</div>
+              {% if verification.photo %}
+              <img src="{{ verification.photo.url }}" alt="Profile Photo" class="profile-avatar-lg" style="object-fit: cover;">
+              {% else %}
+              <div class="profile-avatar-lg">{{ uid.name|slice:":2"|upper }}</div>
+              {% endif %}
               <button class="profile-photo-edit">📷</button>
             </div>
             <div class="profile-details">
-              <h2 class="profile-name-lg">Rajesh Mehta</h2>
-              <p class="profile-bio">Wholesale Trader | 12+ years in agri-commodity trading</p>
+              <h2 class="profile-name-lg">{{uid.name}}</h2>
+              <p class="profile-bio">{{ buyr.business_type|default:"Buyer" }}</p>
               <div class="profile-meta">
-                <span>📍 Pune, Maharashtra</span>
-                <span>📧 rajesh.mehta@example.com</span>
-                <span>📞 +91 98765 43210</span>
+                <span>📍 {{ uid.city|default:"City not provided" }}, {{ buyr.state|default:"" }}</span>
+                <span>📧 {{ uid.email|default:"Email not provided" }}</span>
+                <span>📞 +91 {{ uid.contact|default:"Contact not provided" }}</span>
               </div>
             </div>
             <button class="btn btn-primary">✏️ Edit Profile</button>
@@ -135,12 +139,12 @@
             <div class="card">
               <h3 class="card-title">Personal Information</h3>
               <div class="profile-grid">
-                <div class="profile-field"><label>Full Name</label><span>Rajesh Mehta</span></div>
-                <div class="profile-field"><label>Email</label><span>rajesh.mehta@example.com</span></div>
-                <div class="profile-field"><label>Phone</label><span>+91 98765 43210</span></div>
-                <div class="profile-field"><label>Date of Birth</label><span>15 March 1985</span></div>
-                <div class="profile-field"><label>Gender</label><span>Male</span></div>
-                <div class="profile-field"><label>Language</label><span>Hindi, English, Marathi</span></div>
+                <div class="profile-field"><label>Full Name</label><span>{{uid.name}}</span></div>
+                <div class="profile-field"><label>Email</label><span>{{uid.email|default:"Not provided"}}</span></div>
+                <div class="profile-field"><label>Phone</label><span>{{uid.contact|default:"Not provided"}}</span></div>
+                <div class="profile-field"><label>City</label><span>{{uid.city|default:"Not provided"}}</span></div>
+                <div class="profile-field"><label>State</label><span>{{buyr.state|default:"Not provided"}}</span></div>
+                <div class="profile-field"><label>Pincode</label><span>{{buyr.pincode|default:"Not provided"}}</span></div>
               </div>
             </div>
 
@@ -148,20 +152,18 @@
             <div class="card">
               <h3 class="card-title">Business Information</h3>
               <div class="profile-grid">
-                <div class="profile-field"><label>Business Name</label><span>Mehta Agro Traders</span></div>
-                <div class="profile-field"><label>Business Type</label><span>Wholesale Trader</span></div>
-                <div class="profile-field"><label>GST Number</label><span>27AABCM1234C1Z5</span></div>
-                <div class="profile-field"><label>PAN Number</label><span>ABCDE1234F</span></div>
-                <div class="profile-field"><label>Year Established</label><span>2012</span></div>
-                <div class="profile-field"><label>Annual Turnover</label><span>₹2.5 - 5 Crore</span></div>
+                <div class="profile-field"><label>Business Type</label><span>{{ buyr.business_type|default:"Not provided" }}</span></div>
+                <div class="profile-field"><label>GST Number</label><span>{{ buyr.gst_no|default:"Not provided" }}</span></div>
+                <div class="profile-field"><label>PAN Number</label><span>{{ bank_info.pan_no|default:"Not provided" }}</span></div>
+                <div class="profile-field"><label>MSME Number</label><span>{{ verification.msme_no|default:"Not provided" }}</span></div>
+                <div class="profile-field"><label>Trade License</label><span>{{ verification.trade_license|default:"Not provided" }}</span></div>
               </div>
             </div>
 
             <!-- Address -->
             <div class="card">
               <h3 class="card-title">Address</h3>
-              <p style="font-size:0.875rem;color:var(--text-secondary);">42, Trade Tower, Market Road, Shivajinagar,
-                Pune - 411001, Maharashtra</p>
+              <p style="font-size:0.875rem;color:var(--text-secondary);">{{ buyr.address|default:"Address not provided yet." }}</p>
             </div>
           </div>
 
@@ -173,17 +175,29 @@
                 <div class="doc-item">
                   <span class="doc-icon">🪪</span>
                   <span class="doc-name">Aadhaar Card</span>
-                  <span class="badge badge-approved">Verified</span>
+                  {% if verification.adharcard %}
+                  <span class="badge badge-approved">Uploaded</span>
+                  {% else %}
+                  <span class="badge badge-pending">Pending</span>
+                  {% endif %}
                 </div>
                 <div class="doc-item">
                   <span class="doc-icon">📋</span>
                   <span class="doc-name">GST Certificate</span>
-                  <span class="badge badge-approved">Verified</span>
+                  {% if buyr.gst_certificate %}
+                  <span class="badge badge-approved">Uploaded</span>
+                  {% else %}
+                  <span class="badge badge-pending">Pending</span>
+                  {% endif %}
                 </div>
                 <div class="doc-item">
                   <span class="doc-icon">🏢</span>
                   <span class="doc-name">Trade License</span>
+                  {% if verification.trade_license_doc %}
+                  <span class="badge badge-approved">Uploaded</span>
+                  {% else %}
                   <span class="badge badge-pending">Pending</span>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -192,18 +206,14 @@
             <div class="card">
               <h3 class="card-title">Profile Completion</h3>
               <div class="flex items-center justify-between mb-2">
-                <span class="body-small text-muted">75% Complete</span>
-                <span class="body-small font-bold text-green">4 of 5 steps</span>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-bar-fill" style="width:75%"></div>
+                <span class="body-small text-muted">Profile Status</span>
               </div>
               <div class="profile-steps mt-4">
-                <div class="step-item done">✓ Personal Info</div>
-                <div class="step-item done">✓ Business Info</div>
-                <div class="step-item done">✓ Contact Details</div>
-                <div class="step-item done">✓ KYC Documents</div>
-                <div class="step-item pending">⏳ Trade License</div>
+                <div class="step-item {% if uid.name %}done{% else %}pending{% endif %}">{% if uid.name %}✓{% else %}⏳{% endif %} Personal Info</div>
+                <div class="step-item {% if buyr.business_type %}done{% else %}pending{% endif %}">{% if buyr.business_type %}✓{% else %}⏳{% endif %} Business Info</div>
+                <div class="step-item {% if buyr.address %}done{% else %}pending{% endif %}">{% if buyr.address %}✓{% else %}⏳{% endif %} Contact Details</div>
+                <div class="step-item {% if verification.adharcard %}done{% else %}pending{% endif %}">{% if verification.adharcard %}✓{% else %}⏳{% endif %} KYC Documents</div>
+                <div class="step-item {% if verification.trade_license_doc %}done{% else %}pending{% endif %}">{% if verification.trade_license_doc %}✓{% else %}⏳{% endif %} Trade License</div>
               </div>
             </div>
           </div>

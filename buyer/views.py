@@ -316,7 +316,9 @@ def buyer_profile(request):
     uid = getattr(request, 'uid', None)
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    context = { 'uid' : uid,'premium_type':premium_type,'buyr':buyr } if uid else {}
+    bank_info = bank_details.objects.filter(user=buyr).first()
+    verification = verification_details.objects.filter(user=buyr).first()
+    context = { 'uid' : uid,'premium_type':premium_type,'buyr':buyr, 'bank_info': bank_info, 'verification': verification } if uid else {}
     return render(request, "buyer/profile.html", context)
 
 @check_login(['Buyer'])
