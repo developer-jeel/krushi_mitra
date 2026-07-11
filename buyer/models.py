@@ -314,3 +314,42 @@ class saved(models.Model):
 
     def __str__(self):
         return f"{self.user.user.name} added {self.crop.cropname} in wishlist"
+
+class exportinquiry(models.Model):
+    user = models.ForeignKey(
+        Buyer,
+        on_delete=models.CASCADE,
+        related_name='export_inquiries'
+    )
+
+    country = models.CharField(max_length=100)
+    crop_name = models.CharField(max_length=200)
+    required_quantity = models.PositiveIntegerField(help_text="Quantity in KG")
+    packaging_type = models.CharField(max_length=100)
+    quality_standard = models.CharField(max_length=100)
+    shipping_port = models.CharField(max_length=150)
+    expected_price = models.DecimalField(max_digits=10, decimal_places=2)
+    expected_delivery = models.DateField()
+    additional_notes = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.user.username} - {self.crop_name}"
+
+class BulkProcurementRequest(models.Model):
+    user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='bulk_procurement_requests')
+    crop_name = models.CharField(max_length=200)
+    category = models.CharField(max_length=100)
+    required_quantity = models.PositiveIntegerField()
+    unit = models.CharField(max_length=20, default='kg')
+    target_price = models.DecimalField(max_digits=10, decimal_places=2)
+    required_date = models.DateField()
+    delivery_state = models.CharField(max_length=100)
+    delivery_district = models.CharField(max_length=100)
+    additional_notes = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=20,default='Draft')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.crop_name} - {self.user.user.username}"

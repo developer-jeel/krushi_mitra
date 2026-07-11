@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'buyer/css/verification.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}?v=1.1">
+  <link rel="stylesheet" href="{% static 'buyer/css/verification.css' %}?v=1.1">
 </head>
 
 <body>
@@ -105,43 +105,95 @@
         <div class="verification-progress card page-reveal">
           <div class="flex items-center justify-between mb-2">
             <h3 class="card-title">Verification Progress</h3>
-            <span class="badge badge-pending">70% Complete</span>
-          </div>
-          <div class="progress-bar" style="height:12px;">
-            <div class="progress-bar-fill" style="width:70%"></div>
           </div>
           <p class="body-small text-muted mt-2">Complete all verifications to unlock full platform features</p>
+          {% if messages %}
+          <div style="margin-top: 1rem; padding: 1rem; background: #e6f4ea; color: #1e8e3e; border-radius: 4px;">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
 
         <div class="verification-grid page-reveal">
-          <div class="v-card card approved">
-            <div class="v-card-icon">🪪</div>
-            <h3 class="v-card-title">Aadhaar Verification</h3>
-            <p class="v-card-text">Identity verification completed</p>
-            <span class="badge badge-approved">✓ Verified</span>
-            <div class="v-card-footer"><span class="v-date">Verified on 10 Jan 2024</span></div>
-          </div>
-          <div class="v-card card approved">
-            <div class="v-card-icon">📋</div>
-            <h3 class="v-card-title">GST Verification</h3>
-            <p class="v-card-text">GSTIN verified successfully</p>
-            <span class="badge badge-approved">✓ Verified</span>
-            <div class="v-card-footer"><span class="v-date">Verified on 12 Jan 2024</span></div>
-          </div>
-          <div class="v-card card pending">
-            <div class="v-card-icon">🏢</div>
-            <h3 class="v-card-title">Trade License</h3>
-            <p class="v-card-text">Under review by our team</p>
-            <span class="badge badge-pending">⏳ Pending</span>
-            <div class="v-card-footer"><button class="btn btn-sm btn-outline">Upload Document</button></div>
-          </div>
-          <div class="v-card card review">
-            <div class="v-card-icon">🏭</div>
-            <h3 class="v-card-title">MSME Registration</h3>
-            <p class="v-card-text">Application under review</p>
-            <span class="badge badge-under-review">📋 Under Review</span>
-            <div class="v-card-footer"><span class="v-date">Submitted on 15 Jan 2024</span></div>
-          </div>
+          <form method="POST" action="{% url 'buyer_verification' %}" enctype="multipart/form-data" style="width: 100%;">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+              
+              <!-- Aadhaar Section -->
+              <div class="v-card card {% if verification.adharcard %}approved{% else %}pending{% endif %}">
+                <div class="v-card-icon">🪪</div>
+                <h3 class="v-card-title">Aadhaar Verification</h3>
+                <div class="form-group">
+                  <input type="text" name="adharno" class="form-control" placeholder="Aadhaar Number" value="{{ verification.adharno|default_if_none:'' }}">
+                </div>
+                {% if verification.adharcard %}
+                <span class="badge badge-approved">✓ Uploaded</span>
+                {% endif %}
+                <div class="v-card-footer">
+                  <input type="file" name="adharcard" accept="image/*,.pdf" class="form-control-file">
+                </div>
+              </div>
+
+              <!-- GST Section -->
+              <div class="v-card card {% if buyr.gst_certificate %}approved{% else %}pending{% endif %}">
+                <div class="v-card-icon">📋</div>
+                <h3 class="v-card-title">GST Verification</h3>
+                <div class="form-group">
+                  <input type="text" name="gst_no" class="form-control" placeholder="GST Number" value="{{ buyr.gst_no|default_if_none:'' }}">
+                </div>
+                {% if buyr.gst_certificate %}
+                <span class="badge badge-approved">✓ Uploaded</span>
+                {% endif %}
+                <div class="v-card-footer">
+                  <input type="file" name="gst_certificate" accept="image/*,.pdf" class="form-control-file">
+                </div>
+              </div>
+
+              <!-- Trade License Section -->
+              <div class="v-card card {% if verification.trade_license_doc %}approved{% else %}pending{% endif %}">
+                <div class="v-card-icon">🏢</div>
+                <h3 class="v-card-title">Trade License</h3>
+                <div class="form-group">
+                  <input type="text" name="trade_license" class="form-control" placeholder="Trade License No." value="{{ verification.trade_license|default_if_none:'' }}">
+                </div>
+                {% if verification.trade_license_doc %}
+                <span class="badge badge-approved">✓ Uploaded</span>
+                {% endif %}
+                <div class="v-card-footer">
+                  <input type="file" name="trade_license_doc" accept="image/*,.pdf" class="form-control-file">
+                </div>
+              </div>
+
+              <!-- MSME Section -->
+              <div class="v-card card {% if verification.msme_no %}approved{% else %}pending{% endif %}">
+                <div class="v-card-icon">🏭</div>
+                <h3 class="v-card-title">MSME Registration</h3>
+                <div class="form-group">
+                  <input type="text" name="msme_no" class="form-control" placeholder="MSME Number" value="{{ verification.msme_no|default_if_none:'' }}">
+                </div>
+                {% if verification.msme_no %}
+                <span class="badge badge-approved">✓ Provided</span>
+                {% endif %}
+                <div class="v-card-footer"></div>
+              </div>
+
+              <!-- Photo Section -->
+              <div class="v-card card {% if verification.photo %}approved{% else %}pending{% endif %}">
+                <div class="v-card-icon">📷</div>
+                <h3 class="v-card-title">Profile Photo</h3>
+                {% if verification.photo %}
+                <span class="badge badge-approved">✓ Uploaded</span>
+                {% endif %}
+                <div class="v-card-footer">
+                  <input type="file" name="photo" accept="image/*" class="form-control-file">
+                </div>
+              </div>
+
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Save Verification Details</button>
+          </form>
         </div>
 
         <div class="verification-timeline card page-reveal">

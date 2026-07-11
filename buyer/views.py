@@ -326,14 +326,61 @@ def buyer_verification(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    return render(request, "buyer/verification.html",{'premium_type':premium_type,'buyr':buyr})
+    verification = verification_details.objects.filter(user=buyr).first()
+
+    if request.method == 'POST':
+        if not verification:
+            verification = verification_details(user=buyr)
+        
+        buyr.gst_no = request.POST.get('gst_no', buyr.gst_no)
+        if 'gst_certificate' in request.FILES:
+            buyr.gst_certificate = request.FILES['gst_certificate']
+        buyr.save()
+
+        verification.msme_no = request.POST.get('msme_no', verification.msme_no)
+        verification.trade_license = request.POST.get('trade_license', verification.trade_license)
+        verification.adharno = request.POST.get('adharno', verification.adharno)
+        
+        if 'photo' in request.FILES:
+            verification.photo = request.FILES['photo']
+        if 'trade_license_doc' in request.FILES:
+            verification.trade_license_doc = request.FILES['trade_license_doc']
+        if 'adharcard' in request.FILES:
+            verification.adharcard = request.FILES['adharcard']
+            
+        verification.save()
+        messages.success(request, 'Verification details updated successfully!')
+        return redirect('buyer_verification')
+
+    return render(request, "buyer/verification.html",{'premium_type':premium_type,'buyr':buyr, 'verification': verification})
 
 @check_login(['Buyer'])
 def buyer_bank_details(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    return render(request, "buyer/bank-details.html",{'premium_type':premium_type,'buyr':buyr})
+    bank_info = bank_details.objects.filter(user=buyr).first()
+
+    if request.method == 'POST':
+        if not bank_info:
+            bank_info = bank_details(user=buyr)
+            
+        bank_info.pan_no = request.POST.get('pan_no', bank_info.pan_no)
+        bank_info.account_holder = request.POST.get('account_holder', bank_info.account_holder)
+        bank_info.account_no = request.POST.get('account_no', bank_info.account_no)
+        bank_info.ifsc_code = request.POST.get('ifsc_code', bank_info.ifsc_code)
+        bank_info.bank_name = request.POST.get('bank_name', bank_info.bank_name)
+
+        if 'pancard' in request.FILES:
+            bank_info.pancard = request.FILES['pancard']
+        if 'passbook' in request.FILES:
+            bank_info.passbook = request.FILES['passbook']
+            
+        bank_info.save()
+        messages.success(request, 'Bank details updated successfully!')
+        return redirect('buyer_bank_details')
+
+    return render(request, "buyer/bank-details.html",{'premium_type':premium_type,'buyr':buyr, 'bank_info': bank_info})
 
 @check_login(['Buyer'])
 def buyer_settings(request):

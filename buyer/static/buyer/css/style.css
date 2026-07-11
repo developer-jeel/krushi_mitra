@@ -1678,8 +1678,70 @@ h6 { font-size: 0.875rem; }
 .spinner-sm { width: 16px; height: 16px; border-width: 2px; }
 .spinner-lg { width: 40px; height: 40px; border-width: 4px; }
 
-/* ----- Page wrapper ----- */
 .page-wrapper {
   max-width: 1440px;
   margin: 0 auto;
 }
+
+/* ----- Forms ----- */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.form-control:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+input[type="file"].form-control-file {
+  padding: 8px 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+input[type="file"].form-control-file::file-selector-button {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: all var(--transition-fast);
+}
+
+input[type="file"].form-control-file::file-selector-button:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-300);
+  color: var(--primary-700);
+}
+

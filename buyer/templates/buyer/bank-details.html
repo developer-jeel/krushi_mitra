@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'buyer/css/bank-details.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}?v=1.1">
+  <link rel="stylesheet" href="{% static 'buyer/css/bank-details.css' %}?v=1.1">
 </head>
 
 <body>
@@ -136,65 +136,83 @@
       </header>
       <main class="main-content">
         <div class="bank-layout page-reveal">
-          <div class="bank-main">
-            <div class="card">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="card-title">🏦 Bank Account Information</h3>
-                <button class="btn btn-sm btn-outline"
-                  onclick="showToast('success','Edit Mode','You can now edit bank details.')">✏️ Edit</button>
+          {% if messages %}
+          <div style="margin-bottom: 1rem; padding: 1rem; background: #e6f4ea; color: #1e8e3e; border-radius: 4px;">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+          {% endif %}
+          <form method="POST" action="{% url 'buyer_bank_details' %}" enctype="multipart/form-data" style="width: 100%;">
+            {% csrf_token %}
+            <div class="bank-main">
+              <div class="card">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="card-title">🏦 Bank Account Information</h3>
+                </div>
+                <div class="bank-details-grid">
+                  <div class="bank-field"><label>Account Holder Name</label>
+                    <input type="text" name="account_holder" class="form-control" value="{{ bank_info.account_holder|default_if_none:'' }}">
+                  </div>
+                  <div class="bank-field"><label>Account Number</label>
+                    <input type="text" name="account_no" class="form-control" value="{{ bank_info.account_no|default_if_none:'' }}">
+                  </div>
+                  <div class="bank-field"><label>IFSC Code</label>
+                    <input type="text" name="ifsc_code" class="form-control" value="{{ bank_info.ifsc_code|default_if_none:'' }}">
+                  </div>
+                  <div class="bank-field"><label>Bank Name</label>
+                    <input type="text" name="bank_name" class="form-control" value="{{ bank_info.bank_name|default_if_none:'' }}">
+                  </div>
+                </div>
               </div>
-              <div class="bank-details-grid">
-                <div class="bank-field"><label>Account Holder Name</label><span>Rajesh Mehta</span></div>
-                <div class="bank-field"><label>Account Number</label><span>**** **** **** 1234</span></div>
-                <div class="bank-field"><label>IFSC Code</label><span>SBIN0001234</span></div>
-                <div class="bank-field"><label>Bank Name</label><span>State Bank of India</span></div>
-                <div class="bank-field"><label>Branch</label><span>Pune Main Branch</span></div>
-                <div class="bank-field"><label>Account Type</label><span>Current Account</span></div>
+
+              <div class="card">
+                <h3 class="card-title">📄 PAN Information</h3>
+                <div class="bank-details-grid">
+                  <div class="bank-field"><label>PAN Number</label>
+                    <input type="text" name="pan_no" class="form-control" value="{{ bank_info.pan_no|default_if_none:'' }}">
+                  </div>
+                  <div class="bank-field"><label>Status</label>
+                    {% if bank_info.pan_no %}
+                      <span class="badge badge-approved">✓ Provided</span>
+                    {% else %}
+                      <span class="badge badge-pending">Pending</span>
+                    {% endif %}
+                  </div>
+                </div>
               </div>
+              <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Bank Details</button>
             </div>
 
-            <div class="card">
-              <h3 class="card-title">📄 PAN Information</h3>
-              <div class="bank-details-grid">
-                <div class="bank-field"><label>PAN Number</label><span>ABCDE1234F</span></div>
-                <div class="bank-field"><label>PAN Holder Name</label><span>Rajesh Mehta</span></div>
-                <div class="bank-field"><label>Status</label><span class="badge badge-approved">✓ Verified</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bank-side">
-            <div class="card">
-              <h3 class="card-title">📄 Document Preview</h3>
-              <div class="bank-docs">
-                <div class="bank-doc">
-                  <div class="bank-doc-icon">📄</div>
-                  <div class="bank-doc-info">
-                    <div class="bank-doc-name">Cancelled Cheque</div>
-                    <div class="bank-doc-meta">Uploaded: 10 Jan 2024</div>
+            <div class="bank-side">
+              <div class="card">
+                <h3 class="card-title">📄 Documents</h3>
+                <div class="bank-docs">
+                  <div class="bank-doc">
+                    <div class="bank-doc-icon">📄</div>
+                    <div class="bank-doc-info">
+                      <div class="bank-doc-name">Passbook Copy</div>
+                    </div>
+                    {% if bank_info.passbook %}
+                    <span class="badge badge-approved">✓</span>
+                    {% endif %}
                   </div>
-                  <span class="badge badge-approved">✓</span>
-                </div>
-                <div class="bank-doc">
-                  <div class="bank-doc-icon">📄</div>
-                  <div class="bank-doc-info">
-                    <div class="bank-doc-name">Passbook Copy</div>
-                    <div class="bank-doc-meta">Uploaded: 10 Jan 2024</div>
+                  <input type="file" name="passbook" accept="image/*,.pdf" style="font-size: 0.8rem; margin-bottom: 1rem;">
+                  
+                  <div class="bank-doc">
+                    <div class="bank-doc-icon">📄</div>
+                    <div class="bank-doc-info">
+                      <div class="bank-doc-name">PAN Card Copy</div>
+                    </div>
+                    {% if bank_info.pancard %}
+                    <span class="badge badge-approved">✓</span>
+                    {% endif %}
                   </div>
-                  <span class="badge badge-approved">✓</span>
-                </div>
-                <div class="bank-doc">
-                  <div class="bank-doc-icon">📄</div>
-                  <div class="bank-doc-info">
-                    <div class="bank-doc-name">PAN Card Copy</div>
-                    <div class="bank-doc-meta">Uploaded: 10 Jan 2024</div>
-                  </div>
-                  <span class="badge badge-approved">✓</span>
+                  <input type="file" name="pancard" accept="image/*,.pdf" style="font-size: 0.8rem; margin-bottom: 1rem;">
                 </div>
               </div>
-              <button class="btn btn-outline btn-sm btn-block mt-4">📤 Upload New Document</button>
             </div>
-          </div>
+          </form>
         </div>
       </main>
     </div>
