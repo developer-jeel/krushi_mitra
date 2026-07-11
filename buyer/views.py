@@ -285,14 +285,70 @@ def buyer_bulk_order(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    return render(request, "buyer/bulk-order.html",{'premium_type':premium_type,'buyr':buyr})
+    
+    if request.method == 'POST':
+        crop_name = request.POST.get('crop_name')
+        category = request.POST.get('category')
+        required_quantity = request.POST.get('required_quantity')
+        unit = request.POST.get('unit')
+        target_price = request.POST.get('target_price')
+        required_date = request.POST.get('required_date')
+        delivery_state = request.POST.get('delivery_state')
+        delivery_district = request.POST.get('delivery_district')
+        additional_notes = request.POST.get('additional_notes')
+        
+        bulkrequest.objects.create(
+            user=buyr,
+            crop_name=crop_name,
+            category=category,
+            required_quantity=required_quantity,
+            unit=unit,
+            target_price=target_price,
+            required_date=required_date,
+            delivery_state=delivery_state,
+            delivery_district=delivery_district,
+            additional_notes=additional_notes
+        )
+        messages.success(request, 'Bulk order request submitted successfully!')
+        return redirect('buyer_bulk_order')
+        
+    inquiries = bulkrequest.objects.filter(user=buyr).order_by('-created_at')
+    return render(request, "buyer/bulk-order.html", {'premium_type': premium_type, 'buyr': buyr, 'inquiries': inquiries})
 
 @check_login(['Buyer'])
 def buyer_export_inquiry(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    return render(request, "buyer/export-inquiry.html",{'premium_type':premium_type,'buyr':buyr})
+    
+    if request.method == 'POST':
+        country = request.POST.get('country')
+        crop_name = request.POST.get('crop_name')
+        required_quantity = request.POST.get('required_quantity')
+        packaging_type = request.POST.get('packaging_type')
+        quality_standard = request.POST.get('quality_standard')
+        shipping_port = request.POST.get('shipping_port')
+        expected_price = request.POST.get('expected_price')
+        expected_delivery = request.POST.get('expected_delivery')
+        additional_notes = request.POST.get('additional_notes')
+        
+        exportinquiry.objects.create(
+            user=buyr,
+            country=country,
+            crop_name=crop_name,
+            required_quantity=required_quantity,
+            packaging_type=packaging_type,
+            quality_standard=quality_standard,
+            shipping_port=shipping_port,
+            expected_price=expected_price,
+            expected_delivery=expected_delivery,
+            additional_notes=additional_notes
+        )
+        messages.success(request, 'Export inquiry submitted successfully!')
+        return redirect('buyer_export_inquiry')
+        
+    inquiries = exportinquiry.objects.filter(user=buyr).order_by('-created_at')
+    return render(request, "buyer/export-inquiry.html", {'premium_type': premium_type, 'buyr': buyr, 'inquiries': inquiries})
 
 @check_login(['Buyer'])
 def buyer_messages(request):

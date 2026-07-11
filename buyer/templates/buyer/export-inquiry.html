@@ -107,10 +107,18 @@
             <div class="card">
               <h3 class="card-title">🌍 International Trade Inquiry</h3>
               <p class="card-subtitle">Send export inquiries to international buyers</p>
-              <form class="inquiry-form mt-4">
+              {% if messages %}
+              <div style="margin-top: 1rem; padding: 1rem; background: #e6f4ea; color: #1e8e3e; border-radius: 4px;">
+                {% for message in messages %}
+                  {{ message }}
+                {% endfor %}
+              </div>
+              {% endif %}
+              <form method="POST" action="{% url 'buyer_export_inquiry' %}" class="inquiry-form mt-4">
+                {% csrf_token %}
                 <div class="form-row">
                   <div class="form-group"><label class="form-label">Country <span
-                        class="required">*</span></label><select class="form-select">
+                        class="required">*</span></label><select name="country" class="form-control" required>
                       <option>UAE</option>
                       <option>USA</option>
                       <option>UK</option>
@@ -120,14 +128,14 @@
                       <option>Sri Lanka</option>
                     </select></div>
                   <div class="form-group"><label class="form-label">Crop Name <span
-                        class="required">*</span></label><input type="text" class="form-input" required
+                        class="required">*</span></label><input type="text" name="crop_name" class="form-control" required
                       placeholder="e.g., Basmati Rice"></div>
                 </div>
                 <div class="form-row">
-                  <div class="form-group"><label class="form-label">Required Quantity <span
-                        class="required">*</span></label><input type="number" class="form-input" required
+                  <div class="form-group"><label class="form-label">Required Quantity (kg) <span
+                        class="required">*</span></label><input type="number" name="required_quantity" class="form-control" required
                       placeholder="e.g., 5000"></div>
-                  <div class="form-group"><label class="form-label">Packaging Type</label><select class="form-select">
+                  <div class="form-group"><label class="form-label">Packaging Type</label><select name="packaging_type" class="form-control">
                       <option>Standard (50kg bags)</option>
                       <option>Vacuum Packed</option>
                       <option>Jute Bags</option>
@@ -135,15 +143,14 @@
                     </select></div>
                 </div>
                 <div class="form-row">
-                  <div class="form-group"><label class="form-label">Quality Standards</label><select
-                      class="form-select">
+                  <div class="form-group"><label class="form-label">Quality Standards</label><select name="quality_standard" class="form-control">
                       <option>Grade A</option>
                       <option>Grade B</option>
                       <option>Premium</option>
                       <option>Organic Certified</option>
                       <option>Fair Trade</option>
                     </select></div>
-                  <div class="form-group"><label class="form-label">Shipping Port</label><select class="form-select">
+                  <div class="form-group"><label class="form-label">Shipping Port</label><select name="shipping_port" class="form-control">
                       <option>Mumbai - JNPT</option>
                       <option>Chennai Port</option>
                       <option>Kolkata Port</option>
@@ -152,16 +159,15 @@
                     </select></div>
                 </div>
                 <div class="form-row">
-                  <div class="form-group"><label class="form-label">Expected Price (FOB)</label><input type="text"
-                      class="form-input" placeholder="USD per unit"></div>
+                  <div class="form-group"><label class="form-label">Expected Price (USD)</label><input type="number" step="0.01" name="expected_price"
+                      class="form-control" placeholder="USD per unit"></div>
                   <div class="form-group"><label class="form-label">Expected Delivery</label><input type="date"
-                      class="form-input"></div>
+                      name="expected_delivery" class="form-control" required></div>
                 </div>
                 <div class="form-group"><label class="form-label">Additional Notes</label><textarea
-                    class="form-textarea" placeholder="Special requirements, certifications needed..."></textarea></div>
-                <div class="form-actions">
-                  <button type="button" class="btn btn-secondary save-draft">💾 Save Draft</button>
-                  <button type="button" class="btn btn-primary btn-lg submit-inquiry">🌍 Submit Inquiry</button>
+                    name="additional_notes" class="form-control" style="min-height: 100px;" placeholder="Special requirements, certifications needed..."></textarea></div>
+                <div class="form-actions" style="margin-top: 1rem;">
+                  <button type="submit" class="btn btn-primary btn-lg submit-inquiry">🌍 Submit Inquiry</button>
                 </div>
               </form>
             </div>
@@ -170,31 +176,22 @@
           <div class="export-side">
             <div class="card">
               <h3 class="card-title">📊 Export Inquiries</h3>
-              <div class="export-tracking">
-                <div class="tracking-card">
-                  <div class="tracking-flag">🇦🇪</div>
+              <div class="export-tracking" style="margin-top: 1rem;">
+                {% for inq in inquiries %}
+                <div class="tracking-card" style="padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 1rem; position: relative;">
                   <div class="tracking-info">
-                    <div class="tracking-title">Basmati Rice to UAE</div>
-                    <div class="tracking-meta">10,000 kg | Submitted Dec 2024</div>
+                    <div class="tracking-title" style="font-weight: 600; margin-bottom: 4px;">{{ inq.crop_name }} to {{ inq.country }}</div>
+                    <div class="tracking-meta" style="color: var(--text-secondary); font-size: 0.85rem;">
+                      {{ inq.required_quantity }} kg | Submitted {{ inq.created_at|date:"M Y" }}
+                      <br>
+                      <small>Port: {{ inq.shipping_port }}</small>
+                    </div>
                   </div>
-                  <span class="badge badge-active">Active</span>
+                  <span class="badge badge-active" style="position: absolute; top: 1rem; right: 1rem;">Active</span>
                 </div>
-                <div class="tracking-card">
-                  <div class="tracking-flag">🇸🇬</div>
-                  <div class="tracking-info">
-                    <div class="tracking-title">Turmeric to Singapore</div>
-                    <div class="tracking-meta">2,000 kg | Submitted Nov 2024</div>
-                  </div>
-                  <span class="badge badge-approved">Closed</span>
-                </div>
-                <div class="tracking-card">
-                  <div class="tracking-flag">🇬🇧</div>
-                  <div class="tracking-info">
-                    <div class="tracking-title">Red Chillies to UK</div>
-                    <div class="tracking-meta">500 kg | Submitted Oct 2024</div>
-                  </div>
-                  <span class="badge badge-pending">Pending</span>
-                </div>
+                {% empty %}
+                <p style="color: var(--text-muted); font-size: 0.9rem;">No export inquiries found.</p>
+                {% endfor %}
               </div>
             </div>
           </div>
