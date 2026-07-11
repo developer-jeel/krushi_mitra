@@ -316,12 +316,7 @@ class saved(models.Model):
         return f"{self.user.user.name} added {self.crop.cropname} in wishlist"
 
 class exportinquiry(models.Model):
-    user = models.ForeignKey(
-        Buyer,
-        on_delete=models.CASCADE,
-        related_name='export_inquiries'
-    )
-
+    user = models.ForeignKey(Buyer,on_delete=models.CASCADE,related_name='export_inquiries')
     country = models.CharField(max_length=100)
     crop_name = models.CharField(max_length=200)
     required_quantity = models.PositiveIntegerField(help_text="Quantity in KG")
@@ -337,7 +332,7 @@ class exportinquiry(models.Model):
     def __str__(self):
         return f"{self.user.user.username} - {self.crop_name}"
 
-class BulkProcurementRequest(models.Model):
+class bulkrequest(models.Model):
     user = models.ForeignKey(Buyer, on_delete=models.CASCADE, related_name='bulk_procurement_requests')
     crop_name = models.CharField(max_length=200)
     category = models.CharField(max_length=100)
