@@ -180,6 +180,7 @@
   border-color: var(--primary-500);
   color: var(--primary-600);
 }
+
 .results-header {
   display: flex;
   align-items: center;
@@ -208,8 +209,15 @@
 
 /* Crop Card */
 @keyframes cardFadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .crop-card {
@@ -223,10 +231,21 @@
   border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-.crop-card:nth-child(2) { animation-delay: 0.1s; }
-.crop-card:nth-child(3) { animation-delay: 0.2s; }
-.crop-card:nth-child(4) { animation-delay: 0.3s; }
-.crop-card:nth-child(5) { animation-delay: 0.4s; }
+.crop-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.crop-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.crop-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.crop-card:nth-child(5) {
+  animation-delay: 0.4s;
+}
 
 .crop-card:hover {
   transform: translateY(-8px);
@@ -448,18 +467,43 @@
 
 /* Responsive */
 @media (max-width: 1200px) {
-  .crop-grid { grid-template-columns: repeat(2, 1fr); }
+  .crop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 1024px) {
-  .browse-layout { grid-template-columns: 1fr; }
-  .filter-sidebar { position: static; max-height: none; }
-  .crop-grid { grid-template-columns: repeat(2, 1fr); }
+  .browse-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .crop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-  .crop-grid { grid-template-columns: 1fr; }
-  .browse-search-box { flex-direction: column; padding: 12px; }
-  .browse-search-btn { width: 100%; }
-  .results-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .crop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .browse-search-box {
+    flex-direction: column;
+    padding: 12px;
+  }
+
+  .browse-search-btn {
+    width: 100%;
+  }
+
+  .results-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
 }

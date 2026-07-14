@@ -134,137 +134,176 @@
         </div>
       </header>
 
-      <main class="main-content">
-        <!-- Search & Filter Header -->
-        <section class="browse-header page-reveal">
-          <div class="browse-search-area">
-            <form action="{% url 'buyer_browse_crops' %}" method="GET">
-              <div class="browse-search-box">
-                <span class="browse-search-icon">🔍</span>
-                <input type="text" name="q" class="browse-search-input" placeholder="Search by crop name, category..."
-                  aria-label="Search crops" value="{{ request.GET.q|default:'' }}">
-                <button type="submit" class="btn btn-primary browse-search-btn">Search</button>
-              </div>
-            </form>
-            <div class="browse-search-tags">
-              <span class="search-tag">🌾 Grains <button class="tag-remove">✕</button></span>
-              <span class="search-tag">📍 Maharashtra <button class="tag-remove">✕</button></span>
-              <span class="search-tag">⭐ Grade A <button class="tag-remove">✕</button></span>
-              <span class="search-tag active-filters">3 Filters Active</span>
-            </div>
-          </div>
-        </section>
+      <main class="main-content" style="background-color: #0F172A; padding: 24px; min-height: 100vh;">
+        <!-- Page Title -->
+        <div style="margin-bottom: 24px;">
+          <h1 style="color: white; font-size: 28px; font-weight: 700; margin-bottom: 8px;">Browse Crops</h1>
+          <p style="color: #94A3B8; font-size: 14px;">Find the best quality crops from verified sellers</p>
+        </div>
 
-        <!-- Filters + Results Layout -->
-        <div class="browse-layout page-reveal">
-          <!-- Filter Sidebar -->
-          <form class="filter-sidebar card" action="{% url 'buyer_browse_crops' %}" method="GET" id="filterForm">
-            <input type="hidden" name="q" value="{{ request.GET.q|default:'' }}">
-            <input type="hidden" name="sort" id="hiddenSort" value="{{ request.GET.sort|default:'Latest' }}">
-            <div class="filter-header">
-              <h3 class="card-title">Filters</h3>
-              <a href="{% url 'buyer_browse_crops' %}" class="btn btn-sm btn-ghost clear-filters">Clear All</a>
+        <!-- Search & Filter Area -->
+        <section style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 24px; margin-bottom: 32px;">
+          <form action="{% url 'buyer_browse_crops' %}" method="GET" id="filterForm">
+            <!-- Search Bar -->
+            <div style="display: flex; align-items: center; background: #0F172A; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 8px 8px 20px; margin-bottom: 24px;">
+              <span style="color: #94A3B8; font-size: 18px; margin-right: 12px;">🔍</span>
+              <input type="text" name="q" style="flex: 1; background: transparent; border: none; color: white; font-size: 16px; outline: none;" placeholder="Search crops by name, category..." value="{{ request.GET.q|default:'' }}">
+              <button type="submit" style="background: #22C55E; color: white; border: none; border-radius: 8px; padding: 10px 32px; font-weight: 600; cursor: pointer; font-size: 15px;">Search</button>
             </div>
 
-            <div class="filter-section">
-              <h4 class="filter-title">Category</h4>
-              <div class="filter-options">
-                <label class="form-check"><input type="checkbox" name="category" value="grain cereals" {% if 'grain cereals' in request.GET.category %}checked{% endif %}> 🌾 Grains</label>
-                <label class="form-check"><input type="checkbox" name="category" value="fruits" {% if 'fruits' in request.GET.category %}checked{% endif %}> 🥭 Fruits</label>
-                <label class="form-check"><input type="checkbox" name="category" value="vegetables" {% if 'vegetables' in request.GET.category %}checked{% endif %}> 🥬 Vegetables</label>
-                <label class="form-check"><input type="checkbox" name="category" value="spices" {% if 'spices' in request.GET.category %}checked{% endif %}> 🌶️ Spices</label>
-                <label class="form-check"><input type="checkbox" name="category" value="pulses" {% if 'pulses' in request.GET.category %}checked{% endif %}> 🧅 Pulses</label>
-                <label class="form-check"><input type="checkbox" name="category" value="cotton" {% if 'cotton' in request.GET.category %}checked{% endif %}> 🌿 Cotton</label>
-              </div>
-            </div>
-
-
-
-            <button type="submit" class="btn btn-primary btn-block apply-filters">Apply Filters</button>
-          </form>
-
-          <!-- Results -->
-          <div class="results-container">
-            <!-- Sort & Count -->
-            <div class="results-header">
-              <div class="results-count">Showing <strong>{{ all_crops|length }}</strong> crops</div>
-              <div class="results-sort">
-                <label class="body-small text-muted">Sort by:</label>
-                <select class="form-select" id="sortSelect" style="width:auto;padding:6px 30px 6px 12px;" onchange="document.getElementById('hiddenSort').value = this.value; document.getElementById('filterForm').submit();">
-                  <option {% if request.GET.sort == 'Latest' %}selected{% endif %}>Latest</option>
-                  <option {% if request.GET.sort == 'Price: Low to High' %}selected{% endif %}>Price: Low to High</option>
-                  <option {% if request.GET.sort == 'Price: High to Low' %}selected{% endif %}>Price: High to Low</option>
-                  <option {% if request.GET.sort == 'Rating' %}selected{% endif %}>Rating</option>
-                  <option {% if request.GET.sort == 'Popularity' %}selected{% endif %}>Popularity</option>
+            <!-- Category Filter -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <span style="color: #94A3B8; font-size: 15px;">Category:</span>
+                <select name="category" style="background: #1E293B; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 40px 10px 16px; border-radius: 8px; font-size: 14px; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;" onchange="document.getElementById('filterForm').submit();">
+                  <option value="" {% if not request.GET.category %}selected{% endif %}>All Categories</option>
+                  <option value="grain cereals" {% if 'grain cereals' in request.GET.category %}selected{% endif %}>Grains</option>
+                  <option value="fruits" {% if 'fruits' in request.GET.category %}selected{% endif %}>Fruits</option>
+                  <option value="vegetables" {% if 'vegetables' in request.GET.category %}selected{% endif %}>Vegetables</option>
+                  <option value="pulses" {% if 'pulses' in request.GET.category %}selected{% endif %}>Pulses</option>
+                  <option value="spices" {% if 'spices' in request.GET.category %}selected{% endif %}>Spices</option>
+                  <option value="cotton" {% if 'cotton' in request.GET.category %}selected{% endif %}>Cotton</option>
+                  <option value="oil seeds" {% if 'oil seeds' in request.GET.category %}selected{% endif %}>Oil Seeds</option>
                 </select>
               </div>
+              <input type="hidden" name="sort" id="hiddenSort" value="{{ request.GET.sort|default:'Latest' }}">
+              <a href="{% url 'buyer_browse_crops' %}" style="color: #94A3B8; text-decoration: none; font-size: 14px; transition: color 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='#94A3B8'">Clear All</a>
             </div>
+          </form>
+        </section>
 
-            <!-- Crop Grid -->
-            <div class="crop-grid">
-              {%for crop in all_crops %}
-              <form action="{% url 'buyer_addto_cart'%}" method="post">
-                {%csrf_token%}
-                <div class="crop-card card card-float" data-crop>
-                  <div class="crop-card-img-wrapper">
-                    <img src="{{crop.image.url}}" alt="Basmati Rice" loading="lazy">
-                    {%if crop.id not in saved_crops%}
-                    <a href="{% url 'add_wishlist' pk=crop.id %}" class="wishlist-toggle">🤍</a>
-                    {%else%}
-                    <a href="{% url 'add_wishlist' pk=crop.id %}" class="wishlist-toggle active">❤️</a>
-                    {%endif%}
-                    <span class="crop-stock-badge in-stock">In Stock</span>
-                  </div>
-                  <div class="crop-card-body">
-                    <div class="crop-card-category">{{crop.category}}</div>
-                    <h3 class="crop-card-name">{{crop.cropname}}</h3>
-                    <div class="crop-card-rating">⭐⭐⭐⭐☆ <span class="rating-count">(4.8, 124 reviews)</span></div>
-                    <div class="crop-card-details">
-                      <span class="crop-detail">📍 {{crop.user.city}}</span>
-                      <span class="crop-detail">📦 {{crop.quantity}} kg</span>
-                      <span class="crop-detail">⭐ Grade A</span>
-                    </div>
-                    <div class="crop-card-price">
-                      <span class="price">₹{{crop.price}}</span>
-
-                      <span class="price-unit">/ kg</span>
-                      <span class="price-discount">₹{{crop.price}}</span>
-                    </div>
-                    <div class="crop-card-footer">
-                      <span class="crop-seller-status">✅ Verified Seller</span>
-                      <span class="crop-harvest">Harvest: Nov 2024</span>
-                    </div>
-                    <input value="{{crop.id}}" name="crop" hidden>
-                    <div class="crop-card-actions">
-                      <a href="{% url 'buyer_crop_details' pk=crop.id %}" class="btn btn-outline btn-sm flex-1">View
-                        Details</a>
-                      {%if cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium'%} <button
-                        href="{% url 'buyer_cart' %}" class="btn btn-primary btn-sm flex-1">🛒 Add to
-                        Cart</button>
-                      {%else%}
-                      <a href="#" class="btn btn-primary btn-sm flex-1" style="background-color: gray;"
-                        onclick="alert('Limit over'); return false;">🛒 Add to
-                        Cart</a>
-                      {%endif%}
-                    </div>
-                  </div>
-                </div>
-              </form>
-              {%endfor%}
-
-              <!-- Pagination -->
-              <div class="pagination">
-                <button class="page-btn disabled">‹ Prev</button>
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <button class="page-btn">4</button>
-                <button class="page-btn">5</button>
-                <button class="page-btn">Next ›</button>
-              </div>
+        <!-- Results Header -->
+        <div style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <div style="color: #94A3B8; font-size: 15px;">Showing 1–12 of <strong style="color: white;">{{ all_crops|length }}</strong> Crops</div>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="color: #94A3B8; font-size: 14px;">Sort by:</span>
+              <select style="background: #1E293B; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 36px 8px 16px; border-radius: 8px; font-size: 14px; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;" onchange="document.getElementById('hiddenSort').value = this.value; document.getElementById('filterForm').submit();">
+                <option {% if request.GET.sort == 'Latest' %}selected{% endif %}>Latest</option>
+                <option {% if request.GET.sort == 'Price: Low to High' %}selected{% endif %}>Price: Low to High</option>
+                <option {% if request.GET.sort == 'Price: High to Low' %}selected{% endif %}>Price: High to Low</option>
+              </select>
+            </div>
+            <div style="display: flex; gap: 8px; margin-left: 8px;">
+              <button style="background: #22C55E; color: white; border: none; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </button>
+              <button style="background: transparent; color: #94A3B8; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='white'; this.style.borderColor='rgba(255,255,255,0.3)';" onmouseout="this.style.color='#94A3B8'; this.style.borderColor='rgba(255,255,255,0.1)';">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              </button>
             </div>
           </div>
+        </div>
+
+        <!-- Crop Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-bottom: 40px;">
+          {% for crop in all_crops %}
+          <form action="{% url 'buyer_addto_cart'%}" method="post" style="display: contents;">
+            {% csrf_token %}
+            <div style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+              <!-- Image -->
+              <div style="position: relative; height: 220px; overflow: hidden;">
+                <img src="{{crop.image.url}}" alt="{{crop.cropname}}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                <span style="position: absolute; top: 16px; left: 16px; background: #22C55E; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">In Stock</span>
+                {% if crop.id not in saved_crops %}
+                <a href="{% url 'add_wishlist' pk=crop.id %}" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">🤍</a>
+                {% else %}
+                <a href="{% url 'add_wishlist' pk=crop.id %}" style="position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; color: #EF4444; text-decoration: none; font-size: 16px; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">❤️</a>
+                {% endif %}
+              </div>
+              
+              <!-- Body -->
+              <div style="padding: 20px; display: flex; flex-direction: column; flex: 1;">
+                <div style="color: #22C55E; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">{{crop.category}}</div>
+                <h3 style="color: white; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">{{crop.cropname}}</h3>
+                <div style="color: #94A3B8; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 4px;">📍 {{crop.user.city|default:"Unknown Location"}}</div>
+                
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+                  <span style="color: #F59E0B; font-size: 13px;">⭐⭐⭐⭐⭐</span>
+                  <span style="color: #94A3B8; font-size: 13px;">4.8 (124)</span>
+                  <span style="color: #22C55E; font-size: 13px; display: flex; align-items: center; gap: 4px;">✅ Verified</span>
+                </div>
+                
+                <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                  <span style="background: rgba(255,255,255,0.05); color: #CBD5E1; border: 1px solid rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 6px; font-size: 12px;">📦 {{crop.quantity}} kg</span>
+                  <span style="background: rgba(255,255,255,0.05); color: #CBD5E1; border: 1px solid rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 6px; font-size: 12px;">⭐ Grade A</span>
+                </div>
+                
+                <div style="display: flex; align-items: baseline; gap: 8px; margin-top: auto; margin-bottom: 20px;">
+                  <span style="color: #22C55E; font-size: 24px; font-weight: 700;">₹{{crop.price}}</span>
+                  <span style="color: #94A3B8; font-size: 14px;">/ kg</span>
+                  <span style="color: #64748B; font-size: 14px; text-decoration: line-through; margin-left: 4px;">₹{{crop.price|add:"800"}}</span>
+                </div>
+                
+                <input value="{{crop.id}}" name="crop" hidden>
+                <input value="1" name="quantity" hidden>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px;">
+                  <a href="{% url 'buyer_crop_details' pk=crop.id %}" style="display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; height: 44px; transition: all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)'">View Details</a>
+                  
+                  {% if cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %} 
+                    <button type="submit" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #22C55E; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; height: 44px; transition: background 0.2s;" onmouseover="this.style.background='#16A34A'" onmouseout="this.style.background='#22C55E'">
+                      🛒 Add to Cart
+                    </button>
+                  {% else %}
+                    <button type="button" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #22C55E; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: not-allowed; height: 44px; opacity: 0.6;" onclick="alert('Limit over'); return false;">
+                      🛒 Add to Cart
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </form>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 48px;">
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: #94A3B8; border-radius: 8px; text-decoration: none; font-weight: 500;">‹</a>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #22C55E; border: 1px solid #22C55E; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">1</a>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">2</a>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">3</a>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">4</a>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">5</a>
+          <span style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #94A3B8; font-weight: 500;">...</span>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">16</a>
+          <a href="#" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #172033; border: 1px solid rgba(255,255,255,0.05); color: #white; border-radius: 8px; text-decoration: none; font-weight: 500;">›</a>
+        </div>
+
+        <!-- Trust Section -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.05);">
+          <div style="background: rgba(23,32,51,0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; background: rgba(34,197,94,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #22C55E; font-size: 24px;">🛡️</div>
+            <div>
+              <h4 style="color: white; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Verified Sellers</h4>
+              <p style="color: #94A3B8; font-size: 13px; margin: 0;">100% trusted farmers</p>
+            </div>
+          </div>
+          <div style="background: rgba(23,32,51,0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; background: rgba(34,197,94,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #22C55E; font-size: 24px;">🥇</div>
+            <div>
+              <h4 style="color: white; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Quality Assured</h4>
+              <p style="color: #94A3B8; font-size: 13px; margin: 0;">Lab tested & certified</p>
+            </div>
+          </div>
+          <div style="background: rgba(23,32,51,0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; background: rgba(34,197,94,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #22C55E; font-size: 24px;">🔒</div>
+            <div>
+              <h4 style="color: white; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Secure Payments</h4>
+              <p style="color: #94A3B8; font-size: 13px; margin: 0;">100% safe & secure</p>
+            </div>
+          </div>
+          <div style="background: rgba(23,32,51,0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; background: rgba(34,197,94,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #22C55E; font-size: 24px;">🏷️</div>
+            <div>
+              <h4 style="color: white; font-size: 15px; font-weight: 600; margin: 0 0 4px 0;">Best Prices</h4>
+              <p style="color: #94A3B8; font-size: 13px; margin: 0;">Market competitive rates</p>
+            </div>
+          </div>
+        </div>
+
       </main>
+
     </div>
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
