@@ -508,6 +508,23 @@ def buyer_settings(request):
             else:
                 messages.error(request, 'Current password is incorrect.')
                 
+        elif action == 'delete_account':
+            from django.utils import timezone
+            from datetime import timedelta
+            
+            user = buyr.user
+            user.scheduled_deletion_date = timezone.now() + timedelta(days=60)
+            # user.is_active = False # Decided not to deactivate so they can still log in to cancel
+            user.save()
+            
+            from django.contrib.auth import logout
+            logout(request)
+            if "contact" in request.session:
+                del request.session["contact"]
+                
+            messages.success(request, 'Your account has been scheduled for deletion in 60 days. If you login before that, deletion will be cancelled.')
+            return redirect('login')
+            
         return redirect('buyer_settings')
 
     return render(request, "buyer/settings.html",{'premium_type':premium_type,'buyr':buyr})

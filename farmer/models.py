@@ -17,6 +17,7 @@ class User(AbstractUser):
     contact = models.CharField(max_length=10, unique=True , blank=True, null=True)
     password = models.CharField(max_length=128)
     is_active = models.BooleanField(default=False)
+    scheduled_deletion_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         if self.email:

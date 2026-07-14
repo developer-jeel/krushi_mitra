@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib import messages
+from django.utils import timezone
 from .models import * 
 import requests , math ,json,sseclient,random
 from django.contrib.auth.decorators import login_required
@@ -62,6 +63,16 @@ def login(request):
         user = User.objects.filter(contact=contact).first()
 
         if user is not None and check_password(password, user.password):
+            if user.scheduled_deletion_date:
+                if user.scheduled_deletion_date <= timezone.now():
+                    user.delete()
+                    messages.error(request, 'Your account has been permanently deleted.')
+                    return redirect('login')
+                else:
+                    user.scheduled_deletion_date = None
+                    user.save()
+                    messages.success(request, 'Your account deletion request has been cancelled.')
+
 
             # Buyer verification check
             # if user.role == 'Buyer':

@@ -300,8 +300,14 @@
                   <div class="danger-item"><span>Deactivate Account</span><button class="btn btn-outline btn-sm"
                       onclick="showToast('warning','Account','Account deactivation requested')">Deactivate</button>
                   </div>
-                  <div class="danger-item"><span>Delete Account</span><button class="btn btn-danger btn-sm"
-                      onclick="showToast('error','Account','Account deletion requested')">Delete Permanently</button>
+                  <div class="danger-item">
+                    <span>Delete Account</span>
+                    <form method="POST" action="{% url 'buyer_settings' %}" style="display:inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="delete_account">
+                      <button type="submit" class="btn btn-danger btn-sm"
+                          onclick="return confirm('Are you sure you want to delete your account? It will be permanently deleted after 60 days of inactivity.')">Delete Permanently</button>
+                    </form>
                   </div>
                 </div>
               </div>
