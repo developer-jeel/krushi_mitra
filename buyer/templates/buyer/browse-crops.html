@@ -178,58 +178,7 @@
               </div>
             </div>
 
-            <div class="filter-section">
-              <h4 class="filter-title">Location</h4>
-              <select class="form-select" name="location">
-                <option {% if request.GET.location == 'All Locations' %}selected{% endif %}>All Locations</option>
-                <option {% if request.GET.location == 'Maharashtra' %}selected{% endif %}>Maharashtra</option>
-                <option {% if request.GET.location == 'Punjab' %}selected{% endif %}>Punjab</option>
-                <option {% if request.GET.location == 'Gujarat' %}selected{% endif %}>Gujarat</option>
-                <option {% if request.GET.location == 'Karnataka' %}selected{% endif %}>Karnataka</option>
-                <option {% if request.GET.location == 'Madhya Pradesh' %}selected{% endif %}>Madhya Pradesh</option>
-                <option {% if request.GET.location == 'Uttar Pradesh' %}selected{% endif %}>Uttar Pradesh</option>
-              </select>
-            </div>
 
-            <div class="filter-section">
-              <h4 class="filter-title">Price Range (per kg)</h4>
-              <div class="filter-range">
-                <input type="number" class="form-input" name="min_price" placeholder="Min ₹" value="{{ request.GET.min_price|default:'' }}">
-                <span>—</span>
-                <input type="number" class="form-input" name="max_price" placeholder="Max ₹" value="{{ request.GET.max_price|default:'' }}">
-              </div>
-            </div>
-
-            <div class="filter-section">
-              <h4 class="filter-title">Quantity Available</h4>
-              <select class="form-select" name="quantity">
-                <option {% if request.GET.quantity == 'Any Quantity' %}selected{% endif %}>Any Quantity</option>
-                <option {% if request.GET.quantity == 'Less than 100 kg' %}selected{% endif %}>Less than 100 kg</option>
-                <option {% if request.GET.quantity == '100 - 500 kg' %}selected{% endif %}>100 - 500 kg</option>
-                <option {% if request.GET.quantity == '500 - 1000 kg' %}selected{% endif %}>500 - 1000 kg</option>
-                <option {% if request.GET.quantity == '1000 - 5000 kg' %}selected{% endif %}>1000 - 5000 kg</option>
-                <option {% if request.GET.quantity == '5000+ kg' %}selected{% endif %}>5000+ kg</option>
-              </select>
-            </div>
-
-            <div class="filter-section">
-              <h4 class="filter-title">Quality Grade</h4>
-              <div class="filter-options">
-                <label class="form-check"><input type="radio" name="grade" checked> All Grades</label>
-                <label class="form-check"><input type="radio" name="grade"> ⭐ Grade A</label>
-                <label class="form-check"><input type="radio" name="grade"> ⭐ Grade B</label>
-                <label class="form-check"><input type="radio" name="grade"> ⭐ Premium</label>
-              </div>
-            </div>
-
-            <div class="filter-section">
-              <h4 class="filter-title">Availability</h4>
-              <div class="filter-options">
-                <label class="form-check"><input type="checkbox" checked> In Stock</label>
-                <label class="form-check"><input type="checkbox"> Pre-order</label>
-                <label class="form-check"><input type="checkbox"> Seasonal</label>
-              </div>
-            </div>
 
             <button type="submit" class="btn btn-primary btn-block apply-filters">Apply Filters</button>
           </form>
