@@ -341,8 +341,6 @@ def buyer_export_inquiry(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    print("=====================================================",request.method)
-    print("=====================================================",request.POST)
     
     if request.method == 'POST':
         country = request.POST.get('country')
@@ -408,6 +406,9 @@ def buyer_verification(request):
     verification = verification_details.objects.filter(user=buyr).first()
 
     if request.method == 'POST':
+        if not buyr.enable_update:
+            messages.error(request, 'You cannot change verification data as updates are disabled.')
+            return redirect('buyer_verification')
         if not verification:
             verification = verification_details(user=buyr)
         
@@ -441,6 +442,9 @@ def buyer_bank_details(request):
     bank_info = bank_details.objects.filter(user=buyr).first()
 
     if request.method == 'POST':
+        if not buyr.enable_update:
+            messages.error(request, 'You cannot change bank details as updates are disabled.')
+            return redirect('buyer_bank_details')
         if not bank_info:
             bank_info = bank_details(user=buyr)
             

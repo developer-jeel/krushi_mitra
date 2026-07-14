@@ -571,7 +571,7 @@ def farmer_news(request):
         print(all_news)
         context = {
         'all_news': all_news,
-        "city": city.upper(),+
+        "city": city.upper(),
         "temperature": temperature,
         "condition": condition,
         "humidity": humidity,

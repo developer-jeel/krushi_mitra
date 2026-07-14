@@ -152,16 +152,16 @@
                 </div>
                 <div class="bank-details-grid">
                   <div class="bank-field"><label>Account Holder Name</label>
-                    <input type="text" name="account_holder" class="form-control" value="{{ bank_info.account_holder|default_if_none:'' }}">
+                    <input type="text" name="account_holder" class="form-control" value="{{ bank_info.account_holder|default_if_none:'' }}" {% if not buyr.enable_update %}readonly{% endif %}>
                   </div>
                   <div class="bank-field"><label>Account Number</label>
-                    <input type="text" name="account_no" class="form-control" value="{{ bank_info.account_no|default_if_none:'' }}">
+                    <input type="text" name="account_no" class="form-control" value="{{ bank_info.account_no|default_if_none:'' }}" {% if not buyr.enable_update %}readonly{% endif %}>
                   </div>
                   <div class="bank-field"><label>IFSC Code</label>
-                    <input type="text" name="ifsc_code" class="form-control" value="{{ bank_info.ifsc_code|default_if_none:'' }}">
+                    <input type="text" name="ifsc_code" class="form-control" value="{{ bank_info.ifsc_code|default_if_none:'' }}" {% if not buyr.enable_update %}readonly{% endif %}>
                   </div>
                   <div class="bank-field"><label>Bank Name</label>
-                    <input type="text" name="bank_name" class="form-control" value="{{ bank_info.bank_name|default_if_none:'' }}">
+                    <input type="text" name="bank_name" class="form-control" value="{{ bank_info.bank_name|default_if_none:'' }}" {% if not buyr.enable_update %}readonly{% endif %}>
                   </div>
                 </div>
               </div>
@@ -170,7 +170,7 @@
                 <h3 class="card-title">📄 PAN Information</h3>
                 <div class="bank-details-grid">
                   <div class="bank-field"><label>PAN Number</label>
-                    <input type="text" name="pan_no" class="form-control" value="{{ bank_info.pan_no|default_if_none:'' }}">
+                    <input type="text" name="pan_no" class="form-control" value="{{ bank_info.pan_no|default_if_none:'' }}" {% if not buyr.enable_update %}readonly{% endif %}>
                   </div>
                   <div class="bank-field"><label>Status</label>
                     {% if bank_info.pan_no %}
@@ -181,7 +181,9 @@
                   </div>
                 </div>
               </div>
+              {% if buyr.enable_update %}
               <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Bank Details</button>
+              {% endif %}
             </div>
 
             <div class="bank-side">
@@ -197,7 +199,9 @@
                     <span class="badge badge-approved">✓</span>
                     {% endif %}
                   </div>
+                  {% if buyr.enable_update %}
                   <input type="file" name="passbook" accept="image/*,.pdf" style="font-size: 0.8rem; margin-bottom: 1rem;">
+                  {% endif %}
                   
                   <div class="bank-doc">
                     <div class="bank-doc-icon">📄</div>
@@ -208,7 +212,9 @@
                     <span class="badge badge-approved">✓</span>
                     {% endif %}
                   </div>
+                  {% if buyr.enable_update %}
                   <input type="file" name="pancard" accept="image/*,.pdf" style="font-size: 0.8rem; margin-bottom: 1rem;">
+                  {% endif %}
                 </div>
               </div>
             </div>
