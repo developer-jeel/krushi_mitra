@@ -128,108 +128,121 @@
           </div>
         </div>
       </header>
-      <main class="main-content">
-        <!-- Empty State (hidden by default) -->
-        <div class="empty-state" style="display:none;">
-          <div class="empty-state-icon">🛒</div>
-          <h3 class="empty-state-title">Your cart is empty</h3>
-          <p class="empty-state-text">Looks like you haven't added any crops yet. Browse our marketplace to find premium
-            crops.</p>
-          <a href="{% url 'buyer_browse_crops' %}" class="btn btn-primary">🌾 Browse Crops</a>
+      <main class="main-content" style="padding: 32px 0;">
+        {% if not cart_items %}
+        <!-- Empty State -->
+        <div class="empty-state" style="display:flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; text-align: center; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+          <div class="empty-state-icon" style="font-size: 72px; margin-bottom: 24px; animation: bounce 2s infinite;">🛒</div>
+          <h3 class="empty-state-title" style="font-size: 28px; font-weight: 800; color: white; margin-bottom: 12px; letter-spacing: -0.5px;">Your cart is empty</h3>
+          <p class="empty-state-text" style="color: #94A3B8; max-width: 450px; margin-bottom: 32px; line-height: 1.6; font-size: 16px;">Looks like you haven't added any crops yet. Browse our marketplace to find premium, lab-tested crops directly from trusted farmers.</p>
+          <a href="{% url 'buyer_browse_crops' %}" class="btn" style="background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: white; padding: 14px 36px; border-radius: 12px; font-weight: 600; font-size: 16px; text-decoration: none; box-shadow: 0 8px 24px rgba(34,197,94,0.3); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 28px rgba(34,197,94,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(34,197,94,0.3)';">🌾 Browse Crops</a>
         </div>
-
+        {% else %}
         <!-- Cart Content -->
-        <div class="cart-layout page-reveal">
+        <div class="cart-layout page-reveal" style="display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start;">
           <div class="cart-items">
-            <div class="cart-header card-header">
+            <div class="cart-header" style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05);">
               <div>
-                <h3 class="card-title">Cart Items (3)</h3>
-                <p class="card-subtitle">Review your selected crops</p>
+                <h3 class="card-title" style="font-size: 28px; font-weight: 800; color: white; margin: 0; letter-spacing: -0.5px;">Cart Items</h3>
+                <p class="card-subtitle" style="color: #94A3B8; margin-top: 6px; font-size: 15px;">Review your selected crops before checkout</p>
               </div>
             </div>
 
-            {%for item in cart_items%}
-            <form action="{% url 'cart_item_delete' pk=item.id%}" method="post">
-              {%csrf_token%}
-              <div class="cart-item card">
-                <div class="cart-item-img"><img src="{{item.crop.image.url}}" alt="Basmati Rice"></div>
-                <div class="cart-item-info">
-                  <h4 class="cart-item-name">{{item.crop.cropname}}</h4>
-                  <div class="cart-item-meta">🌾 {{item.crop.category}} | 📍 {{item.crop.user.city}} | ⭐ Grade A</div>
-                  <span class="cart-item-price">₹{{item.crop.price}}</span>/20kg
+            {% for item in cart_items %}
+            <form action="{% url 'cart_item_delete' pk=item.id %}" method="post">
+              {% csrf_token %}
+              <div class="cart-item" style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 24px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                <div class="cart-item-img" style="width: 140px; height: 110px; border-radius: 12px; overflow: hidden; flex-shrink: 0; position: relative;">
+                  <img src="{{item.crop.image.url}}" alt="{{item.crop.cropname}}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                  <div style="position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; font-size: 11px; padding: 4px 8px; border-radius: 8px; font-weight: 600;">⭐ Grade A</div>
                 </div>
-                <div class="cart-item-qty">
-                  <label class="body-small text-muted">Qty (kg)</label>
-                  <div class="qty-selector">
-                    <button class="qty-minus">−</button>
-                    <input type="number" class="qty-input cart-qty-input" value="{{item.quantity}}" min="1" max="5000"
-                      name='quantity'>
-                    <button class="qty-plus">+</button>
+                
+                <div class="cart-item-info" style="flex: 1;">
+                  <h4 class="cart-item-name" style="font-size: 20px; font-weight: 700; color: white; margin: 0 0 8px 0;">{{item.crop.cropname}}</h4>
+                  <div class="cart-item-meta" style="font-size: 13px; color: #94A3B8; margin-bottom: 12px; display: flex; gap: 12px; align-items: center;">
+                    <span style="background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; font-weight: 500;">🌾 {{item.crop.category}}</span>
+                    <span style="display: flex; align-items: center; gap: 4px;">📍 {{item.crop.user.city|default:"Unknown"}}</span>
+                  </div>
+                  <div style="font-size: 16px; font-weight: 700; color: #22C55E;">
+                    ₹<span class="cart-unit-price" data-price="{{item.crop.price}}">{{item.crop.price}}</span> <span style="font-size: 13px; color: #64748B; font-weight: 500;">/ kg</span>
                   </div>
                 </div>
-                <div class="cart-item-total">
-                  <label class="body-small text-muted">Total</label>
-                  <div class="cart-total-price">₹{{item.subtotal}}</div>
-                  <input type="hidden" class="cart-unit-price" data-price="{{item.crop.price}}">
+                
+                <div class="cart-item-qty" style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);">
+                  <label style="font-size: 12px; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Quantity</label>
+                  <div class="qty-selector" style="display: flex; align-items: center;">
+                    <button type="button" class="qty-minus" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white; font-size: 18px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">−</button>
+                    <input type="number" class="qty-input cart-qty-input" value="{{item.quantity}}" min="1" max="5000" name="quantity" style="width: 60px; text-align: center; background: transparent; border: none; color: white; font-weight: 700; font-size: 16px; outline: none; margin: 0 4px;">
+                    <button type="button" class="qty-plus" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white; font-size: 18px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">+</button>
+                  </div>
+                </div>
+
+                <div class="cart-item-total" style="text-align: right; min-width: 110px;">
+                  <label style="font-size: 12px; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;">Total Price</label>
+                  <div class="cart-total-price" style="font-size: 22px; font-weight: 800; color: white;">₹{{item.subtotal}}</div>
                   <input type="hidden" value="{{item.crop.id}}" name="crop">
                 </div>
-                <div class="cart-item-actions">
-                  <button class="btn btn-sm btn-ghost">❤️ Save</button>
-                  <a href="{% url 'cart_item_delete' pk=item.id%}" class="btn btn-sm btn-ghost"
-                    style="color:var(--red-500);"
-                    onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️
-                    Remove</a>
+                
+                <div class="cart-item-actions" style="display: flex; flex-direction: column; gap: 10px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 24px;">
+                  <button type="button" class="btn btn-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">🤍 Save</button>
+                  <a href="{% url 'cart_item_delete' pk=item.id %}" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.05)'" onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️ Remove</a>
                 </div>
               </div>
             </form>
-            {%endfor%}
+            {% endfor %}
 
-            <div class="cart-footer-actions">
-              <a href="{% url 'buyer_browse_crops' %}" class="btn btn-ghost">← Continue Shopping</a>
-              <button class="btn btn-ghost">❤️ Save For Later</button>
+            <div class="cart-footer-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.05);">
+              <a href="{% url 'buyer_browse_crops' %}" class="btn" style="background: #172033; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='#172033'">← Continue Shopping</a>
             </div>
           </div>
 
           <!-- Order Summary -->
-          <div class="cart-summary">
-            <div class="card">
-              <h3 class="card-title" style="margin-bottom:20px;">Order Summary</h3>
+          <div class="cart-summary" style="position: sticky; top: 120px;">
+            <div class="card" style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 32px; box-shadow: 0 24px 48px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+              <!-- Decorative element -->
+              <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: rgba(34,197,94,0.1); border-radius: 50%; filter: blur(30px);"></div>
+              
+              <h3 class="card-title" style="font-size: 22px; font-weight: 800; color: white; margin-bottom: 28px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;">
+                <span style="font-size: 24px;">🧾</span> Order Summary
+              </h3>
 
-              <div class="summary-row">
-                <span>Subtotal (3 items)</span>
-                <span class="subtotal-amount">₹{{cart.total_price}}</span>
+              <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #94A3B8; font-size: 15px; align-items: center;">
+                <span style="font-weight: 500;">Subtotal</span>
+                <span class="subtotal-amount" style="color: white; font-weight: 700; font-size: 16px;">₹{{cart.total_price}}</span>
               </div>
-              <div class="summary-row">
-                <span>Delivery Charges</span>
-                <span class="text-green">Free</span>
+              <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #94A3B8; font-size: 15px; align-items: center;">
+                <span style="font-weight: 500;">Delivery Charges</span>
+                <span class="text-green" style="color: #22C55E; font-weight: 700; background: rgba(34,197,94,0.1); padding: 6px 12px; border-radius: 20px; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">Free Delivery</span>
               </div>
-              <div class="summary-row">
-                <span>Tax (GST @ 5%)</span>
-                <span id="gst">₹1,775</span>
+              <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #94A3B8; font-size: 15px; align-items: center;">
+                <span style="font-weight: 500;">Tax (GST @ 5%)</span>
+                <span id="gst" style="color: white; font-weight: 700; font-size: 16px;">₹0</span>
               </div>
-              <div class="summary-row discount-row hidden">
-                <span>Discount (COUPON500)</span>
-                <span class="discount-amount text-green">-₹500</span>
-              </div>
-              <div class="summary-divider"></div>
-              <div class="summary-row total-row">
-                <span>Grand Total</span>
-                <span id="total" class="grand-total">₹37,275</span>
+              
+              <div class="summary-divider" style="height: 1px; background: rgba(255,255,255,0.08); margin: 28px 0;"></div>
+              
+              <div class="summary-row total-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 36px; font-size: 20px; font-weight: 800;">
+                <span style="color: white;">Grand Total</span>
+                <span id="total" class="grand-total" style="color: #22C55E; font-size: 28px;">₹0</span>
               </div>
 
-              <div class="coupon-section" style="display:none;">
-                <!-- Coupon logic has been moved to checkout -->
+              {% if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %}
+              <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-block" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: white; padding: 18px; border-radius: 16px; font-size: 18px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(34,197,94,0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px rgba(34,197,94,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(34,197,94,0.3)';">
+                Proceed to Checkout <span style="font-size: 20px;">→</span>
+              </a>
+              {% else %}
+              <a href="#" class="btn btn-primary btn-block" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #475569; color: #94A3B8; padding: 18px; border-radius: 16px; font-size: 18px; font-weight: 700; text-decoration: none; border: none; cursor: not-allowed; transition: all 0.3s ease;" onclick="alert('Item over limit'); return false;">
+                Limit Reached
+              </a>
+              {% endif %}
+              
+              <div style="margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 8px; color: #64748B; font-size: 13px; font-weight: 500;">
+                <span style="color: #22C55E;">🔒</span> Secure 256-bit SSL Encryption
               </div>
-              {%if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium'%}
-              <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-lg btn-block"
-                style="margin-top:20px;">Proceed to Checkout →</a>
-              {%else%}
-              <a href="#" class="btn btn-primary btn-lg btn-block" style="margin-top:20px;"
-                onclick="alert('item over limit'); return false;">Proceed to Checkout →</a>
-              {%endif%}
             </div>
           </div>
         </div>
+        {% endif %}
       </main>
     </div>
   </div>
