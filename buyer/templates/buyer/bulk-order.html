@@ -168,7 +168,11 @@
                     remaining</div>
                 </div>
                 <div class="form-actions" style="margin-top: 1rem;">
+                  {% if not buyr.is_verified %}
+                  <button type="button" class="btn btn-primary" style="background-color: gray; cursor: not-allowed;" onclick="alert('Please verify your account to place a bulk order.'); return false;">📨 Submit Inquiry</button>
+                  {% else %}
                   <button type="submit" class="btn btn-primary ">📨 Submit Inquiry</button>
+                  {% endif %}
                 </div>
               </form>
             </div>

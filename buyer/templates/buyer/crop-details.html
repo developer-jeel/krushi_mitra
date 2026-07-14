@@ -222,7 +222,11 @@
 
               <div class="product-actions">
                 <input value="{{crop.id}}" name="crop" hidden>
-                {%if cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium'%}
+                {% if not buyr.is_verified %}
+                <a href="#" class="btn btn-primary btn-lg flex-1" style="background-color: gray;"
+                  onclick="alert('Please verify your account to buy crops.'); return false;">🛒 Add to
+                  Cart</a>
+                {%elif cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium'%}
                 <button type="submit" href="{% url 'buyer_cart'%}" class="btn btn-primary btn-lg flex-1">🛒
                   Add to
                   Cart</button>
@@ -233,7 +237,11 @@
                 {%endif%}
 
 
+                {% if not buyr.is_verified %}
+                <a href="#" class="btn btn-outline btn-lg flex-1" onclick="alert('Please verify your account to checkout.'); return false;">Buy Now</a>
+                {% else %}
                 <a href="{% url 'buyer_checkout' %}" class="btn btn-outline btn-lg flex-1">Buy Now</a>
+                {% endif %}
                 <button class="btn btn-ghost btn-lg wishlist-toggle"
                   style="flex:none;width:52px;height:52px;border-radius:var(--radius-md);border:1px solid var(--border-color);">🤍</button>
               </div>

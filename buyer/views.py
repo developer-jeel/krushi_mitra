@@ -181,6 +181,11 @@ def buyer_cart(request):
 @check_login(['Buyer'])
 def buyer_addto_cart(request):
     uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    if not buyr.is_verified:
+        messages.error(request, 'Please verify your account to buy crops.')
+        return redirect('buyer_browse_crops')
+    
     cart = Cart.objects.get(user = uid)
     if request.method == 'POST':
         quantity = request.POST.get('quantity', 1)
@@ -223,6 +228,11 @@ def buyer_checkout(request):
     from decimal import Decimal
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    
+    if not buyr.is_verified:
+        messages.error(request, 'Please verify your account to checkout.')
+        return redirect('buyer_cart')
+        
     cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
     premium_type = premium_buyer.objects.get(user=buyr)
@@ -356,6 +366,11 @@ def add_wishlist(request,pk):
 def buyer_bulk_order(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
+    
+    if not buyr.is_verified:
+        messages.error(request, 'Please verify your account to place a bulk order.')
+        return redirect('buyer_dashboard')
+        
     premium_type = premium_buyer.objects.get(user=buyr)
     
     if request.method == 'POST':

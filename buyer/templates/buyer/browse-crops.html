@@ -241,7 +241,11 @@
                 <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px;">
                   <a href="{% url 'buyer_crop_details' pk=crop.id %}" style="display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; height: 44px; transition: all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)'">View Details</a>
                   
-                  {% if cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %} 
+                  {% if not buyr.is_verified %}
+                    <button type="button" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #22C55E; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: not-allowed; height: 44px; opacity: 0.6;" onclick="alert('Please verify your account to buy crops.'); return false;">
+                      🛒 Add to Cart
+                    </button>
+                  {% elif cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %} 
                     <button type="submit" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #22C55E; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; height: 44px; transition: background 0.2s;" onmouseover="this.style.background='#16A34A'" onmouseout="this.style.background='#22C55E'">
                       🛒 Add to Cart
                     </button>
