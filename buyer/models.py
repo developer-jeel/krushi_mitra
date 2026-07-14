@@ -49,6 +49,7 @@ class Buyer(models.Model):
     is_verified = models.BooleanField(default=False)
     is_premiume = models.BooleanField(default=False)
     enable_update = models.BooleanField(default=True)
+    update_request = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -633,3 +633,13 @@ def current_plan(request):
         'cart_usage_pct': cart_usage_pct,
         'last_buy':last_buy
     })
+
+@check_login(['Buyer'])
+def buyer_request_update(request):
+    uid = request.uid
+    buyr = Buyer.objects.get(user=uid)
+    if request.method == 'POST':
+        buyr.update_request = True
+        buyr.save()
+        messages.success(request, 'Request to enable updates has been submitted successfully!')
+    return redirect(request.META.get('HTTP_REFERER', 'buyer_dashboard'))

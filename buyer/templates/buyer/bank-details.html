@@ -183,6 +183,12 @@
               </div>
               {% if buyr.enable_update %}
               <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Bank Details</button>
+              {% else %}
+                {% if buyr.update_request %}
+                <button type="button" class="btn" style="margin-top: 1rem; cursor: not-allowed; opacity: 0.7; background-color: #6c757d; color: white;" disabled>Edit Request Pending</button>
+                {% else %}
+                <button type="submit" formaction="{% url 'buyer_request_update' %}" class="btn" style="margin-top: 1rem; background-color: #ffc107; color: black;">Request Edit Access</button>
+                {% endif %}
               {% endif %}
             </div>
 

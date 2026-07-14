@@ -45,6 +45,7 @@ urlpatterns = [
     path('profile/', views.buyer_profile, name='buyer_profile'),
     path('verification/', views.buyer_verification, name='buyer_verification'),
     path('bank-details/', views.buyer_bank_details, name='buyer_bank_details'),
+    path('request-update/', views.buyer_request_update, name='buyer_request_update'),
     path('settings/', views.buyer_settings, name='buyer_settings'),
     path('kyc', views.kyc, name='kyc'),
     
