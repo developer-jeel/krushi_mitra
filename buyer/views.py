@@ -112,31 +112,7 @@ def buyer_browse_crops(request):
     categories = request.GET.getlist('category')
     if categories:
         all_crops = all_crops.filter(category__in=categories)
-        
-    location = request.GET.get('location')
-    if location and location != 'All Locations':
-        all_crops = all_crops.filter(user__city__icontains=location)
-        
-    min_price = request.GET.get('min_price')
-    if min_price:
-        all_crops = all_crops.filter(price__gte=min_price)
-        
-    max_price = request.GET.get('max_price')
-    if max_price:
-        all_crops = all_crops.filter(price__lte=max_price)
-        
-    quantity = request.GET.get('quantity')
-    if quantity and quantity != 'Any Quantity':
-        if quantity == 'Less than 100 kg':
-            all_crops = all_crops.filter(quantity__lt=100)
-        elif quantity == '100 - 500 kg':
-            all_crops = all_crops.filter(quantity__gte=100, quantity__lte=500)
-        elif quantity == '500 - 1000 kg':
-            all_crops = all_crops.filter(quantity__gte=500, quantity__lte=1000)
-        elif quantity == '1000 - 5000 kg':
-            all_crops = all_crops.filter(quantity__gte=1000, quantity__lte=5000)
-        elif quantity == '5000+ kg':
-            all_crops = all_crops.filter(quantity__gt=5000)
+
             
     sort_by = request.GET.get('sort')
     if sort_by == 'Price: Low to High':
