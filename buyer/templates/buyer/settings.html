@@ -103,6 +103,13 @@
       </header>
       <main class="main-content">
         <div class="settings-layout page-reveal">
+          {% if messages %}
+          <div style="margin-bottom: 1rem; padding: 1rem; background: #e6f4ea; color: #1e8e3e; border-radius: 4px;">
+            {% for message in messages %}
+              {{ message }}
+            {% endfor %}
+          </div>
+          {% endif %}
           <div class="settings-nav card">
             <button class="settings-nav-item active" data-section="profile"><span>👤</span> Profile Settings</button>
             <button class="settings-nav-item" data-section="security"><span>🔒</span> Security</button>
@@ -117,41 +124,49 @@
             <!-- Profile Settings -->
             <div class="settings-section active" data-section="profile">
               <div class="card">
-                <h3 class="card-title">👤 Profile Settings</h3>
-                <div class="form-row mt-4">
-                  <div class="form-group"><label class="form-label">Display Name</label><input type="text"
-                      class="form-input" value="Rajesh Mehta"></div>
-                  <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input"
-                      value="rajesh.mehta@example.com"></div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input"
-                      value="+91 98765 43210"></div>
-                  <div class="form-group"><label class="form-label">Business Name</label><input type="text"
-                      class="form-input" value="Mehta Agro Traders"></div>
-                </div>
-                <button class="btn btn-primary mt-4">Save Changes</button>
+                <form method="POST" action="{% url 'buyer_settings' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="update_profile">
+                  <h3 class="card-title">👤 Profile Settings</h3>
+                  <div class="form-row mt-4">
+                    <div class="form-group"><label class="form-label">Display Name</label><input type="text" name="display_name"
+                        class="form-input" value="{{ buyr.user.name|default_if_none:'' }}"></div>
+                    <div class="form-group"><label class="form-label">Email</label><input type="email" name="email" class="form-input"
+                        value="{{ buyr.user.email|default_if_none:'' }}"></div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group"><label class="form-label">Phone</label><input type="tel" name="phone" class="form-input"
+                        value="{{ buyr.user.contact|default_if_none:'' }}"></div>
+                    <div class="form-group"><label class="form-label">Business Name</label><input type="text" name="business_name"
+                        class="form-input" value="{{ buyr.business_type|default_if_none:'' }}"></div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-4">Save Changes</button>
+                </form>
               </div>
             </div>
 
             <!-- Security -->
             <div class="settings-section" data-section="security">
               <div class="card">
-                <h3 class="card-title">🔒 Security Settings</h3>
-                <div class="form-group mt-4">
-                  <label class="form-label">Current Password</label>
-                  <div class="password-field"><input type="password" class="form-input" value="password123"><button
-                      class="password-toggle">👁️</button></div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group"><label class="form-label">New Password</label><input type="password"
-                      class="form-input" placeholder="Enter new password"></div>
-                  <div class="form-group"><label class="form-label">Confirm Password</label><input type="password"
-                      class="form-input" placeholder="Confirm new password"></div>
-                </div>
-                <div class="form-check mt-4"><input type="checkbox" checked id="twofa"><label for="twofa">Enable
-                    Two-Factor Authentication</label></div>
-                <button class="btn btn-primary mt-4">Update Security</button>
+                <form method="POST" action="{% url 'buyer_settings' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="update_security">
+                  <h3 class="card-title">🔒 Security Settings</h3>
+                  <div class="form-group mt-4">
+                    <label class="form-label">Current Password</label>
+                    <div class="password-field"><input type="password" name="current_password" class="form-input" placeholder="Current Password" required><button type="button"
+                        class="password-toggle">👁️</button></div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group"><label class="form-label">New Password</label><input type="password" name="new_password"
+                        class="form-input" placeholder="Enter new password" required></div>
+                    <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" name="confirm_password"
+                        class="form-input" placeholder="Confirm new password" required></div>
+                  </div>
+                  <div class="form-check mt-4"><input type="checkbox" id="twofa"><label for="twofa">Enable
+                      Two-Factor Authentication</label></div>
+                  <button type="submit" class="btn btn-primary mt-4">Update Security</button>
+                </form>
               </div>
             </div>
 

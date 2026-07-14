@@ -9,6 +9,8 @@ from farmer.models import *
 from farmer.views import *
 from .models import *
 from django.core.serializers.json import DjangoJSONEncoder
+from django.contrib.auth.hashers import make_password, check_password
+
 
 # Create your views here.
 
@@ -465,11 +467,50 @@ def buyer_bank_details(request):
 
     return render(request, "buyer/bank-details.html",{'premium_type':premium_type,'buyr':buyr, 'bank_info': bank_info})
 
+
 @check_login(['Buyer'])
 def buyer_settings(request):
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'update_profile':
+            display_name = request.POST.get('display_name')
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            business_name = request.POST.get('business_name')
+            
+            user = buyr.user
+            if display_name: user.name = display_name
+            if email: user.email = email
+            if phone: user.contact = phone
+            user.save()
+            
+            if business_name: buyr.business_type = business_name
+            buyr.save()
+            messages.success(request, 'Profile settings updated successfully!')
+            
+        elif action == 'update_security':
+            current_password = request.POST.get('current_password')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            user = buyr.user
+            if check_password(current_password, user.password):
+                if new_password and new_password == confirm_password:
+                    user.password = make_password(new_password)
+                    user.save()
+                    messages.success(request, 'Password updated successfully!')
+                else:
+                    messages.error(request, 'New passwords do not match.')
+            else:
+                messages.error(request, 'Current password is incorrect.')
+                
+        return redirect('buyer_settings')
+
     return render(request, "buyer/settings.html",{'premium_type':premium_type,'buyr':buyr})
 
 @check_login(['Buyer'])
