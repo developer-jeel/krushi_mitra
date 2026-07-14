@@ -43,7 +43,6 @@
           <span>Back</span>
         </a>
       </div>
-      <pre>{{ coupons }}</pre>
 
       <div class="header-center">
         <div class="header-logo">
@@ -600,7 +599,7 @@
        ============================================================ */
     const state = {
       plan: BACKEND_PLAN === 'Premium' ? 'premium' : 'standard',
-      isYearly: new URLSearchParams(window.locatio  n.search).get('cycle') === 'yearly',
+      isYearly: new URLSearchParams(window.location.search).get('cycle') === 'yearly',
       couponCode: null,
       couponDiscount: 0,
       paymentMethod: 'upi',
@@ -954,7 +953,7 @@
     function updateSummary() {
       const p = PLANS[state.plan];
       const basePrice = state.isYearly ? p.yearly_total : p.monthly;
-      
+
       if (state.couponCode) {
         const coupon = COUPONS[state.couponCode];
         if (coupon) {

@@ -160,10 +160,12 @@
         </div>
 
         <div class="navbar-right">
-          <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Search crops, orders..." aria-label="Search">
-          </div>
+          <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
+            <div class="search-box" data-search-target>
+              <span class="search-icon">🔍</span>
+              <input type="text" name="q" placeholder="Search crops, orders..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
+            </div>
+          </form>
           <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">🔔<span
               class="badge-dot"></span></a>

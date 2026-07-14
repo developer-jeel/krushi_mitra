@@ -101,16 +101,21 @@
           </div>
         </div>
         <div class="navbar-right">
-          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search..."></div>
+          <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
+            <div class="search-box" data-search-target>
+              <span class="search-icon">🔍</span>
+              <input type="text" name="q" placeholder="Search..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
+            </div>
+          </form>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
-              <div class="profile-avatar">RM</div>
+              <div class="profile-avatar">{{ buyr.user.name|make_list|first|upper }}</div>
               <div>
                 <div class="profile-name">{{uid.name}}</div>
-                <div class="profile-role">Wholesale Trader</div>
+                <div class="profile-role">{{ buyr.business_type|default:"Buyer" }}</div>
               </div>
             </div>
             <div class="dropdown-menu">
@@ -206,16 +211,24 @@
                 <div class="checkout-summary-item"><span>Delivery</span><span class="text-green">Free</span></div>
                 <div class="checkout-summary-item"><span>Tax (GST @ {{cart.tax_per}}%)</span><span>₹{{cart.tax}}</span>
                 </div>
+                <div class="checkout-summary-item" id="discount-row" style="display:none; color:var(--green-500);">
+                  <span>Discount (<span id="coupon-name"></span>)</span>
+                  <span id="discount-amount">-₹0</span>
+                </div>
                 <div class="summary-divider"></div>
-                <div class="checkout-summary-item total"><span>Grand Total</span><span>₹{{cart.final_price}}</span>
+                <div class="checkout-summary-item total"><span>Grand Total</span><span id="grand-total">₹{{cart.final_price}}</span>
                 </div>
 
                 <div class="coupon-section mt-4">
                   <div class="coupon-input-group">
-                    <input type="text" class="form-input coupon-input" placeholder="Have a coupon?">
-                    <button class="btn btn-primary btn-sm apply-coupon">Apply</button>
+                    <input type="text" class="form-input custom-coupon-input" id="couponInput" placeholder="Have a coupon?">
+                    <button type="button" class="btn btn-primary btn-sm custom-apply-coupon" id="couponApplyBtn">Apply</button>
                   </div>
+                  <div id="couponMessage" style="margin-top: 8px; font-size: 0.875rem;"></div>
                 </div>
+                
+                <input type="hidden" name="coupon_code" id="hiddenCouponCode" value="">
+
 
                 <div class="checkout-payment mt-4">
                   <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:12px;">Payment Method</h4>
@@ -262,6 +275,80 @@
     </div>
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
+  <script>
+    const COUPONS = {{ coupons|safe }};
+    const baseFinalPrice = {{ cart.final_price }};
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const applyBtn = document.getElementById('couponApplyBtn');
+      const input = document.getElementById('couponInput');
+      const hiddenInput = document.getElementById('hiddenCouponCode');
+      const discountRow = document.getElementById('discount-row');
+      const couponName = document.getElementById('coupon-name');
+      const discountAmountDisplay = document.getElementById('discount-amount');
+      const grandTotal = document.getElementById('grand-total');
+      const messageDiv = document.getElementById('couponMessage');
+      const orderBtn = document.querySelector('button[onclick^="showToast(\'success\'"]');
+
+      applyBtn.addEventListener('click', () => {
+        const code = input.value.trim().toUpperCase();
+        if (!code) {
+          showMessage('Please enter a coupon code', 'error');
+          return;
+        }
+
+        const coupon = COUPONS.find(c => c.code === code);
+        
+        if (coupon) {
+          if (baseFinalPrice >= coupon.minimum_amount) {
+            let discount = 0;
+            if (coupon.discount_type === 'percent') {
+              discount = (baseFinalPrice * coupon.discount_value) / 100;
+            } else if (coupon.discount_type === 'flat') {
+              discount = coupon.discount_value;
+            }
+            
+            const newTotal = Math.max(0, baseFinalPrice - discount);
+            
+            // Update UI
+            hiddenInput.value = code;
+            couponName.textContent = code;
+            discountAmountDisplay.textContent = '-₹' + discount.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+            discountRow.style.display = 'flex';
+            grandTotal.textContent = '₹' + newTotal.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+            
+            if (orderBtn) {
+              orderBtn.innerHTML = `🛒 Place Order - ₹${newTotal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+            }
+            
+            showMessage('Coupon applied successfully!', 'success');
+            showToast('success', 'Coupon Applied', `Coupon "${code}" applied successfully!`);
+          } else {
+            showMessage(`Minimum order amount of ₹${coupon.minimum_amount} required`, 'error');
+            resetCoupon();
+          }
+        } else {
+          showMessage('Invalid coupon code', 'error');
+          showToast('error', 'Invalid Coupon', 'Please enter a valid coupon code.');
+          resetCoupon();
+        }
+      });
+      
+      function showMessage(msg, type) {
+        messageDiv.textContent = msg;
+        messageDiv.style.color = type === 'error' ? 'var(--red-500)' : 'var(--green-500)';
+      }
+      
+      function resetCoupon() {
+        hiddenInput.value = '';
+        discountRow.style.display = 'none';
+        grandTotal.textContent = '₹' + baseFinalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        if (orderBtn) {
+          orderBtn.innerHTML = `🛒 Place Order - ₹${baseFinalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>

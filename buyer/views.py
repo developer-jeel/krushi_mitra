@@ -100,8 +100,53 @@ def buyer_browse_crops(request):
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
     all_crops = crop.objects.filter(is_approved = True)
+    
+    query = request.GET.get('q')
+    if query:
+        from django.db.models import Q
+        all_crops = all_crops.filter(
+            Q(cropname__icontains=query) | 
+            Q(category__icontains=query)
+        )
+        
+    categories = request.GET.getlist('category')
+    if categories:
+        all_crops = all_crops.filter(category__in=categories)
+        
+    location = request.GET.get('location')
+    if location and location != 'All Locations':
+        all_crops = all_crops.filter(user__city__icontains=location)
+        
+    min_price = request.GET.get('min_price')
+    if min_price:
+        all_crops = all_crops.filter(price__gte=min_price)
+        
+    max_price = request.GET.get('max_price')
+    if max_price:
+        all_crops = all_crops.filter(price__lte=max_price)
+        
+    quantity = request.GET.get('quantity')
+    if quantity and quantity != 'Any Quantity':
+        if quantity == 'Less than 100 kg':
+            all_crops = all_crops.filter(quantity__lt=100)
+        elif quantity == '100 - 500 kg':
+            all_crops = all_crops.filter(quantity__gte=100, quantity__lte=500)
+        elif quantity == '500 - 1000 kg':
+            all_crops = all_crops.filter(quantity__gte=500, quantity__lte=1000)
+        elif quantity == '1000 - 5000 kg':
+            all_crops = all_crops.filter(quantity__gte=1000, quantity__lte=5000)
+        elif quantity == '5000+ kg':
+            all_crops = all_crops.filter(quantity__gt=5000)
+            
+    sort_by = request.GET.get('sort')
+    if sort_by == 'Price: Low to High':
+        all_crops = all_crops.order_by('price')
+    elif sort_by == 'Price: High to Low':
+        all_crops = all_crops.order_by('-price')
+    else:
+        all_crops = all_crops.order_by('-created_at')
+
     saved_crops = saved.objects.filter( user=buyr).values_list('crop_id', flat=True)
-    buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
     context = {'all_crops' : all_crops,"saved_crops":saved_crops,'premium_type':premium_type,'buyr':buyr,'cart':cart}
     return render(request, "buyer/browse-crops.html",context)
@@ -198,6 +243,8 @@ def cart_item_delete(request,pk):
 
 @check_login(['Buyer'])
 def buyer_checkout(request):
+    import json
+    from decimal import Decimal
     uid = request.uid
     buyr = Buyer.objects.get(user=uid)
     cart = Cart.objects.get(user = uid)
@@ -205,14 +252,42 @@ def buyer_checkout(request):
     premium_type = premium_buyer.objects.get(user=buyr)
     total_quantity = 0
     quantity_limit = cart.cart_limit
+
+    coupons = discount_coupon.objects.filter(is_active=True).values('code', 'discount_type', 'discount_value', 'label', 'minimum_amount')
+    coupon_data = list(coupons)
+    for c in coupon_data:
+        c['discount_value'] = float(c['discount_value'])
+        c['minimum_amount'] = float(c['minimum_amount'])
+
     if request.method == 'POST':
         payment_method = request.POST.get('payment')
+        coupon_code = request.POST.get('coupon_code')
+        
+        final_price = float(cart.final_price)
+        discount_amount = 0
+        
+        if coupon_code:
+            coupon = discount_coupon.objects.filter(code=coupon_code, is_active=True).first()
+            if coupon and float(cart.final_price) >= float(coupon.minimum_amount):
+                if coupon.discount_type == 'percent':
+                    discount_amount = (float(cart.final_price) * float(coupon.discount_value)) / 100
+                elif coupon.discount_type == 'flat':
+                    discount_amount = float(coupon.discount_value)
+                
+                final_price = max(0, float(cart.final_price) - discount_amount)
+                coupon.used_count += 1
+                if coupon.used_count >= coupon.usage_limit:
+                    coupon.is_active = False
+                coupon.save()
+
         con_order = Order.objects.create(
              user = uid,
              subtotal = cart.total_price,
              tax = cart.tax,
-             total_amount = cart.final_price,
-             payment_method = payment_method
+             total_amount = final_price,
+             payment_method = payment_method,
+             coupon_code = coupon_code if coupon_code else None,
+             discount_amount = discount_amount
         )
         con_order.save()
 
@@ -236,7 +311,7 @@ def buyer_checkout(request):
         )
         return redirect("buyer_dashboard")
 
-    context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr,'premium_type':premium_type,'buyr':buyr}
+    context = {"uid":uid,"cart":cart,"cart_items":cart_items ,'buyr':buyr,'premium_type':premium_type,'buyr':buyr, "coupons": json.dumps(coupon_data)}
     return render(request, "buyer/checkout.html",context)
 
 @check_login(['Buyer'])

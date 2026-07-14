@@ -100,8 +100,12 @@
           </div>
         </div>
         <div class="navbar-right">
-          <div class="search-box"><span class="search-icon">🔍</span><input type="text"
-              placeholder="Search wishlist..."></div>
+          <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
+            <div class="search-box" data-search-target>
+              <span class="search-icon">🔍</span>
+              <input type="text" name="q" placeholder="Search wishlist..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
+            </div>
+          </form>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
@@ -110,7 +114,7 @@
               <div class="profile-avatar">{{ uid.name|slice:":1"|upper }}</div>
               <div>
                 <div class="profile-name">{{uid.name}}</div>
-                <div class="profile-role">Wholesale Trader</div>
+                <div class="profile-role">{{ buyr.business_type|default:"Buyer" }}</div>
               </div>
             </div>
             <div class="dropdown-menu">

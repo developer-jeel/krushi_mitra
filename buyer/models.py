@@ -204,6 +204,27 @@ class premium_coupon(models.Model):
     def __str__(self):
         return self.code
 
+class discount_coupon(models.Model):
+    DISCOUNT_TYPE = (
+        ('percent', 'Percentage'),
+        ('flat', 'Flat'),
+    )
+
+    code = models.CharField(max_length=30, unique=True)
+    discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE)
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    label = models.CharField(max_length=100)
+    minimum_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    usage_limit = models.PositiveIntegerField(default=1)
+    used_count = models.PositiveIntegerField(default=0)
+    expiry_date = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.code
+
+
 class Cart(models.Model):
     user = models.OneToOneField(
         User,
@@ -267,6 +288,8 @@ class Order(models.Model):
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default='Pending')
     payment_method = models.CharField(max_length=50,blank=True,null=True)
     payment_status = models.CharField(max_length=20,default='Pending')
+    coupon_code = models.CharField(max_length=30, blank=True, null=True)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

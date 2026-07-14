@@ -104,10 +104,10 @@
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
-              <div class="profile-avatar">RM</div>
+              <div class="profile-avatar">{{ buyr.user.name|make_list|first|upper }}</div>
               <div>
                 <div class="profile-name">{{uid.name}}</div>
-                <div class="profile-role">Wholesale Trader</div>
+                <div class="profile-role">{{ buyr.business_type|default:"Buyer" }}</div>
               </div>
             </div>
             <div class="dropdown-menu">

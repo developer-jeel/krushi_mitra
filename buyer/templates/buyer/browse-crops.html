@@ -104,18 +104,22 @@
           </div>
         </div>
         <div class="navbar-right">
-          <div class="search-box"><span class="search-icon">🔍</span><input type="text" placeholder="Search crops..."
-              aria-label="Search"></div>
+          <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
+            <div class="search-box" data-search-target>
+              <span class="search-icon">🔍</span>
+              <input type="text" name="q" placeholder="Search crops..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
+            </div>
+          </form>
           <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
           <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">🔔<span
               class="badge-dot"></span></a>
           <button class="theme-toggle">🌙</button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
-              <div class="profile-avatar">RM</div>
+              <div class="profile-avatar">{{ buyr.user.name|make_list|first|upper }}</div>
               <div>
                 <div class="profile-name">{{uid.name}}</div>
-                <div class="profile-role">Wholesale Trader</div>
+                <div class="profile-role">{{ buyr.business_type|default:"Buyer" }}</div>
               </div>
             </div>
             <div class="dropdown-menu">
@@ -134,12 +138,14 @@
         <!-- Search & Filter Header -->
         <section class="browse-header page-reveal">
           <div class="browse-search-area">
-            <div class="browse-search-box">
-              <span class="browse-search-icon">🔍</span>
-              <input type="text" class="browse-search-input" placeholder="Search by crop name, category, location..."
-                aria-label="Search crops">
-              <button class="btn btn-primary browse-search-btn">Search</button>
-            </div>
+            <form action="{% url 'buyer_browse_crops' %}" method="GET">
+              <div class="browse-search-box">
+                <span class="browse-search-icon">🔍</span>
+                <input type="text" name="q" class="browse-search-input" placeholder="Search by crop name, category..."
+                  aria-label="Search crops" value="{{ request.GET.q|default:'' }}">
+                <button type="submit" class="btn btn-primary browse-search-btn">Search</button>
+              </div>
+            </form>
             <div class="browse-search-tags">
               <span class="search-tag">🌾 Grains <button class="tag-remove">✕</button></span>
               <span class="search-tag">📍 Maharashtra <button class="tag-remove">✕</button></span>
@@ -152,55 +158,57 @@
         <!-- Filters + Results Layout -->
         <div class="browse-layout page-reveal">
           <!-- Filter Sidebar -->
-          <aside class="filter-sidebar card">
+          <form class="filter-sidebar card" action="{% url 'buyer_browse_crops' %}" method="GET" id="filterForm">
+            <input type="hidden" name="q" value="{{ request.GET.q|default:'' }}">
+            <input type="hidden" name="sort" id="hiddenSort" value="{{ request.GET.sort|default:'Latest' }}">
             <div class="filter-header">
               <h3 class="card-title">Filters</h3>
-              <button class="btn btn-sm btn-ghost clear-filters">Clear All</button>
+              <a href="{% url 'buyer_browse_crops' %}" class="btn btn-sm btn-ghost clear-filters">Clear All</a>
             </div>
 
             <div class="filter-section">
               <h4 class="filter-title">Category</h4>
               <div class="filter-options">
-                <label class="form-check"><input type="checkbox" checked> 🌾 Grains (24)</label>
-                <label class="form-check"><input type="checkbox"> 🥭 Fruits (18)</label>
-                <label class="form-check"><input type="checkbox"> 🥬 Vegetables (31)</label>
-                <label class="form-check"><input type="checkbox"> 🌶️ Spices (15)</label>
-                <label class="form-check"><input type="checkbox"> 🧅 Pulses (12)</label>
-                <label class="form-check"><input type="checkbox"> 🌿 Oilseeds (9)</label>
+                <label class="form-check"><input type="checkbox" name="category" value="grain cereals" {% if 'grain cereals' in request.GET.category %}checked{% endif %}> 🌾 Grains</label>
+                <label class="form-check"><input type="checkbox" name="category" value="fruits" {% if 'fruits' in request.GET.category %}checked{% endif %}> 🥭 Fruits</label>
+                <label class="form-check"><input type="checkbox" name="category" value="vegetables" {% if 'vegetables' in request.GET.category %}checked{% endif %}> 🥬 Vegetables</label>
+                <label class="form-check"><input type="checkbox" name="category" value="spices" {% if 'spices' in request.GET.category %}checked{% endif %}> 🌶️ Spices</label>
+                <label class="form-check"><input type="checkbox" name="category" value="pulses" {% if 'pulses' in request.GET.category %}checked{% endif %}> 🧅 Pulses</label>
+                <label class="form-check"><input type="checkbox" name="category" value="cotton" {% if 'cotton' in request.GET.category %}checked{% endif %}> 🌿 Cotton</label>
               </div>
             </div>
 
             <div class="filter-section">
               <h4 class="filter-title">Location</h4>
-              <select class="form-select">
-                <option>All Locations</option>
-                <option>Maharashtra</option>
-                <option>Punjab</option>
-                <option>Gujarat</option>
-                <option>Karnataka</option>
-                <option>Madhya Pradesh</option>
-                <option>Uttar Pradesh</option>
+              <select class="form-select" name="location">
+                <option {% if request.GET.location == 'All Locations' %}selected{% endif %}>All Locations</option>
+                <option {% if request.GET.location == 'Maharashtra' %}selected{% endif %}>Maharashtra</option>
+                <option {% if request.GET.location == 'Punjab' %}selected{% endif %}>Punjab</option>
+                <option {% if request.GET.location == 'Gujarat' %}selected{% endif %}>Gujarat</option>
+                <option {% if request.GET.location == 'Karnataka' %}selected{% endif %}>Karnataka</option>
+                <option {% if request.GET.location == 'Madhya Pradesh' %}selected{% endif %}>Madhya Pradesh</option>
+                <option {% if request.GET.location == 'Uttar Pradesh' %}selected{% endif %}>Uttar Pradesh</option>
               </select>
             </div>
 
             <div class="filter-section">
               <h4 class="filter-title">Price Range (per kg)</h4>
               <div class="filter-range">
-                <input type="number" class="form-input" placeholder="Min ₹" value="10">
+                <input type="number" class="form-input" name="min_price" placeholder="Min ₹" value="{{ request.GET.min_price|default:'' }}">
                 <span>—</span>
-                <input type="number" class="form-input" placeholder="Max ₹" value="1000">
+                <input type="number" class="form-input" name="max_price" placeholder="Max ₹" value="{{ request.GET.max_price|default:'' }}">
               </div>
             </div>
 
             <div class="filter-section">
               <h4 class="filter-title">Quantity Available</h4>
-              <select class="form-select">
-                <option>Any Quantity</option>
-                <option>Less than 100 kg</option>
-                <option>100 - 500 kg</option>
-                <option>500 - 1000 kg</option>
-                <option>1000 - 5000 kg</option>
-                <option>5000+ kg</option>
+              <select class="form-select" name="quantity">
+                <option {% if request.GET.quantity == 'Any Quantity' %}selected{% endif %}>Any Quantity</option>
+                <option {% if request.GET.quantity == 'Less than 100 kg' %}selected{% endif %}>Less than 100 kg</option>
+                <option {% if request.GET.quantity == '100 - 500 kg' %}selected{% endif %}>100 - 500 kg</option>
+                <option {% if request.GET.quantity == '500 - 1000 kg' %}selected{% endif %}>500 - 1000 kg</option>
+                <option {% if request.GET.quantity == '1000 - 5000 kg' %}selected{% endif %}>1000 - 5000 kg</option>
+                <option {% if request.GET.quantity == '5000+ kg' %}selected{% endif %}>5000+ kg</option>
               </select>
             </div>
 
@@ -223,22 +231,22 @@
               </div>
             </div>
 
-            <button class="btn btn-primary btn-block apply-filters">Apply Filters</button>
-          </aside>
+            <button type="submit" class="btn btn-primary btn-block apply-filters">Apply Filters</button>
+          </form>
 
           <!-- Results -->
           <div class="results-container">
             <!-- Sort & Count -->
             <div class="results-header">
-              <div class="results-count">Showing <strong>24</strong> of 128 crops</div>
+              <div class="results-count">Showing <strong>{{ all_crops|length }}</strong> crops</div>
               <div class="results-sort">
                 <label class="body-small text-muted">Sort by:</label>
-                <select class="form-select" style="width:auto;padding:6px 30px 6px 12px;">
-                  <option>Latest</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Rating</option>
-                  <option>Popularity</option>
+                <select class="form-select" id="sortSelect" style="width:auto;padding:6px 30px 6px 12px;" onchange="document.getElementById('hiddenSort').value = this.value; document.getElementById('filterForm').submit();">
+                  <option {% if request.GET.sort == 'Latest' %}selected{% endif %}>Latest</option>
+                  <option {% if request.GET.sort == 'Price: Low to High' %}selected{% endif %}>Price: Low to High</option>
+                  <option {% if request.GET.sort == 'Price: High to Low' %}selected{% endif %}>Price: High to Low</option>
+                  <option {% if request.GET.sort == 'Rating' %}selected{% endif %}>Rating</option>
+                  <option {% if request.GET.sort == 'Popularity' %}selected{% endif %}>Popularity</option>
                 </select>
               </div>
             </div>

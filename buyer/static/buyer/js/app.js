@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
           showToast('success', 'Coupon Applied', `Coupon "${input.value}" applied successfully!`);
           updateOrderTotal();
         } else {
-          showToast('error', 'Invalid Coupon', 'Please enter a valid coupon code.');
+            showToast('error', 'Invalid Coupon', 'Please enter a valid coupon code.');
         }
       });
     });
