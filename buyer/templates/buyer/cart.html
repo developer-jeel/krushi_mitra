@@ -162,32 +162,32 @@
       </header>
 
       <main class="main-content">
-
         <div class="cart-page">
 
-          <!-- Page Header -->
+          <!-- ── Page Header ── -->
           <div class="cart-page-header">
+            <div class="cart-title-row">
+              <div class="cart-title-left">
+                <h1 class="cart-page-title">Shopping Cart</h1>
+                <p class="cart-page-subtitle">Review your selected crops before checkout.</p>
+              </div>
+              {% if cart_items %}
+              <div class="cart-stats-pill">
+                <span class="cart-stats-icon">🛒</span>
+                <span class="cart-stats-count">{{ cart_items|length }} Item{{ cart_items|length|pluralize }}</span>
+                <span class="cart-stats-sep"></span>
+                <span class="cart-stats-label">Total</span>
+                <span class="cart-stats-total">₹{{ cart.total_price }}</span>
+              </div>
+              {% endif %}
+            </div>
             <a href="{% url 'buyer_browse_crops' %}" class="cart-back-link">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
               Continue Shopping
             </a>
-            <div class="cart-header-row">
-              <div>
-                <h1 class="cart-page-title">Shopping Cart</h1>
-                {% if cart_items %}
-                <p class="cart-page-meta">Review your selected crops before checkout</p>
-                {% endif %}
-              </div>
-              {% if cart_items %}
-              <div class="cart-header-stats">
-                <span class="cart-header-stats-icon">🛒</span>
-                <span class="cart-header-stats-text">{{ cart_items|length }} item{{ cart_items|length|pluralize }} &nbsp;·&nbsp; ₹{{ cart.total_price }}</span>
-              </div>
-              {% endif %}
-            </div>
           </div>
 
-          <!-- Cart Layout -->
+          <!-- ── Cart Layout ── -->
           <div class="cart-layout">
 
             {% if not cart_items %}
@@ -196,17 +196,13 @@
               <div class="cart-empty-icon">🛒</div>
               <h2>Your cart is empty</h2>
               <p>Browse our marketplace to find premium crops directly from trusted farmers.</p>
-              <a href="{% url 'buyer_browse_crops' %}" class="cart-empty-btn">
-                🌾 Browse Crops
-              </a>
+              <a href="{% url 'buyer_browse_crops' %}" class="cart-empty-btn">🌾 Browse Crops</a>
             </div>
 
             {% else %}
 
             <!-- LEFT: Cart Items -->
             <div class="cart-items-col">
-              <div class="cart-col-label">{{ cart_items|length }} item{{ cart_items|length|pluralize }} selected</div>
-
               {% for item in cart_items %}
               <form action="{% url 'cart_item_delete' pk=item.id %}" method="post" class="cart-item-form" id="form-{{ item.id }}">
                 {% csrf_token %}
@@ -219,52 +215,52 @@
                   <div class="cart-img-wrap">
                     <img src="{{ item.crop.image.url }}" alt="{{ item.crop.cropname }}" class="cart-img">
                     <span class="cart-grade-badge">★ Grade A</span>
-                    <a href="{% url 'add_wishlist' pk=item.crop.id %}" class="cart-wishlist-icon" title="Save to Wishlist">❤️</a>
                   </div>
 
                   <!-- Details -->
                   <div class="cart-item-details">
                     <h3 class="cart-item-name">{{ item.crop.cropname }}</h3>
-                    <div class="cart-item-meta">
-                      <span class="cart-meta-pill">🌾 {{ item.crop.category }}</span>
-                      <span class="cart-meta-pill">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        {{ item.crop.user.city|default:"India" }}
-                      </span>
+                    <div class="cart-item-tags">
+                      <span class="cart-tag-pill">🌾 {{ item.crop.category }}</span>
+                    </div>
+                    <div class="cart-tag cart-tag-location">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      {{ item.crop.user.city|default:"India" }}, {{ item.crop.user.state|default:"India" }}
                     </div>
                     <div class="cart-verified">
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                       Verified Seller
                     </div>
-                  </div>
-
-                  <!-- Price -->
-                  <div class="cart-item-price-col">
-                    <div class="cart-unit-price-display">
-                      ₹<span class="cart-unit-price" data-price="{{ item.crop.price }}">{{ item.crop.price }}</span>/kg
+                    <div class="cart-stars">
+                      <span class="cart-stars-icons">★★★★★</span>
+                      <span class="cart-stars-label">4.8 (124 reviews)</span>
                     </div>
-                    <div class="cart-old-price">₹{{ item.crop.price|add:"800" }}/kg</div>
-                    <span class="cart-discount-tag">21% OFF</span>
                   </div>
 
                   <!-- Quantity -->
-                  <div class="cart-qty-wrap">
+                  <div class="cart-qty-section">
+                    <span class="cart-qty-label-text">Quantity (kg)</span>
                     <div class="cart-qty-stepper qty-selector">
                       <button type="button" class="qty-btn qty-minus" aria-label="Decrease">−</button>
                       <input type="number" class="qty-input" value="{{ item.quantity }}" min="1" max="5000" aria-label="Quantity">
                       <button type="button" class="qty-btn qty-plus" aria-label="Increase">+</button>
                     </div>
-                    <span class="cart-qty-label">kg</span>
                   </div>
 
-                  <!-- Item Total -->
-                  <div class="cart-item-total-col">
-                    <span class="cart-item-total-label">Total</span>
-                    <div class="cart-item-total-price cart-total-price">₹{{ item.subtotal }}</div>
+                  <!-- Price -->
+                  <div class="cart-item-price-section">
+                    <div class="cart-current-price">
+                      ₹<span class="cart-unit-price" data-price="{{ item.crop.price }}">{{ item.crop.price }}</span>
+                      <span class="per-unit">/ kg</span>
+                    </div>
+                    <div class="cart-old-price-row">
+                      <span class="cart-old-price">₹{{ item.crop.price|add:"800" }} / kg</span>
+                      <span class="cart-discount-tag">21% OFF</span>
+                    </div>
                   </div>
 
-                  <!-- Actions (icon only) -->
-                  <div class="cart-item-actions">
+                  <!-- Actions -->
+                  <div class="cart-item-action-col">
                     <a href="{% url 'add_wishlist' pk=item.crop.id %}" class="cart-action-btn" title="Save to Wishlist">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                     </a>
@@ -273,24 +269,24 @@
                     </button>
                   </div>
 
+                  <!-- Hidden total (for JS) -->
+                  <div class="cart-total-price" style="display:none;" data-base="{{ item.crop.price }}" data-qty="{{ item.quantity }}">{{ item.subtotal }}</div>
                 </div>
               </form>
               {% endfor %}
-
-              <a href="{% url 'buyer_browse_crops' %}" class="cart-continue-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Continue Shopping
-              </a>
             </div>
 
             <!-- RIGHT: Order Summary -->
             <div class="cart-summary-col">
               <div class="summary-card">
+
+                <!-- Heading -->
                 <h3 class="summary-heading">
-                  <span class="summary-heading-icon">🧾</span>
+                  <span class="summary-heading-icon">📋</span>
                   Order Summary
                 </h3>
 
+                <!-- Rows -->
                 <div class="summary-row">
                   <span class="summary-row-label">Subtotal ({{ cart_items|length }} item{{ cart_items|length|pluralize }})</span>
                   <span class="summary-row-value subtotal-amount">₹{{ cart.total_price }}</span>
@@ -303,42 +299,39 @@
                   <span class="summary-row-label">GST (5%)</span>
                   <span class="summary-row-value" id="gst">₹{{ cart.tax|floatformat:2 }}</span>
                 </div>
+                <div class="summary-row">
+                  <span class="summary-row-label">Coupon Discount</span>
+                  <span class="summary-row-value discount" id="couponDiscount">- ₹0.00</span>
+                </div>
 
                 <div class="summary-divider"></div>
 
-                <div class="summary-total-row">
-                  <span class="summary-total-label">Grand Total</span>
-                  <span class="summary-total-value" id="total">₹{{ cart.final_price|floatformat:2 }}</span>
+                <!-- Grand Total -->
+                <div class="summary-grand-row">
+                  <span class="summary-grand-label">Grand Total</span>
+                  <span class="summary-grand-value" id="total">₹{{ cart.final_price|floatformat:2 }}</span>
                 </div>
 
-                <!-- Savings Banner -->
-                <div class="savings-banner">
-                  <span class="savings-banner-icon">🎉</span>
-                  <span class="savings-banner-text">You're saving on delivery + exclusive farmer prices!</span>
-                </div>
-
-                <!-- Coupon Code -->
-                <div class="coupon-row">
-                  <input type="text" class="coupon-input" placeholder="Coupon code" id="couponInput">
-                  <button type="button" class="coupon-btn" onclick="applyCoupon()">Apply</button>
-                </div>
-
+                <!-- Plan Usage -->
                 {% if cart.cart_limit %}
                 <div class="plan-usage-wrap">
                   <div class="plan-usage-header">
-                    <span>Plan Usage</span>
+                    <span class="pu-label">Plan Usage</span>
                     <span>{{ cart.total_kg|default:0 }} / {{ cart.cart_limit }} kg</span>
                   </div>
                   <div class="plan-usage-track">
                     <div class="plan-usage-bar" style="width: {% widthratio cart.total_kg|default:0 cart.cart_limit 100 %}%;"></div>
                   </div>
+                  <div class="plan-usage-remaining">{{ cart.cart_limit|add:"-0" }} kg Remaining</div>
                 </div>
                 {% endif %}
 
+                <!-- Checkout -->
                 {% if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %}
                 <a href="{% url 'buyer_checkout' %}" class="checkout-btn" id="checkoutBtn">
-                  Proceed to Checkout
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Proceed to Secure Checkout
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
                 {% else %}
                 <div class="checkout-btn-disabled">
@@ -346,34 +339,39 @@
                   Cart Limit Reached
                 </div>
                 <p class="limit-note">
-                  You've exceeded your plan limit of <strong style="color:#CBD5E1;">{{ cart.cart_limit }} kg</strong>.
-                  <a href="{% url 'buyer_premium' %}">Upgrade your plan →</a>
+                  Exceeded plan limit of <strong style="color:#CBD5E1;">{{ cart.cart_limit }} kg</strong>.
+                  <a href="{% url 'buyer_premium' %}">Upgrade plan →</a>
                 </p>
                 {% endif %}
 
-                <div class="summary-trust">
-                  <div class="trust-item">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    256-bit SSL
+                <!-- Trust Badges — horizontal icon row matching image -->
+                <div class="trust-row">
+                  <div class="trust-badge-item">
+                    <div class="trust-badge-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <span class="trust-badge-label">256-bit SSL Encryption</span>
                   </div>
-                  <div class="trust-item">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    Buyer Shield
+                  <div class="trust-badge-item">
+                    <div class="trust-badge-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <span class="trust-badge-label">Buyer Protection</span>
                   </div>
-                  <div class="trust-item">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
-                    Fast Delivery
+                  <div class="trust-badge-item">
+                    <div class="trust-badge-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"></rect><path d="M16 8h4l3 5v3h-7V8z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    </div>
+                    <span class="trust-badge-label">Secure Delivery</span>
                   </div>
-                  <div class="trust-item">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    Safe Payments
+                  <div class="trust-badge-item">
+                    <div class="trust-badge-icon">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <span class="trust-badge-label">Safe Payments</span>
                   </div>
                 </div>
 
-                <div class="secure-note">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                  Secured &amp; verified by Krushi Mitra
-                </div>
               </div>
             </div>
 
@@ -381,7 +379,6 @@
 
           </div><!-- /cart-layout -->
         </div><!-- /cart-page -->
-
       </main>
     </div><!-- /main-wrapper -->
   </div><!-- /app-layout -->
