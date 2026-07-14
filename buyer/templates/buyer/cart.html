@@ -5,7 +5,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cart - Krushi Mitra</title>
+  <title>Cart – Krushi Mitra</title>
+  <meta name="description"
+    content="Review your selected crops and proceed to checkout on Krushi Mitra – India's trusted agri-marketplace.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
@@ -17,7 +19,31 @@
 <body>
   <div class="sidebar-backdrop"></div>
   <div class="toast-container"></div>
+
+  <!-- Remove Confirmation Modal -->
+  <div id="removeModal"
+    style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+    <div
+      style="background:linear-gradient(135deg,#1e293b,#0f172a); border:1px solid rgba(255,255,255,0.12); border-radius:24px; padding:40px; max-width:420px; width:90%; text-align:center; box-shadow:0 40px 80px rgba(0,0,0,0.5);">
+      <div style="font-size:56px; margin-bottom:16px;">🗑️</div>
+      <h3 style="color:white; font-size:22px; font-weight:800; margin-bottom:12px;">Remove Item?</h3>
+      <p style="color:#94A3B8; margin-bottom:32px; line-height:1.6;" id="removeModalText">Are you sure you want to
+        remove this item from your cart?</p>
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button onclick="closeRemoveModal()"
+          style="flex:1; padding:14px 24px; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:white; font-weight:700; cursor:pointer; font-size:15px; transition:all 0.2s;"
+          onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+          onmouseout="this.style.background='rgba(255,255,255,0.05)'">Cancel</button>
+        <a id="removeConfirmBtn" href="#"
+          style="flex:1; padding:14px 24px; border-radius:12px; border:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:white; font-weight:700; cursor:pointer; font-size:15px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; transition:all 0.2s;"
+          onmouseover="this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.transform='translateY(0)'">Remove</a>
+      </div>
+    </div>
+  </div>
+
   <div class="app-layout">
+    <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
@@ -33,15 +59,16 @@
         <div class="sidebar-section-label">Main</div>
         <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
             class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
-        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item " data-tooltip="Browse Crops"><span
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops"><span
             class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
         <a href="{% url 'buyer_cart' %}" class="sidebar-item active" data-tooltip="Cart"><span
-            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
-            class="sidebar-item-badge">3</span></a>
+            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span>{% if cart_items %}<span
+            class="sidebar-item-badge">{{ cart_items|length }}</span>{% endif %}</a>
         <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
             class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
         <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
             class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+
         <div class="sidebar-section-label">Procurement</div>
         {% if buyr.is_premiume %}
         <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
@@ -55,29 +82,28 @@
         </a>
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
-          onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
+          onclick="showUpgradeToast('Export Inquiry is available for Premium plan only.'); return false;">
           <span class="sidebar-item-icon">🔒</span>
-          <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
+          <span class="sidebar-item-text">Export Inquiry (Premium)</span>
         </a>
         {% endif %}
         {% else %}
-        <a href="#" class="sidebar-item disabled-link" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
-          <span class=" sidebar-item-icon">🔒</span>
-          <span class="sidebar-item-text">Bulk Orders (Upgrade To Unlock)</span>
-        </a>
-        <a href="#" class="sidebar-item disabled-link"
-          onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
+        <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
           <span class="sidebar-item-icon">🔒</span>
-          <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
+          <span class="sidebar-item-text">Bulk Orders (Upgrade)</span>
+        </a>
+        <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
+          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-text">Export Inquiry (Upgrade)</span>
         </a>
         {% endif %}
+
         <div class="sidebar-section-label">Communication</div>
         <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
-            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
-            class="sidebar-item-badge">5</span></a>
+            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span></a>
         <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
-            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
-            class="sidebar-item-badge">12</span></a>
+            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span></a>
+
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
             class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
@@ -90,12 +116,17 @@
       </nav>
     </aside>
 
+    <!-- ========== MAIN CONTENT ========== -->
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+        <div class="navbar-left">
+          <button class="mobile-menu-btn">☰</button>
           <div>
-            <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
-                class="breadcrumb-sep">›</span><span class="current">Cart</span></div>
+            <div class="breadcrumb">
+              <a href="{% url 'buyer_dashboard' %}">Home</a>
+              <span class="breadcrumb-sep">›</span>
+              <span class="current">Cart</span>
+            </div>
             <h1 class="page-title">Shopping Cart</h1>
           </div>
         </div>
@@ -103,7 +134,8 @@
           <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
             <div class="search-box" data-search-target>
               <span class="search-icon">🔍</span>
-              <input type="text" name="q" placeholder="Search..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
+              <input type="text" name="q" placeholder="Search crops…" aria-label="Search"
+                value="{{ request.GET.q|default:'' }}">
             </div>
           </form>
           <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
@@ -123,297 +155,344 @@
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
               <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item danger">🚪 Logout</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item danger">🚪 Logout</a>
             </div>
           </div>
         </div>
       </header>
-      <main class="main-content" style="padding: 32px 0;">
-        {% if not cart_items %}
-        <!-- Empty State -->
-        <div class="empty-state" style="display:flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; text-align: center; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-          <div class="empty-state-icon" style="font-size: 72px; margin-bottom: 24px; animation: bounce 2s infinite;">🛒</div>
-          <h3 class="empty-state-title" style="font-size: 28px; font-weight: 800; color: white; margin-bottom: 12px; letter-spacing: -0.5px;">Your cart is empty</h3>
-          <p class="empty-state-text" style="color: #94A3B8; max-width: 450px; margin-bottom: 32px; line-height: 1.6; font-size: 16px;">Looks like you haven't added any crops yet. Browse our marketplace to find premium, lab-tested crops directly from trusted farmers.</p>
-          <a href="{% url 'buyer_browse_crops' %}" class="btn" style="background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: white; padding: 14px 36px; border-radius: 12px; font-weight: 600; font-size: 16px; text-decoration: none; box-shadow: 0 8px 24px rgba(34,197,94,0.3); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 28px rgba(34,197,94,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(34,197,94,0.3)';">🌾 Browse Crops</a>
-        </div>
-        {% else %}
-        <!-- Cart Content -->
-        <div class="cart-layout page-reveal" style="display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start;">
-          <div class="cart-items">
-            <div class="cart-header" style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-              <div>
-                <h3 class="card-title" style="font-size: 28px; font-weight: 800; color: white; margin: 0; letter-spacing: -0.5px;">Cart Items</h3>
-                <p class="card-subtitle" style="color: #94A3B8; margin-top: 6px; font-size: 15px;">Review your selected crops before checkout</p>
-              </div>
-            </div>
 
-            {% for item in cart_items %}
-            <form action="{% url 'cart_item_delete' pk=item.id %}" method="post">
-              {% csrf_token %}
-              <div class="cart-item" style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 24px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 20px 40px rgba(0,0,0,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-                <div class="cart-item-img" style="width: 140px; height: 110px; border-radius: 12px; overflow: hidden; flex-shrink: 0; position: relative;">
-                  <img src="{{item.crop.image.url}}" alt="{{item.crop.cropname}}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                  <div style="position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; font-size: 11px; padding: 4px 8px; border-radius: 8px; font-weight: 600;">⭐ Grade A</div>
-                </div>
-                
-                <div class="cart-item-info" style="flex: 1;">
-                  <h4 class="cart-item-name" style="font-size: 20px; font-weight: 700; color: white; margin: 0 0 8px 0;">{{item.crop.cropname}}</h4>
-                  <div class="cart-item-meta" style="font-size: 13px; color: #94A3B8; margin-bottom: 12px; display: flex; gap: 12px; align-items: center;">
-                    <span style="background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; font-weight: 500;">🌾 {{item.crop.category}}</span>
-                    <span style="display: flex; align-items: center; gap: 4px;">📍 {{item.crop.user.city|default:"Unknown"}}</span>
-                  </div>
-                  <div style="font-size: 16px; font-weight: 700; color: #22C55E;">
-                    ₹<span class="cart-unit-price" data-price="{{item.crop.price}}">{{item.crop.price}}</span> <span style="font-size: 13px; color: #64748B; font-weight: 500;">/ kg</span>
-                  </div>
-                </div>
-                
-                <div class="cart-item-qty" style="display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03);">
-                  <label style="font-size: 12px; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Quantity</label>
-                  <div class="qty-selector" style="display: flex; align-items: center;">
-                    <button type="button" class="qty-minus" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white; font-size: 18px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">−</button>
-                    <input type="number" class="qty-input cart-qty-input" value="{{item.quantity}}" min="1" max="5000" name="quantity" style="width: 60px; text-align: center; background: transparent; border: none; color: white; font-weight: 700; font-size: 16px; outline: none; margin: 0 4px;">
-                    <button type="button" class="qty-plus" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,255,255,0.05); color: white; font-size: 18px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">+</button>
-                  </div>
-                </div>
+      <main class="main-content">
 
-                <div class="cart-item-total" style="text-align: right; min-width: 110px;">
-                  <label style="font-size: 12px; color: #94A3B8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 12px;">Total Price</label>
-                  <div class="cart-total-price" style="font-size: 22px; font-weight: 800; color: white;">₹{{item.subtotal}}</div>
-                  <input type="hidden" value="{{item.crop.id}}" name="crop">
-                </div>
-                
-                <div class="cart-item-actions" style="display: flex; flex-direction: column; gap: 10px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 24px;">
-                  <button type="button" class="btn btn-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">🤍 Save</button>
-                  <a href="{% url 'cart_item_delete' pk=item.id %}" class="btn btn-sm btn-remove" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.05)'">🗑️ Remove</a>
-                </div>
-              </div>
-            </form>
-            {% endfor %}
+        <div class="cart-page">
 
-            <div class="cart-footer-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.05);">
-              <a href="{% url 'buyer_browse_crops' %}" class="btn" style="background: #172033; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='#172033'">← Continue Shopping</a>
-            </div>
+          <!-- Page Header -->
+          <div class="cart-page-header">
+            <a href="{% url 'buyer_browse_crops' %}" class="cart-back-link">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              Continue Shopping
+            </a>
+            <h1 class="cart-page-title">Shopping Cart</h1>
+            {% if cart_items %}
+            <p class="cart-page-meta">{{ cart_items|length }} item{{ cart_items|length|pluralize }} in your cart</p>
+            {% endif %}
           </div>
 
-          <!-- Order Summary -->
-          <div class="cart-summary" style="position: sticky; top: 120px;">
-            <div class="card" style="background: #172033; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 32px; box-shadow: 0 24px 48px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
-              <!-- Decorative element -->
-              <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: rgba(34,197,94,0.1); border-radius: 50%; filter: blur(30px);"></div>
-              
-              <h3 class="card-title" style="font-size: 22px; font-weight: 800; color: white; margin-bottom: 28px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;">
-                <span style="font-size: 24px;">🧾</span> Order Summary
-              </h3>
+          <!-- Cart Layout -->
+          <div class="cart-layout">
 
-              <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #94A3B8; font-size: 15px; align-items: center;">
-                <span style="font-weight: 500;">Subtotal</span>
-                <span class="subtotal-amount" style="color: white; font-weight: 700; font-size: 16px;">₹{{cart.total_price}}</span>
-              </div>
-              <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #94A3B8; font-size: 15px; align-items: center;">
-                <span style="font-weight: 500;">Delivery Charges</span>
-                <span class="text-green" style="color: #22C55E; font-weight: 700; background: rgba(34,197,94,0.1); padding: 6px 12px; border-radius: 20px; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">Free Delivery</span>
-              </div>
-              <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 20px; color: #94A3B8; font-size: 15px; align-items: center;">
-                <span style="font-weight: 500;">Tax (GST @ 5%)</span>
-                <span id="gst" style="color: white; font-weight: 700; font-size: 16px;">₹0</span>
-              </div>
-              
-              <div class="summary-divider" style="height: 1px; background: rgba(255,255,255,0.08); margin: 28px 0;"></div>
-              
-              <div class="summary-row total-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 36px; font-size: 20px; font-weight: 800;">
-                <span style="color: white;">Grand Total</span>
-                <span id="total" class="grand-total" style="color: #22C55E; font-size: 28px;">₹0</span>
-              </div>
+            {% if not cart_items %}
+            <!-- Empty State -->
+            <div class="cart-empty">
+              <div class="cart-empty-icon">🛒</div>
+              <h2>Your cart is empty</h2>
+              <p>Browse our marketplace to find premium crops directly from trusted farmers.</p>
+              <a href="{% url 'buyer_browse_crops' %}" class="cart-empty-btn">
+                🌾 Browse Crops
+              </a>
+            </div>
 
-              {% if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %}
-              <a href="{% url 'buyer_checkout' %}" class="btn btn-primary btn-block" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); color: white; padding: 18px; border-radius: 16px; font-size: 18px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 8px 24px rgba(34,197,94,0.3); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 28px rgba(34,197,94,0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(34,197,94,0.3)';">
-                Proceed to Checkout <span style="font-size: 20px;">→</span>
+            {% else %}
+
+            <!-- LEFT: Cart Items -->
+            <div class="cart-items-col">
+
+              {% for item in cart_items %}
+              <form action="{% url 'cart_item_delete' pk=item.id %}" method="post" class="cart-item-form" id="form-{{ item.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="quantity" class="hidden-qty" value="{{ item.quantity }}">
+                <input type="hidden" name="crop" value="{{ item.crop.id }}">
+
+                <div class="cart-item-card cart-item" id="cart-item-{{ item.id }}">
+
+                  <!-- Image -->
+                  <div class="cart-img-wrap">
+                    <img src="{{ item.crop.image.url }}" alt="{{ item.crop.cropname }}" class="cart-img">
+                    <span class="cart-grade-badge">★ Grade A</span>
+                    <a href="{% url 'add_wishlist' pk=item.crop.id %}" class="cart-wishlist-icon" title="Save to Wishlist">❤️</a>
+                  </div>
+
+                  <!-- Details -->
+                  <div class="cart-item-details">
+                    <h3 class="cart-item-name">{{ item.crop.cropname }}</h3>
+                    <div class="cart-item-meta">
+                      <span>{{ item.crop.category }}</span>
+                      <span>·</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      <span>{{ item.crop.user.city|default:"India" }}</span>
+                    </div>
+                    <div class="cart-verified">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      Verified Seller
+                    </div>
+                  </div>
+
+                  <!-- Price -->
+                  <div class="cart-item-price-col">
+                    <div class="cart-unit-price-display">
+                      ₹<span class="cart-unit-price" data-price="{{ item.crop.price }}">{{ item.crop.price }}</span>/kg
+                    </div>
+                    <div class="cart-old-price">₹{{ item.crop.price|add:"800" }}/kg</div>
+                  </div>
+
+                  <!-- Quantity -->
+                  <div class="cart-qty-wrap">
+                    <div class="cart-qty-stepper qty-selector">
+                      <button type="button" class="qty-btn qty-minus" aria-label="Decrease">−</button>
+                      <input type="number" class="qty-input" value="{{ item.quantity }}" min="1" max="5000" aria-label="Quantity">
+                      <button type="button" class="qty-btn qty-plus" aria-label="Increase">+</button>
+                    </div>
+                    <span class="cart-qty-label">kg</span>
+                  </div>
+
+                  <!-- Item Total -->
+                  <div class="cart-item-total-col">
+                    <span class="cart-item-total-label">Total</span>
+                    <div class="cart-item-total-price cart-total-price">₹{{ item.subtotal }}</div>
+                  </div>
+
+                  <!-- Actions (icon only) -->
+                  <div class="cart-item-actions">
+                    <a href="{% url 'add_wishlist' pk=item.crop.id %}" class="cart-action-btn" title="Save to Wishlist">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </a>
+                    <button type="button" class="cart-action-btn remove" data-item-id="{{ item.id }}" data-item-name="{{ item.crop.cropname }}" data-delete-url="{% url 'cart_item_delete' pk=item.id %}" title="Remove">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+              {% endfor %}
+
+              <a href="{% url 'buyer_browse_crops' %}" class="cart-continue-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Continue Shopping
               </a>
-              {% else %}
-              <a href="#" class="btn btn-primary btn-block" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #475569; color: #94A3B8; padding: 18px; border-radius: 16px; font-size: 18px; font-weight: 700; text-decoration: none; border: none; cursor: not-allowed; transition: all 0.3s ease;" onclick="alert('Item over limit'); return false;">
-                Limit Reached
-              </a>
-              {% endif %}
-              
-              <div style="margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 8px; color: #64748B; font-size: 13px; font-weight: 500;">
-                <span style="color: #22C55E;">🔒</span> Secure 256-bit SSL Encryption
+            </div>
+
+            <!-- RIGHT: Order Summary -->
+            <div class="cart-summary-col">
+              <div class="summary-card">
+                <h3 class="summary-heading">Order Summary</h3>
+
+                <div class="summary-row">
+                  <span class="summary-row-label">Subtotal ({{ cart_items|length }} item{{ cart_items|length|pluralize }})</span>
+                  <span class="summary-row-value subtotal-amount">₹{{ cart.total_price }}</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-row-label">Delivery</span>
+                  <span class="summary-row-value free">FREE</span>
+                </div>
+                <div class="summary-row">
+                  <span class="summary-row-label">GST (5%)</span>
+                  <span class="summary-row-value" id="gst">₹{{ cart.tax|floatformat:2 }}</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-total-row">
+                  <span class="summary-total-label">Grand Total</span>
+                  <span class="summary-total-value" id="total">₹{{ cart.final_price|floatformat:2 }}</span>
+                </div>
+
+                {% if cart.cart_limit %}
+                <div class="plan-usage-wrap">
+                  <div class="plan-usage-header">
+                    <span>Plan Usage</span>
+                    <span>{{ cart.total_kg|default:0 }} / {{ cart.cart_limit }} kg</span>
+                  </div>
+                  <div class="plan-usage-track">
+                    <div class="plan-usage-bar" style="width: {% widthratio cart.total_kg|default:0 cart.cart_limit 100 %}%;"></div>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %}
+                <a href="{% url 'buyer_checkout' %}" class="checkout-btn" id="checkoutBtn">
+                  Proceed to Checkout →
+                </a>
+                {% else %}
+                <div class="checkout-btn-disabled">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Cart Limit Reached
+                </div>
+                <p class="limit-note">
+                  You've exceeded your plan limit of <strong style="color:#CBD5E1;">{{ cart.cart_limit }} kg</strong>.
+                  <a href="{% url 'buyer_premium' %}">Upgrade your plan →</a>
+                </p>
+                {% endif %}
+
+                <div class="summary-trust">
+                  <div class="trust-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    SSL Secure
+                  </div>
+                  <div class="trust-item">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Buyer Protected
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        {% endif %}
+
+            {% endif %}
+
+          </div><!-- /cart-layout -->
+        </div><!-- /cart-page -->
+
       </main>
-    </div>
-  </div>
+    </div><!-- /main-wrapper -->
+  </div><!-- /app-layout -->
+
   <script src="{% static 'buyer/js/app.js' %}"></script>
-  <style>
-    @keyframes slideUpFade {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    
-    .cart-item {
-      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      opacity: 0;
-    }
-    .cart-item:nth-child(1) { animation-delay: 0.1s; }
-    .cart-item:nth-child(2) { animation-delay: 0.2s; }
-    .cart-item:nth-child(3) { animation-delay: 0.3s; }
-    .cart-item:nth-child(4) { animation-delay: 0.4s; }
-    .cart-item:nth-child(5) { animation-delay: 0.5s; }
-    .cart-item:nth-child(6) { animation-delay: 0.6s; }
-  </style>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-      // 1. Smooth Quantity Increment & Decrement
+      // ── 1. Quantity Controls ──────────────────────────────
       document.querySelectorAll('.qty-selector').forEach(selector => {
         const minusBtn = selector.querySelector('.qty-minus');
         const plusBtn = selector.querySelector('.qty-plus');
         const input = selector.querySelector('.qty-input');
-        const form = selector.closest('form');
         const itemEl = selector.closest('.cart-item');
+        const form = selector.closest('form.cart-item-form');
         const unitPrice = parseFloat(itemEl.querySelector('.cart-unit-price').dataset.price);
-        const itemTotalEl = itemEl.querySelector('.cart-total-price');
+        const totalEl = itemEl.querySelector('.cart-total-price');
+        const hiddenQty = form ? form.querySelector('.hidden-qty') : null;
 
         const updateQuantity = async (newQty) => {
-          if (newQty < 1) newQty = 1;
-          if (newQty > parseInt(input.max || 5000)) newQty = parseInt(input.max || 5000);
-          
+          newQty = Math.max(1, Math.min(newQty, parseInt(input.max) || 5000));
           input.value = newQty;
-          
-          // Immediate DOM update
+          if (hiddenQty) hiddenQty.value = newQty;
+
           const newTotal = newQty * unitPrice;
-          itemTotalEl.innerText = '₹' + newTotal.toFixed(2);
-          
-          // Add a small scale bump for feedback
-          itemTotalEl.style.transition = 'all 0.2s';
-          itemTotalEl.style.transform = 'scale(1.1)';
-          itemTotalEl.style.color = '#22C55E';
-          setTimeout(() => {
-            itemTotalEl.style.transform = 'scale(1)';
-            itemTotalEl.style.color = 'white';
-          }, 200);
+          totalEl.style.color = '#22C55E';
+          setTimeout(() => { totalEl.style.color = ''; }, 300);
+          totalEl.textContent = '₹' + newTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
 
-          updateCartSummary();
+          updateSummary();
 
-          // Background sync
-          try {
-            const formData = new FormData(form);
-            formData.set('quantity', newQty);
-            await fetch(form.action, {
-              method: 'POST',
-              body: formData,
-              headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-          } catch (e) {
-            console.error('Failed to sync qty');
+          if (form) {
+            try {
+              const fd = new FormData(form);
+              fd.set('quantity', newQty);
+              await fetch(form.action, {
+                method: 'POST',
+                body: fd,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+              });
+            } catch (e) { console.warn('Qty sync failed', e); }
           }
         };
 
         minusBtn.addEventListener('click', () => updateQuantity(parseInt(input.value) - 1));
         plusBtn.addEventListener('click', () => updateQuantity(parseInt(input.value) + 1));
-        
-        let debounceTimer;
+
+        let debounce;
         input.addEventListener('input', () => {
-          clearTimeout(debounceTimer);
-          debounceTimer = setTimeout(() => {
-            let val = parseInt(input.value);
-            if (isNaN(val) || val < 1) val = 1;
-            updateQuantity(val);
-          }, 300);
+          clearTimeout(debounce);
+          debounce = setTimeout(() => {
+            const v = parseInt(input.value);
+            updateQuantity(isNaN(v) ? 1 : v);
+          }, 350);
         });
       });
 
-      // 2. Smooth Remove
-      document.querySelectorAll('.btn-remove').forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-          e.preventDefault();
-          
-          const itemEl = btn.closest('.cart-item');
-          
-          // Animate out
-          itemEl.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          itemEl.style.transform = 'scale(0.9) translateX(50px)';
-          itemEl.style.opacity = '0';
-          
-          // Perform server deletion in background
-          try {
-            await fetch(btn.href, { method: 'GET' });
-          } catch (err) {
-            console.error('Failed to remove item');
-          }
-
-          setTimeout(() => {
-            itemEl.remove();
-            const remainingItems = document.querySelectorAll('.cart-item').length;
-            if (remainingItems === 0) {
-              location.reload(); // Reload to show empty state beautifully
-            } else {
-              updateCartSummary();
-            }
-          }, 400);
+      // ── 2. Remove Button ──────────────────────────────────
+      document.querySelectorAll('.cart-action-btn.remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const name = btn.dataset.itemName;
+          const url = btn.dataset.deleteUrl;
+          openRemoveModal(name, url, btn);
         });
       });
 
     });
 
-    // 3. Smooth Summary Updates
-    function updateCartSummary() {
+    // ── Remove Modal ──────────────────────────────────────
+    function openRemoveModal(itemName, deleteUrl, btn) {
+      document.getElementById('removeModalText').textContent = `Remove "${itemName}" from your cart?`;
+      document.getElementById('removeConfirmBtn').href = 'javascript:void(0)';
+      document.getElementById('removeConfirmBtn').onclick = () => confirmRemove(deleteUrl, btn);
+      document.getElementById('removeModal').style.display = 'flex';
+    }
+
+    function closeRemoveModal() {
+      document.getElementById('removeModal').style.display = 'none';
+    }
+
+    async function confirmRemove(deleteUrl, btn) {
+      closeRemoveModal();
+      const itemEl = btn.closest('.cart-item');
+      itemEl.style.transition = 'all 0.3s';
+      itemEl.style.opacity = '0';
+      itemEl.style.transform = 'translateX(20px) scale(0.97)';
+
+      try {
+        await fetch(deleteUrl, { method: 'GET' });
+      } catch (e) { console.warn('Remove failed', e); }
+
+      setTimeout(() => {
+        const form = itemEl.closest('form.cart-item-form');
+        if (form) form.remove(); else itemEl.remove();
+
+        const remaining = document.querySelectorAll('.cart-item').length;
+        if (remaining === 0) {
+          location.reload();
+        } else {
+          updateSummary();
+          const sidebarBadge = document.querySelector('.sidebar-item.active .sidebar-item-badge');
+          if (sidebarBadge) sidebarBadge.textContent = remaining;
+        }
+      }, 320);
+    }
+
+    document.getElementById('removeModal').addEventListener('click', function (e) {
+      if (e.target === this) closeRemoveModal();
+    });
+
+    // ── Summary Calculator ────────────────────────────────
+    function updateSummary() {
       let subtotal = 0;
       document.querySelectorAll('.cart-item').forEach(item => {
-        let price = parseFloat(item.querySelector('.cart-unit-price').dataset.price);
-        let qty = parseInt(item.querySelector('.qty-input').value);
-        if (!isNaN(price) && !isNaN(qty)) {
-          subtotal += price * qty;
-        }
+        const price = parseFloat(item.querySelector('.cart-unit-price')?.dataset.price || 0);
+        const qty = parseInt(item.querySelector('.qty-input')?.value || 0);
+        if (!isNaN(price) && !isNaN(qty)) subtotal += price * qty;
       });
 
-      let gst = subtotal * 0.05;
-      let total = subtotal + gst;
+      const gst = subtotal * 0.05;
+      const total = subtotal + gst;
 
       animateValue(document.querySelector('.subtotal-amount'), subtotal);
       animateValue(document.getElementById('gst'), gst);
       animateValue(document.getElementById('total'), total);
     }
 
-    // Value Animator for smooth counting effect
-    function animateValue(obj, end) {
-      if (!obj) return;
-      const startStr = obj.innerText.replace(/[^0-9.]/g, '');
+    function animateValue(el, end) {
+      if (!el) return;
+      const startStr = el.textContent.replace(/[^0-9.]/g, '');
       let start = parseFloat(startStr) || 0;
-      
-      if (Math.abs(start - end) < 0.01) {
-        obj.innerText = '₹' + end.toFixed(2);
-        return;
-      }
-
-      let startTimestamp = null;
-      const duration = 400; // ms
-
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        
-        // ease out cubic
-        const ease = 1 - Math.pow(1 - progress, 3);
-        const current = start + (end - start) * ease;
-        
-        obj.innerText = '₹' + current.toFixed(2);
-        
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        } else {
-          obj.innerText = '₹' + end.toFixed(2);
-        }
+      if (Math.abs(start - end) < 0.01) { el.textContent = '₹' + end.toFixed(2); return; }
+      let t0 = null;
+      const dur = 350;
+      const step = (ts) => {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts - t0) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = '₹' + (start + (end - start) * ease).toFixed(2);
+        if (p < 1) requestAnimationFrame(step);
       };
-      window.requestAnimationFrame(step);
+      requestAnimationFrame(step);
     }
 
-    // Initial setup call
-    updateCartSummary();
+    function showUpgradeToast(msg) {
+      if (window.showToast) { showToast(msg, 'warning'); }
+      else { alert(msg); }
+    }
+
+    function showLimitModal() {
+      alert('You have reached your plan limit. Please remove some items or upgrade your plan.');
+    }
   </script>
 </body>
 

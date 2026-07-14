@@ -144,10 +144,7 @@ def buyer_cart(request):
     cart = Cart.objects.get(user = uid)
     buyr = Buyer.objects.get(user=uid)
     cart_items = CartItem.objects.filter(cart=cart)
-    total_qty = 0
-    if cart_items:
-        total_qty = [total_qty+(itme.quantity * 20) for itme in cart_items]
-        total_qty = total_qty[0]
+    total_qty = sum(item.quantity * 20 for item in cart_items)
     premium_type = premium_buyer.objects.get(user=buyr)
     if request.method == 'POST':
         quantity = request.POST.get('quantity', 1)
@@ -157,24 +154,23 @@ def buyer_cart(request):
         cart_item = CartItem.objects.filter(cart=cart,crop=crop_obj).first()
 
         if cart_item:
-            cart_item.quantity+= int(quantity)
+            cart_item.quantity += int(quantity)
             cart_item.save()
-            cart_items = CartItem.objects.filter(cart=cart)
-            context = {'cart_items':cart_items,'cart':cart,'premium_type':premium_type,'buyr':buyr,'total_qty':total_qty}
-            return render(request, "buyer/cart.html",context)
         else:
-            cart_item = CartItem.objects.create(cart=cart,crop=crop_obj,quantity=quantity)
-            cart_item.save()    
-            cart_items = CartItem.objects.filter(cart=cart)
-            context = {'cart_items':cart_items,'cart':cart,'premium_type':premium_type,'total_qty':total_qty}
-            return render(request, "buyer/cart.html",context)
-        
+            cart_item = CartItem.objects.create(cart=cart, crop=crop_obj, quantity=quantity)
+            cart_item.save()
+
+        cart_items = CartItem.objects.filter(cart=cart)
+        total_qty = sum(item.quantity * 20 for item in cart_items)
+        context = {'cart_items': cart_items, 'cart': cart, 'premium_type': premium_type, 'buyr': buyr, 'total_qty': total_qty}
+        return render(request, "buyer/cart.html", context)
+
     if cart:
         cart_items = CartItem.objects.filter(cart=cart)
-        context = {'cart_items':cart_items,'cart':cart,'premium_type':premium_type,'total_qty':total_qty}
-        return render(request, "buyer/cart.html",context)
+        context = {'cart_items': cart_items, 'cart': cart, 'premium_type': premium_type, 'buyr': buyr, 'total_qty': total_qty}
+        return render(request, "buyer/cart.html", context)
     else:
-        cart = Cart.objects.create(user = uid)
+        cart = Cart.objects.create(user=uid)
         cart.save()
     return render(request, "buyer/cart.html")
 
