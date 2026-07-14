@@ -168,13 +168,23 @@
           <!-- Page Header -->
           <div class="cart-page-header">
             <a href="{% url 'buyer_browse_crops' %}" class="cart-back-link">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
               Continue Shopping
             </a>
-            <h1 class="cart-page-title">Shopping Cart</h1>
-            {% if cart_items %}
-            <p class="cart-page-meta">{{ cart_items|length }} item{{ cart_items|length|pluralize }} in your cart</p>
-            {% endif %}
+            <div class="cart-header-row">
+              <div>
+                <h1 class="cart-page-title">Shopping Cart</h1>
+                {% if cart_items %}
+                <p class="cart-page-meta">Review your selected crops before checkout</p>
+                {% endif %}
+              </div>
+              {% if cart_items %}
+              <div class="cart-header-stats">
+                <span class="cart-header-stats-icon">🛒</span>
+                <span class="cart-header-stats-text">{{ cart_items|length }} item{{ cart_items|length|pluralize }} &nbsp;·&nbsp; ₹{{ cart.total_price }}</span>
+              </div>
+              {% endif %}
+            </div>
           </div>
 
           <!-- Cart Layout -->
@@ -195,6 +205,7 @@
 
             <!-- LEFT: Cart Items -->
             <div class="cart-items-col">
+              <div class="cart-col-label">{{ cart_items|length }} item{{ cart_items|length|pluralize }} selected</div>
 
               {% for item in cart_items %}
               <form action="{% url 'cart_item_delete' pk=item.id %}" method="post" class="cart-item-form" id="form-{{ item.id }}">
@@ -215,13 +226,14 @@
                   <div class="cart-item-details">
                     <h3 class="cart-item-name">{{ item.crop.cropname }}</h3>
                     <div class="cart-item-meta">
-                      <span>{{ item.crop.category }}</span>
-                      <span>·</span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                      <span>{{ item.crop.user.city|default:"India" }}</span>
+                      <span class="cart-meta-pill">🌾 {{ item.crop.category }}</span>
+                      <span class="cart-meta-pill">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        {{ item.crop.user.city|default:"India" }}
+                      </span>
                     </div>
                     <div class="cart-verified">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                       Verified Seller
                     </div>
                   </div>
@@ -232,6 +244,7 @@
                       ₹<span class="cart-unit-price" data-price="{{ item.crop.price }}">{{ item.crop.price }}</span>/kg
                     </div>
                     <div class="cart-old-price">₹{{ item.crop.price|add:"800" }}/kg</div>
+                    <span class="cart-discount-tag">21% OFF</span>
                   </div>
 
                   <!-- Quantity -->
@@ -273,7 +286,10 @@
             <!-- RIGHT: Order Summary -->
             <div class="cart-summary-col">
               <div class="summary-card">
-                <h3 class="summary-heading">Order Summary</h3>
+                <h3 class="summary-heading">
+                  <span class="summary-heading-icon">🧾</span>
+                  Order Summary
+                </h3>
 
                 <div class="summary-row">
                   <span class="summary-row-label">Subtotal ({{ cart_items|length }} item{{ cart_items|length|pluralize }})</span>
@@ -295,6 +311,18 @@
                   <span class="summary-total-value" id="total">₹{{ cart.final_price|floatformat:2 }}</span>
                 </div>
 
+                <!-- Savings Banner -->
+                <div class="savings-banner">
+                  <span class="savings-banner-icon">🎉</span>
+                  <span class="savings-banner-text">You're saving on delivery + exclusive farmer prices!</span>
+                </div>
+
+                <!-- Coupon Code -->
+                <div class="coupon-row">
+                  <input type="text" class="coupon-input" placeholder="Coupon code" id="couponInput">
+                  <button type="button" class="coupon-btn" onclick="applyCoupon()">Apply</button>
+                </div>
+
                 {% if cart.cart_limit %}
                 <div class="plan-usage-wrap">
                   <div class="plan-usage-header">
@@ -309,7 +337,8 @@
 
                 {% if cart.cart_limit >= total_qty and cart.cart_limit >= cart.total_kg or premium_type.premium_type == 'Premium' %}
                 <a href="{% url 'buyer_checkout' %}" class="checkout-btn" id="checkoutBtn">
-                  Proceed to Checkout →
+                  Proceed to Checkout
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
                 {% else %}
                 <div class="checkout-btn-disabled">
@@ -324,13 +353,26 @@
 
                 <div class="summary-trust">
                   <div class="trust-item">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    SSL Secure
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    256-bit SSL
                   </div>
                   <div class="trust-item">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    Buyer Protected
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Buyer Shield
                   </div>
+                  <div class="trust-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+                    Fast Delivery
+                  </div>
+                  <div class="trust-item">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    Safe Payments
+                  </div>
+                </div>
+
+                <div class="secure-note">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Secured &amp; verified by Krushi Mitra
                 </div>
               </div>
             </div>
@@ -492,6 +534,13 @@
 
     function showLimitModal() {
       alert('You have reached your plan limit. Please remove some items or upgrade your plan.');
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponInput')?.value?.trim();
+      if (!code) return;
+      if (window.showToast) { showToast('Coupon "' + code + '" is not valid or has expired.', 'error'); }
+      else { alert('Coupon "' + code + '" is not valid or has expired.'); }
     }
   </script>
 </body>
