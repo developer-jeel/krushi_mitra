@@ -185,7 +185,7 @@
                 
                 <div class="cart-item-actions" style="display: flex; flex-direction: column; gap: 10px; margin-left: 16px; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 24px;">
                   <button type="button" class="btn btn-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">🤍 Save</button>
-                  <a href="{% url 'cart_item_delete' pk=item.id %}" class="btn btn-sm" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.05)'" onclick="this.closest('.cart-item').remove();updateCartSummary();showToast('info','Removed','Item removed from cart');">🗑️ Remove</a>
+                  <a href="{% url 'cart_item_delete' pk=item.id %}" class="btn btn-sm btn-remove" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); color: #EF4444; border-radius: 10px; padding: 10px 16px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;" onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.05)'">🗑️ Remove</a>
                 </div>
               </div>
             </form>
@@ -247,44 +247,173 @@
     </div>
   </div>
   <script src="{% static 'buyer/js/app.js' %}"></script>
+  <style>
+    @keyframes slideUpFade {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .cart-item {
+      animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+    }
+    .cart-item:nth-child(1) { animation-delay: 0.1s; }
+    .cart-item:nth-child(2) { animation-delay: 0.2s; }
+    .cart-item:nth-child(3) { animation-delay: 0.3s; }
+    .cart-item:nth-child(4) { animation-delay: 0.4s; }
+    .cart-item:nth-child(5) { animation-delay: 0.5s; }
+    .cart-item:nth-child(6) { animation-delay: 0.6s; }
+  </style>
+
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // 1. Smooth Quantity Increment & Decrement
+      document.querySelectorAll('.qty-selector').forEach(selector => {
+        const minusBtn = selector.querySelector('.qty-minus');
+        const plusBtn = selector.querySelector('.qty-plus');
+        const input = selector.querySelector('.qty-input');
+        const form = selector.closest('form');
+        const itemEl = selector.closest('.cart-item');
+        const unitPrice = parseFloat(itemEl.querySelector('.cart-unit-price').dataset.price);
+        const itemTotalEl = itemEl.querySelector('.cart-total-price');
+
+        const updateQuantity = async (newQty) => {
+          if (newQty < 1) newQty = 1;
+          if (newQty > parseInt(input.max || 5000)) newQty = parseInt(input.max || 5000);
+          
+          input.value = newQty;
+          
+          // Immediate DOM update
+          const newTotal = newQty * unitPrice;
+          itemTotalEl.innerText = '₹' + newTotal.toFixed(2);
+          
+          // Add a small scale bump for feedback
+          itemTotalEl.style.transition = 'all 0.2s';
+          itemTotalEl.style.transform = 'scale(1.1)';
+          itemTotalEl.style.color = '#22C55E';
+          setTimeout(() => {
+            itemTotalEl.style.transform = 'scale(1)';
+            itemTotalEl.style.color = 'white';
+          }, 200);
+
+          updateCartSummary();
+
+          // Background sync
+          try {
+            const formData = new FormData(form);
+            formData.set('quantity', newQty);
+            await fetch(form.action, {
+              method: 'POST',
+              body: formData,
+              headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+          } catch (e) {
+            console.error('Failed to sync qty');
+          }
+        };
+
+        minusBtn.addEventListener('click', () => updateQuantity(parseInt(input.value) - 1));
+        plusBtn.addEventListener('click', () => updateQuantity(parseInt(input.value) + 1));
+        
+        let debounceTimer;
+        input.addEventListener('input', () => {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(() => {
+            let val = parseInt(input.value);
+            if (isNaN(val) || val < 1) val = 1;
+            updateQuantity(val);
+          }, 300);
+        });
+      });
+
+      // 2. Smooth Remove
+      document.querySelectorAll('.btn-remove').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          
+          const itemEl = btn.closest('.cart-item');
+          
+          // Animate out
+          itemEl.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+          itemEl.style.transform = 'scale(0.9) translateX(50px)';
+          itemEl.style.opacity = '0';
+          
+          // Perform server deletion in background
+          try {
+            await fetch(btn.href, { method: 'GET' });
+          } catch (err) {
+            console.error('Failed to remove item');
+          }
+
+          setTimeout(() => {
+            itemEl.remove();
+            const remainingItems = document.querySelectorAll('.cart-item').length;
+            if (remainingItems === 0) {
+              location.reload(); // Reload to show empty state beautifully
+            } else {
+              updateCartSummary();
+            }
+          }, 400);
+        });
+      });
+
+    });
+
+    // 3. Smooth Summary Updates
     function updateCartSummary() {
-
       let subtotal = 0;
-
       document.querySelectorAll('.cart-item').forEach(item => {
-        let price = item.querySelector('.cart-unit-price').dataset.price;
-        let qty = item.querySelector('.qty-input').value;
-
-        subtotal += price * qty;
+        let price = parseFloat(item.querySelector('.cart-unit-price').dataset.price);
+        let qty = parseInt(item.querySelector('.qty-input').value);
+        if (!isNaN(price) && !isNaN(qty)) {
+          subtotal += price * qty;
+        }
       });
 
       let gst = subtotal * 0.05;
       let total = subtotal + gst;
 
-      document.querySelector('.subtotal-amount').innerText = '₹' + subtotal;
-      document.getElementById('gst').innerText = '₹' + gst;
-      document.querySelector('.grand-total').innerText = '₹' + total;
+      animateValue(document.querySelector('.subtotal-amount'), subtotal);
+      animateValue(document.getElementById('gst'), gst);
+      animateValue(document.getElementById('total'), total);
     }
 
+    // Value Animator for smooth counting effect
+    function animateValue(obj, end) {
+      if (!obj) return;
+      const startStr = obj.innerText.replace(/[^0-9.]/g, '');
+      let start = parseFloat(startStr) || 0;
+      
+      if (Math.abs(start - end) < 0.01) {
+        obj.innerText = '₹' + end.toFixed(2);
+        return;
+      }
+
+      let startTimestamp = null;
+      const duration = 400; // ms
+
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        
+        // ease out cubic
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = start + (end - start) * ease;
+        
+        obj.innerText = '₹' + current.toFixed(2);
+        
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          obj.innerText = '₹' + end.toFixed(2);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    // Initial setup call
     updateCartSummary();
-    function updateSummary() {
-
-      let subtotal = parseFloat(
-        document.querySelector(".subtotal-amount")
-          .innerText.replace("₹", "").replace(/,/g, "")
-      ) || 0;
-
-      let gst = subtotal * 0.05;
-      let total = subtotal + gst;
-
-      document.getElementById("gst").innerText = "₹" + gst.toFixed(2);
-      document.getElementById("total").innerText = "₹" + total.toFixed(2);
-    }
-
-    updateSummary();
-
-
   </script>
 </body>
 
