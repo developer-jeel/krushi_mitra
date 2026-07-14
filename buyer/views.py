@@ -103,7 +103,6 @@ def buyer_browse_crops(request):
     saved_crops = saved.objects.filter( user=buyr).values_list('crop_id', flat=True)
     buyr = Buyer.objects.get(user=uid)
     premium_type = premium_buyer.objects.get(user=buyr)
-    print("==================>",all_crops)
     context = {'all_crops' : all_crops,"saved_crops":saved_crops,'premium_type':premium_type,'buyr':buyr,'cart':cart}
     return render(request, "buyer/browse-crops.html",context)
 

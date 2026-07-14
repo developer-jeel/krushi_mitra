@@ -600,7 +600,7 @@
        ============================================================ */
     const state = {
       plan: BACKEND_PLAN === 'Premium' ? 'premium' : 'standard',
-      isYearly: new URLSearchParams(window.location.search).get('cycle') === 'yearly',
+      isYearly: new URLSearchParams(window.locatio  n.search).get('cycle') === 'yearly',
       couponCode: null,
       couponDiscount: 0,
       paymentMethod: 'upi',
