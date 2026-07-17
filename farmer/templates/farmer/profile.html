@@ -49,8 +49,18 @@
     <header class="topbar">
       <div class="topbar-left">
         <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title">My Profile</div>
+          <div class="breadcrumb">Dashboard / Profile</div>
         </div>
       </div>
+      <div class="topbar-right">
+        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="page-content">
 
       <!-- Profile Stats -->
       <div class="profile-stats">
@@ -78,15 +88,14 @@
 
       <!-- Settings Tabs -->
       <div class="settings-nav">
-        <button class="settings-tab active">Personal Info</button>
-        <button class="settings-tab">Farm Details</button>
-        <button class="settings-tab">Bank Account</button>
-        <button class="settings-tab">Documents</button>
-        <button class="settings-tab">Notifications</button>
+        <button class="settings-tab active" onclick="switchTab('sec-personal', this)">Personal Info</button>
+        <button class="settings-tab" onclick="switchTab('sec-farm', this)">Farm Details</button>
+        <button class="settings-tab" onclick="switchTab('sec-docs', this)">Documents</button>
+        <button class="settings-tab" onclick="switchTab('sec-notif', this)">Settings & Danger</button>
       </div>
 
       <!-- Personal Info Section -->
-      <div class="profile-section">
+      <div id="sec-personal" class="profile-section">
         <div class="profile-section-title">Personal Information</div>
         <form method="POST" action="{% url 'farmer_profile' %}">
           {% csrf_token %}
@@ -128,7 +137,7 @@
       </div>
 
       <!-- Farm Details Section -->
-      <div class="profile-section">
+      <div id="sec-farm" class="profile-section" style="display:none;">
         <div class="profile-section-title">Farm Details</div>
         {% if farmer %}
         <form method="POST" action="{% url 'farmer_profile' %}" enctype="multipart/form-data">
@@ -162,9 +171,52 @@
         {% endif %}
       </div>
 
-      <!-- Notification Preferences -->
-      <div class="profile-section">
-        <div class="profile-section-title">Notification Preferences</div>
+      <!-- Documents Section -->
+      <div id="sec-docs" class="profile-section" style="display:none;">
+        <div class="profile-section-title">Verified Documents</div>
+        {% if farmer %}
+        <form method="POST" action="{% url 'farmer_profile' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="docs">
+          <div class="form-row">
+            <div class="form-field">
+              <label>Aadhar Card Upload</label>
+              {% if farmer.adharcard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              <input type="file" name="adharcard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+            </div>
+            <div class="form-field">
+              <label>PAN Card Upload</label>
+              {% if farmer.pancard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              <input type="file" name="pancard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+            </div>
+            <div class="form-field">
+              <label>Bank Passbook</label>
+              {% if farmer.passbook %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              <input type="file" name="passbook" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+            </div>
+            <div class="form-field">
+              <label>7/12 Extract (Satbara)</label>
+              {% if farmer.seventwel %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              <input type="file" name="seventwel" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label for="pfAadharInput">Aadhar Number</label>
+            <input type="text" id="pfAadharInput" name="adharno" value="{{ farmer.adharno|default:'' }}" placeholder="12-digit Aadhar number" />
+          </div>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+            <button class="btn btn-primary" type="submit">Save Documents</button>
+          </div>
+        </form>
+        {% else %}
+        <div style="color:rgba(255,255,255,0.5);font-size:14px;">No farmer profile linked. Please contact admin.</div>
+        {% endif %}
+      </div>
+
+      <!-- Settings & Notifications -->
+      <div id="sec-notif" style="display:none;">
+        <div class="profile-section">
+          <div class="profile-section-title">Notification Preferences</div>
 
         <div class="toggle-row">
           <div>
@@ -208,16 +260,17 @@
       </div>
 
       <!-- Danger Zone -->
-      <div class="profile-section" style="border:1.5px solid #fee2e2;">
-        <div class="profile-section-title" style="color:#dc2626;">⚠️ Danger Zone</div>
-        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-          <div>
-            <div style="font-size:14px; font-weight:600; color:var(--gray-800);">Delete
-              Account</div>
-            <div style="font-size:12px; color:var(--gray-400);">
-              Permanently delete your farmer account and all data</div>
+        <div class="profile-section" style="border:1.5px solid #fee2e2;">
+          <div class="profile-section-title" style="color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div style="font-size:14px; font-weight:600; color:var(--gray-800);">Delete
+                Account</div>
+              <div style="font-size:12px; color:var(--gray-400);">
+                Permanently delete your farmer account and all data</div>
+            </div>
+            <button class="btn btn-danger">Delete My Account</button>
           </div>
-          <button class="btn btn-danger">Delete My Account</button>
         </div>
       </div>
 
@@ -226,6 +279,23 @@
 
 
 
+  <script>
+    function switchTab(sectionId, btnElem) {
+      // Hide all sections
+      document.getElementById('sec-personal').style.display = 'none';
+      document.getElementById('sec-farm').style.display = 'none';
+      document.getElementById('sec-docs').style.display = 'none';
+      document.getElementById('sec-notif').style.display = 'none';
+      
+      // Remove active from all tabs
+      const tabs = document.querySelectorAll('.settings-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      
+      // Show selected section and activate tab
+      document.getElementById(sectionId).style.display = 'block';
+      if(btnElem) btnElem.classList.add('active');
+    }
+  </script>
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
   <script src="{% static 'farmer/js/animations.js' %}"></script>
 </body>

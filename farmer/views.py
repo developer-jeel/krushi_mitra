@@ -282,6 +282,17 @@ def farmer_profile(request):
             if request.FILES.get('photo'):
                 farmer_obj.photo = request.FILES['photo']
             farmer_obj.save()
+        elif action == 'docs' and farmer_obj:
+            farmer_obj.adharno = request.POST.get('adharno', farmer_obj.adharno)
+            if request.FILES.get('adharcard'):
+                farmer_obj.adharcard = request.FILES['adharcard']
+            if request.FILES.get('pancard'):
+                farmer_obj.pancard = request.FILES['pancard']
+            if request.FILES.get('passbook'):
+                farmer_obj.passbook = request.FILES['passbook']
+            if request.FILES.get('seventwel'):
+                farmer_obj.seventwel = request.FILES['seventwel']
+            farmer_obj.save()
         messages.success(request, 'Profile updated successfully!')
         return redirect('farmer_profile')
 
