@@ -93,7 +93,7 @@
           </svg>
           <span class="badge"></span>
         </button>
-        <div class="avatar" data-translate="r">R</div>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
       </div>
     </header>
 
@@ -101,11 +101,10 @@
 
       <!-- Profile Hero -->
       <div class="profile-hero">
-        <div class="profile-avatar-lg" data-translate="r">R</div>
+        <div class="profile-avatar-lg">{{ uid.name|make_list|first|upper }}</div>
         <div class="profile-info">
-          <div class="profile-name" data-translate="rameshPatel">Ramesh Patel</div>
-          <div class="profile-role" data-translate="verifiedFarmerAnandGujarat"><i class="fa-solid fa-wheat-awn"></i> Verified Farmer · Anand, Gujarat
-          </div>
+          <div class="profile-name">{{ uid.name }}</div>
+          <div class="profile-role"><i class="fa-solid fa-wheat-awn"></i> Farmer · {{ uid.city|default:"India" }}</div>
           <div class="profile-badges">
             <span class="profile-badge" data-translate="kycVerified"><i class="fa-solid fa-circle-check"></i> KYC Verified</span>
             <span class="profile-badge" data-translate="48Rating"><i class="fa-solid fa-star"></i> 4.8 Rating</span>
@@ -127,7 +126,7 @@
       <!-- Profile Stats -->
       <div class="profile-stats">
         <div class="profile-stat-card">
-          <div class="profile-stat-val">42</div>
+          <div class="profile-stat-val">{{ crop_count }}</div>
           <div class="profile-stat-lbl" data-translate="cropsSold">Crops Sold</div>
         </div>
         <div class="profile-stat-card">
@@ -135,7 +134,7 @@
           <div class="profile-stat-lbl" data-translate="totalRevenue">Total Revenue</div>
         </div>
         <div class="profile-stat-card">
-          <div class="profile-stat-val">18</div>
+          <div class="profile-stat-val">{{ approved_count }}</div>
           <div class="profile-stat-lbl" data-translate="activeListings">Active Listings</div>
         </div>
         <div class="profile-stat-card">
@@ -159,84 +158,79 @@
 
       <!-- Personal Info Section -->
       <div class="profile-section">
-        <div class="profile-section-title" data-translate="personalInformation">Personal Information</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label for="pfName" data-translate="fullName">Full Name</label>
-            <input type="text" id="pfName" value="Ramesh Patel" />
+        <div class="profile-section-title">Personal Information</div>
+        <form method="POST" action="{% url 'farmer_profile' %}">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="personal">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="pfName">Full Name</label>
+              <input type="text" id="pfName" name="name" value="{{ uid.name }}" />
+            </div>
+            <div class="form-field">
+              <label for="pfPhone">Mobile Number</label>
+              <input type="tel" id="pfPhone" value="{{ uid.contact|default:'' }}" readonly style="opacity:0.6;cursor:not-allowed;" />
+            </div>
+            <div class="form-field">
+              <label for="pfEmail">Email Address</label>
+              <input type="email" id="pfEmail" name="email" value="{{ uid.email|default:'' }}" />
+            </div>
+            <div class="form-field">
+              <label for="pfCity">City</label>
+              <input type="text" id="pfCity" name="city" value="{{ uid.city|default:'' }}" placeholder="e.g. Anand" />
+            </div>
+            {% if farmer %}
+            <div class="form-field">
+              <label for="pfAadhar">Aadhar Number</label>
+              <input type="text" id="pfAadhar" value="{{ farmer.adharno|default:'Not set' }}" readonly style="opacity:0.6;cursor:not-allowed;" />
+            </div>
+            {% endif %}
           </div>
+          {% if farmer %}
           <div class="form-field">
-            <label for="pfPhone" data-translate="mobileNumber">Mobile Number</label>
-            <input type="tel" id="pfPhone" value="+91 98765 43210" />
+            <label for="pfAddress">Address</label>
+            <textarea id="pfAddress" rows="2" readonly style="opacity:0.6;">{{ farmer.address|default:'' }}</textarea>
           </div>
-          <div class="form-field">
-            <label for="pfEmail" data-translate="emailAddress">Email Address</label>
-            <input type="email" id="pfEmail" value="ramesh.patel@gmail.com" />
+          {% endif %}
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+            <button class="btn btn-primary" type="submit">Save Changes</button>
           </div>
-          <div class="form-field">
-            <label for="pfAadhar" data-translate="aadharNumber">Aadhar Number</label>
-            <input type="text" id="pfAadhar" value="XXXX XXXX 3210" readonly
-              style="background:var(--gray-100); cursor:not-allowed;" />
-          </div>
-          <div class="form-field">
-            <label for="pfDob" data-translate="dateOfBirth">Date of Birth</label>
-            <input type="date" id="pfDob" value="1985-06-15" />
-          </div>
-          <div class="form-field">
-            <label for="pfGender" data-translate="gender">Gender</label>
-            <select id="pfGender">
-              <option selected data-translate="male">Male</option>
-              <option data-translate="female">Female</option>
-              <option data-translate="other">Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-field">
-          <label for="pfAddress" data-translate="fullAddress">Full Address</label>
-          <textarea id="pfAddress" rows="2">Plot 14, Navapura, Anand – 388001, Gujarat</textarea>
-        </div>
-        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
-          <button class="btn btn-secondary" data-translate="cancel">Cancel</button>
-          <button class="btn btn-primary" data-translate="saveChanges">Save Changes</button>
-        </div>
+        </form>
       </div>
 
       <!-- Farm Details Section -->
       <div class="profile-section">
-        <div class="profile-section-title" data-translate="farmDetails">Farm Details</div>
-        <div class="form-row">
-          <div class="form-field">
-            <label for="farmName" data-translate="farmName">Farm Name</label>
-            <input type="text" id="farmName" value="Patel Organic Farm" />
+        <div class="profile-section-title">Farm Details</div>
+        {% if farmer %}
+        <form method="POST" action="{% url 'farmer_profile' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="farm">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="farmName">Farm Name</label>
+              <input type="text" id="farmName" name="farm_name" value="{{ farmer.farm_name|default:'' }}" placeholder="e.g. Patel Organic Farm" />
+            </div>
+            <div class="form-field">
+              <label for="farmSize">Farm Size (Acres)</label>
+              <input type="number" id="farmSize" name="acres" value="{{ farmer.acres|default:'' }}" placeholder="e.g. 4.5" />
+            </div>
           </div>
           <div class="form-field">
-            <label for="farmSize" data-translate="farmSize">Farm Size</label>
-            <input type="text" id="farmSize" value="4.5 Acres" />
+            <label for="farmAddress">Farm Address</label>
+            <textarea id="farmAddress" name="address" rows="2" placeholder="Enter full farm address">{{ farmer.address|default:'' }}</textarea>
           </div>
           <div class="form-field">
-            <label for="farmType" data-translate="farmingType">Farming Type</label>
-            <select id="farmType">
-              <option selected data-translate="organic">Organic</option>
-              <option data-translate="traditional">Traditional</option>
-              <option data-translate="mixed">Mixed</option>
-              <option data-translate="hydroponic">Hydroponic</option>
-            </select>
+            <label>Profile Photo</label>
+            {% if farmer.photo %}<img src="{{ farmer.photo.url }}" alt="Photo" style="height:60px;border-radius:50%;margin-bottom:8px;display:block;">{% endif %}
+            <input type="file" name="photo" accept="image/*" style="color:rgba(255,255,255,0.7);" />
           </div>
-          <div class="form-field">
-            <label for="farmState" data-translate="state">State</label>
-            <select id="farmState">
-              <option selected data-translate="gujarat">Gujarat</option>
-              <option data-translate="maharashtra">Maharashtra</option>
-              <option data-translate="rajasthan">Rajasthan</option>
-              <option data-translate="punjab">Punjab</option>
-              <option data-translate="madhyaPradesh">Madhya Pradesh</option>
-            </select>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+            <button class="btn btn-primary" type="submit">Save Farm Info</button>
           </div>
-        </div>
-        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
-          <button class="btn btn-secondary" data-translate="cancel">Cancel</button>
-          <button class="btn btn-primary" data-translate="saveFarmInfo">Save Farm Info</button>
-        </div>
+        </form>
+        {% else %}
+        <div style="color:rgba(255,255,255,0.5);font-size:14px;">No farmer profile linked. Please contact admin.</div>
+        {% endif %}
       </div>
 
       <!-- Notification Preferences -->
@@ -300,11 +294,6 @@
 
     </div><!-- /page-content -->
   </div><!-- /main -->
-
-
-  <!-- Language Modal -->
-  
-  </div>
 
 
 

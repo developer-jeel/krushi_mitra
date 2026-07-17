@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
     <link rel="stylesheet" href="{% static 'farmer/css/tool_price.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -45,15 +45,15 @@
                             <option value="" disabled {% if not category %}selected{% endif %}
                                 data-translate="selectMachineCategory">Select machine
                                 category</option>
-                            <option value="tractor" {% if category =='tractor' %}selected{% endif %}
+                            <option value="tractor" {% if category == 'tractor' %}selected{% endif %}
                                 data-translate="tractor">Tractor</option>
-                            <option value="harvester" {% if category=='harvester' %}selected{% endif %}
+                            <option value="harvester" {% if category == 'harvester' %}selected{% endif %}
                                 data-translate="harvester">Harvester</option>
-                            <option value="other" {% if category=='other' %}selected{% endif %}
+                            <option value="other" {% if category == 'other' %}selected{% endif %}
                                 data-translate="otherMachinery">Other Machinery</option>
-                            <option value="tools" {% if category=='tools' %}selected{% endif %}
+                            <option value="tools" {% if category == 'tools' %}selected{% endif %}
                                 data-translate="machineryTools">Machinery Tools</option>
-                            <option value="hand" {% if category=='hand' %}selected{% endif %}
+                            <option value="hand" {% if category == 'hand' %}selected{% endif %}
                                 data-translate="handTools">Hand Tools</option>
                         </select>
                     </div>
@@ -64,13 +64,13 @@
                             <option value="" disabled {% if not condition %}selected{% endif %}
                                 data-translate="selectCurrentCondition">Select current
                                 condition</option>
-                            <option value="excellent" {% if condition=='excellent' %}selected{% endif %}
+                            <option value="excellent" {% if condition == 'excellent' %}selected{% endif %}
                                 data-translate="excellent">Excellent</option>
-                            <option value="good" {% if condition=='good' %}selected{% endif %} data-translate="good">
+                            <option value="good" {% if condition == 'good' %}selected{% endif %} data-translate="good">
                                 Good</option>
-                            <option value="average" {% if condition=='average' %}selected{% endif %}
+                            <option value="average" {% if condition == 'average' %}selected{% endif %}
                                 data-translate="average">Average</option>
-                            <option value="poor" {% if condition=='poor' %}selected{% endif %} data-translate="poor">
+                            <option value="poor" {% if condition == 'poor' %}selected{% endif %} data-translate="poor">
                                 Poor</option>
                         </select>
                     </div>

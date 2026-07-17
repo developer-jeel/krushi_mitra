@@ -234,3 +234,42 @@ class news(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.category} - {self.state} - {self.created_at}"
+
+class FarmerTool(models.Model):
+    CATEGORY_CHOICES = (
+        ('tractor',   'Tractor'),
+        ('harvester', 'Harvester'),
+        ('other',     'Other Machinery'),
+        ('tools',     'Machinery Tools'),
+        ('hand',      'Hand Tools'),
+    )
+    CONDITION_CHOICES = (
+        ('excellent', 'Excellent'),
+        ('good',      'Good'),
+        ('average',   'Average'),
+        ('poor',      'Poor'),
+    )
+    STATUS_CHOICES = (
+        ('available', 'Available'),
+        ('sold',      'Sold'),
+    )
+
+    user                  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farmer_tools')
+    tool_name             = models.CharField(max_length=100)
+    category              = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    company               = models.CharField(max_length=100, blank=True, null=True)
+    model_name            = models.CharField(max_length=100, blank=True, null=True)
+    manufacturing_year    = models.PositiveIntegerField(blank=True, null=True)
+    horsepower            = models.PositiveIntegerField(blank=True, null=True)
+    condition             = models.CharField(max_length=20, choices=CONDITION_CHOICES)
+    description           = models.TextField(blank=True, null=True)
+    image                 = models.ImageField(upload_to='farmer_tools/images/', blank=True, null=True)
+    availability_status   = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
+    location              = models.CharField(max_length=200, blank=True, null=True)
+    original_price        = models.PositiveIntegerField(help_text='Original purchase price (used for auto price estimation)')
+    years_used            = models.PositiveIntegerField(default=0, help_text='Number of years the tool has been used')
+    created_at            = models.DateTimeField(auto_now_add=True)
+    updated_at            = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.tool_name} — {self.user.name}"

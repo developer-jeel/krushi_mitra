@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ tool.tool_name }} – Tool Details | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .detail-wrap { max-width: 900px; margin: 0 auto; }
+    
+    .detail-header {
+      background: var(--glass-card); border: 1px solid var(--glass-border);
+      border-radius: 18px; padding: 24px; margin-bottom: 24px;
+      display: flex; gap: 24px; align-items: stretch;
+    }
+    
+    .detail-img-box {
+      width: 280px; flex-shrink: 0; border-radius: 14px; overflow: hidden;
+      background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(16,185,129,0.08));
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--glass-border);
+    }
+    .detail-img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .detail-img-box .no-img { font-size: 64px; color: var(--em-600); opacity: 0.5; }
+    
+    .detail-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    
+    .detail-title-row { display: flex; justify-content: space-between; align-items: flex-start; }
+    .detail-title { font-size: 24px; font-weight: 800; color: rgba(255,255,255,0.92); margin-bottom: 8px; }
+    
+    .status-pill {
+      padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .status-pill.available { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+    .status-pill.sold      { background: rgba(239,68,68,0.2);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+    .detail-meta { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,0.6); }
+    .meta-item i { color: var(--em-500); }
+
+    .price-card {
+      background: linear-gradient(135deg, rgba(34,197,94,0.1), rgba(16,185,129,0.05));
+      border: 1px solid rgba(34,197,94,0.2); border-radius: 14px; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .price-card .lbl { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .price-card .val { font-size: 28px; font-weight: 800; color: var(--em-400); line-height: 1; }
+    .price-card .sub { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 6px; }
+
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 768px) {
+      .detail-header { flex-direction: column; }
+      .detail-img-box { width: 100%; height: 240px; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    .info-card {
+      background: var(--glass-card); border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 24px;
+    }
+    .info-card-title { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .info-card-title i { color: var(--em-400); }
+    
+    .spec-list { display: flex; flex-direction: column; gap: 12px; }
+    .spec-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .spec-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .spec-lbl { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .spec-val { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.85); }
+
+    .desc-text { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.7); }
+
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item active" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title"><i class="fa-solid fa-eye"></i> Tool Details</div>
+          <div class="breadcrumb">Dashboard / Tools / {{ tool.tool_name }}</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'my_tool_list' %}" class="btn btn-secondary" style="font-size:13px;padding:8px 14px;text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Back</a>
+        <a href="{% url 'tool_edit' tool.id %}" class="btn btn-primary" style="font-size:13px;padding:8px 14px;text-decoration:none;"><i class="fa-solid fa-pen"></i> Edit</a>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div class="detail-wrap">
+        
+        <!-- Header Section -->
+        <div class="detail-header">
+          <div class="detail-img-box">
+            {% if tool.image %}
+              <img src="{{ tool.image.url }}" alt="{{ tool.tool_name }}" />
+            {% else %}
+              <span class="no-img">
+                {% if tool.category == 'tractor' %}<i class="fa-solid fa-tractor"></i>
+                {% elif tool.category == 'harvester' %}<i class="fa-solid fa-wheat-awn"></i>
+                {% elif tool.category == 'hand' %}<i class="fa-solid fa-hammer"></i>
+                {% else %}<i class="fa-solid fa-screwdriver-wrench"></i>{% endif %}
+              </span>
+            {% endif %}
+          </div>
+          
+          <div class="detail-info">
+            <div>
+              <div class="detail-title-row">
+                <h1 class="detail-title">{{ tool.tool_name }}</h1>
+                <span class="status-pill {{ tool.availability_status }}">
+                  {% if tool.availability_status == 'available' %}<i class="fa-solid fa-circle-check"></i> Available
+                  {% else %}<i class="fa-solid fa-tag"></i> Sold{% endif %}
+                </span>
+              </div>
+              
+              <div class="detail-meta">
+                <div class="meta-item"><i class="fa-solid fa-layer-group"></i> {{ tool.get_category_display }}</div>
+                {% if tool.location %}<div class="meta-item"><i class="fa-solid fa-location-dot"></i> {{ tool.location }}</div>{% endif %}
+                <div class="meta-item"><i class="fa-solid fa-calendar-days"></i> Listed on {{ tool.created_at|date:"d M Y" }}</div>
+              </div>
+            </div>
+            
+            <div class="price-card">
+              <div>
+                <div class="lbl"><i class="fa-solid fa-robot"></i> AI Estimated Selling Price</div>
+                {% if predicted %}
+                  <div class="val">₹{{ predicted|floatformat:0 }}</div>
+                {% else %}
+                  <div class="val" style="font-size:20px;color:rgba(255,255,255,0.4);">Price Not Available</div>
+                {% endif %}
+                <div class="sub">Calculated based on category, condition, purchase price, and years used.</div>
+              </div>
+              <i class="fa-solid fa-calculator" style="font-size:40px; color:var(--em-500); opacity:0.2;"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Details Grid -->
+        <div class="detail-grid">
+          
+          <!-- Specifications -->
+          <div class="info-card">
+            <h3 class="info-card-title"><i class="fa-solid fa-list-check"></i> Specifications</h3>
+            <div class="spec-list">
+              <div class="spec-row">
+                <span class="spec-lbl">Category</span>
+                <span class="spec-val">{{ tool.get_category_display }}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-lbl">Condition</span>
+                <span class="spec-val">
+                  <span style="color:var(--em-400);"><i class="fa-solid fa-certificate"></i></span> {{ tool.get_condition_display }}
+                </span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-lbl">Company / Brand</span>
+                <span class="spec-val">{{ tool.company|default:"-" }}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-lbl">Model</span>
+                <span class="spec-val">{{ tool.model_name|default:"-" }}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-lbl">Manufacturing Year</span>
+                <span class="spec-val">{{ tool.manufacturing_year|default:"-" }}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-lbl">Horsepower (HP)</span>
+                <span class="spec-val">{% if tool.horsepower %}{{ tool.horsepower }} HP{% else %}-{% endif %}</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-lbl">Years Used</span>
+                <span class="spec-val">{{ tool.years_used }} years</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Additional Info -->
+          <div>
+            <div class="info-card" style="margin-bottom:24px;">
+              <h3 class="info-card-title"><i class="fa-solid fa-file-lines"></i> Description</h3>
+              {% if tool.description %}
+                <div class="desc-text">{{ tool.description|linebreaksbr }}</div>
+              {% else %}
+                <div class="desc-text" style="color:rgba(255,255,255,0.3);font-style:italic;">No description provided.</div>
+              {% endif %}
+            </div>
+            
+            <div class="info-card">
+              <h3 class="info-card-title"><i class="fa-solid fa-chart-line"></i> Background Data</h3>
+              <div class="spec-list">
+                <div class="spec-row">
+                  <span class="spec-lbl">Original Purchase Price</span>
+                  <span class="spec-val">₹{{ tool.original_price|default:"0" }}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-lbl">Last Updated</span>
+                  <span class="spec-val">{{ tool.updated_at|date:"d M Y, h:i A" }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+      </div>
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+</html>

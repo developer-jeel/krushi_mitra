@@ -11,308 +11,280 @@
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .edit-modal-overlay { display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; }
+    .edit-modal-overlay.open { display:flex; }
+    .edit-modal { background:var(--glass-card); border:1px solid var(--glass-border); border-radius:18px; padding:28px; width:100%; max-width:520px; box-shadow:0 24px 64px rgba(0,0,0,0.6); }
+    .edit-modal h3 { font-size:18px; font-weight:700; color:var(--em-400); margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+    .edit-modal .form-row { display:flex; gap:14px; }
+    .edit-modal .form-field { flex:1; margin-bottom:14px; }
+    .edit-modal .form-field label { display:block; font-size:12px; font-weight:600; color:rgba(255,255,255,0.6); margin-bottom:6px; }
+    .edit-modal .form-field input, .edit-modal .form-field select, .edit-modal .form-field textarea { width:100%; padding:10px 14px; border-radius:10px; border:1.5px solid var(--glass-border); background:rgba(0,0,0,0.3); color:rgba(255,255,255,0.9); font-family:inherit; font-size:14px; outline:none; transition:border-color 0.2s; }
+    .edit-modal .form-field input:focus, .edit-modal .form-field select:focus, .edit-modal .form-field textarea:focus { border-color:var(--em-500); }
+    .edit-modal .form-field select option { background:#0d2211; }
+    .edit-modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:6px; }
+    .django-messages { margin-bottom:16px; }
+    .django-msg { padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+    .django-msg.success { background:rgba(34,197,94,0.12); color:#4ade80; border:1px solid rgba(34,197,94,0.25); }
+    .django-msg.error { background:rgba(239,68,68,0.12); color:#f87171; border:1px solid rgba(239,68,68,0.25); }
+  </style>
 </head>
 
 <body>
 
-  <!-- ════════════ SIDEBAR ════════════ -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
-      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
     </div>
-
     <nav class="sidebar-nav">
-      <div class="nav-section-title" data-translate="main">Main</div>
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}" class="nav-item active" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    </nav>
+  </aside>
 
-      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-        <i class="fa-solid fa-house"></i>
-        <span data-translate="home">Home</span>
-      </a>
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title"><i class="fa-solid fa-wheat-awn"></i> My Crops</div>
+          <div class="breadcrumb">Dashboard / My Crops</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
 
-      <a href="{% url 'farmer_crops' %}" class="nav-item active" id="nav-crops">
-        <i class="fa-solid fa-wheat-awn"></i>
-        <span data-translate="crops">My Crops</span>
-      </a>
+    <div class="page-content">
 
-      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-        <i class="fa-solid fa-wheat-awn"></i>
-                Crop Name <span style="color:#ef4444;">*</span>
-              </label>
-              <input type="text" id="cropName" name="cropname" placeholder="e.g. Basmati Rice" maxlength="20"
-                required />
-              <small style="color:var(--text-muted,#8a9bb0);font-size:11px;">Max 20 characters</small>
+      {% if messages %}
+      <div class="django-messages">
+        {% for message in messages %}
+        <div class="django-msg {{ message.tags }}">
+          {% if message.tags == 'success' %}<i class="fa-solid fa-circle-check"></i>{% else %}<i class="fa-solid fa-triangle-exclamation"></i>{% endif %}
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Add Crop Form -->
+      <div style="background:var(--glass-card);border:1px solid var(--glass-border);border-radius:18px;padding:24px;margin-bottom:28px;">
+        <div style="font-size:17px;font-weight:700;color:var(--em-400);margin-bottom:18px;display:flex;align-items:center;gap:10px;">
+          <i class="fa-solid fa-plus-circle"></i> Add New Crop Listing
+        </div>
+        <form method="POST" action="{% url 'farmer_crops' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-field">
+              <label for="cropName"><i class="fa-solid fa-wheat-awn" style="margin-right:5px;"></i> Crop Name <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="cropName" name="cropname" placeholder="e.g. Basmati Rice" maxlength="20" required />
             </div>
             <div class="form-field">
-              <label for="cropCategory">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  style="margin-right:5px;vertical-align:middle;">
-                  <rect x="3" y="3" width="7" height="7" />
-                  <rect x="14" y="3" width="7" height="7" />
-                  <rect x="14" y="14" width="7" height="7" />
-                  <rect x="3" y="14" width="7" height="7" />
-                </svg>
-                Category <span style="color:#ef4444;">*</span>
-              </label>
+              <label for="cropCategory"><i class="fa-solid fa-layer-group" style="margin-right:5px;"></i> Category <span style="color:#ef4444;">*</span></label>
               <select id="cropCategory" name="category" required>
                 <option value="" disabled selected>-- Select Category --</option>
-                <option value="grain cereals"><i class="fa-solid fa-wheat-awn"></i> Grain Cereals</option>
-                <option value="vegetables">🥦 Vegetables</option>
-                <option value="fruits">🍎 Fruits</option>
-                <option value="pulses">🫘 Pulses</option>
-                <option value="spices"><i class="fa-solid fa-pepper-hot"></i> Spices</option>
-                <option value="cotton">🪡 Cotton</option>
+                <option value="grain cereals">Grain Cereals</option>
+                <option value="vegetables">Vegetables</option>
+                <option value="fruits">Fruits</option>
+                <option value="pulses">Pulses</option>
+                <option value="spices">Spices</option>
+                <option value="cotton">Cotton</option>
               </select>
             </div>
           </div>
-
-          <!-- Row 2: Quantity + Price -->
           <div class="form-row">
             <div class="form-field">
-              <label for="cropQty">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  style="margin-right:5px;vertical-align:middle;">
-                  <path
-                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                </svg>
-                Quantity (kg) <span style="color:#ef4444;">*</span>
-              </label>
+              <label for="cropQty"><i class="fa-solid fa-weight-scale" style="margin-right:5px;"></i> Quantity (kg) <span style="color:#ef4444;">*</span></label>
               <input type="number" id="cropQty" placeholder="e.g. 200" min="1" name="quantity" required />
-              <small style="color:var(--text-muted,#8a9bb0);font-size:11px;">Enter total quantity available in
-                kilograms</small>
             </div>
             <div class="form-field">
-              <label for="cropPrice">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  style="margin-right:5px;vertical-align:middle;">
-                  <line x1="12" y1="1" x2="12" y2="23" />
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
-                Price per kg (₹) <span style="color:#ef4444;">*</span>
-              </label>
+              <label for="cropPrice"><i class="fa-solid fa-indian-rupee-sign" style="margin-right:5px;"></i> Price per kg (₹) <span style="color:#ef4444;">*</span></label>
               <input type="number" id="cropPrice" placeholder="e.g. 45" min="1" name="price" required />
-              <small style="color:var(--text-muted,#8a9bb0);font-size:11px;">Set your asking price in Indian Rupees per
-                kg</small>
             </div>
           </div>
-
-          <!-- Row 3: Description -->
           <div class="form-field">
-            <label for="cropDesc">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                style="margin-right:5px;vertical-align:middle;">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-              Description <span style="color:#8a9bb0;font-size:12px;font-weight:400;">(Optional)</span>
-            </label>
-            <textarea id="cropDesc" rows="3" name="description"
-              placeholder="Describe your crop — grade, harvest date, storage info, certifications (organic/premium), etc."></textarea>
+            <label for="cropDesc"><i class="fa-solid fa-file-lines" style="margin-right:5px;"></i> Description <span style="color:#8a9bb0;font-size:12px;">(Optional)</span></label>
+            <textarea id="cropDesc" rows="3" name="description" placeholder="Describe your crop — grade, harvest date, organic status, etc."></textarea>
           </div>
-
-          <!-- Row 4: Crop Image Upload -->
           <div class="form-field">
-            <label for="cropImage">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                style="margin-right:5px;vertical-align:middle;">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <polyline points="21 15 16 10 5 21" />
-              </svg>
-              Crop Image <span style="color:#8a9bb0;font-size:12px;font-weight:400;">(Optional)</span>
-            </label>
-            <div id="cropImageDropZone" style="
-              border: 2px dashed var(--border,#2a3d55);
-              border-radius: 12px;
-              padding: 28px 20px;
-              text-align: center;
-              cursor: pointer;
-              transition: border-color 0.2s, background 0.2s;
-              background: var(--bg-card,#0f1d2e);
-              position: relative;
-            " onclick="document.getElementById('cropImage').click()"
-              ondragover="event.preventDefault(); this.style.borderColor='#22c55e';"
-              ondragleave="this.style.borderColor='var(--border,#2a3d55)';" ondrop="handleCropImageDrop(event);">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.5"
-                style="margin-bottom:10px;opacity:0.8;">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <polyline points="21 15 16 10 5 21" />
-              </svg>
-              <div style="font-size:14px;font-weight:600;color:var(--text-primary,#e2eaf4);margin-bottom:4px;">Click to
-                upload or drag & drop</div>
-              <div style="font-size:12px;color:var(--text-muted,#8a9bb0);">JPG, PNG, WEBP · Max 5 MB</div>
-              <div id="cropImagePreviewWrapper" style="display:none; margin-top:14px;">
-                <img id="cropImagePreview" src="#" alt="Crop Preview"
-                  style="max-height:120px; border-radius:8px; border:1px solid var(--border,#2a3d55); object-fit:cover;" />
+            <label for="cropImage"><i class="fa-solid fa-image" style="margin-right:5px;"></i> Crop Image <span style="color:#8a9bb0;font-size:12px;">(Optional)</span></label>
+            <div id="cropImageDropZone" style="border:2px dashed var(--glass-border);border-radius:12px;padding:24px 20px;text-align:center;cursor:pointer;background:rgba(0,0,0,0.2);" onclick="document.getElementById('cropImage').click()" ondragover="event.preventDefault();this.style.borderColor='#22c55e';" ondragleave="this.style.borderColor='var(--glass-border)';" ondrop="handleCropImageDrop(event);">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size:32px;color:var(--em-500);margin-bottom:10px;"></i>
+              <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);margin-bottom:4px;">Click to upload or drag &amp; drop</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.4);">JPG, PNG, WEBP · Max 5 MB</div>
+              <div id="cropImagePreviewWrapper" style="display:none;margin-top:14px;">
+                <img id="cropImagePreview" src="#" alt="Preview" style="max-height:120px;border-radius:8px;border:1px solid var(--glass-border);object-fit:cover;" />
                 <div id="cropImageFileName" style="font-size:12px;color:#22c55e;margin-top:6px;"></div>
               </div>
             </div>
-            <input type="file" id="cropImage" accept="image/*" style="display:none;" onchange="previewCropImage(event)"
-              name="image" required />
+            <input type="file" id="cropImage" accept="image/*" style="display:none;" onchange="previewCropImage(event)" name="image" />
           </div>
-
-          <!-- Action Buttons -->
-          <div
-            style="display:flex; gap:12px; justify-content:flex-end; margin-top:20px; padding-top:16px; border-top:1px solid var(--border,#2a3d55);">
-            <button class="btn btn-secondary" type="button" id="clearCropFormBtn" onclick="clearCropForm()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                <polyline points="1 4 1 10 7 10" />
-                <path d="M3.51 15a9 9 0 1 0 .49-3.5" />
-              </svg>
-              Clear Form
-            </button>
-            <button class="btn btn-primary" type="submit" id="publishCropBtn" onclick="submitCropForm()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                <line x1="12" y1="5" x2="12" y2="19" />
-                <line x1="5" y1="12" x2="19" y2="12" />
-              </svg>
-              Publish Listing
-            </button>
+          <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--glass-border);">
+            <button class="btn btn-secondary" type="button" onclick="clearCropForm()"><i class="fa-solid fa-rotate-left"></i> Clear</button>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-plus"></i> Publish Listing</button>
           </div>
-
-          <!-- Success / Error Banner (hidden by default) -->
-          <div id="cropFormMsg"
-            style="display:none; margin-top:14px; padding:12px 16px; border-radius:10px; font-size:13px; font-weight:500;">
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
 
       <script>
-        /* ── Crop Image Preview ── */
         function previewCropImage(event) {
-          var file = event.target.files[0];
-          if (!file) return;
-          var wrapper = document.getElementById('cropImagePreviewWrapper');
-          var preview = document.getElementById('cropImagePreview');
-          var fname = document.getElementById('cropImageFileName');
+          var file = event.target.files[0]; if (!file) return;
           var reader = new FileReader();
-          reader.onload = function (e) {
-            preview.src = e.target.result;
-            fname.textContent = file.name;
-            wrapper.style.display = 'block';
+          reader.onload = function(e) {
+            document.getElementById('cropImagePreview').src = e.target.result;
+            document.getElementById('cropImageFileName').textContent = file.name;
+            document.getElementById('cropImagePreviewWrapper').style.display = 'block';
           };
           reader.readAsDataURL(file);
         }
-
         function handleCropImageDrop(event) {
           event.preventDefault();
-          document.getElementById('cropImageDropZone').style.borderColor = 'var(--border,#2a3d55)';
+          document.getElementById('cropImageDropZone').style.borderColor = 'var(--glass-border)';
           var file = event.dataTransfer.files[0];
           if (!file || !file.type.startsWith('image/')) return;
-          var dt = new DataTransfer();
-          dt.items.add(file);
+          var dt = new DataTransfer(); dt.items.add(file);
           document.getElementById('cropImage').files = dt.files;
           previewCropImage({ target: { files: [file] } });
         }
-
-        /* ── Clear Form ── */
         function clearCropForm() {
-          document.getElementById('cropName').value = '';
+          ['cropName','cropQty','cropPrice','cropDesc','cropImage'].forEach(function(id){ document.getElementById(id).value=''; });
           document.getElementById('cropCategory').value = '';
-          document.getElementById('cropQty').value = '';
-          document.getElementById('cropPrice').value = '';
-          document.getElementById('cropDesc').value = '';
-          document.getElementById('cropImage').value = '';
           document.getElementById('cropImagePreviewWrapper').style.display = 'none';
-          document.getElementById('cropFormMsg').style.display = 'none';
-        }
-
-        /* ── Basic front-end validation ── */
-        function submitCropForm() {
-          var name = document.getElementById('cropName').value.trim();
-          var category = document.getElementById('cropCategory').value;
-          var qty = document.getElementById('cropQty').value;
-          var price = document.getElementById('cropPrice').value;
-          var msg = document.getElementById('cropFormMsg');
-
-          if (!name || !category || !qty || !price) {
-            msg.style.display = 'block';
-            msg.style.background = 'rgba(239,68,68,0.12)';
-            msg.style.color = '#f87171';
-            msg.style.border = '1px solid rgba(239,68,68,0.25)';
-            msg.textContent = '⚠️  Please fill in all required fields before publishing.';
-            return;
-          }
-          msg.style.display = 'block';
-          msg.style.background = 'rgba(34,197,94,0.12)';
-          msg.style.color = '#4ade80';
-          msg.style.border = '1px solid rgba(34,197,94,0.25)';
-          msg.textContent = '<i class="fa-solid fa-circle-check"></i>  Crop listing submitted! Awaiting admin approval.';
         }
       </script>
 
-      <!-- Filter Bar -->
+      <!-- Listings Header -->
       <div class="section-header">
-        <div class="section-title" data-translate="allListings">All Listings</div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn btn-primary" style="font-size:12px; padding:7px 14px;" data-translate="all">All</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="active">Active</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="pending">Pending</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="sold">Sold</button>
-        </div>
+        <div class="section-title"><i class="fa-solid fa-list"></i> All My Listings</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);">{{ all_crops|length }} crop{% if all_crops|length != 1 %}s{% endif %} listed</div>
       </div>
 
       <!-- Crop Cards -->
       <div class="card-grid">
-        {% for crop in all_crops %}
+        {% for c in all_crops %}
         <div class="product-card">
-
           <div class="card-img">
-            <img src="{{ crop.image.url }}" alt="{{ crop.cropname }}">
-            {% if crop.is_approved %}
-            <span class="card-badge" data-translate="Aapproved">Aapproved</span>
-            {%else%}
-            <span class="card-badge red" data-translate="Not Aapproved">Not Aapproved</span>
-            {%endif%}
+            {% if c.image %}
+            <img src="{{ c.image.url }}" alt="{{ c.cropname }}">
+            {% else %}
+            <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;background:linear-gradient(135deg,var(--em-900),var(--em-700));">
+              <i class="fa-solid fa-wheat-awn" style="color:var(--em-400);"></i>
+            </div>
+            {% endif %}
+            {% if c.is_approved %}
+            <span class="card-badge"><i class="fa-solid fa-circle-check"></i> Approved</span>
+            {% else %}
+            <span class="card-badge red"><i class="fa-solid fa-clock"></i> Pending</span>
+            {% endif %}
           </div>
-
           <div class="card-body">
-            <div class="card-name" data-translate="{{crop.cropname}}">
-              {{crop.cropname}}
+            <div class="card-name">{{ c.cropname }}</div>
+            <div class="card-meta"><i class="fa-solid fa-layer-group" style="margin-right:4px;color:var(--em-400);"></i>{{ c.get_category_display }}</div>
+            {% if c.description %}<div class="card-meta" style="font-size:12px;opacity:0.7;margin-top:4px;">{{ c.description|truncatechars:55 }}</div>{% endif %}
+            <div style="display:flex;gap:12px;font-size:12px;color:rgba(255,255,255,0.5);margin:8px 0;">
+              <span><i class="fa-solid fa-weight-scale"></i> {{ c.quantity }} kg</span>
             </div>
-
-            <div class="card-meta">
-              {{crop.description}}
-            </div>
-
             <div class="card-price-row">
-              <div class="card-price">
-                ₹{{crop.price}}
-                <span class="unit" data-translate="kg">/ kg</span>
-              </div>
+              <div class="card-price">₹{{ c.price }} <span class="unit">/ kg</span></div>
             </div>
-
-            <div class="card-actions">
-              <button class="btn btn-secondary" data-translate="edit">
-                Edit
+            <div class="card-actions" style="margin-top:12px;">
+              <button class="btn btn-secondary" onclick="openEditModal({{ c.id }}, '{{ c.cropname }}', '{{ c.category }}', {{ c.quantity }}, {{ c.price }}, '{{ c.description|default:''|escapejs }}')">
+                <i class="fa-solid fa-pen"></i> Edit
               </button>
-
-              <button class="btn btn-primary" data-translate="viewOrders">
-                View Orders
-              </button>
-
-              <button class="btn btn-danger" data-translate="remove">
-                Remove
-              </button>
+              <form method="POST" action="{% url 'delete_crop' c.id %}" style="display:inline;" onsubmit="return confirm('Delete this crop? This cannot be undone.')">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+              </form>
             </div>
           </div>
         </div>
+        {% empty %}
+        <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:rgba(255,255,255,0.4);">
+          <i class="fa-solid fa-seedling" style="font-size:48px;color:var(--em-700);margin-bottom:16px;display:block;"></i>
+          <div style="font-size:18px;font-weight:600;margin-bottom:8px;">No crop listings yet</div>
+          <div style="font-size:14px;">Use the form above to add your first crop listing.</div>
+        </div>
         {% endfor %}
-
       </div>
+
     </div><!-- /page-content -->
   </div><!-- /main -->
 
+  <!-- Edit Crop Modal -->
+  <div class="edit-modal-overlay" id="editCropModal">
+    <div class="edit-modal">
+      <h3><i class="fa-solid fa-pen"></i> Edit Crop</h3>
+      <form method="POST" id="editCropForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-field">
+            <label>Crop Name *</label>
+            <input type="text" name="cropname" id="editCropName" maxlength="20" required />
+          </div>
+          <div class="form-field">
+            <label>Category *</label>
+            <select name="category" id="editCropCategory" required>
+              <option value="grain cereals">Grain Cereals</option>
+              <option value="vegetables">Vegetables</option>
+              <option value="fruits">Fruits</option>
+              <option value="pulses">Pulses</option>
+              <option value="spices">Spices</option>
+              <option value="cotton">Cotton</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Quantity (kg) *</label>
+            <input type="number" name="quantity" id="editCropQty" min="1" required />
+          </div>
+          <div class="form-field">
+            <label>Price per kg (₹) *</label>
+            <input type="number" name="price" id="editCropPrice" min="1" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Description</label>
+          <textarea name="description" id="editCropDesc" rows="3"></textarea>
+        </div>
+        <div class="form-field">
+          <label>Replace Image <span style="color:rgba(255,255,255,0.4);font-size:11px;">(optional)</span></label>
+          <input type="file" name="image" accept="image/*" style="color:rgba(255,255,255,0.7);" />
+        </div>
+        <div class="edit-modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i> Cancel</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  <!-- Language Modal -->
-
-
+  <script>
+    function openEditModal(id, name, category, qty, price, desc) {
+      document.getElementById('editCropForm').action = '/edit_crop/' + id;
+      document.getElementById('editCropName').value = name;
+      document.getElementById('editCropCategory').value = category;
+      document.getElementById('editCropQty').value = qty;
+      document.getElementById('editCropPrice').value = price;
+      document.getElementById('editCropDesc').value = desc;
+      document.getElementById('editCropModal').classList.add('open');
+    }
+    function closeEditModal() { document.getElementById('editCropModal').classList.remove('open'); }
+    document.getElementById('editCropModal').addEventListener('click', function(e) { if (e.target === this) closeEditModal(); });
+  </script>
 
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
   <script src="{% static 'farmer/js/animations.js' %}"></script>

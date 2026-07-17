@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Tool – {{ tool.tool_name }} | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .tool-form-wrap { max-width:780px; }
+    .form-section { background:var(--glass-card); border:1px solid var(--glass-border); border-radius:18px; padding:24px; margin-bottom:20px; }
+    .form-section-title { font-size:15px; font-weight:700; color:rgba(255,255,255,0.9); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+    .form-group { margin-bottom:16px; }
+    .form-group:last-child { margin-bottom:0; }
+    .form-group label { display:block; font-size:12px; font-weight:600; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+    .form-group input, .form-group select, .form-group textarea { width:100%; padding:11px 14px; background:rgba(0,0,0,0.25); border:1.5px solid var(--glass-border); border-radius:10px; color:rgba(255,255,255,0.9); font-family:'Inter',sans-serif; font-size:14px; outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--em-500); box-shadow:0 0 0 3px rgba(34,197,94,0.12); }
+    .form-group select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='%2322c55e' d='M5.5 7L0 0h11z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer; background-color:rgba(0,0,0,0.25); }
+    .form-group select option { background:#0d2211; color:#fff; }
+    .form-group textarea { resize:vertical; min-height:80px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .price-panel { background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(16,185,129,0.04)); border:1px solid rgba(34,197,94,0.25); border-radius:16px; padding:20px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .price-panel .price-label { font-size:12px; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+    .price-panel .price-amount { font-size:32px; font-weight:800; color:var(--em-400); line-height:1; }
+    .price-panel .price-source { font-size:11px; color:rgba(255,255,255,0.35); margin-top:4px; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .price-loading { animation:pulse 1.2s infinite; color:rgba(255,255,255,0.3); font-size:14px; }
+    .upload-area { border:2px dashed var(--glass-border); border-radius:14px; padding:20px; text-align:center; cursor:pointer; transition:border-color 0.2s; background:rgba(34,197,94,0.03); position:relative; }
+    .upload-area:hover { border-color:var(--em-500); }
+    .upload-area input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .current-img { width:100px; height:100px; object-fit:cover; border-radius:12px; border:2px solid var(--glass-border); margin-bottom:10px; }
+    .form-actions { display:flex; gap:12px; justify-content:flex-end; }
+    @media (max-width:600px) { .form-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item active" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title"><i class="fa-solid fa-pen"></i> Edit Tool</div>
+          <div class="breadcrumb">Dashboard / Tools / Edit: {{ tool.tool_name }}</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'my_tool_list' %}" class="btn btn-secondary" style="font-size:13px;padding:8px 14px;text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Back</a>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div class="tool-form-wrap">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'tool_edit' tool.id %}" novalidate>
+          {% csrf_token %}
+
+          <!-- Tool Info -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--em-400);"></i> Tool Information</div>
+            <div class="form-group">
+              <label>Tool Name *</label>
+              <input type="text" name="tool_name" value="{{ tool.tool_name }}" maxlength="100" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Category *</label>
+                <select name="category" id="edit_category" class="price-trigger" required>
+                  <option value="tractor"   {% if tool.category == 'tractor' %}selected{% endif %}>Tractor</option>
+                  <option value="harvester" {% if tool.category == 'harvester' %}selected{% endif %}>Harvester</option>
+                  <option value="other"     {% if tool.category == 'other' %}selected{% endif %}>Other Machinery</option>
+                  <option value="tools"     {% if tool.category == 'tools' %}selected{% endif %}>Machinery Tools</option>
+                  <option value="hand"      {% if tool.category == 'hand' %}selected{% endif %}>Hand Tools</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Condition *</label>
+                <select name="condition" id="edit_condition" class="price-trigger" required>
+                  <option value="excellent" {% if tool.condition == 'excellent' %}selected{% endif %}>Excellent</option>
+                  <option value="good"      {% if tool.condition == 'good' %}selected{% endif %}>Good</option>
+                  <option value="average"   {% if tool.condition == 'average' %}selected{% endif %}>Average</option>
+                  <option value="poor"      {% if tool.condition == 'poor' %}selected{% endif %}>Poor</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Company / Brand</label>
+                <input type="text" name="company" value="{{ tool.company|default:'' }}" placeholder="e.g. Mahindra" />
+              </div>
+              <div class="form-group">
+                <label>Model Name</label>
+                <input type="text" name="model_name" value="{{ tool.model_name|default:'' }}" placeholder="e.g. Arjun 555" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Manufacturing Year</label>
+                <input type="number" name="manufacturing_year" value="{{ tool.manufacturing_year|default:'' }}" min="1900" max="2025" />
+              </div>
+              <div class="form-group">
+                <label>Horsepower (HP)</label>
+                <input type="number" name="horsepower" value="{{ tool.horsepower|default:'' }}" min="1" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="description" rows="3">{{ tool.description|default:'' }}</textarea>
+            </div>
+          </div>
+
+          <!-- Pricing -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-indian-rupee-sign" style="color:var(--em-400);"></i> Pricing &amp; Listing</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Original Purchase Price (₹) *</label>
+                <input type="number" id="edit_orig_price" name="original_price" value="{{ tool.original_price }}" min="1" class="price-trigger" required />
+                <small style="color:rgba(255,255,255,0.3);font-size:11px;">Used only for selling price estimation.</small>
+              </div>
+              <div class="form-group">
+                <label>Years Used</label>
+                <input type="number" id="edit_years_used" name="years_used" value="{{ tool.years_used }}" min="0" max="50" class="price-trigger" />
+              </div>
+            </div>
+
+            <!-- Auto Price (read-only) -->
+            <div class="price-panel">
+              <div>
+                <div class="price-label"><i class="fa-solid fa-robot"></i> Estimated Selling Price (Auto)</div>
+                <div class="price-amount" id="priceDisplay">
+                  {% if predicted %}₹{{ predicted|floatformat:0 }}{% else %}—{% endif %}
+                </div>
+                <div class="price-source">Source: Krushi Mitra Price Prediction Model &nbsp; <i class="fa-solid fa-lock" style="color:rgba(255,255,255,0.3);font-size:10px;"></i> Read-only</div>
+              </div>
+              <i class="fa-solid fa-robot" style="font-size:40px;color:var(--em-600);opacity:0.3;"></i>
+            </div>
+
+            <div class="form-row" style="margin-top:16px;">
+              <div class="form-group">
+                <label>Availability Status</label>
+                <select name="availability_status">
+                  <option value="available" {% if tool.availability_status == 'available' %}selected{% endif %}>Available</option>
+                  <option value="sold"      {% if tool.availability_status == 'sold' %}selected{% endif %}>Sold</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" value="{{ tool.location|default:'' }}" placeholder="e.g. Anand, Gujarat" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-camera" style="color:var(--em-400);"></i> Tool Image</div>
+            {% if tool.image %}
+            <div style="margin-bottom:14px;">
+              <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:8px;">Current Image:</div>
+              <img src="{{ tool.image.url }}" alt="Current" class="current-img" />
+            </div>
+            {% endif %}
+            <label class="upload-area" for="tool_image_edit">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size:28px;color:var(--em-500);margin-bottom:6px;"></i>
+              <p style="color:rgba(255,255,255,0.5);font-size:13px;">{% if tool.image %}Replace image{% else %}Upload image{% endif %} (optional)</p>
+              <input type="file" id="tool_image_edit" name="image" accept="image/*" onchange="previewImg(event)" />
+            </label>
+            <div id="imgPreviews" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+          </div>
+
+          <div class="form-actions">
+            <a href="{% url 'my_tool_list' %}" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> Cancel</a>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PRICE_API = "{% url 'get_tool_price_api' %}";
+    let priceTimer = null;
+
+    function schedulePriceFetch() {
+      clearTimeout(priceTimer);
+      priceTimer = setTimeout(fetchPrice, 600);
+    }
+
+    function fetchPrice() {
+      const category = document.getElementById('edit_category').value;
+      const condition = document.getElementById('edit_condition').value;
+      const price = document.getElementById('edit_orig_price').value;
+      const years = document.getElementById('edit_years_used').value;
+      if (!category || !condition || !price) return;
+      document.getElementById('priceDisplay').innerHTML = '<span class="price-loading">Calculating...</span>';
+      fetch(PRICE_API + '?category=' + encodeURIComponent(category)
+           + '&condition=' + encodeURIComponent(condition)
+           + '&original_price=' + encodeURIComponent(price)
+           + '&years_used=' + encodeURIComponent(years || 0))
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('priceDisplay').textContent =
+            (data.status === 'ok' && data.price)
+              ? '₹' + Number(data.price).toLocaleString('en-IN')
+              : 'Price Not Available';
+        })
+        .catch(() => { document.getElementById('priceDisplay').textContent = 'Price Not Available'; });
+    }
+
+    document.querySelectorAll('.price-trigger').forEach(el => {
+      el.addEventListener('change', schedulePriceFetch);
+      el.addEventListener('input', schedulePriceFetch);
+    });
+
+    function previewImg(event) {
+      const c = document.getElementById('imgPreviews');
+      c.innerHTML = '';
+      Array.from(event.target.files).slice(0,4).forEach(function(file) {
+        const r = new FileReader();
+        r.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          Object.assign(img.style, {width:'72px',height:'72px',objectFit:'cover',borderRadius:'10px',border:'1.5px solid var(--glass-border)'});
+          c.appendChild(img);
+        };
+        r.readAsDataURL(file);
+      });
+    }
+  </script>
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+</html>

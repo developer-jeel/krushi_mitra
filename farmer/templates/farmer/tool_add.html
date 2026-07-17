@@ -1,0 +1,313 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Tool – Farmer Panel | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .tool-form-wrap { max-width:780px; }
+    .form-section { background:var(--glass-card); border:1px solid var(--glass-border); border-radius:18px; padding:24px; margin-bottom:20px; }
+    .form-section-title { font-size:15px; font-weight:700; color:rgba(255,255,255,0.9); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+    .form-group { margin-bottom:16px; }
+    .form-group:last-child { margin-bottom:0; }
+    .form-group label { display:block; font-size:12px; font-weight:600; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%; padding:11px 14px; background:rgba(0,0,0,0.25);
+      border:1.5px solid var(--glass-border); border-radius:10px;
+      color:rgba(255,255,255,0.9); font-family:'Inter',sans-serif; font-size:14px;
+      outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--em-500); box-shadow:0 0 0 3px rgba(34,197,94,0.12); }
+    .form-group select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='%2322c55e' d='M5.5 7L0 0h11z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer; background-color:rgba(0,0,0,0.25); }
+    .form-group select option { background:#0d2211; color:#fff; }
+    .form-group textarea { resize:vertical; min-height:80px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .form-error { color:#f87171; font-size:11px; margin-top:4px; display:flex; align-items:center; gap:4px; }
+    .field-error { border-color:#ef4444 !important; }
+
+    /* Price Panel */
+    .price-panel {
+      background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(16,185,129,0.04));
+      border:1px solid rgba(34,197,94,0.25); border-radius:16px; padding:20px;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .price-panel .price-label { font-size:12px; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+    .price-panel .price-amount { font-size:32px; font-weight:800; color:var(--em-400); line-height:1; }
+    .price-panel .price-source { font-size:11px; color:rgba(255,255,255,0.35); margin-top:4px; }
+    .price-loading { animation:pulse 1.2s infinite; color:rgba(255,255,255,0.3); font-size:14px; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* Upload */
+    .upload-area { border:2px dashed var(--glass-border); border-radius:14px; padding:24px; text-align:center; cursor:pointer; transition:border-color 0.2s, background 0.2s; background:rgba(34,197,94,0.03); position:relative; }
+    .upload-area:hover { border-color:var(--em-500); background:rgba(34,197,94,0.06); }
+    .upload-area input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .upload-previews { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .upload-previews img { width:72px; height:72px; object-fit:cover; border-radius:10px; border:1.5px solid var(--glass-border); }
+
+    .form-actions { display:flex; gap:12px; justify-content:flex-end; }
+    @media (max-width:600px) { .form-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item active" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title"><i class="fa-solid fa-plus-circle"></i> Add New Tool</div>
+          <div class="breadcrumb">Dashboard / Tools / Add Tool</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'my_tool_list' %}" class="btn btn-secondary" style="font-size:13px;padding:8px 14px;text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> My Tools</a>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div class="tool-form-wrap">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'tool_add' %}" id="toolAddForm" novalidate>
+          {% csrf_token %}
+
+          <!-- ── Section 1: Tool Info ── -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--em-400);"></i> Tool Information</div>
+
+            <div class="form-group">
+              <label for="tool_name">Tool Name <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="tool_name" name="tool_name" placeholder="e.g. Mini Power Tiller" maxlength="100"
+                     value="{{ post.tool_name|default:'' }}" class="{% if errors.tool_name %}field-error{% endif %}" />
+              {% if errors.tool_name %}<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> {{ errors.tool_name }}</div>{% endif %}
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tool_category">Category <span style="color:#ef4444;">*</span></label>
+                <select id="tool_category" name="category" class="price-trigger {% if errors.category %}field-error{% endif %}">
+                  <option value="" disabled {% if not post.category %}selected{% endif %}>Select category</option>
+                  <option value="tractor"   {% if post.category == 'tractor' %}selected{% endif %}>Tractor</option>
+                  <option value="harvester" {% if post.category == 'harvester' %}selected{% endif %}>Harvester</option>
+                  <option value="other"     {% if post.category == 'other' %}selected{% endif %}>Other Machinery</option>
+                  <option value="tools"     {% if post.category == 'tools' %}selected{% endif %}>Machinery Tools</option>
+                  <option value="hand"      {% if post.category == 'hand' %}selected{% endif %}>Hand Tools</option>
+                </select>
+                {% if errors.category %}<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> {{ errors.category }}</div>{% endif %}
+              </div>
+              <div class="form-group">
+                <label for="tool_condition">Condition <span style="color:#ef4444;">*</span></label>
+                <select id="tool_condition" name="condition" class="price-trigger {% if errors.condition %}field-error{% endif %}">
+                  <option value="" disabled {% if not post.condition %}selected{% endif %}>Select condition</option>
+                  <option value="excellent" {% if post.condition == 'excellent' %}selected{% endif %}>Excellent</option>
+                  <option value="good"      {% if post.condition == 'good' %}selected{% endif %}>Good</option>
+                  <option value="average"   {% if post.condition == 'average' %}selected{% endif %}>Average</option>
+                  <option value="poor"      {% if post.condition == 'poor' %}selected{% endif %}>Poor</option>
+                </select>
+                {% if errors.condition %}<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> {{ errors.condition }}</div>{% endif %}
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tool_company">Company / Brand</label>
+                <input type="text" id="tool_company" name="company" placeholder="e.g. Mahindra" value="{{ post.company|default:'' }}" />
+              </div>
+              <div class="form-group">
+                <label for="tool_model">Model Name</label>
+                <input type="text" id="tool_model" name="model_name" placeholder="e.g. Arjun 555" value="{{ post.model_name|default:'' }}" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tool_year">Manufacturing Year</label>
+                <input type="number" id="tool_year" name="manufacturing_year" placeholder="e.g. 2018" min="1900" max="2025"
+                       value="{{ post.manufacturing_year|default:'' }}" class="{% if errors.manufacturing_year %}field-error{% endif %}" />
+                {% if errors.manufacturing_year %}<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> {{ errors.manufacturing_year }}</div>{% endif %}
+              </div>
+              <div class="form-group">
+                <label for="tool_hp">Horsepower (HP)</label>
+                <input type="number" id="tool_hp" name="horsepower" placeholder="e.g. 45" min="1" value="{{ post.horsepower|default:'' }}" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tool_desc">Description</label>
+              <textarea id="tool_desc" name="description" rows="3" placeholder="Describe your tool — specs, usage history, certifications...">{{ post.description|default:'' }}</textarea>
+            </div>
+          </div>
+
+          <!-- ── Section 2: Pricing & Listing ── -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-indian-rupee-sign" style="color:var(--em-400);"></i> Pricing &amp; Listing</div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="tool_orig_price">Original Purchase Price (₹) <span style="color:#ef4444;">*</span></label>
+                <input type="number" id="tool_orig_price" name="original_price" placeholder="e.g. 250000" min="1"
+                       value="{{ post.original_price|default:'' }}" class="price-trigger {% if errors.original_price %}field-error{% endif %}" />
+                <small style="color:rgba(255,255,255,0.3);font-size:11px;">Used to auto-calculate selling value. Not shown to buyers.</small>
+                {% if errors.original_price %}<div class="form-error"><i class="fa-solid fa-circle-exclamation"></i> {{ errors.original_price }}</div>{% endif %}
+              </div>
+              <div class="form-group">
+                <label for="tool_years_used">Years Used <span style="color:#ef4444;">*</span></label>
+                <input type="number" id="tool_years_used" name="years_used" placeholder="e.g. 3" min="0" max="50"
+                       value="{{ post.years_used|default:'0' }}" class="price-trigger" />
+              </div>
+            </div>
+
+            <!-- Auto Price Display (READ-ONLY) -->
+            <div class="price-panel" id="pricePanel">
+              <div>
+                <div class="price-label"><i class="fa-solid fa-robot"></i> Estimated Selling Price (Auto)</div>
+                <div class="price-amount" id="priceDisplay">—</div>
+                <div class="price-source">Source: Krushi Mitra Price Prediction Model &nbsp; <i class="fa-solid fa-lock" style="color:rgba(255,255,255,0.3);font-size:10px;"></i> Read-only</div>
+              </div>
+              <div style="text-align:center;opacity:0.25;">
+                <i class="fa-solid fa-robot" style="font-size:40px;color:var(--em-400);"></i>
+                <div style="font-size:10px;margin-top:4px;color:rgba(255,255,255,0.4);">AI Pricing</div>
+              </div>
+            </div>
+
+            <div class="form-row" style="margin-top:16px;">
+              <div class="form-group">
+                <label for="tool_status">Availability Status</label>
+                <select id="tool_status" name="availability_status">
+                  <option value="available" {% if post.availability_status == 'available' or not post.availability_status %}selected{% endif %}>Available</option>
+                  <option value="sold"      {% if post.availability_status == 'sold' %}selected{% endif %}>Sold</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="tool_location">Location</label>
+                <input type="text" id="tool_location" name="location" placeholder="e.g. Anand, Gujarat" value="{{ post.location|default:'' }}" />
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Section 3: Tool Image ── -->
+          <div class="form-section">
+            <div class="form-section-title"><i class="fa-solid fa-camera" style="color:var(--em-400);"></i> Tool Image</div>
+            <label class="upload-area" for="tool_image">
+              <i class="fa-solid fa-cloud-arrow-up" style="font-size:36px;color:var(--em-500);margin-bottom:8px;"></i>
+              <p style="color:rgba(255,255,255,0.6);font-size:14px;font-weight:600;">Click to upload or drag &amp; drop</p>
+              <p style="color:rgba(255,255,255,0.3);font-size:12px;margin-top:4px;">JPG, PNG, WEBP · max 5 MB</p>
+              <input type="file" id="tool_image" name="image" accept="image/*" onchange="previewImg(event)" />
+            </label>
+            <div class="upload-previews" id="imgPreviews"></div>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <a href="{% url 'my_tool_list' %}" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> Cancel</a>
+            <button type="submit" class="btn btn-primary" id="submitBtn"><i class="fa-solid fa-plus"></i> Add Tool</button>
+          </div>
+
+        </form>
+      </div>
+    </div><!-- /page-content -->
+  </div><!-- /main -->
+
+  <script>
+    const PRICE_API = "{% url 'get_tool_price_api' %}";
+
+    function getPriceTriggerValues() {
+      return {
+        category:       document.getElementById('tool_category').value,
+        condition:      document.getElementById('tool_condition').value,
+        original_price: document.getElementById('tool_orig_price').value,
+        years_used:     document.getElementById('tool_years_used').value,
+      };
+    }
+
+    let priceTimer = null;
+    function schedulePriceFetch() {
+      clearTimeout(priceTimer);
+      priceTimer = setTimeout(fetchPrice, 600);
+    }
+
+    function fetchPrice() {
+      const v = getPriceTriggerValues();
+      if (!v.category || !v.condition || !v.original_price) {
+        document.getElementById('priceDisplay').textContent = '—';
+        return;
+      }
+      document.getElementById('priceDisplay').innerHTML = '<span class="price-loading">Calculating...</span>';
+      fetch(PRICE_API + '?category=' + encodeURIComponent(v.category)
+           + '&condition=' + encodeURIComponent(v.condition)
+           + '&original_price=' + encodeURIComponent(v.original_price)
+           + '&years_used=' + encodeURIComponent(v.years_used || 0))
+        .then(r => r.json())
+        .then(data => {
+          if (data.status === 'ok' && data.price) {
+            document.getElementById('priceDisplay').textContent = '₹' + Number(data.price).toLocaleString('en-IN');
+          } else {
+            document.getElementById('priceDisplay').textContent = 'Price Not Available';
+          }
+        })
+        .catch(() => { document.getElementById('priceDisplay').textContent = 'Price Not Available'; });
+    }
+
+    document.querySelectorAll('.price-trigger').forEach(el => el.addEventListener('change', schedulePriceFetch));
+    document.querySelectorAll('.price-trigger').forEach(el => el.addEventListener('input', schedulePriceFetch));
+
+    function previewImg(event) {
+      const container = document.getElementById('imgPreviews');
+      container.innerHTML = '';
+      Array.from(event.target.files).slice(0, 4).forEach(function(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Preview';
+          container.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Client-side validation
+    document.getElementById('toolAddForm').addEventListener('submit', function(e) {
+      let ok = true;
+      ['tool_name','tool_category','tool_condition','tool_orig_price'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.classList.add('field-error'); ok = false; }
+        else el.classList.remove('field-error');
+      });
+      if (!ok) { e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); }
+    });
+
+    // Trigger on load if values exist (after validation error repopulate)
+    window.addEventListener('DOMContentLoaded', fetchPrice);
+  </script>
+
+  <script src="{% static 'farmer/js/farmer.js' %}"></script>
+  <script src="{% static 'farmer/js/animations.js' %}"></script>
+</body>
+</html>

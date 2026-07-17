@@ -204,7 +204,9 @@ def farmer_crops(request):
 
 @check_login(['Farmer'])
 def farmer_tools(request):
-    return render(request, "farmer/tools.html")
+    uid = request.uid
+    context = {'uid': uid}
+    return render(request, "farmer/tools.html", context)
 
 @check_login(['Farmer'])
 def farmer_blogs(request):
@@ -252,7 +254,30 @@ def delete_blog(request):
 
 @check_login(['Farmer'])
 def farmer_profile(request):
-    return render(request, "farmer/profile.html")
+    uid = request.uid
+    farmer_obj = getattr(uid, 'farmer', None)
+    crop_count = crop.objects.filter(user=uid).count()
+    approved_count = crop.objects.filter(user=uid, is_approved=True).count()
+    context = {'uid': uid, 'farmer': farmer_obj, 'crop_count': crop_count, 'approved_count': approved_count}
+
+    if request.method == 'POST':
+        action = request.POST.get('action', 'personal')
+        if action == 'personal':
+            uid.name = request.POST.get('name', uid.name)
+            uid.email = request.POST.get('email', uid.email)
+            uid.city = request.POST.get('city', uid.city)
+            uid.save()
+        elif action == 'farm' and farmer_obj:
+            farmer_obj.farm_name = request.POST.get('farm_name', farmer_obj.farm_name)
+            farmer_obj.acres = request.POST.get('acres', farmer_obj.acres) or None
+            farmer_obj.address = request.POST.get('address', farmer_obj.address)
+            if request.FILES.get('photo'):
+                farmer_obj.photo = request.FILES['photo']
+            farmer_obj.save()
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('farmer_profile')
+
+    return render(request, "farmer/profile.html", context)
 
 @check_login(['Farmer'])
 def govt_info(request):
@@ -495,7 +520,42 @@ def tool_price(request):
     return render(request, "farmer/tool_price.html")
 
 def add_tool(request):
-    return render(request, "farmer/add_tool.html")
+    uid = request.uid if hasattr(request, 'uid') else None
+    return render(request, "farmer/add_tool.html", {'uid': uid})
+
+@check_login(['Farmer'])
+def delete_crop(request, pk):
+    uid = request.uid
+    crop_obj = crop.objects.filter(id=pk, user=uid).first()
+    if crop_obj:
+        crop_obj.delete()
+        messages.success(request, 'Crop deleted successfully.')
+    else:
+        messages.error(request, 'Crop not found.')
+    return redirect('farmer_crops')
+
+@check_login(['Farmer'])
+def edit_crop(request, pk):
+    uid = request.uid
+    crop_obj = crop.objects.filter(id=pk, user=uid).first()
+    if not crop_obj:
+        messages.error(request, 'Crop not found.')
+        return redirect('farmer_crops')
+
+    if request.method == 'POST':
+        crop_obj.cropname = request.POST.get('cropname', crop_obj.cropname)
+        crop_obj.category = request.POST.get('category', crop_obj.category)
+        crop_obj.quantity = request.POST.get('quantity', crop_obj.quantity)
+        crop_obj.price = request.POST.get('price', crop_obj.price)
+        crop_obj.description = request.POST.get('description', crop_obj.description)
+        if request.FILES.get('image'):
+            crop_obj.image = request.FILES['image']
+        crop_obj.save()
+        messages.success(request, 'Crop updated successfully!')
+        return redirect('farmer_crops')
+
+    # For GET requests redirect back (we use inline modal)
+    return redirect('farmer_crops')
 
 def rain_probability(temperature,humidity,wind_speed,clouds):
     model = RandomForestClassifier()
@@ -596,3 +656,194 @@ def farmer_news(request):
 
 
 #++++++++++++++++++++++==============================+++++++++++++++++++++===========================++++++++++++++++++++++++++++=====================
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  FARMER TOOL CRUD
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _tool_predicted_price(category_str, condition_str, years, original_price):
+    """
+    Re-uses the predict_price() ML function from this file.
+    Returns a rounded integer rental price estimate, or None on error.
+    """
+    category_map  = {"tractor": 0, "harvester": 1, "other": 2, "tools": 3, "hand": 4}
+    condition_map = {"poor": 5, "average": 4, "good": 3, "excellent": 2}
+    try:
+        cat  = category_map.get(category_str, 0)
+        cond = condition_map.get(condition_str, 3)
+        return int(predict_price(original_price, cat, int(years), cond))
+    except Exception:
+        return None
+
+
+@check_login(['Farmer'])
+def my_tool_list(request):
+    uid = request.uid
+    qs  = FarmerTool.objects.filter(user=uid).order_by('-created_at')
+
+    # Search & filter
+    search   = request.GET.get('search', '').strip()
+    category = request.GET.get('category', '')
+    status   = request.GET.get('status', '')
+    if search:
+        qs = qs.filter(tool_name__icontains=search)
+    if category:
+        qs = qs.filter(category=category)
+    if status:
+        qs = qs.filter(availability_status=status)
+
+    # Attach predicted price to each tool
+    tools_with_price = []
+    for t in qs:
+        predicted = _tool_predicted_price(t.category, t.condition, t.years_used, t.original_price)
+        tools_with_price.append({'tool': t, 'predicted_price': predicted})
+
+    context = {
+        'uid': uid,
+        'tools_with_price': tools_with_price,
+        'search': search,
+        'selected_category': category,
+        'selected_status': status,
+        'total': qs.count(),
+    }
+    return render(request, 'farmer/my_tools.html', context)
+
+
+@check_login(['Farmer'])
+def tool_add(request):
+    uid = request.uid
+    if request.method == 'POST':
+        tool_name          = request.POST.get('tool_name', '').strip()
+        category           = request.POST.get('category', '')
+        company            = request.POST.get('company', '').strip()
+        model_name         = request.POST.get('model_name', '').strip()
+        manufacturing_year = request.POST.get('manufacturing_year', '')
+        horsepower         = request.POST.get('horsepower', '') or None
+        condition          = request.POST.get('condition', '')
+        description        = request.POST.get('description', '').strip()
+        availability_status= request.POST.get('availability_status', 'available')
+        location           = request.POST.get('location', '').strip()
+        original_price     = request.POST.get('original_price', 0)
+        years_used         = request.POST.get('years_used', 0)
+        image              = request.FILES.get('image')
+
+        errors = {}
+        if not tool_name:        errors['tool_name'] = 'Tool name is required.'
+        if not category:         errors['category']  = 'Category is required.'
+        if not condition:        errors['condition'] = 'Condition is required.'
+        if not original_price:   errors['original_price'] = 'Purchase price is required.'
+
+        if manufacturing_year:
+            try:
+                yr = int(manufacturing_year)
+                from datetime import datetime
+                if yr < 1900 or yr > datetime.now().year:
+                    errors['manufacturing_year'] = 'Enter a valid manufacturing year.'
+            except ValueError:
+                errors['manufacturing_year'] = 'Enter a valid year.'
+
+        if errors:
+            context = {
+                'uid': uid, 'errors': errors,
+                'post': request.POST,
+            }
+            return render(request, 'farmer/tool_add.html', context)
+
+        t = FarmerTool.objects.create(
+            user=uid,
+            tool_name=tool_name,
+            category=category,
+            company=company or None,
+            model_name=model_name or None,
+            manufacturing_year=int(manufacturing_year) if manufacturing_year else None,
+            horsepower=int(horsepower) if horsepower else None,
+            condition=condition,
+            description=description or None,
+            availability_status=availability_status,
+            location=location or None,
+            original_price=int(original_price),
+            years_used=int(years_used) if years_used else 0,
+        )
+        if image:
+            t.image = image
+            t.save()
+        messages.success(request, f'Tool "{tool_name}" added successfully!')
+        return redirect('my_tool_list')
+
+    return render(request, 'farmer/tool_add.html', {'uid': uid})
+
+
+@check_login(['Farmer'])
+def tool_edit(request, pk):
+    uid      = request.uid
+    tool_obj = FarmerTool.objects.filter(id=pk, user=uid).first()
+    if not tool_obj:
+        messages.error(request, 'Tool not found or access denied.')
+        return redirect('my_tool_list')
+
+    predicted = _tool_predicted_price(tool_obj.category, tool_obj.condition, tool_obj.years_used, tool_obj.original_price)
+
+    if request.method == 'POST':
+        tool_obj.tool_name           = request.POST.get('tool_name', tool_obj.tool_name).strip()
+        tool_obj.category            = request.POST.get('category', tool_obj.category)
+        tool_obj.company             = request.POST.get('company', '').strip() or None
+        tool_obj.model_name          = request.POST.get('model_name', '').strip() or None
+        yr = request.POST.get('manufacturing_year', '')
+        tool_obj.manufacturing_year  = int(yr) if yr else None
+        hp = request.POST.get('horsepower', '')
+        tool_obj.horsepower          = int(hp) if hp else None
+        tool_obj.condition           = request.POST.get('condition', tool_obj.condition)
+        tool_obj.description         = request.POST.get('description', '').strip() or None
+        tool_obj.availability_status = request.POST.get('availability_status', tool_obj.availability_status)
+        tool_obj.location            = request.POST.get('location', '').strip() or None
+        tool_obj.original_price      = int(request.POST.get('original_price', tool_obj.original_price))
+        tool_obj.years_used          = int(request.POST.get('years_used', 0))
+        if request.FILES.get('image'):
+            tool_obj.image = request.FILES['image']
+        tool_obj.save()
+        messages.success(request, 'Tool updated successfully!')
+        return redirect('my_tool_list')
+
+    context = {'uid': uid, 'tool': tool_obj, 'predicted': predicted}
+    return render(request, 'farmer/tool_edit.html', context)
+
+
+@check_login(['Farmer'])
+def tool_detail(request, pk):
+    uid      = request.uid
+    tool_obj = FarmerTool.objects.filter(id=pk, user=uid).first()
+    if not tool_obj:
+        messages.error(request, 'Tool not found or access denied.')
+        return redirect('my_tool_list')
+    predicted = _tool_predicted_price(tool_obj.category, tool_obj.condition, tool_obj.years_used, tool_obj.original_price)
+    context   = {'uid': uid, 'tool': tool_obj, 'predicted': predicted}
+    return render(request, 'farmer/tool_detail.html', context)
+
+
+@check_login(['Farmer'])
+def tool_delete(request, pk):
+    uid      = request.uid
+    tool_obj = FarmerTool.objects.filter(id=pk, user=uid).first()
+    if tool_obj:
+        name = tool_obj.tool_name
+        tool_obj.delete()
+        messages.success(request, f'Tool "{name}" deleted successfully.')
+    else:
+        messages.error(request, 'Tool not found.')
+    return redirect('my_tool_list')
+
+
+@check_login(['Farmer'])
+def get_tool_price_api(request):
+    """AJAX endpoint: returns predicted rental price JSON."""
+    category       = request.GET.get('category', '')
+    condition      = request.GET.get('condition', '')
+    years_used     = request.GET.get('years_used', 0)
+    original_price = request.GET.get('original_price', 0)
+    try:
+        predicted = _tool_predicted_price(category, condition, int(years_used), int(original_price))
+        if predicted is not None:
+            return JsonResponse({'status': 'ok', 'price': predicted})
+        return JsonResponse({'status': 'not_found', 'price': None})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})

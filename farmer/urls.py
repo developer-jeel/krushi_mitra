@@ -24,6 +24,8 @@ urlpatterns = [
     path('', views.login, name='login'),
     path('farmer_home', views.farmer_home, name='farmer_home'),
     path('farmer_crops', views.farmer_crops, name='farmer_crops'),
+    path('delete_crop/<int:pk>', views.delete_crop, name='delete_crop'),
+    path('edit_crop/<int:pk>', views.edit_crop, name='edit_crop'),
     
     path('farmer_tools', views.farmer_tools, name='farmer_tools'),
     path('tool_price', views.tool_price, name='tool_price'),
@@ -44,6 +46,14 @@ urlpatterns = [
 
     path('community_chat', views.community_chat, name='community_chat'),
     path('community_chat_delet/<int:pk>', views.community_chat_delet, name='community_chat_delet'),
+
+    # ── Farmer Tool CRUD ──────────────────────────────────────────────────────
+    path('my_tools',               views.my_tool_list,       name='my_tool_list'),
+    path('tool_add',               views.tool_add,           name='tool_add'),
+    path('tool_edit/<int:pk>',     views.tool_edit,          name='tool_edit'),
+    path('tool_detail/<int:pk>',   views.tool_detail,        name='tool_detail'),
+    path('tool_delete/<int:pk>',   views.tool_delete,        name='tool_delete'),
+    path('get_tool_price/',        views.get_tool_price_api, name='get_tool_price_api'),
 
 
     # path('home', views.home, name='home'),
