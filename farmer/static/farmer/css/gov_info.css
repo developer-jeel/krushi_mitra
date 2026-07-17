@@ -1,12 +1,13 @@
 /* ══════════════════════════════════════════════════════════════
-   gov_info.css — page-specific additions over farmer.css
+   gov_info.css — Government Schemes Page v4.0
+   Green Earth SaaS Theme
    ══════════════════════════════════════════════════════════════ */
 
-/* ── Search bar ─────────────────────────────────────────────── */
+/* ── Search & Filter Bar ── */
 .gi-search {
   display: flex;
   gap: 10px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
   align-items: stretch;
   flex-wrap: wrap;
 }
@@ -17,417 +18,253 @@
   position: relative;
 }
 
-.gi-search-input-wrap svg {
+.gi-search-input-wrap svg,
+.gi-search-input-wrap i {
   position: absolute;
   left: 13px;
   top: 50%;
   transform: translateY(-50%);
   width: 16px; height: 16px;
-  color: rgba(34,197,94,0.50);
+  font-size: 15px;
+  color: var(--text-muted);
   pointer-events: none;
 }
 
 .gi-search-input-wrap input {
   width: 100%;
-  height: 100%;
   min-height: 42px;
   padding: 0 14px 0 40px;
   font-size: 13.5px;
   font-family: 'Inter', sans-serif;
-  background: var(--glass-input);
-  border: 1px solid var(--glass-border-light);
-  border-radius: var(--r-sm);
-  color: rgba(255,255,255,0.88);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-heading);
   outline: none;
-  transition: border-color var(--t-mid), box-shadow var(--t-mid);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.gi-search-input-wrap input::placeholder { color: rgba(255,255,255,0.25); }
+.gi-search-input-wrap input::placeholder { color: var(--text-faint); }
 .gi-search-input-wrap input:focus {
-  border-color: var(--glass-border-strong);
-  box-shadow: 0 0 0 3px rgba(34,197,94,0.10);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79,111,82,.10);
 }
 
 #gov-state-filter {
   min-width: 180px;
-  padding: 0 36px 0 13px;
+  padding: 0 14px;
   min-height: 42px;
   font-size: 13px;
   font-family: 'Inter', sans-serif;
-  background-color: var(--glass-input);
-  border: 1px solid var(--glass-border-light);
-  border-radius: var(--r-sm);
-  color: rgba(255,255,255,0.72);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-body);
   outline: none;
   cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(34,197,94,0.55)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 11px center;
-  transition: border-color var(--t-mid);
+  transition: border-color 0.2s ease;
 }
 
-#gov-state-filter option { background: var(--dark-850); color: rgba(255,255,255,0.88); }
-#gov-state-filter:focus { border-color: var(--glass-border-strong); }
+#gov-state-filter:focus { border-color: var(--color-primary); }
 
-/* ── Scheme cards ───────────────────────────────────────────── */
-.gi-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-.gi-card {
-  background: var(--glass-card);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
-  border-radius: var(--r-xl);
-  border: 1px solid var(--glass-border-light);
-  box-shadow: var(--shadow-card);
-  display: flex;
-  flex-direction: column;
-  transition: transform var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid);
-  position: relative;
-  overflow: hidden;
-}
-
-/* subtle top shimmer */
-.gi-card::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 15%; right: 15%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(34,197,94,0.30), transparent);
-  pointer-events: none;
-}
-
-.gi-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--glass-border);
-}
-
-/* ── Card image banner ── */
-.gi-card-img-wrap {
-  position: relative;
-  width: 100%;
-  height: 155px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.gi-card-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
-}
-
-.gi-card:hover .gi-card-img { transform: scale(1.06); }
-
-/* gradient overlay so text below stays readable */
-.gi-card-img-wrap::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 60px;
-  background: linear-gradient(to bottom, transparent, rgba(7,16,9,0.75));
-  pointer-events: none;
-}
-
-/* badge pinned top-right inside the image */
-.gi-img-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-/* card body below the image */
-.gi-card-body {
-  padding: 14px 18px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-
-/* emoji + name on same row */
-.gi-card-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.gi-emoji {
-  font-size: 26px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-/* status badge */
-.gi-badge {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: var(--r-full);
-  letter-spacing: 0.04em;
-}
-
-.gi-badge.active {
-  background: rgba(34,197,94,0.12);
-  color: var(--em-300);
-  border: 1px solid rgba(34,197,94,0.22);
-}
-
-.gi-badge.upcoming {
-  background: rgba(245,158,11,0.12);
-  color: var(--gold-light);
-  border: 1px solid rgba(245,158,11,0.22);
-}
-
-.gi-name {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.93);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-}
-
-.gi-desc {
-  font-size: 12.5px;
-  color: rgba(255,255,255,0.46);
-  line-height: 1.68;
-  margin: 0;
-  flex: 1;
-}
-
-.gi-benefit {
-  font-size: 12px;
+.gi-submit-btn {
+  padding: 0 18px;
+  min-height: 42px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 13.5px;
   font-weight: 600;
-  color: var(--em-300);
-  background: rgba(34,197,94,0.07);
-  border: 1px solid rgba(34,197,94,0.13);
-  border-radius: var(--r-sm);
-  padding: 8px 12px;
-  line-height: 1.5;
-}
-
-.gi-footer {
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  font-family: inherit;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  margin-top: auto;
+  gap: 7px;
 }
 
-.gi-dept {
-  font-size: 10.5px;
-  color: rgba(255,255,255,0.28);
+.gi-submit-btn:hover {
+  background: var(--color-hover);
+  transform: translateY(-1px);
+}
+
+/* ── Stats Row ── */
+.gi-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.gi-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.gi-stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+}
+
+.gi-stat-lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 3px;
   font-weight: 500;
 }
 
-.gi-link {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: var(--em-400);
-  text-decoration: none;
-  transition: color var(--t-fast), transform var(--t-fast);
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
+/* ── Scheme Cards Grid ── */
+.gi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.gi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.gi-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.gi-card-header {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.gi-card-icon {
+  width: 42px; height: 42px;
+  border-radius: var(--r-md);
+  background: var(--success-bg);
+  border: 1px solid rgba(63,125,88,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  color: var(--success);
   flex-shrink: 0;
 }
 
-.gi-link:hover { color: var(--em-300); transform: translateX(2px); }
+.gi-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
 
-/* ── Bottom row (announcements + contacts) ───────────────────── */
-.gi-bottom {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+.gi-card-ministry {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gi-card-body {
+  padding: 14px 18px;
+  flex: 1;
+}
+
+.gi-card-desc {
+  font-size: 13px;
+  color: var(--text-body);
+  line-height: 1.6;
   margin-bottom: 12px;
 }
 
-/* helplines single column */
-.gi-helplines-grid {
+.gi-card-tags {
   display: flex;
-  flex-direction: column;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.gi-helplines-grid .gi-contact {
-  border-right: none;
+.gi-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
 }
 
-/* ── Panel wrapper ── */
-.gi-panel {
-  background: var(--glass-card);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
-  border-radius: var(--r-xl);
-  border: 1px solid var(--glass-border-light);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-  position: relative;
-}
+.gi-tag.state { background: var(--info-bg); color: var(--info); border-color: rgba(74,127,165,.15); }
+.gi-tag.central { background: var(--success-bg); color: var(--success); border-color: rgba(63,125,88,.15); }
 
-.gi-panel::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 15%; right: 15%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(34,197,94,0.35), transparent);
-}
-
-.gi-panel-head {
+.gi-card-footer {
+  padding: 10px 18px;
+  border-top: 1px solid var(--border-light);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px 14px;
-  border-bottom: 1px solid var(--glass-border-light);
+  gap: 10px;
 }
 
-.gi-panel-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.90);
-  letter-spacing: -0.01em;
-}
-
-/* ── Announcement rows ── */
-.gi-ann-item {
+.gi-deadline {
+  font-size: 12px;
+  color: var(--text-muted);
   display: flex;
-  gap: 14px;
-  padding: 13px 20px;
-  border-bottom: 1px solid rgba(34,197,94,0.05);
-  transition: background var(--t-fast);
-  align-items: flex-start;
-}
-
-.gi-ann-item:hover { background: rgba(34,197,94,0.04); }
-
-.gi-ann-left {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 5px;
-  flex-shrink: 0;
-  width: 54px;
 }
 
-/* type tags */
-.gi-tag {
-  display: inline-block;
-  font-size: 8.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 2px 6px;
-  border-radius: var(--r-full);
-  white-space: nowrap;
-}
-
-.gi-tag.urgent {
-  background: rgba(239,68,68,0.12);
-  color: #fca5a5;
-  border: 1px solid rgba(239,68,68,0.20);
-}
-
-.gi-tag.policy {
-  background: rgba(245,158,11,0.12);
-  color: var(--gold-light);
-  border: 1px solid rgba(245,158,11,0.20);
-}
-
-.gi-tag.notice {
-  background: rgba(56,189,248,0.10);
-  color: #7dd3fc;
-  border: 1px solid rgba(56,189,248,0.18);
-}
-
-.gi-date {
-  font-size: 9.5px;
-  color: rgba(255,255,255,0.28);
+/* ── No results ── */
+.gi-empty {
   text-align: center;
-  line-height: 1.4;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  grid-column: 1 / -1;
 }
 
-.gi-ann-title {
-  font-size: 13px;
+.gi-empty i {
+  font-size: 38px;
+  color: var(--border-strong);
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* ── Scheme Detail Modal / Section ── */
+.gi-detail-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 18px;
+}
+
+.gi-detail-label {
+  font-size: 11px;
   font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.40;
-  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
 }
 
-.gi-ann-desc {
-  font-size: 11.5px;
-  color: rgba(255,255,255,0.38);
-  line-height: 1.55;
-  margin: 0;
-}
-
-/* ── Contact rows ── */
-.gi-contact {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 20px;
-  border-bottom: 1px solid rgba(34,197,94,0.05);
-  transition: background var(--t-fast);
-}
-
-.gi-contact:hover { background: rgba(34,197,94,0.04); }
-
-.gi-c-icon { font-size: 26px; flex-shrink: 0; }
-
-.gi-c-info { flex: 1; min-width: 0; }
-
-.gi-c-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.86);
-}
-
-.gi-c-num {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--em-400);
-  margin-top: 2px;
-  letter-spacing: 0.01em;
-}
-
-.gi-c-time {
-  font-size: 10.5px;
-  color: rgba(255,255,255,0.30);
-  margin-top: 2px;
-}
-
-/* ── Dollar Amount Highlighting ────────────────────────────── */
-.dollar-amount {
-  font-weight: 700;
-  color: #fcd34d;
-  text-shadow: 0 0 8px rgba(252, 211, 77, 0.4);
-}
-
-/* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 1100px) {
-  .gi-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 900px) {
-  .gi-bottom { grid-template-columns: 1fr; }
+.gi-detail-value {
+  font-size: 14px;
+  color: var(--text-body);
+  line-height: 1.6;
 }
 
 @media (max-width: 640px) {
   .gi-grid { grid-template-columns: 1fr; }
-  .gi-search { flex-direction: column; }
-  #gov-state-filter { min-width: unset; }
 }
