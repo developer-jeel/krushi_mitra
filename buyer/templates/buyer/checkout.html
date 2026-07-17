@@ -12,6 +12,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/checkout.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -56,18 +57,18 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="#" class="sidebar-item disabled-link" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
-          <span class=" sidebar-item-icon">🔒</span>
+          <span class=" sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade To Unlock)</span>
         </a>
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
@@ -80,11 +81,11 @@
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
-            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span><span class="sidebar-item-text">Profile</span></a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
-            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span><span class="sidebar-item-text">Verification</span></a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
-            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
             class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
       </nav>
@@ -119,7 +120,7 @@
               </div>
             </div>
             <div class="dropdown-menu">
-              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
               <a href="{% url 'buyer_premium' %}" class="dropdown-item">👑 Premium Membership</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
@@ -141,31 +142,25 @@
               <!-- Billing Information -->
               <div class="premium-card">
                 <h3 class="card-title">
-                  <div class="card-title-icon">👤</div>
+                  <div class="card-title-icon"><i class="fa-solid fa-user"></i></div>
                   Billing Information
                 </h3>
-                <div class="form-row">
-                  <div class="form-group floating">
-                    <span class="floating-icon">📝</span>
-                    <input type="text" class="form-input premium-input" value="{{uid.name}}" placeholder="First Name" required>
-                  </div>
-                  <div class="form-group floating">
-                    <span class="floating-icon">📝</span>
-                    <input type="text" class="form-input premium-input" value="" placeholder="Last Name" required hidden>
-                  </div>
+                <div class="form-group floating">
+                  <span class="floating-icon"><i class="fa-solid fa-pen"></i></span>
+                  <input type="text" class="form-input premium-input" value="{{uid.name}}" placeholder="Full Name" required>
                 </div>
                 <div class="form-row">
                   <div class="form-group floating">
-                    <span class="floating-icon">✉️</span>
+                    <span class="floating-icon"><i class="fa-solid fa-envelope"></i></span>
                     <input type="email" class="form-input premium-input" value="{{uid.email}}" placeholder="Email Address" required>
                   </div>
                   <div class="form-group floating">
-                    <span class="floating-icon">📱</span>
+                    <span class="floating-icon"><i class="fa-solid fa-mobile-screen"></i></span>
                     <input type="tel" class="form-input premium-input" value="{{uid.contact}}" placeholder="Phone Number" required>
                   </div>
                 </div>
                 <div class="form-group floating">
-                  <span class="floating-icon" style="top:24px;">📍</span>
+                  <span class="floating-icon" style="top:24px;"><i class="fa-solid fa-location-dot"></i></span>
                   <textarea class="form-textarea premium-input" rows="3" placeholder="Billing Address" required>{{buyr.address}}</textarea>
                 </div>
               </div>
@@ -173,7 +168,7 @@
               <!-- Shipping Information -->
               <div class="premium-card">
                 <h3 class="card-title">
-                  <div class="card-title-icon">🚚</div>
+                  <div class="card-title-icon"><i class="fa-solid fa-truck-fast"></i></div>
                   Shipping Information
                 </h3>
                 <label class="premium-checkbox-wrapper" for="same-billing">
@@ -182,26 +177,26 @@
                 </label>
                 
                 <div class="form-group floating">
-                  <span class="floating-icon" style="top:24px;">📍</span>
+                  <span class="floating-icon" style="top:24px;"><i class="fa-solid fa-location-dot"></i></span>
                   <textarea class="form-textarea premium-input" rows="3" placeholder="Delivery Address">{{buyr.address}}</textarea>
                 </div>
                 <div class="form-row">
                   <div class="form-group floating">
-                    <span class="floating-icon">🏙️</span>
+                    <span class="floating-icon"><i class="fa-solid fa-city"></i></span>
                     <input type="text" class="form-input premium-input" value="{{uid.city}}" placeholder="City">
                   </div>
                   <div class="form-group floating">
-                    <span class="floating-icon">🗺️</span>
+                    <span class="floating-icon"><i class="fa-solid fa-map-location-dot"></i></span>
                     <input type="text" class="form-input premium-input" value="{{buyr.state}}" placeholder="State">
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="form-group floating">
-                    <span class="floating-icon">📮</span>
+                    <span class="floating-icon"><i class="fa-solid fa-envelopes-bulk"></i></span>
                     <input type="text" class="form-input premium-input" value="{{buyr.pincode}}" placeholder="Pincode">
                   </div>
                   <div class="form-group floating">
-                    <span class="floating-icon">📝</span>
+                    <span class="floating-icon"><i class="fa-solid fa-pen"></i></span>
                     <input type="text" class="form-input premium-input" placeholder="Delivery Instructions (Optional)">
                   </div>
                 </div>
@@ -210,22 +205,22 @@
               <!-- Business Information -->
               <div class="premium-card">
                 <h3 class="card-title">
-                  <div class="card-title-icon">🏢</div>
+                  <div class="card-title-icon"><i class="fa-solid fa-building"></i></div>
                   Business Information
                 </h3>
                 <div class="form-row">
                   <div class="form-group floating">
-                    <span class="floating-icon">💼</span>
+                    <span class="floating-icon"><i class="fa-solid fa-briefcase"></i></span>
                     <input type="text" class="form-input premium-input" value="Mehta Agro Traders" placeholder="Business Name">
                   </div>
                   <div class="form-group floating">
-                    <span class="floating-icon">🧾</span>
+                    <span class="floating-icon"><i class="fa-solid fa-file-invoice-dollar"></i></span>
                     <input type="text" class="form-input premium-input" value="27AABCM1234C1Z5" placeholder="GST Number">
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="form-group floating">
-                    <span class="floating-icon">🏷️</span>
+                    <span class="floating-icon"><i class="fa-solid fa-tag"></i></span>
                     <select class="form-select premium-input">
                       <option>Wholesaler</option>
                       <option>Retailer</option>
@@ -234,7 +229,7 @@
                     </select>
                   </div>
                   <div class="form-group floating">
-                    <span class="floating-icon">💳</span>
+                    <span class="floating-icon"><i class="fa-solid fa-credit-card"></i></span>
                     <input type="text" class="form-input premium-input" value="ABCDE1234F" placeholder="PAN Number">
                   </div>
                 </div>
@@ -243,34 +238,34 @@
               <!-- Payment Method -->
               <div class="premium-card">
                 <h3 class="card-title">
-                  <div class="card-title-icon">💳</div>
+                  <div class="card-title-icon"><i class="fa-solid fa-credit-card"></i></div>
                   Payment Method
                 </h3>
                 <div class="payment-grid">
                   <label class="payment-method-card selected" onclick="selectPayment(this, 'card')">
-                    <div class="payment-icon">💳</div>
+                    <div class="payment-icon"><i class="fa-solid fa-credit-card"></i></div>
                     <div class="payment-name">Credit/Debit Card</div>
                   </label>
                   <label class="payment-method-card" onclick="selectPayment(this, 'net_banking')">
-                    <div class="payment-icon">🏦</div>
+                    <div class="payment-icon"><i class="fa-solid fa-building-columns"></i></div>
                     <div class="payment-name">Net Banking</div>
                   </label>
                   <label class="payment-method-card" onclick="selectPayment(this, 'upi')">
-                    <div class="payment-icon">📱</div>
+                    <div class="payment-icon"><i class="fa-solid fa-mobile-screen"></i></div>
                     <div class="payment-name">UPI</div>
                   </label>
                   <label class="payment-method-card" onclick="selectPayment(this, 'bank_transfer')">
-                    <div class="payment-icon">🏛</div>
+                    <div class="payment-icon"><i class="fa-solid fa-building-columns"></i></div>
                     <div class="payment-name">Bank Transfer</div>
                   </label>
                 </div>
                 
                 <!-- Trust Signals -->
                 <div class="trust-signals">
-                  <div class="trust-item"><span class="icon">🔒</span> Secure Checkout</div>
-                  <div class="trust-item"><span class="icon">🛡</span> SSL Encrypted</div>
-                  <div class="trust-item"><span class="icon">🚚</span> Fast Delivery</div>
-                  <div class="trust-item"><span class="icon">📞</span> 24×7 Customer Support</div>
+                  <div class="trust-item"><span class="icon"><i class="fa-solid fa-lock"></i></span> Secure Checkout</div>
+                  <div class="trust-item"><span class="icon"><i class="fa-solid fa-shield-halved"></i></span> SSL Encrypted</div>
+                  <div class="trust-item"><span class="icon"><i class="fa-solid fa-truck-fast"></i></span> Fast Delivery</div>
+                  <div class="trust-item"><span class="icon"><i class="fa-solid fa-headset"></i></span> 24×7 Customer Support</div>
                 </div>
               </div>
             </form>
@@ -282,8 +277,7 @@
               <h3 class="card-title" style="font-size: 1.375rem;">Order Summary</h3>
               
               <!-- Cart Items -->
-              <div style="max-height: 250px; overflow-y: auto; padding-right: 8px;">
-                {%for item in cart_items%}
+              {%for item in cart_items%}
                 <div class="product-row">
                   <div class="product-info">
                     <div class="product-name">{{item.crop.cropname}}</div>
@@ -292,7 +286,6 @@
                   <div class="product-price">₹{{item.subtotal}}</div>
                 </div>
                 {%endfor%}
-              </div>
 
               <!-- Coupon Section -->
               <div class="modern-coupon-card">
@@ -303,7 +296,7 @@
                 
                 <div class="coupon-success-card" id="coupon-success-card">
                   <div class="coupon-success-header">
-                    <span>✅</span> <span id="success-code">SAVE20</span> Applied Successfully!
+                    <span><i class="fa-solid fa-circle-check"></i></span> <span id="success-code">SAVE20</span> Applied Successfully!
                   </div>
                   <div class="coupon-success-details">
                     <span>Discount: <strong id="success-value">20% OFF</strong></span>
@@ -363,7 +356,7 @@
 
               <!-- Checkout Button -->
               <button type="button" class="btn-place-order" id="placeOrderBtn" onclick="submitOrder()">
-                <span>🔒 Secure Checkout</span>
+                <span><i class="fa-solid fa-lock"></i> Secure Checkout</span>
                 <span id="btn-total">₹{{cart.final_price}}</span>
               </button>
             </div>
