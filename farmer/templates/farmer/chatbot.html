@@ -173,7 +173,7 @@
                 <div class="chat-time">{{ message.created_at|default:"" }}</div>
               </div>
             </div>
-            <div class="chat-avatar user-avatar"><span>R</span></div>
+            <div class="chat-avatar user-avatar"><span>{{ uid.name|make_list|first|upper }}</span></div>
           </div>
           {% else %}
           <div class="chat-message bot" style="--delay:0.04s">
@@ -380,7 +380,7 @@
             <div class="chat-time">${timeStr}</div>
           </div>
         </div>
-        <div class="chat-avatar user-avatar"><span>R</span></div>
+        <div class="chat-avatar user-avatar"><span>{{ uid.name|make_list|first|upper }}</span></div>
       `;
       const typingIndicator = document.getElementById('typingIndicator');
       chatMessages.insertBefore(msgDiv, typingIndicator);

@@ -90,7 +90,7 @@
 
             <div class="b-card-footer">
               <div class="b-card-author">
-                <div class="b-card-avatar">R</div>
+                <div class="b-card-avatar">{{blog.user.name|make_list|first|upper}}</div>
                 {{blog.user.name}}
               </div>
               <div class="b-card-date">{{blog.created_at}}</div>

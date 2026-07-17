@@ -296,7 +296,7 @@
         {%for message in messages%}
         {% if message.sender != uid %}
         <div class="wa-msg recv" id="m1">
-          <div class="wa-av av-g" title="Ramesh Patel">RP</div>
+          <div class="wa-av av-g" title="{{message.sender.name}}">{{message.sender.name|make_list|first|upper}}</div>
           <div class="wa-bubble-wrap">
             <div class="wa-sender" style="color:#4ade80;">{{message.sender.name}}</div>
             <div class="wa-bubble">

@@ -16,7 +16,7 @@
 
 <body>
 
-        <!-- SIDEBAR -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -24,23 +24,32 @@
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-title">Main</div>
-      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
-      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
-      <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
-      
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home"><i
+          class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My
+          Crops</span></a>
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools"><i
+          class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+
       <div class="nav-section-title">AI Assistant</div>
-      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
-      
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI
+          Chatbot</span></a>
+
       <div class="nav-section-title">Updates</div>
-      <a href="{% url 'news' %}"           class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Agri News</span></a>
-      <a href="{% url 'gov_info' %}"       class="nav-item" id="nav-gov"><i class="fa-solid fa-building-columns"></i><span>Govt Schemes</span></a>
-      
+      <a href="{% url 'news' %}" class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Agri
+          News</span></a>
+      <a href="{% url 'gov_info' %}" class="nav-item" id="nav-gov"><i
+          class="fa-solid fa-building-columns"></i><span>Govt Schemes</span></a>
+
       <div class="nav-section-title">Community</div>
-      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-community"><i class="fa-solid fa-comments"></i><span>Community Chat</span></a>
-      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
-      
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-community"><i
+          class="fa-solid fa-comments"></i><span>Community Chat</span></a>
+      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs
+          &amp; Reviews</span></a>
+
       <div class="nav-section-title">Account</div>
-      <a href="{% url 'farmer_profile' %}" class="nav-item active" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+      <a href="{% url 'farmer_profile' %}" class="nav-item active" id="nav-profile"><i
+          class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
   </aside>
 
@@ -55,7 +64,8 @@
         </div>
       </div>
       <div class="topbar-right">
-        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
+        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span
+            class="badge"></span></button>
         <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
       </div>
     </header>
@@ -107,7 +117,8 @@
             </div>
             <div class="form-field">
               <label for="pfPhone">Mobile Number</label>
-              <input type="tel" id="pfPhone" value="{{ uid.contact|default:'' }}" readonly style="opacity:0.6;cursor:not-allowed;" />
+              <input type="tel" id="pfPhone" value="{{ uid.contact|default:'' }}" readonly
+                style="opacity:0.6;cursor:not-allowed;" />
             </div>
             <div class="form-field">
               <label for="pfEmail">Email Address</label>
@@ -120,7 +131,8 @@
             {% if farmer %}
             <div class="form-field">
               <label for="pfAadhar">Aadhar Number</label>
-              <input type="text" id="pfAadhar" value="{{ farmer.adharno|default:'Not set' }}" readonly style="opacity:0.6;cursor:not-allowed;" />
+              <input type="text" id="pfAadhar" value="{{ farmer.adharno|default:'Not set' }}" readonly
+                style="opacity:0.6;cursor:not-allowed;" />
             </div>
             {% endif %}
           </div>
@@ -146,20 +158,24 @@
           <div class="form-row">
             <div class="form-field">
               <label for="farmName">Farm Name</label>
-              <input type="text" id="farmName" name="farm_name" value="{{ farmer.farm_name|default:'' }}" placeholder="e.g. Patel Organic Farm" />
+              <input type="text" id="farmName" name="farm_name" value="{{ farmer.farm_name|default:'' }}"
+                placeholder="e.g. Patel Organic Farm" />
             </div>
             <div class="form-field">
               <label for="farmSize">Farm Size (Acres)</label>
-              <input type="number" id="farmSize" name="acres" value="{{ farmer.acres|default:'' }}" placeholder="e.g. 4.5" />
+              <input type="number" id="farmSize" name="acres" value="{{ farmer.acres|default:'' }}"
+                placeholder="e.g. 4.5" />
             </div>
           </div>
           <div class="form-field">
             <label for="farmAddress">Farm Address</label>
-            <textarea id="farmAddress" name="address" rows="2" placeholder="Enter full farm address">{{ farmer.address|default:'' }}</textarea>
+            <textarea id="farmAddress" name="address" rows="2"
+              placeholder="Enter full farm address">{{ farmer.address|default:'' }}</textarea>
           </div>
           <div class="form-field">
             <label>Profile Photo</label>
-            {% if farmer.photo %}<img src="{{ farmer.photo.url }}" alt="Photo" style="height:60px;border-radius:50%;margin-bottom:8px;display:block;">{% endif %}
+            {% if farmer.photo %}<img src="{{ farmer.photo.url }}" alt="Photo"
+              style="height:60px;border-radius:50%;margin-bottom:8px;display:block;">{% endif %}
             <input type="file" name="photo" accept="image/*" style="color:rgba(255,255,255,0.7);" />
           </div>
           <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
@@ -181,28 +197,33 @@
           <div class="form-row">
             <div class="form-field">
               <label>Aadhar Card Upload</label>
-              {% if farmer.adharcard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.adharcard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
+                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
               <input type="file" name="adharcard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
             </div>
             <div class="form-field">
               <label>PAN Card Upload</label>
-              {% if farmer.pancard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.pancard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
+                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
               <input type="file" name="pancard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
             </div>
             <div class="form-field">
               <label>Bank Passbook</label>
-              {% if farmer.passbook %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.passbook %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
+                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
               <input type="file" name="passbook" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
             </div>
             <div class="form-field">
               <label>7/12 Extract (Satbara)</label>
-              {% if farmer.seventwel %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.seventwel %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
+                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
               <input type="file" name="seventwel" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
             </div>
           </div>
           <div class="form-field">
             <label for="pfAadharInput">Aadhar Number</label>
-            <input type="text" id="pfAadharInput" name="adharno" value="{{ farmer.adharno|default:'' }}" placeholder="12-digit Aadhar number" />
+            <input type="text" id="pfAadharInput" name="adharno" value="{{ farmer.adharno|default:'' }}"
+              placeholder="12-digit Aadhar number" />
           </div>
           <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
             <button class="btn btn-primary" type="submit">Save Documents</button>
@@ -218,50 +239,51 @@
         <div class="profile-section">
           <div class="profile-section-title">Notification Preferences</div>
 
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-label">New Order Alerts</div>
-            <div class="toggle-desc">Get notified when someone places an
-              order</div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">New Order Alerts</div>
+              <div class="toggle-desc">Get notified when someone places an
+                order</div>
+            </div>
+            <div class="toggle-switch on" id="t1"></div>
           </div>
-          <div class="toggle-switch on" id="t1"></div>
-        </div>
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-label">Price Alerts</div>
-            <div class="toggle-desc">Daily market price updates for your
-              crops</div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Price Alerts</div>
+              <div class="toggle-desc">Daily market price updates for your
+                crops</div>
+            </div>
+            <div class="toggle-switch on" id="t2"></div>
           </div>
-          <div class="toggle-switch on" id="t2"></div>
-        </div>
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-label">Blog Notifications</div>
-            <div class="toggle-desc">Get notified about new blogs and
-              articles</div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Blog Notifications</div>
+              <div class="toggle-desc">Get notified about new blogs and
+                articles</div>
+            </div>
+            <div class="toggle-switch" id="t3"></div>
           </div>
-          <div class="toggle-switch" id="t3"></div>
-        </div>
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-label">Promotional SMS</div>
-            <div class="toggle-desc">Receive offers and deals via SMS</div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Promotional SMS</div>
+              <div class="toggle-desc">Receive offers and deals via SMS</div>
+            </div>
+            <div class="toggle-switch" id="t4"></div>
           </div>
-          <div class="toggle-switch" id="t4"></div>
-        </div>
-        <div class="toggle-row" style="border-bottom:none;">
-          <div>
-            <div class="toggle-label">Government Scheme Updates</div>
-            <div class="toggle-desc">Stay informed about PM-KISAN and
-              other schemes</div>
+          <div class="toggle-row" style="border-bottom:none;">
+            <div>
+              <div class="toggle-label">Government Scheme Updates</div>
+              <div class="toggle-desc">Stay informed about PM-KISAN and
+                other schemes</div>
+            </div>
+            <div class="toggle-switch on" id="t5"></div>
           </div>
-          <div class="toggle-switch on" id="t5"></div>
         </div>
-      </div>
 
-      <!-- Danger Zone -->
+        <!-- Danger Zone -->
         <div class="profile-section" style="border:1.5px solid #fee2e2;">
-          <div class="profile-section-title" style="color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
+          <div class="profile-section-title" style="color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i>
+            Danger Zone</div>
           <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
             <div>
               <div style="font-size:14px; font-weight:600; color:var(--gray-800);">Delete
@@ -286,14 +308,14 @@
       document.getElementById('sec-farm').style.display = 'none';
       document.getElementById('sec-docs').style.display = 'none';
       document.getElementById('sec-notif').style.display = 'none';
-      
+
       // Remove active from all tabs
       const tabs = document.querySelectorAll('.settings-tab');
       tabs.forEach(t => t.classList.remove('active'));
-      
+
       // Show selected section and activate tab
       document.getElementById(sectionId).style.display = 'block';
-      if(btnElem) btnElem.classList.add('active');
+      if (btnElem) btnElem.classList.add('active');
     }
   </script>
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
