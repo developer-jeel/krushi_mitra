@@ -465,7 +465,7 @@ def community_chat(request):
             if is_image:
                 user_message.image = image
             user_message.save()
-            return render(request, "farmer/community_chat.html", context)
+            return redirect('community_chat')
     return render(request, "farmer/community_chat.html", context)
 
 
