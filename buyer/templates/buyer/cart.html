@@ -84,17 +84,17 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="showUpgradeToast('Export Inquiry is available for Premium plan only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade)</span>
         </a>
         <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Upgrade)</span>
         </a>
         {% endif %}
@@ -107,11 +107,11 @@
 
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
-            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span><span class="sidebar-item-text">Profile</span></a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
-            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span><span class="sidebar-item-text">Verification</span></a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
-            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
             class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
@@ -151,7 +151,7 @@
               </div>
             </div>
             <div class="dropdown-menu">
-              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
               <a href="{% url 'buyer_premium' %}" class="dropdown-item"><i class="fa-solid fa-crown"></i> Premium Membership</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>

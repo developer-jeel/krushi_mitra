@@ -56,18 +56,18 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="#" class="sidebar-item disabled-link" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
-          <span class=" sidebar-item-icon">🔒</span>
+          <span class=" sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade To Unlock)</span>
         </a>
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
@@ -80,11 +80,11 @@
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
-            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span><span class="sidebar-item-text">Profile</span></a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
-            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span><span class="sidebar-item-text">Verification</span></a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
-            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
             class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
@@ -118,7 +118,7 @@
               </div>
             </div>
             <div class="dropdown-menu">
-              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
               <a href="{% url 'buyer_premium' %}" class="dropdown-item"><i class="fa-solid fa-crown"></i> Premium Membership</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
@@ -150,14 +150,14 @@
               <div class="stat-card-label">Shipped</div>
               <div class="stat-card-value" data-counter="{{shipped_order}}">0</div>
             </div>
-            <div class="stat-card-icon">🚚</div>
+            <div class="stat-card-icon"><i class="fa-solid fa-truck-fast"></i></div>
           </div>
           <div class="stat-card rose">
             <div class="stat-card-info">
               <div class="stat-card-label">Delivered</div>
               <div class="stat-card-value" data-counter="{{delivered_order}}">0</div>
             </div>
-            <div class="stat-card-icon">✅</div>
+            <div class="stat-card-icon"><i class="fa-solid fa-circle-check"></i></div>
           </div>
           <div class="stat-card purple">
             <div class="stat-card-info">
@@ -186,7 +186,7 @@
                 <option>Last 6 months</option>
                 <option>All time</option>
               </select>
-              <button class="btn btn-sm btn-secondary">📅 Custom Date</button>
+              <button class="btn btn-sm btn-secondary"><i class="fa-solid fa-calendar-days"></i> Custom Date</button>
               <button class="btn btn-sm btn-secondary">📥 Export All</button>
             </div>
           </div>

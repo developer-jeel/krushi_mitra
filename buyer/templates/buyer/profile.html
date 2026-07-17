@@ -57,18 +57,18 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="#" class="sidebar-item disabled-link" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
-          <span class=" sidebar-item-icon">🔒</span>
+          <span class=" sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade To Unlock)</span>
         </a>
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
@@ -81,11 +81,11 @@
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item active" data-tooltip="Profile"><span
-            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span><span class="sidebar-item-text">Profile</span></a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
-            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span><span class="sidebar-item-text">Verification</span></a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
-            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
             class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
@@ -119,9 +119,9 @@
               <h2 class="profile-name-lg">{{uid.name}}</h2>
               <p class="profile-bio">{{ buyr.business_type|default:"Buyer" }}</p>
               <div class="profile-meta">
-                <span>📍 {{ uid.city|default:"City not provided" }}, {{ buyr.state|default:"" }}</span>
+                <span><i class="fa-solid fa-location-dot"></i> {{ uid.city|default:"City not provided" }}, {{ buyr.state|default:"" }}</span>
                 <span>📧 {{ uid.email|default:"Email not provided" }}</span>
-                <span>📞 +91 {{ uid.contact|default:"Contact not provided" }}</span>
+                <span><i class="fa-solid fa-headset"></i> +91 {{ uid.contact|default:"Contact not provided" }}</span>
               </div>
             </div>
             <button class="btn btn-primary">✏️ Edit Profile</button>
@@ -192,7 +192,7 @@
                   {% endif %}
                 </div>
                 <div class="doc-item">
-                  <span class="doc-icon">🏢</span>
+                  <span class="doc-icon"><i class="fa-solid fa-building"></i></span>
                   <span class="doc-name">Trade License</span>
                   {% if verification.trade_license_doc %}
                   <span class="badge badge-approved">Uploaded</span>

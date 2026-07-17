@@ -125,13 +125,13 @@
 
             <div class="plan-display" id="planDisplay">
               <div class="plan-crown-wrap">
-                <div class="plan-crown-icon" id="planCrownIcon">&#128081;</div>
+                <div class="plan-crown-icon" id="planCrownIcon"><i class="fa-solid fa-crown"></i></div>
               </div>
               <div class="plan-display-info">
                 <div class="plan-display-top">
                   <h2 class="plan-display-name" id="planDisplayName">Standard</h2>
                   <div class="plan-badges">
-                    <span class="plan-type-badge" id="planTypeBadge">&#128309; Standard</span>
+                    <span class="plan-type-badge" id="planTypeBadge"><i class="fa-solid fa-circle"></i> Standard</span>
                     <span class="plan-cycle-badge" id="planCycleBadge">Monthly</span>
                   </div>
                 </div>
@@ -339,7 +339,7 @@
               <div class="card-inner-glow gold-glow"></div>
               <div class="summary-header">
                 <h3 class="summary-title">Order Summary</h3>
-                <span class="summary-crown">&#128081;</span>
+                <span class="summary-crown"><i class="fa-solid fa-crown"></i></span>
               </div>
 
               <div class="summary-plan-row">
@@ -536,7 +536,7 @@
       </div>
       <h2 class="success-title">Payment Successful! &#127881;</h2>
       <p class="success-sub">Your Premium Membership has been activated. Welcome to Krushi Mitra Premium!</p>
-      <div class="success-plan-badge" id="successPlanBadge">&#128081; Standard Plan — Active</div>
+      <div class="success-plan-badge" id="successPlanBadge"><i class="fa-solid fa-crown"></i> Standard Plan — Active</div>
       <a href="{% url 'buyer_dashboard' %}" class="success-cta-btn" id="successCtaBtn">Go to Dashboard</a>
     </div>
   </div>
@@ -551,8 +551,8 @@
       const PLANS = {
         standard: {
           name: 'Standard',
-          crown: '⭐',
-          badge: '🔵 Standard',
+          crown: '<i class="fa-solid fa-star"></i>',
+          badge: '<i class="fa-solid fa-circle"></i> Standard',
           monthly: '{{plans.standard_price}}',
           yearly_per: '{{plans.standard_dis}}',     // per-month price if billed yearly
           yearly_total: '{{plans.standard_yearly}}',
@@ -611,7 +611,7 @@
        ============================================================ */
     const $ = (id) => document.getElementById(id);
     const $$ = (sel) => document.querySelectorAll(sel);
-    const setText = (id, text) => { const el = $(id); if (el) el.textContent = text; };
+    const setText = (id, text) => { const el = $(id); if (el) el.innerHTML = text; };
     const show = (el) => { if (el) el.style.display = ''; };
     const hide = (el) => { if (el) el.style.display = 'none'; };
 
@@ -926,7 +926,7 @@
       const badge = $('successPlanBadge');
       if (badge) {
         const p = PLANS[state.plan];
-        badge.textContent = `${p.crown} ${p.name} Plan — Active`;
+        badge.innerHTML = `${p.crown} ${p.name} Plan — Active`;
       }
 
       overlay.style.display = 'flex';

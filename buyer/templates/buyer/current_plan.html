@@ -75,19 +75,19 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="showToast('warning','Premium Only','Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="showToast('warning','Upgrade Required','Upgrade to unlock Bulk Orders.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade)</span>
         </a>
         <a href="#" class="sidebar-item disabled-link"
           onclick="showToast('warning','Premium Only','Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
@@ -104,15 +104,15 @@
 
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile">
-          <span class="sidebar-item-icon">👤</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span>
           <span class="sidebar-item-text">Profile</span>
         </a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification">
-          <span class="sidebar-item-icon">✅</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span>
           <span class="sidebar-item-text">Verification</span>
         </a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details">
-          <span class="sidebar-item-icon">🏦</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span>
           <span class="sidebar-item-text">Bank Details</span>
         </a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings">
@@ -123,7 +123,7 @@
         <div class="sidebar-section-label"
           style="padding-top:12px; border-top:1px solid var(--border-color); margin-top:8px;">Premium</div>
         <a href="{% url 'buyer_premium' %}" class="sidebar-item" data-tooltip="Upgrade Plan">
-          <span class="sidebar-item-icon">⭐</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-star"></i></span>
           <span class="sidebar-item-text">Upgrade Plan</span>
         </a>
         <a href="#" class="sidebar-item active" data-tooltip="Current Plan">
@@ -181,8 +181,8 @@
               </div>
             </div>
             <div class="dropdown-menu">
-              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
-              <a href="{% url 'buyer_premium' %}" class="dropdown-item">⭐ Upgrade Plan</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
+              <a href="{% url 'buyer_premium' %}" class="dropdown-item"><i class="fa-solid fa-star"></i> Upgrade Plan</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
               <div class="dropdown-divider"></div>
@@ -343,7 +343,7 @@
           <div>
             <!-- Billing -->
             <div class="cp-panel">
-              <div class="cp-panel-title">💳 Billing Information</div>
+              <div class="cp-panel-title"><i class="fa-solid fa-credit-card"></i> Billing Information</div>
               <div class="cp-row">
                 <span class="cp-row-label">Billing Cycle</span>
                 <span class="cp-row-value">{{ premium_type.premium_time }}</span>
@@ -374,7 +374,7 @@
 
             <!-- Timeline -->
             <div class="cp-panel">
-              <div class="cp-panel-title">📅 Membership Timeline</div>
+              <div class="cp-panel-title"><i class="fa-solid fa-calendar-days"></i> Membership Timeline</div>
               <div class="cp-htimeline">
                 <div class="cp-hstep done">
                   <div class="cp-hstep-dot"></div>
@@ -408,7 +408,7 @@
             <a href="{% url 'buyer_premium' %}" class="btn btn-secondary"
               style="border-color:var(--amber-500);color:var(--amber-500);">⬆️ Upgrade Plan</a>
             <button class="btn btn-secondary"
-              onclick="showToast('info','Billing','Redirecting to billing settings...')">📅 Change Billing</button>
+              onclick="showToast('info','Billing','Redirecting to billing settings...')"><i class="fa-solid fa-calendar-days"></i> Change Billing</button>
           </div>
           <button class="btn btn-danger"
             onclick="showToast('warning','Cancel','Are you sure? Contact support to cancel.')">❌ Cancel

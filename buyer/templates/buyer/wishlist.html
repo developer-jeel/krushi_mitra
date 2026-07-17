@@ -57,18 +57,18 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="#" class="sidebar-item disabled-link" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
-          <span class=" sidebar-item-icon">🔒</span>
+          <span class=" sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade To Unlock)</span>
         </a>
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
@@ -81,11 +81,11 @@
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
-            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span><span class="sidebar-item-text">Profile</span></a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
-            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span><span class="sidebar-item-text">Verification</span></a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
-            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
             class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
@@ -119,7 +119,7 @@
               </div>
             </div>
             <div class="dropdown-menu">
-              <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
               <a href="{% url 'buyer_premium' %}" class="dropdown-item"><i class="fa-solid fa-crown"></i> Premium Membership</a>
               <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
               <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
@@ -151,7 +151,7 @@
             <div class="wishlist-body">
               <div class="wishlist-category"><i class="fa-solid fa-wheat-awn"></i> {{saved_crop.crop.category}}</div>
               <h4 class="wishlist-name">{{saved_crop.crop.cropname}}</h4>
-              <div class="wishlist-meta">📍 {{saved_crop.crop.user.city}} | ⭐ Grade A</div>
+              <div class="wishlist-meta"><i class="fa-solid fa-location-dot"></i> {{saved_crop.crop.user.city}} | <i class="fa-solid fa-star"></i> Grade A</div>
               <div class="wishlist-price">₹{{saved_crop.crop.price}}<span class="price-unit">/ 20kg</span></div>
               {%if saved_crop.crop.quantity >= 10%}
               <div class="wishlist-stock"><span class="badge badge-approved">In Stock</span></div>

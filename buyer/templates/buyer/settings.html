@@ -57,18 +57,18 @@
         {% else %}
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
         {% else %}
         <a href="#" class="sidebar-item disabled-link" onclick="alert('Upgrade To Unlock Bulk Orders'); return false;">
-          <span class=" sidebar-item-icon">🔒</span>
+          <span class=" sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Bulk Orders (Upgrade To Unlock)</span>
         </a>
         <a href="#" class="sidebar-item disabled-link"
           onclick="alert('Export Inquiry is available for Premium users only.'); return false;">
-          <span class="sidebar-item-icon">🔒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
           <span class="sidebar-item-text">Export Inquiry (Premium Only)</span>
         </a>
         {% endif %}
@@ -81,11 +81,11 @@
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
-            class="sidebar-item-icon">👤</span><span class="sidebar-item-text">Profile</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span><span class="sidebar-item-text">Profile</span></a>
         <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification"><span
-            class="sidebar-item-icon">✅</span><span class="sidebar-item-text">Verification</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span><span class="sidebar-item-text">Verification</span></a>
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
-            class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item active" data-tooltip="Settings"><span
             class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
@@ -112,11 +112,11 @@
           </div>
           {% endif %}
           <div class="settings-nav card">
-            <button class="settings-nav-item active" data-section="profile"><span>👤</span> Profile Settings</button>
-            <button class="settings-nav-item" data-section="security"><span>🔒</span> Security</button>
+            <button class="settings-nav-item active" data-section="profile"><span><i class="fa-solid fa-user"></i></span> Profile Settings</button>
+            <button class="settings-nav-item" data-section="security"><span><i class="fa-solid fa-lock"></i></span> Security</button>
             <button class="settings-nav-item" data-section="notifications"><span><i class="fa-solid fa-bell"></i></span> Notifications</button>
             <button class="settings-nav-item" data-section="theme"><span>🎨</span> Appearance</button>
-            <button class="settings-nav-item" data-section="privacy"><span>🛡️</span> Privacy</button>
+            <button class="settings-nav-item" data-section="privacy"><span><i class="fa-solid fa-shield-halved"></i>️</span> Privacy</button>
             <button class="settings-nav-item" data-section="sessions"><span>💻</span> Sessions</button>
             <button class="settings-nav-item danger" data-section="danger"><span>⚠️</span> Danger Zone</button>
           </div>
@@ -128,7 +128,7 @@
                 <form method="POST" action="{% url 'buyer_settings' %}">
                   {% csrf_token %}
                   <input type="hidden" name="action" value="update_profile">
-                  <h3 class="card-title">👤 Profile Settings</h3>
+                  <h3 class="card-title"><i class="fa-solid fa-user"></i> Profile Settings</h3>
                   <div class="form-row mt-4">
                     <div class="form-group"><label class="form-label">Display Name</label><input type="text" name="display_name"
                         class="form-input" value="{{ buyr.user.name|default_if_none:'' }}"></div>
@@ -152,7 +152,7 @@
                 <form method="POST" action="{% url 'buyer_settings' %}">
                   {% csrf_token %}
                   <input type="hidden" name="action" value="update_security">
-                  <h3 class="card-title">🔒 Security Settings</h3>
+                  <h3 class="card-title"><i class="fa-solid fa-lock"></i> Security Settings</h3>
                   <div class="form-group mt-4">
                     <label class="form-label">Current Password</label>
                     <div class="password-field"><input type="password" name="current_password" class="form-input" placeholder="Current Password" required><button type="button"
@@ -240,7 +240,7 @@
             <!-- Privacy -->
             <div class="settings-section" data-section="privacy">
               <div class="card">
-                <h3 class="card-title">🛡️ Privacy Settings</h3>
+                <h3 class="card-title"><i class="fa-solid fa-shield-halved"></i>️ Privacy Settings</h3>
                 <div class="settings-toggles mt-4">
                   <div class="toggle-item">
                     <div>
@@ -278,7 +278,7 @@
                     <span class="badge badge-approved">Active</span>
                   </div>
                   <div class="session-item">
-                    <div class="session-device">📱 Safari on iPhone</div>
+                    <div class="session-device"><i class="fa-solid fa-mobile-screen"></i> Safari on iPhone</div>
                     <div class="session-meta">Mumbai, India • Last active 2 hours ago</div>
                     <button class="btn btn-sm btn-ghost" style="color:var(--red-500);">Revoke</button>
                   </div>
