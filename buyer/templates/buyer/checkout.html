@@ -129,223 +129,399 @@
           </div>
         </div>
       </header>
-      <main class="main-content">
-        <div class="checkout-layout page-reveal">
-          <!-- Billing & Shipping -->
-          <div class="checkout-forms">
-            <!-- Billing -->
-            <div class="card checkout-card">
-              <h3 class="card-title">Billing Information</h3>
-              <div class="form-row">
-                <div class="form-group"><label class="form-label">{{uid.Firstname}}</label><input type="text"
-                    class="form-input" value="{{uid.name}}" required></div>
-                <div class="form-group"><label class="form-label">{{uid.last}}</label><input type="text"
-                    class="form-input" value="" required hidden></div>
-              </div>
-              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input"
-                  value="{{uid.email}}" required></div>
-              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input"
-                  value="{{uid.contact}}" required></div>
-              <div class="form-group"><label class="form-label">Billing Address</label><textarea class="form-textarea"
-                  required>{{buyr.address}}</textarea></div>
-            </div>
-
-            <!-- Shipping -->
-            <div class="card checkout-card">
-              <h3 class="card-title">Shipping Information</h3>
-              <div class="form-check" style="margin-bottom:16px;">
-                <input type="checkbox" checked id="same-billing">
-                <label for="same-billing">Same as billing address</label>
-              </div>
-              <div class="form-group"><label class="form-label">Delivery Address</label><textarea
-                  class="form-textarea">{{buyr.address}}</textarea></div>
-              <div class="form-row">
-                <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input"
-                    value="{{uid.city}}"></div>
-                <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input"
-                    value="{{buyr.state}}"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group"><label class="form-label">Pincode</label><input type="text" class="form-input"
-                    value="{{buyr.pincode}}"></div>
-                <div class="form-group"><label class="form-label">Delivery Instructions</label><input type="text"
-                    class="form-input" placeholder="Optional"></div>
-              </div>
-            </div>
-
-            <!-- Business -->
-            <div class="card checkout-card">
-              <h3 class="card-title">Business Information</h3>
-              <div class="form-row">
-                <div class="form-group"><label class="form-label">Business Name</label><input type="text"
-                    class="form-input" value="Mehta Agro Traders"></div>
-                <div class="form-group"><label class="form-label">GST Number</label><input type="text"
-                    class="form-input" value="27AABCM1234C1Z5"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group"><label class="form-label">Business Type</label><select class="form-select">
-                    <option>Wholesaler</option>
-                    <option>Retailer</option>
-                    <option>Exporter</option>
-                    <option>Processor</option>
-                  </select></div>
-                <div class="form-group"><label class="form-label">PAN Number</label><input type="text"
-                    class="form-input" value="ABCDE1234F"></div>
-              </div>
-            </div>
+            <main class="main-content" style="padding-top: 100px;">
+        <!-- Progress Stepper -->
+        <div class="checkout-steps">
+          <div class="step completed">
+            <div class="step-icon">✓</div>
+            <span>Cart</span>
           </div>
-
-          <!-- Order Summary -->
-          <div class="checkout-summary">
-            <form action="{% url 'buyer_checkout'%}" method="post">
-              {%csrf_token%}
-              <div class="card">
-                <h3 class="card-title" style="margin-bottom:16px;">Order Summary</h3>
-                {%for item in cart_items%}
-                <div class="checkout-summary-item"><span>{{item.crop.cropname}} ({{item.quantity}}
-                    kg)</span><span>₹{{item.subtotal}}</span></div>
-                {%endfor%}
-
-                <div class="summary-divider"></div>
-                <div class="checkout-summary-item"><span>Subtotal</span><span>₹{{cart.total_price}}</span></div>
-                <div class="checkout-summary-item"><span>Delivery</span><span class="text-green">Free</span></div>
-                <div class="checkout-summary-item"><span>Tax (GST @ {{cart.tax_per}}%)</span><span>₹{{cart.tax}}</span>
-                </div>
-                <div class="checkout-summary-item" id="discount-row" style="display:none; color:var(--green-500);">
-                  <span>Discount (<span id="coupon-name"></span>)</span>
-                  <span id="discount-amount">-₹0</span>
-                </div>
-                <div class="summary-divider"></div>
-                <div class="checkout-summary-item total"><span>Grand Total</span><span id="grand-total">₹{{cart.final_price}}</span>
-                </div>
-
-                <div class="coupon-section mt-4">
-                  <div class="coupon-input-group">
-                    <input type="text" class="form-input custom-coupon-input" id="couponInput" placeholder="Have a coupon?">
-                    <button type="button" class="btn btn-primary btn-sm custom-apply-coupon" id="couponApplyBtn">Apply</button>
-                  </div>
-                  <div id="couponMessage" style="margin-top: 8px; font-size: 0.875rem;"></div>
-                </div>
-                
-                <input type="hidden" name="coupon_code" id="hiddenCouponCode" value="">
-
-
-                <div class="checkout-payment mt-4">
-                  <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:12px;">Payment Method</h4>
-                  <div class="payment-options">
-                    <label class="form-check"><input type="radio" name="payment" value="card" checked> 💳 Credit/Debit
-                      Card</label>
-                    <label class="form-check"><input type="radio" name="payment" value="net_banking"> 🏦 Net
-                      Banking</label>
-                    <label class="form-check"><input type="radio" name="payment" value="upi"> 📱 UPI</label>
-                    <label class="form-check"><input type="radio" name="payment" value="bank_transfer"> 📋 Bank
-                      Transfer</label>
-                  </div>
-                </div>
-
-                <div class="form-check mt-4">
-                  <input type="checkbox" id="terms" checked>
-                  <label for="terms">I agree to the <a href="#" style="color:var(--text-link);">Terms & Conditions</a>
-                    and
-                    <a href="#" style="color:var(--text-link);">Return Policy</a></label>
-                </div>
-
-                <button class="btn btn-primary btn-lg btn-block mt-4"
-                  onclick="showToast('success','Order Placed!','Your order has been placed successfully. Order ID: ORD-2024-0892');setTimeout(()=>window.location='orders.html',1500);">
-                  🛒 Place Order - ₹{{cart.final_price}}
-                </button>
-              </div>
-            </form>
+          <div class="step-divider"></div>
+          <div class="step active">
+            <div class="step-icon">2</div>
+            <span>Checkout</span>
+          </div>
+          <div class="step-divider" style="background:#ffffff1a;"></div>
+          <div class="step">
+            <div class="step-icon">3</div>
+            <span>Payment</span>
+          </div>
+          <div class="step-divider" style="background:rgba(255,255,255,0.1);"></div>
+          <div class="step">
+            <div class="step-icon">4</div>
+            <span>Confirmation</span>
           </div>
         </div>
 
-        <!-- Success Modal -->
-        <div class="modal-overlay" id="success-modal">
-          <div class="modal" style="max-width:420px;text-align:center;">
-            <div class="modal-body" style="padding:40px 24px;">
-              <div style="font-size:4rem;margin-bottom:16px;">🎉</div>
-              <h3 style="font-size:1.25rem;font-weight:700;margin-bottom:8px;">Order Placed Successfully!</h3>
-              <p style="font-size:0.875rem;color:var(--text-secondary);margin-bottom:20px;">Your order #ORD-2024-0892
-                has been placed. We'll notify you when it ships.</p>
-              <a href="{% url 'buyer_orders' %}" class="btn btn-primary">View My Orders</a>
+        <div class="checkout-layout">
+          <!-- Left Column: Forms -->
+          <div class="checkout-forms">
+            <form id="checkout-form" action="{% url 'buyer_checkout'%}" method="post">
+              {%csrf_token%}
+              <input type="hidden" name="coupon_code" id="hiddenCouponCode" value="">
+              <input type="hidden" name="payment" id="hiddenPaymentMethod" value="card">
+
+              <!-- Billing Information -->
+              <div class="premium-card">
+                <h3 class="card-title">
+                  <div class="card-title-icon">👤</div>
+                  Billing Information
+                </h3>
+                <div class="form-row">
+                  <div class="form-group floating">
+                    <span class="floating-icon">📝</span>
+                    <input type="text" class="form-input premium-input" value="{{uid.name}}" placeholder="First Name" required>
+                  </div>
+                  <div class="form-group floating">
+                    <span class="floating-icon">📝</span>
+                    <input type="text" class="form-input premium-input" value="" placeholder="Last Name" required hidden>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group floating">
+                    <span class="floating-icon">✉️</span>
+                    <input type="email" class="form-input premium-input" value="{{uid.email}}" placeholder="Email Address" required>
+                  </div>
+                  <div class="form-group floating">
+                    <span class="floating-icon">📱</span>
+                    <input type="tel" class="form-input premium-input" value="{{uid.contact}}" placeholder="Phone Number" required>
+                  </div>
+                </div>
+                <div class="form-group floating">
+                  <span class="floating-icon" style="top:24px;">📍</span>
+                  <textarea class="form-textarea premium-input" rows="3" placeholder="Billing Address" required>{{buyr.address}}</textarea>
+                </div>
+              </div>
+
+              <!-- Shipping Information -->
+              <div class="premium-card">
+                <h3 class="card-title">
+                  <div class="card-title-icon">🚚</div>
+                  Shipping Information
+                </h3>
+                <label class="premium-checkbox-wrapper" for="same-billing">
+                  <input type="checkbox" checked id="same-billing">
+                  <span style="color: #f1f5f9; font-weight: 500;">Same as billing address</span>
+                </label>
+                
+                <div class="form-group floating">
+                  <span class="floating-icon" style="top:24px;">📍</span>
+                  <textarea class="form-textarea premium-input" rows="3" placeholder="Delivery Address">{{buyr.address}}</textarea>
+                </div>
+                <div class="form-row">
+                  <div class="form-group floating">
+                    <span class="floating-icon">🏙️</span>
+                    <input type="text" class="form-input premium-input" value="{{uid.city}}" placeholder="City">
+                  </div>
+                  <div class="form-group floating">
+                    <span class="floating-icon">🗺️</span>
+                    <input type="text" class="form-input premium-input" value="{{buyr.state}}" placeholder="State">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group floating">
+                    <span class="floating-icon">📮</span>
+                    <input type="text" class="form-input premium-input" value="{{buyr.pincode}}" placeholder="Pincode">
+                  </div>
+                  <div class="form-group floating">
+                    <span class="floating-icon">📝</span>
+                    <input type="text" class="form-input premium-input" placeholder="Delivery Instructions (Optional)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Business Information -->
+              <div class="premium-card">
+                <h3 class="card-title">
+                  <div class="card-title-icon">🏢</div>
+                  Business Information
+                </h3>
+                <div class="form-row">
+                  <div class="form-group floating">
+                    <span class="floating-icon">💼</span>
+                    <input type="text" class="form-input premium-input" value="Mehta Agro Traders" placeholder="Business Name">
+                  </div>
+                  <div class="form-group floating">
+                    <span class="floating-icon">🧾</span>
+                    <input type="text" class="form-input premium-input" value="27AABCM1234C1Z5" placeholder="GST Number">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group floating">
+                    <span class="floating-icon">🏷️</span>
+                    <select class="form-select premium-input">
+                      <option>Wholesaler</option>
+                      <option>Retailer</option>
+                      <option>Exporter</option>
+                      <option>Processor</option>
+                    </select>
+                  </div>
+                  <div class="form-group floating">
+                    <span class="floating-icon">💳</span>
+                    <input type="text" class="form-input premium-input" value="ABCDE1234F" placeholder="PAN Number">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Method -->
+              <div class="premium-card">
+                <h3 class="card-title">
+                  <div class="card-title-icon">💳</div>
+                  Payment Method
+                </h3>
+                <div class="payment-grid">
+                  <label class="payment-method-card selected" onclick="selectPayment(this, 'card')">
+                    <div class="payment-icon">💳</div>
+                    <div class="payment-name">Credit/Debit Card</div>
+                  </label>
+                  <label class="payment-method-card" onclick="selectPayment(this, 'net_banking')">
+                    <div class="payment-icon">🏦</div>
+                    <div class="payment-name">Net Banking</div>
+                  </label>
+                  <label class="payment-method-card" onclick="selectPayment(this, 'upi')">
+                    <div class="payment-icon">📱</div>
+                    <div class="payment-name">UPI</div>
+                  </label>
+                  <label class="payment-method-card" onclick="selectPayment(this, 'bank_transfer')">
+                    <div class="payment-icon">🏛</div>
+                    <div class="payment-name">Bank Transfer</div>
+                  </label>
+                </div>
+                
+                <!-- Trust Signals -->
+                <div class="trust-signals">
+                  <div class="trust-item"><span class="icon">🔒</span> Secure Checkout</div>
+                  <div class="trust-item"><span class="icon">🛡</span> SSL Encrypted</div>
+                  <div class="trust-item"><span class="icon">🚚</span> Fast Delivery</div>
+                  <div class="trust-item"><span class="icon">📞</span> 24×7 Customer Support</div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right Column: Order Summary -->
+          <div class="checkout-summary">
+            <div class="premium-card summary-card" style="padding: 24px;">
+              <h3 class="card-title" style="font-size: 1.375rem;">Order Summary</h3>
+              
+              <!-- Cart Items -->
+              <div style="max-height: 250px; overflow-y: auto; padding-right: 8px;">
+                {%for item in cart_items%}
+                <div class="product-row">
+                  <div class="product-info">
+                    <div class="product-name">{{item.crop.cropname}}</div>
+                    <div class="product-meta">Qty: {{item.quantity}} kg</div>
+                  </div>
+                  <div class="product-price">₹{{item.subtotal}}</div>
+                </div>
+                {%endfor%}
+              </div>
+
+              <!-- Coupon Section -->
+              <div class="modern-coupon-card">
+                <div class="coupon-input-group" id="coupon-input-wrapper">
+                  <input type="text" class="premium-coupon-input" id="couponInput" placeholder="Enter promo code">
+                  <button type="button" class="btn-apply-coupon" id="couponApplyBtn">Apply</button>
+                </div>
+                
+                <div class="coupon-success-card" id="coupon-success-card">
+                  <div class="coupon-success-header">
+                    <span>✅</span> <span id="success-code">SAVE20</span> Applied Successfully!
+                  </div>
+                  <div class="coupon-success-details">
+                    <span>Discount: <strong id="success-value">20% OFF</strong></span>
+                    <span style="color:#10b981;">You Saved: <strong id="success-saved">₹500</strong></span>
+                  </div>
+                </div>
+                
+                <div id="couponMessage" style="margin-top: 12px; font-size: 0.875rem; font-weight: 500; display:none;"></div>
+              </div>
+
+              <!-- Pricing Breakdown -->
+              <div class="pricing-breakdown">
+                <div class="pricing-row">
+                  <span>Subtotal</span>
+                  <span>₹{{cart.total_price}}</span>
+                </div>
+                <div class="pricing-row free-text">
+                  <span>Delivery Charge</span>
+                  <span>Free</span>
+                </div>
+                <div class="pricing-row">
+                  <span>Tax (GST @ {{cart.tax_per}}%)</span>
+                  <span>₹{{cart.tax}}</span>
+                </div>
+                <div class="pricing-row">
+                  <span>Platform Fee</span>
+                  <span>₹0</span>
+                </div>
+                
+                <div class="pricing-row discount-row" id="discount-row" style="display:none;">
+                  <span>Coupon Discount (<span id="coupon-name"></span>)</span>
+                  <span id="discount-amount">-₹0</span>
+                </div>
+                <div class="pricing-row discount-row" id="savings-row" style="display:none;">
+                  <span>Total Savings</span>
+                  <span id="savings-amount">₹0</span>
+                </div>
+              </div>
+              
+              <div class="pricing-divider"></div>
+              
+              <div class="total-box">
+                <div class="original-total" id="original-total">₹{{cart.final_price}}</div>
+                <div class="final-total-row">
+                  <span>Grand Total</span>
+                  <span class="amount" id="grand-total">₹{{cart.final_price}}</span>
+                </div>
+              </div>
+
+              <!-- T&C -->
+              <label class="premium-checkbox-wrapper" for="terms" style="margin-top:24px; margin-bottom: 0;">
+                <input type="checkbox" id="terms" checked>
+                <span style="color: #94a3b8; font-size: 0.8125rem;">
+                  I agree to the <a href="#" style="color:#10b981;">Terms & Conditions</a> and <a href="#" style="color:#10b981;">Privacy Policy</a>
+                </span>
+              </label>
+
+              <!-- Checkout Button -->
+              <button type="button" class="btn-place-order" id="placeOrderBtn" onclick="submitOrder()">
+                <span>🔒 Secure Checkout</span>
+                <span id="btn-total">₹{{cart.final_price}}</span>
+              </button>
             </div>
           </div>
         </div>
       </main>
     </div>
   </div>
+  
   <script src="{% static 'buyer/js/app.js' %}"></script>
   <script>
-    const COUPONS = {{ coupons|safe }};
-    const baseFinalPrice = {{ cart.final_price }};
+    const COUPONS = {{ coupons|safe|default:"[]" }};
+    const baseFinalPrice = {{ cart.final_price|default:"0" }};
+
+    function selectPayment(element, method) {
+      document.querySelectorAll('.payment-method-card').forEach(card => card.classList.remove('selected'));
+      element.classList.add('selected');
+      document.getElementById('hiddenPaymentMethod').value = method;
+    }
+
+    function submitOrder() {
+      const btn = document.getElementById('placeOrderBtn');
+      btn.innerHTML = '<span style="animation: pulseGreen 1s infinite;">Processing...</span>';
+      
+      // Simulate slight delay for effect
+      setTimeout(() => {
+        document.getElementById('checkout-form').submit();
+      }, 1000);
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const applyBtn = document.getElementById('couponApplyBtn');
       const input = document.getElementById('couponInput');
       const hiddenInput = document.getElementById('hiddenCouponCode');
       const discountRow = document.getElementById('discount-row');
+      const savingsRow = document.getElementById('savings-row');
       const couponName = document.getElementById('coupon-name');
       const discountAmountDisplay = document.getElementById('discount-amount');
+      const savingsAmountDisplay = document.getElementById('savings-amount');
       const grandTotal = document.getElementById('grand-total');
+      const originalTotal = document.getElementById('original-total');
+      const btnTotal = document.getElementById('btn-total');
       const messageDiv = document.getElementById('couponMessage');
-      const orderBtn = document.querySelector('button[onclick^="showToast(\'success\'"]');
+      
+      // Success Card UI
+      const successCard = document.getElementById('coupon-success-card');
+      const successCode = document.getElementById('success-code');
+      const successValue = document.getElementById('success-value');
+      const successSaved = document.getElementById('success-saved');
 
-      applyBtn.addEventListener('click', () => {
-        const code = input.value.trim().toUpperCase();
-        if (!code) {
-          showMessage('Please enter a coupon code', 'error');
-          return;
-        }
+      if(applyBtn) {
+        applyBtn.addEventListener('click', () => {
+          const code = input.value.trim().toUpperCase();
+          if (!code) {
+            showMessage('Please enter a coupon code', 'error');
+            return;
+          }
 
-        const coupon = COUPONS.find(c => c.code === code);
-        
-        if (coupon) {
-          if (baseFinalPrice >= coupon.minimum_amount) {
-            let discount = 0;
-            if (coupon.discount_type === 'percent') {
-              discount = (baseFinalPrice * coupon.discount_value) / 100;
-            } else if (coupon.discount_type === 'flat') {
-              discount = coupon.discount_value;
+          const coupon = COUPONS.find(c => c.code === code);
+          
+          if (coupon) {
+            if (baseFinalPrice >= coupon.minimum_amount) {
+              let discount = 0;
+              let discountText = "";
+              if (coupon.discount_type === 'percent') {
+                discount = (baseFinalPrice * coupon.discount_value) / 100;
+                discountText = `${coupon.discount_value}% OFF`;
+              } else if (coupon.discount_type === 'flat') {
+                discount = coupon.discount_value;
+                discountText = `₹${coupon.discount_value} OFF`;
+              }
+              
+              const newTotal = Math.max(0, baseFinalPrice - discount);
+              const formattedDiscount = '₹' + discount.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+              const formattedTotal = '₹' + newTotal.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+              
+              // Update Hidden input
+              hiddenInput.value = code;
+              
+              // Update Pricing Details
+              couponName.textContent = code;
+              discountAmountDisplay.textContent = '-' + formattedDiscount;
+              savingsAmountDisplay.textContent = formattedDiscount;
+              
+              discountRow.style.display = 'flex';
+              savingsRow.style.display = 'flex';
+              
+              // Animate Totals
+              grandTotal.textContent = formattedTotal;
+              btnTotal.textContent = formattedTotal;
+              
+              grandTotal.classList.remove('animate-update');
+              void grandTotal.offsetWidth; // trigger reflow
+              grandTotal.classList.add('animate-update');
+              
+              originalTotal.classList.add('show');
+              
+              // Show Success Card & Hide Message
+              messageDiv.style.display = 'none';
+              successCode.textContent = code;
+              successValue.textContent = discountText;
+              successSaved.textContent = formattedDiscount;
+              successCard.style.display = 'block';
+              
+              if(typeof showToast === 'function') showToast('success', 'Coupon Applied', `Coupon "${code}" applied successfully!`);
+            } else {
+              showMessage(`Minimum order amount of ₹${coupon.minimum_amount} required`, 'error');
+              resetCoupon();
             }
-            
-            const newTotal = Math.max(0, baseFinalPrice - discount);
-            
-            // Update UI
-            hiddenInput.value = code;
-            couponName.textContent = code;
-            discountAmountDisplay.textContent = '-₹' + discount.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-            discountRow.style.display = 'flex';
-            grandTotal.textContent = '₹' + newTotal.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-            
-            if (orderBtn) {
-              orderBtn.innerHTML = `🛒 Place Order - ₹${newTotal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-            }
-            
-            showMessage('Coupon applied successfully!', 'success');
-            showToast('success', 'Coupon Applied', `Coupon "${code}" applied successfully!`);
           } else {
-            showMessage(`Minimum order amount of ₹${coupon.minimum_amount} required`, 'error');
+            showMessage('Invalid coupon code', 'error');
             resetCoupon();
           }
-        } else {
-          showMessage('Invalid coupon code', 'error');
-          showToast('error', 'Invalid Coupon', 'Please enter a valid coupon code.');
-          resetCoupon();
-        }
-      });
+        });
+      }
       
       function showMessage(msg, type) {
-        messageDiv.textContent = msg;
-        messageDiv.style.color = type === 'error' ? 'var(--red-500)' : 'var(--green-500)';
+        if(messageDiv) {
+          messageDiv.textContent = msg;
+          messageDiv.style.color = type === 'error' ? '#ef4444' : '#10b981';
+          messageDiv.style.display = 'block';
+          successCard.style.display = 'none';
+        }
       }
       
       function resetCoupon() {
-        hiddenInput.value = '';
-        discountRow.style.display = 'none';
-        grandTotal.textContent = '₹' + baseFinalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-        if (orderBtn) {
-          orderBtn.innerHTML = `🛒 Place Order - ₹${baseFinalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
-        }
+        if(hiddenInput) hiddenInput.value = '';
+        if(discountRow) discountRow.style.display = 'none';
+        if(savingsRow) savingsRow.style.display = 'none';
+        if(originalTotal) originalTotal.classList.remove('show');
+        if(successCard) successCard.style.display = 'none';
+        
+        const baseFormatted = '₹' + baseFinalPrice.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        if(grandTotal) grandTotal.textContent = baseFormatted;
+        if(btnTotal) btnTotal.textContent = baseFormatted;
       }
     });
   </script>
