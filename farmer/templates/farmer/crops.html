@@ -32,7 +32,7 @@
 
 <body>
 
-    <!-- SIDEBAR -->
+        <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -43,10 +43,18 @@
       <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
       <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops" class="nav-item active"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
       <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      
       <div class="nav-section-title">AI Assistant</div>
       <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      
+      <div class="nav-section-title">Updates</div>
+      <a href="{% url 'news' %}"           class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Agri News</span></a>
+      <a href="{% url 'gov_info' %}"       class="nav-item" id="nav-gov"><i class="fa-solid fa-building-columns"></i><span>Govt Schemes</span></a>
+      
       <div class="nav-section-title">Community</div>
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-community"><i class="fa-solid fa-comments"></i><span>Community Chat</span></a>
       <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      
       <div class="nav-section-title">Account</div>
       <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>

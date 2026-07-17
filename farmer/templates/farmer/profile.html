@@ -16,7 +16,7 @@
 
 <body>
 
-    <!-- SIDEBAR -->
+        <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -27,10 +27,18 @@
       <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
       <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
       <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      
       <div class="nav-section-title">AI Assistant</div>
       <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      
+      <div class="nav-section-title">Updates</div>
+      <a href="{% url 'news' %}"           class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Agri News</span></a>
+      <a href="{% url 'gov_info' %}"       class="nav-item" id="nav-gov"><i class="fa-solid fa-building-columns"></i><span>Govt Schemes</span></a>
+      
       <div class="nav-section-title">Community</div>
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-community"><i class="fa-solid fa-comments"></i><span>Community Chat</span></a>
       <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      
       <div class="nav-section-title">Account</div>
       <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile" class="nav-item active"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
@@ -41,40 +49,6 @@
     <header class="topbar">
       <div class="topbar-left">
         <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
-        <div>
-          <div class="page-title">My Profile <i class="fa-solid fa-user"></i></div>
-          <div class="breadcrumb">Dashboard / Profile</div>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
-        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
-      </div>
-    </header>
-
-    <div class="page-content">
-
-      <!-- Profile Hero -->
-      <div class="profile-hero">
-        <div class="profile-avatar-lg">{{ uid.name|make_list|first|upper }}</div>
-        <div class="profile-info">
-          <div class="profile-name">{{ uid.name }}</div>
-          <div class="profile-role"><i class="fa-solid fa-wheat-awn"></i> Farmer · {{ uid.city|default:"India" }}</div>
-          <div class="profile-badges">
-            <span class="profile-badge"><i class="fa-solid fa-circle-check"></i> KYC Verified</span>
-            <span class="profile-badge"><i class="fa-solid fa-star"></i> 4.8 Rating</span>
-            <span class="profile-badge"><i class="fa-solid fa-trophy"></i> Top Seller</span>
-          </div>
-        </div>
-        <div style="margin-left:auto; position:relative; z-index:1;">
-          <button class="btn"
-            style="background:rgba(255,255,255,0.2); color:white; border:1.5px solid rgba(255,255,255,0.35);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-            </svg>
-            Edit Photo
-          </button>
         </div>
       </div>
 

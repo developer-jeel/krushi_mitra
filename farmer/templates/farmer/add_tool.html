@@ -209,7 +209,7 @@
 
 <body>
 
-    <!-- SIDEBAR -->
+        <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -220,10 +220,18 @@
       <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
       <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
       <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      
       <div class="nav-section-title">AI Assistant</div>
       <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      
+      <div class="nav-section-title">Updates</div>
+      <a href="{% url 'news' %}"           class="nav-item" id="nav-news"><i class="fa-solid fa-newspaper"></i><span>Agri News</span></a>
+      <a href="{% url 'gov_info' %}"       class="nav-item" id="nav-gov"><i class="fa-solid fa-building-columns"></i><span>Govt Schemes</span></a>
+      
       <div class="nav-section-title">Community</div>
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-community"><i class="fa-solid fa-comments"></i><span>Community Chat</span></a>
       <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      
       <div class="nav-section-title">Account</div>
       <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
@@ -234,123 +242,6 @@
     <header class="topbar">
       <div class="topbar-left">
         <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
-        <div>
-          <div class="page-title">Add New Tool 🔧</div>
-          <div class="breadcrumb">Dashboard / Tools / Add Tool</div>
-        </div>
-      </div>
-      <div class="topbar-right">
-        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
-        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
-      </div>
-    </header>
-
-    <div class="page-content">
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <a href="{% url 'farmer_tools' %}" class="tab-btn">Browse Tools</a>
-        <a href="{% url 'add_tool' %}" class="tab-btn active">Add Tool</a>
-      </div>
-
-      <!-- Add Tool Form -->
-      <div class="add-tool-form">
-
-        <!-- Tool Information -->
-        <div class="form-section">
-          <div class="form-section-title">🔧 Tool Information</div>
-
-          <div class="form-group">
-            <label for="tool_name">Tool Name *</label>
-            <input type="text" id="tool_name" name="tool_name" placeholder="e.g. Mini Power Tiller" />
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="tool_category">Category *</label>
-              <select id="tool_category" name="category">
-                <option value="" disabled selected>Select category</option>
-                <option value="tractors"><i class="fa-solid fa-tractor"></i> Tractors & Machinery</option>
-                <option value="hand_tools">🔨 Hand Tools</option>
-                <option value="irrigation"><i class="fa-solid fa-droplet"></i> Irrigation</option>
-                <option value="sprayers"><i class="fa-solid fa-seedling"></i> Sprayers</option>
-                <option value="storage">🏗️ Storage</option>
-                <option value="soil_testing"><i class="fa-solid fa-seedling"></i> Soil Testing</option>
-                <option value="harvesting"><i class="fa-solid fa-wheat-awn"></i> Harvesting</option>
-                <option value="other"><i class="fa-solid fa-box"></i> Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="tool_condition">Condition *</label>
-              <select id="tool_condition" name="condition">
-                <option value="" disabled selected>Select condition</option>
-                <option value="excellent">Excellent</option>
-                <option value="good">Good</option>
-                <option value="average">Average</option>
-                <option value="poor">Poor</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="tool_desc">Description</label>
-            <textarea id="tool_desc" name="description" rows="3"
-              placeholder="Describe your tool — model, specs, usage history..."></textarea>
-          </div>
-        </div>
-
-        <!-- Pricing & Listing -->
-        <div class="form-section">
-          <div class="form-section-title">💰 Pricing & Listing</div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="listing_type">Listing Type *</label>
-              <select id="listing_type" name="listing_type">
-                <option value="sell">For Sale</option>
-                <option value="rent">For Rent</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="tool_price">Price (₹) *</label>
-              <input type="number" id="tool_price" name="price" placeholder="e.g. 12500" min="0" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="tool_years">Years Used</label>
-              <input type="number" id="tool_years" name="years_used" placeholder="e.g. 3" min="0" max="50" />
-            </div>
-            <div class="form-group">
-              <label for="tool_location">Location *</label>
-              <input type="text" id="tool_location" name="location" placeholder="e.g. Anand, Gujarat" />
-            </div>
-          </div>
-        </div>
-
-        <!-- Tool Images -->
-        <div class="form-section">
-          <div class="form-section-title">📸 Tool Images</div>
-
-          <label class="upload-area" for="tool_images">
-            <div style="font-size:32px; margin-bottom:4px;">📷</div>
-            <p><strong>Click to upload</strong> photos of your tool</p>
-            <p style="font-size:11px; color:rgba(255,255,255,0.30);">PNG, JPG, WEBP · max 5 MB each</p>
-            <input type="file" id="tool_images" name="images" accept="image/*" multiple />
-          </label>
-          <div class="upload-previews" id="imagePreviews"></div>
-        </div>
-
-        <!-- Actions -->
-        <div class="form-actions">
-          <a href="{% url 'farmer_tools' %}" class="btn btn-secondary">Cancel</a>
-          <button type="submit" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            Publish Listing
-          </button>
         </div>
 
       </div>
