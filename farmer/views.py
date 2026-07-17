@@ -205,7 +205,15 @@ def farmer_crops(request):
 @check_login(['Farmer'])
 def farmer_tools(request):
     uid = request.uid
-    context = {'uid': uid}
+    qs = FarmerTool.objects.filter(availability_status='available').exclude(user=uid).order_by('-created_at')
+    
+    # Attach predicted price to each tool
+    available_tools = []
+    for t in qs:
+        predicted = _tool_predicted_price(t.category, t.condition, t.years_used, t.original_price)
+        available_tools.append({'tool': t, 'predicted_price': predicted})
+        
+    context = {'uid': uid, 'available_tools': available_tools}
     return render(request, "farmer/tools.html", context)
 
 @check_login(['Farmer'])
