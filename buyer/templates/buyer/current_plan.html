@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <!-- Current plan-specific styles (only unique components, reuses all variables) -->
   <link rel="stylesheet" href="{% static 'buyer/css/current_plan.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -34,41 +35,41 @@
             <span class="sidebar-logo-sub">Buyer Panel</span>
           </div>
         </div>
-        <button class="sidebar-toggle" aria-label="Toggle sidebar">◀</button>
+        <button class="sidebar-toggle" aria-label="Toggle sidebar"><i class="fa-solid fa-chevron-left"></i></button>
       </div>
 
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
         <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard">
-          <span class="sidebar-item-icon">📊</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-chart-simple"></i></span>
           <span class="sidebar-item-text">Dashboard</span>
         </a>
         <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops">
-          <span class="sidebar-item-icon">🌾</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-wheat-awn"></i></span>
           <span class="sidebar-item-text">Browse Crops</span>
         </a>
         <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart">
-          <span class="sidebar-item-icon">🛒</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-cart-shopping"></i></span>
           <span class="sidebar-item-text">Cart</span>
         </a>
         <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders">
-          <span class="sidebar-item-icon">📦</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-box"></i></span>
           <span class="sidebar-item-text">Orders</span>
         </a>
         <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist">
-          <span class="sidebar-item-icon">❤️</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-heart"></i></span>
           <span class="sidebar-item-text">Wishlist</span>
         </a>
 
         <div class="sidebar-section-label">Procurement</div>
         {% if buyr.is_premiume %}
         <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
-          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-clipboard-list"></i></span>
           <span class="sidebar-item-text">Bulk Orders</span>
         </a>
         {% if premium_type.premium_type == 'Premium' %}
         <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item" data-tooltip="Export Inquiry">
-          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-earth-americas"></i></span>
           <span class="sidebar-item-text">Export Inquiry</span>
         </a>
         {% else %}
@@ -93,11 +94,11 @@
 
         <div class="sidebar-section-label">Communication</div>
         <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages">
-          <span class="sidebar-item-icon">💬</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-message"></i></span>
           <span class="sidebar-item-text">Messages</span>
         </a>
         <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications">
-          <span class="sidebar-item-icon">🔔</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-bell"></i></span>
           <span class="sidebar-item-text">Notifications</span>
         </a>
 
@@ -115,7 +116,7 @@
           <span class="sidebar-item-text">Bank Details</span>
         </a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings">
-          <span class="sidebar-item-icon">⚙️</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span>
           <span class="sidebar-item-text">Settings</span>
         </a>
 
@@ -126,7 +127,7 @@
           <span class="sidebar-item-text">Upgrade Plan</span>
         </a>
         <a href="#" class="sidebar-item active" data-tooltip="Current Plan">
-          <span class="sidebar-item-icon">👑</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-crown"></i></span>
           <span class="sidebar-item-text">Current Plan</span>
         </a>
 
@@ -134,7 +135,7 @@
           style="padding-top:12px; border-top:1px solid var(--border-color); margin-top:8px;">Support</div>
         <a href="#" class="sidebar-item" data-tooltip="Logout"
           onclick="showToast('info','Logout','Logging you out...')">
-          <span class="sidebar-item-icon">🚪</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
           <span class="sidebar-item-text">Logout</span>
         </a>
       </nav>
@@ -146,7 +147,7 @@
       <!-- ===== NAVBAR ===== -->
       <header class="navbar">
         <div class="navbar-left">
-          <button class="mobile-menu-btn" aria-label="Open menu">☰</button>
+          <button class="mobile-menu-btn" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
           <div>
             <div class="breadcrumb">
               <a href="{% url 'buyer_dashboard' %}">Home</a>
@@ -162,14 +163,14 @@
         <div class="navbar-right">
           <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
             <div class="search-box" data-search-target>
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" name="q" placeholder="Search crops, orders..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
             </div>
           </form>
-          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">💬<span class="badge-dot"></span></a>
-          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">🔔<span
+          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages"><i class="fa-solid fa-message"></i><span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span
               class="badge-dot"></span></a>
-          <button class="theme-toggle" title="Toggle theme">🌙</button>
+          <button class="theme-toggle" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
 
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
@@ -182,10 +183,10 @@
             <div class="dropdown-menu">
               <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
               <a href="{% url 'buyer_premium' %}" class="dropdown-item">⭐ Upgrade Plan</a>
-              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
-              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
               <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">🚪
+              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')"><i class="fa-solid fa-arrow-right-from-bracket"></i>
                 Logout</a>
             </div>
           </div>
@@ -265,7 +266,7 @@
 
         <!-- ── CART USAGE METER ──────────────────────── -->
         <div class="cp-cart-meter">
-          <div class="cp-cart-meter-icon">🛒</div>
+          <div class="cp-cart-meter-icon"><i class="fa-solid fa-cart-shopping"></i></div>
           <div class="cp-cart-meter-info">
             <div class="cp-cart-meter-title">Cart Capacity Used</div>
             <div class="cp-cart-meter-nums">
@@ -301,14 +302,14 @@
                 </div>
               </div>
               <div class="cp-pill">
-                <div class="cp-pill-emoji">🌍</div>
+                <div class="cp-pill-emoji"><i class="fa-solid fa-earth-americas"></i></div>
                 <div>
                   <div class="cp-pill-text">Export Inquiry</div>
                   <div class="cp-pill-sub">Reach global buyers freely</div>
                 </div>
               </div>
               <div class="cp-pill">
-                <div class="cp-pill-emoji">👑</div>
+                <div class="cp-pill-emoji"><i class="fa-solid fa-crown"></i></div>
                 <div>
                   <div class="cp-pill-text">Premium Badge</div>
                   <div class="cp-pill-sub">Stand out to top-tier sellers</div>
@@ -322,7 +323,7 @@
                 </div>
               </div>
               <div class="cp-pill">
-                <div class="cp-pill-emoji">📊</div>
+                <div class="cp-pill-emoji"><i class="fa-solid fa-chart-simple"></i></div>
                 <div>
                   <div class="cp-pill-text">Advanced Analytics</div>
                   <div class="cp-pill-sub">Deep market & price insights</div>

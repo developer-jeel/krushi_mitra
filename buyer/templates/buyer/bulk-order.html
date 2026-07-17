@@ -12,6 +12,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/bulk-order.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -27,30 +28,30 @@
             <span class="sidebar-logo-sub">Buyer Panel</span>
           </div>
         </div>
-        <button class="sidebar-toggle">◀</button>
+        <button class="sidebar-toggle"><i class="fa-solid fa-chevron-left"></i></button>
       </div>
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
         <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
-            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-chart-simple"></i></span><span class="sidebar-item-text">Dashboard</span></a>
         <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops"><span
-            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-wheat-awn"></i></span><span class="sidebar-item-text">Browse Crops</span></a>
         <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
-            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span><span
+            class="sidebar-item-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="sidebar-item-text">Cart</span><span
             class="sidebar-item-badge">3</span></a>
         <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders"><span
-            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-box"></i></span><span class="sidebar-item-text">Orders</span></a>
         <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
-            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-heart"></i></span><span class="sidebar-item-text">Wishlist</span></a>
         <div class="sidebar-section-label">Procurement</div>
         {% if buyr.is_premiume %}
         <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
-          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-clipboard-list"></i></span>
           <span class="sidebar-item-text">Bulk Orders</span>
         </a>
         {% if premium_type.premium_type == 'Premium' %}
         <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item">
-          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-earth-americas"></i></span>
           <span class="sidebar-item-text">Export Inquiry</span>
         </a>
         {% else %}
@@ -73,10 +74,10 @@
         {% endif %}
         <div class="sidebar-section-label">Communication</div>
         <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
-            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-icon"><i class="fa-solid fa-message"></i></span><span class="sidebar-item-text">Messages</span><span
             class="sidebar-item-badge">5</span></a>
         <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
-            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-icon"><i class="fa-solid fa-bell"></i></span><span class="sidebar-item-text">Notifications</span><span
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
@@ -86,26 +87,26 @@
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
             class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
-            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
     </aside>
 
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+        <div class="navbar-left"><button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
           <div>
             <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
                 class="breadcrumb-sep">›</span><span class="current">Bulk Order</span></div>
             <h1 class="page-title">Bulk Order Inquiry</h1>
           </div>
         </div>
-        <div class="navbar-right"><button class="theme-toggle">🌙</button></div>
+        <div class="navbar-right"><button class="theme-toggle"><i class="fa-solid fa-moon"></i></button></div>
       </header>
       <main class="main-content">
         <div class="bulk-layout page-reveal">
           <div class="bulk-form-section">
             <div class="card">
-              <h3 class="card-title">📋 New Bulk Procurement Request</h3>
+              <h3 class="card-title"><i class="fa-solid fa-clipboard-list"></i> New Bulk Procurement Request</h3>
               <p class="card-subtitle">Submit a large-scale procurement request for competitive quotes</p>
               {% if messages %}
               <div style="margin-top: 1rem; padding: 1rem; background: #e6f4ea; color: #1e8e3e; border-radius: 4px;">
@@ -180,7 +181,7 @@
 
           <div class="bulk-side">
             <div class="card">
-              <h3 class="card-title">📊 My Inquiries</h3>
+              <h3 class="card-title"><i class="fa-solid fa-chart-simple"></i> My Inquiries</h3>
               <div class="inquiry-history" style="margin-top: 1rem;">
                 {% for inq in inquiries %}
                 <div class="inquiry-card" style="padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 1rem;">

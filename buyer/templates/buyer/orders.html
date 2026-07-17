@@ -12,6 +12,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'buyer/css/orders.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -27,29 +28,29 @@
             <span class="sidebar-logo-sub"></span>
           </div>
         </div>
-        <button class="sidebar-toggle">◀</button>
+        <button class="sidebar-toggle"><i class="fa-solid fa-chevron-left"></i></button>
       </div>
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div>
         <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard"><span
-            class="sidebar-item-icon">📊</span><span class="sidebar-item-text">Dashboard</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-chart-simple"></i></span><span class="sidebar-item-text">Dashboard</span></a>
         <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops"><span
-            class="sidebar-item-icon">🌾</span><span class="sidebar-item-text">Browse Crops</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-wheat-awn"></i></span><span class="sidebar-item-text">Browse Crops</span></a>
         <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart"><span
-            class="sidebar-item-icon">🛒</span><span class="sidebar-item-text">Cart</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-cart-shopping"></i></span><span class="sidebar-item-text">Cart</span></a>
         <a href="{% url 'buyer_orders' %}" class="sidebar-item active" data-tooltip="Orders"><span
-            class="sidebar-item-icon">📦</span><span class="sidebar-item-text">Orders</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-box"></i></span><span class="sidebar-item-text">Orders</span></a>
         <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist"><span
-            class="sidebar-item-icon">❤️</span><span class="sidebar-item-text">Wishlist</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-heart"></i></span><span class="sidebar-item-text">Wishlist</span></a>
         <div class="sidebar-section-label">Procurement</div>
         {% if buyr.is_premiume %}
         <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
-          <span class="sidebar-item-icon">📋</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-clipboard-list"></i></span>
           <span class="sidebar-item-text">Bulk Orders</span>
         </a>
         {% if premium_type.premium_type == 'Premium' %}
         <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item">
-          <span class="sidebar-item-icon">🌍</span>
+          <span class="sidebar-item-icon"><i class="fa-solid fa-earth-americas"></i></span>
           <span class="sidebar-item-text">Export Inquiry</span>
         </a>
         {% else %}
@@ -72,10 +73,10 @@
         {% endif %}
         <div class="sidebar-section-label">Communication</div>
         <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages"><span
-            class="sidebar-item-icon">💬</span><span class="sidebar-item-text">Messages</span><span
+            class="sidebar-item-icon"><i class="fa-solid fa-message"></i></span><span class="sidebar-item-text">Messages</span><span
             class="sidebar-item-badge">5</span></a>
         <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications"><span
-            class="sidebar-item-icon">🔔</span><span class="sidebar-item-text">Notifications</span><span
+            class="sidebar-item-icon"><i class="fa-solid fa-bell"></i></span><span class="sidebar-item-text">Notifications</span><span
             class="sidebar-item-badge">12</span></a>
         <div class="sidebar-section-label">Account</div>
         <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile"><span
@@ -85,13 +86,13 @@
         <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details"><span
             class="sidebar-item-icon">🏦</span><span class="sidebar-item-text">Bank Details</span></a>
         <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings"><span
-            class="sidebar-item-icon">⚙️</span><span class="sidebar-item-text">Settings</span></a>
+            class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span><span class="sidebar-item-text">Settings</span></a>
       </nav>
     </aside>
 
     <div class="main-wrapper">
       <header class="navbar">
-        <div class="navbar-left"><button class="mobile-menu-btn">☰</button>
+        <div class="navbar-left"><button class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></button>
           <div>
             <div class="breadcrumb"><a href="{% url 'buyer_dashboard' %}">Home</a><span
                 class="breadcrumb-sep">›</span><span class="current">Orders</span></div>
@@ -101,13 +102,13 @@
         <div class="navbar-right">
           <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
             <div class="search-box" data-search-target>
-              <span class="search-icon">🔍</span>
+              <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
               <input type="text" name="q" placeholder="Search orders..." aria-label="Search" value="{{ request.GET.q|default:'' }}">
             </div>
           </form>
-          <a href="{% url 'buyer_messages' %}" class="nav-btn">💬<span class="badge-dot"></span></a>
-          <a href="{% url 'buyer_notifications' %}" class="nav-btn">🔔<span class="badge-dot"></span></a>
-          <button class="theme-toggle">🌙</button>
+          <a href="{% url 'buyer_messages' %}" class="nav-btn"><i class="fa-solid fa-message"></i><span class="badge-dot"></span></a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn"><i class="fa-solid fa-bell"></i><span class="badge-dot"></span></a>
+          <button class="theme-toggle"><i class="fa-solid fa-moon"></i></button>
           <div class="dropdown">
             <div class="profile-btn dropdown-trigger">
               <div class="profile-avatar">{{ uid.name|slice:":1"|upper }}</div>
@@ -118,11 +119,11 @@
             </div>
             <div class="dropdown-menu">
               <a href="{% url 'buyer_profile' %}" class="dropdown-item">👤 My Profile</a>
-              <a href="{% url 'buyer_premium' %}" class="dropdown-item">👑 Premium Membership</a>
-              <a href="{% url 'buyer_orders' %}" class="dropdown-item">📦 My Orders</a>
-              <a href="{% url 'buyer_settings' %}" class="dropdown-item">⚙️ Settings</a>
+              <a href="{% url 'buyer_premium' %}" class="dropdown-item"><i class="fa-solid fa-crown"></i> Premium Membership</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
               <div class="dropdown-divider"></div>
-              <a href="#" class="dropdown-item danger">🚪 Logout</a>
+              <a href="#" class="dropdown-item danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
             </div>
           </div>
         </div>
@@ -135,7 +136,7 @@
               <div class="stat-card-label">Total Orders</div>
               <div class="stat-card-value" data-counter="{{total_order}}">0</div>
             </div>
-            <div class="stat-card-icon">📦</div>
+            <div class="stat-card-icon"><i class="fa-solid fa-box"></i></div>
           </div>
           <div class="stat-card blue">
             <div class="stat-card-info">
