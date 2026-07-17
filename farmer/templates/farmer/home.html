@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
-  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/home.css' %}">
 
@@ -88,6 +87,7 @@
       background: linear-gradient(135deg, #5c3d2e, #3d251e);
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -103,50 +103,31 @@
       <div class="nav-section-title" data-translate="main">Main</div>
 
       <a href="{% url 'farmer_home' %}" class="nav-item active" id="nav-home">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
+        <i class="fa-solid fa-house"></i>
         <span data-translate="home">Home</span>
       </a>
 
       <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2a10 10 0 0 1 10 10" />
-          <path d="M12 2v20" />
-          <path d="M2 12h20" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
+        <i class="fa-solid fa-wheat-awn"></i>
         <span data-translate="crops">My Crops</span>
       </a>
 
       <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-        </svg>
+        <i class="fa-solid fa-screwdriver-wrench"></i>
         <span data-translate="tools">Tools</span>
       </a>
 
       <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
 
       <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-        <span data-translate="chatbot">AI Chatbot 🌱</span>
+        <i class="fa-solid fa-robot"></i>
+        <span data-translate="chatbot">AI Chatbot <i class="fa-solid fa-seedling"></i></span>
       </a>
 
       <div class="nav-section-title" data-translate="community">Community</div>
 
       <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
+        <i class="fa-solid fa-blog"></i>
         <span data-translate="blogsReviews">Blogs & Reviews</span>
       </a>
 
@@ -155,7 +136,7 @@
           <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1" />
           <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z" />
         </svg>
-        <span>Krushi Mitro 🌾</span>
+        <span>Krushi Mitro <i class="fa-solid fa-wheat-awn"></i></span>
       </a>
 
       <a href="{% url 'gov_info' %}" class="nav-item" id="nav-gov-info">
@@ -165,7 +146,7 @@
           <path d="M9 21V11h6v10" />
           <rect x="10" y="3" width="4" height="4" rx="1" />
         </svg>
-        <span>Gov Info 🏛</span>
+        <span>Gov Info <i class="fa-solid fa-building-columns"></i></span>
       </a>
 
       <a href="{% url 'news' %}" class="nav-item" id="nav-news">
@@ -187,16 +168,7 @@
       </a>
     </nav>
 
-    <div class="sidebar-bottom">
-      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="2" y1="12" x2="22" y2="12" />
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
-      </div>
-    </div>
+    
   </aside>
 
   <!-- ════════════ MAIN ════════════ -->
@@ -242,23 +214,23 @@
           <div class="home-hero-actions">
             <a href="{% url 'farmer_crops' %}" class="btn btn-primary" data-translate="listCrop">List New Crop</a>
             <a href="{% url 'farmer_chatbot' %}" class="btn btn-secondary" data-translate="consultAI">Consult Krushi AI
-              🌱</a>
+              <i class="fa-solid fa-seedling"></i></a>
           </div>
         </div>
-        <div class="home-hero-illustration">🌾</div>
+        <div class="home-hero-illustration"><i class="fa-solid fa-wheat-awn"></i></div>
       </section>
 
       <!-- 4. Farm Statistics Grid (Redesigned) -->
       <div class="home-stats-grid home-section stagger-2">
         <div class="home-stat-card">
-          <div class="home-stat-icon green">🚜</div>
+          <div class="home-stat-icon green"><i class="fa-solid fa-tractor"></i></div>
           <div class="home-stat-info">
             <div class="home-stat-val">{{ listed_crops_count }}</div>
             <div class="home-stat-lbl" data-translate="cropListedCounts">Crops Listed</div>
           </div>
         </div>
         <div class="home-stat-card">
-          <div class="home-stat-icon purple">⭐</div>
+          <div class="home-stat-icon purple"><i class="fa-solid fa-star"></i></div>
           <div class="home-stat-info">
             <div class="home-stat-val">{{ avg_rating }}</div>
             <div class="home-stat-lbl" data-translate="rating">Avg. Rating</div>
@@ -272,7 +244,7 @@
           </div>
         </div>
         <div class="home-stat-card">
-          <div class="home-stat-icon blue">✅</div>
+          <div class="home-stat-icon blue"><i class="fa-solid fa-circle-check"></i></div>
           <div class="home-stat-info">
             <div class="home-stat-val">{{ completed_transactions }}</div>
             <div class="home-stat-lbl" data-translate="completedTransactions">Completed Transactions</div>
@@ -302,7 +274,7 @@
                 <div class="market-crop-info">
                   <div class="market-crop-name"
                     style="font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,0.92);">{{ crop.crop }}</div>
-                  <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;">📍
+                  <div class="market-apmc" style="font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;"><i class="fa-solid fa-location-dot"></i>
                     {{ city }} APMC</div>
                 </div>
                 <div class="market-card-price" style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">
@@ -330,12 +302,12 @@
               ⚡ <span data-translate="quickActions">Quick Actions</span>
             </div>
             <a href="{% url 'farmer_crops' %}" class="home-quick-item">
-              <span class="home-quick-item-icon">🌱</span>
+              <span class="home-quick-item-icon"><i class="fa-solid fa-seedling"></i></span>
               <span data-translate="listCrop">List New Crop</span>
               <span class="home-quick-item-arrow">➔</span>
             </a>
             <a href="{% url 'farmer_tools' %}" class="home-quick-item">
-              <span class="home-quick-item-icon">🚜</span>
+              <span class="home-quick-item-icon"><i class="fa-solid fa-tractor"></i></span>
               <span data-translate="addTool">Add Tool</span>
               <span class="home-quick-item-arrow">➔</span>
             </a>
@@ -345,7 +317,7 @@
               <span class="home-quick-item-arrow">➔</span>
             </a>
             <a href="{% url 'farmer_profile' %}" class="home-quick-item">
-              <span class="home-quick-item-icon">👤</span>
+              <span class="home-quick-item-icon"><i class="fa-solid fa-user"></i></span>
               <span data-translate="editProfile">Edit Profile</span>
               <span class="home-quick-item-arrow">➔</span>
             </a>
@@ -359,7 +331,7 @@
       <div class="home-section stagger-4">
         <div class="home-section-header">
           <div class="home-section-title">
-            <span class="section-emoji">🏛</span>
+            <span class="section-emoji"><i class="fa-solid fa-building-columns"></i></span>
             <span data-translate="govSchemes">Government Schemes</span>
           </div>
           <a href="{% url 'gov_info' %}" class="btn btn-secondary" data-translate="viewAll">View All</a>
@@ -477,21 +449,10 @@
   </div><!-- /main -->
 
   <!-- Language Modal -->
-  <div class="lang-modal-overlay" id="langModal">
-    <div class="lang-modal">
-      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
-      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language
-        for the interface</div>
-      <div class="lang-grid" id="langGrid"></div>
-      <div class="lang-modal-actions">
-        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
-        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
-      </div>
-    </div>
+  
   </div>
 
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
-  <script src="{% static 'farmer/js/language.js' %}"></script>
   <script src="{% static 'farmer/js/animations.js' %}"></script>
 
 

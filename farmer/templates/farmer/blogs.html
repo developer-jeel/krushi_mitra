@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
-  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
   <style>
     .tabs {
@@ -73,6 +72,7 @@
       color: var(--amber);
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -117,16 +117,7 @@
           <circle cx="12" cy="7" r="4" />
         </svg><span data-translate="profile">Profile</span></a>
     </nav>
-    <div class="sidebar-bottom">
-      <div class="lang-selector" data-lang-trigger>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="2" y1="12" x2="22" y2="12" />
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span data-translate="lang">Language</span><span class="lang-current-label" data-translate="en">EN</span>
-      </div>
-    </div>
+    
   </aside>
 
   <!-- ════════════ MAIN ════════════ -->
@@ -134,7 +125,7 @@
     <header class="topbar">
       <div class="topbar-left">
         <div>
-          <div class="page-title" data-translate="blogsReviews">Blogs & Reviews 📝</div>
+          <div class="page-title" data-translate="blogsReviews">Blogs & Reviews <i class="fa-solid fa-pen"></i></div>
           <div class="breadcrumb" data-translate="dashboardBlogsReviews">Dashboard / Blogs & Reviews</div>
         </div>
       </div>
@@ -383,17 +374,7 @@
 
 
   <!-- Language Modal -->
-  <div class="lang-modal-overlay" id="langModal">
-    <div class="lang-modal">
-      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
-      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">Select your preferred language
-        for the interface</div>
-      <div class="lang-grid" id="langGrid"></div>
-      <div class="lang-modal-actions">
-        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
-        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
-      </div>
-    </div>
+  
   </div>
   <div class="lang-grid">
     <div class="lang-item selected"><span class="lang-flag">🇮🇳</span> हिन्दी</div>
@@ -414,31 +395,7 @@
   </div>
 
 
-  <script>
-    document.getElementById('langClose')?.addEventListener('click', () => {
-      document.getElementById('langModal').classList.remove('open');
-    });
-
-    const tabs = document.querySelectorAll('.tab-btn');
-    tabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
-
-    const stars = document.querySelectorAll('.rating-star');
-    stars.forEach((star, i) => {
-      star.addEventListener('mouseenter', () => {
-        stars.forEach((s, j) => s.classList.toggle('active', j <= i));
-      });
-      star.addEventListener('click', () => {
-        stars.forEach((s, j) => s.classList.toggle('active', j <= i));
-      });
-    });
-  </script>
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
-  <script src="{% static 'farmer/js/language.js' %}"></script>
   <script src="{% static 'farmer/js/animations.js' %}"></script>
 </body>
 

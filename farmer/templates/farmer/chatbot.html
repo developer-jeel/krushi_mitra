@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Chatbot – Krushi Mitra 🌱</title>
+  <title>AI Chatbot – Krushi Mitra <i class="fa-solid fa-seedling"></i></title>
   <meta name="description"
     content="Krushi Mitra AI — your smart farming assistant for crop advice, weather updates, and market insights." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,9 +12,9 @@
     href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,700;1,500&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
-  <link rel="stylesheet" href="{% static 'farmer/css/language.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/chatbot.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -29,44 +29,25 @@
     <nav class="sidebar-nav">
       <div class="nav-section-title" data-translate="main">Main</div>
       <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
+        <i class="fa-solid fa-house"></i>
         <span data-translate="home">Home</span>
       </a>
       <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2a10 10 0 0 1 10 10" />
-          <path d="M12 2v20" />
-          <path d="M2 12h20" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
+        <i class="fa-solid fa-wheat-awn"></i>
         <span data-translate="crops">My Crops</span>
       </a>
       <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-        </svg>
+        <i class="fa-solid fa-screwdriver-wrench"></i>
         <span data-translate="tools">Tools</span>
       </a>
       <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
       <a href="{% url 'farmer_chatbot' %}" class="nav-item active" id="nav-chatbot">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-        <span data-translate="chatbot">AI Chatbot 🌱</span>
+        <i class="fa-solid fa-robot"></i>
+        <span data-translate="chatbot">AI Chatbot <i class="fa-solid fa-seedling"></i></span>
       </a>
       <div class="nav-section-title" data-translate="community">Community</div>
       <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
+        <i class="fa-solid fa-blog"></i>
         <span data-translate="blogsReviews">Blogs & Reviews</span>
       </a>
       <div class="nav-section-title" data-translate="account">Account</div>
@@ -79,17 +60,7 @@
       </a>
     </nav>
 
-    <div class="sidebar-bottom">
-      <div class="lang-selector" data-lang-trigger id="langTriggerSidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="2" y1="12" x2="22" y2="12" />
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span data-translate="lang">Language</span>
-        <span class="lang-current-label" data-translate="en">EN</span>
-      </div>
-    </div>
+    
   </aside>
 
 
@@ -103,7 +74,7 @@
           <!-- Bot icon -->
           <div class="chatbot-header-icon">
             <span class="bot-icon-bg"></span>
-            <span class="bot-icon-emoji">🌱</span>
+            <span class="bot-icon-emoji"><i class="fa-solid fa-seedling"></i></span>
             <span class="bot-icon-ring"></span>
             <span class="bot-icon-ring-2"></span>
           </div>
@@ -171,11 +142,11 @@
 
             <!-- Context pills (scrollable on overflow) -->
             <!-- <div class="header-context-pills">
-            <span class="context-pill" data-translate="kharifSeason">🌾 Kharif Season</span>
-            <span class="context-pill" data-translate="gujarat">📍 Gujarat</span>
+            <span class="context-pill" data-translate="kharifSeason"><i class="fa-solid fa-wheat-awn"></i> Kharif Season</span>
+            <span class="context-pill" data-translate="gujarat"><i class="fa-solid fa-location-dot"></i> Gujarat</span>
             <span class="context-pill" data-translate="34c">🌡 34°C</span>
             <span class="context-pill">💧 Humidity 62%</span>
-            <span class="context-pill">🌙 Monsoon Alert</span>
+            <span class="context-pill"><i class="fa-solid fa-moon"></i> Monsoon Alert</span>
           </div> -->
           </div>
 
@@ -186,7 +157,7 @@
 
           <!-- Welcome Message -->
           <div class="chat-message bot" style="--delay:0.08s">
-            <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+            <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
             <div class="chat-bubble-wrap">
               <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
               <div class="chat-bubble bot-bubble">
@@ -195,12 +166,12 @@
                   <br><br>
                   Main aapki in cheezon mein madad kar sakta hoon:
                   <div class="capability-grid">
-                    <div class="cap-item"><span>🌾</span> Fasal Salah</div>
+                    <div class="cap-item"><span><i class="fa-solid fa-wheat-awn"></i></span> Fasal Salah</div>
                     <div class="cap-item"><span>🌦</span> Mausam</div>
                     <div class="cap-item"><span>💰</span> Mandi Bhav</div>
                     <div class="cap-item"><span>🐛</span> Keeda Rog</div>
                     <div class="cap-item"><span>💧</span> Sinchai</div>
-                    <div class="cap-item"><span>🌱</span> Beej Salah</div>
+                    <div class="cap-item"><span><i class="fa-solid fa-seedling"></i></span> Beej Salah</div>
                   </div>
                 </div>
                 <div class="chat-time" id="welcomeTime"></div>
@@ -222,7 +193,7 @@
           </div>
           {% else %}
           <div class="chat-message bot" style="--delay:0.04s">
-            <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+            <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
             <div class="chat-bubble-wrap">
               <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
               <div class="chat-bubble bot-bubble">
@@ -236,7 +207,7 @@
 
           <!-- Typing Indicator (hidden by default) -->
           <div class="chat-message bot typing-message" id="typingIndicator" style="display:none; --delay:0s">
-            <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+            <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
             <div class="chat-bubble-wrap">
               <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
               <div class="chat-bubble bot-bubble typing-bubble">
@@ -256,14 +227,14 @@
         <div class="chatbot-chips-bar">
           <div class="chips-label" data-translate="quickAsk">Quick Ask:</div>
           <div class="chips-scroll">
-            <button class="chip" onclick="useChip(this)" data-translate="fasalSalah">🌾 Fasal Salah</button>
+            <button class="chip" onclick="useChip(this)" data-translate="fasalSalah"><i class="fa-solid fa-wheat-awn"></i> Fasal Salah</button>
             <button class="chip" onclick="useChip(this)" data-translate="aajKaMausam">🌦 Aaj ka Mausam</button>
             <button class="chip" onclick="useChip(this)" data-translate="mandiBhav">💰 Mandi Bhav</button>
             <button class="chip" onclick="useChip(this)" data-translate="keedaRog">🐛 Keeda Rog</button>
             <button class="chip" onclick="useChip(this)" data-translate="sinchaiTips">💧 Sinchai Tips</button>
-            <button class="chip" onclick="useChip(this)" data-translate="beejChunav">🌱 Beej Chunav</button>
-            <button class="chip" onclick="useChip(this)">🧪 Mitti Pareeksha</button>
-            <button class="chip" onclick="useChip(this)">📦 Fasal Bhandar</button>
+            <button class="chip" onclick="useChip(this)" data-translate="beejChunav"><i class="fa-solid fa-seedling"></i> Beej Chunav</button>
+            <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-flask"></i> Mitti Pareeksha</button>
+            <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-box"></i> Fasal Bhandar</button>
           </div>
         </div>
 
@@ -440,7 +411,7 @@
       msgDiv.className = 'chat-message bot';
       msgDiv.style.setProperty('--delay', '0s');
       msgDiv.innerHTML = `
-        <div class="chat-avatar bot-avatar"><span>🌱</span></div>
+        <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
         <div class="chat-bubble-wrap">
           <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
           <div class="chat-bubble bot-bubble">
@@ -510,22 +481,10 @@
   </script>
 
   <!-- Language Modal -->
-  <div class="lang-modal-overlay" id="langModal">
-    <div class="lang-modal">
-      <div class="lang-modal-title">🌐 <span data-translate="chooseLanguage">Choose Language</span></div>
-      <div class="lang-modal-subtitle" data-translate="selectYourPreferredLanguageFor">
-        Select your preferred language for the interface
-      </div>
-      <div class="lang-grid" id="langGrid"></div>
-      <div class="lang-modal-actions">
-        <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
-        <button class="btn btn-primary" id="langApplyBtn" data-translate="apply">Apply Language</button>
-      </div>
-    </div>
+  
   </div>
 
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
-  <script src="{% static 'farmer/js/language.js' %}"></script>
   <script src="{% static 'farmer/js/animations.js' %}"></script>
 </body>
 

@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
     <link rel="stylesheet" href="{% static 'farmer/css/tool_price.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -44,7 +45,7 @@
                             <option value="" disabled {% if not category %}selected{% endif %}
                                 data-translate="selectMachineCategory">Select machine
                                 category</option>
-                            <option value="tractor" {% if category=='tractor' %}selected{% endif %}
+                            <option value="tractor" {% if category =='tractor' %}selected{% endif %}
                                 data-translate="tractor">Tractor</option>
                             <option value="harvester" {% if category=='harvester' %}selected{% endif %}
                                 data-translate="harvester">Harvester</option>

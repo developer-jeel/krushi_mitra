@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ── Apply theme before DOM ready (prevents flash) ── */
-(function() {
+(function () {
   const t = localStorage.getItem('km-theme') || 'dark';
   document.documentElement.setAttribute('data-theme', t);
 })();

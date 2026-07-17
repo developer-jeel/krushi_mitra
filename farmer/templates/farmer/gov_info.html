@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/gov_info.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -26,50 +27,31 @@
       <div class="nav-section-title">Main</div>
 
       <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
+        <i class="fa-solid fa-house"></i>
         <span>Home</span>
       </a>
 
       <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2a10 10 0 0 1 10 10" />
-          <path d="M12 2v20" />
-          <path d="M2 12h20" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
+        <i class="fa-solid fa-wheat-awn"></i>
         <span>My Crops</span>
       </a>
 
       <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-        </svg>
+        <i class="fa-solid fa-screwdriver-wrench"></i>
         <span>Tools</span>
       </a>
 
       <div class="nav-section-title">AI Assistant</div>
 
       <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-        <span>AI Chatbot 🌱</span>
+        <i class="fa-solid fa-robot"></i>
+        <span>AI Chatbot <i class="fa-solid fa-seedling"></i></span>
       </a>
 
       <div class="nav-section-title">Community</div>
 
       <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
+        <i class="fa-solid fa-blog"></i>
         <span>Blogs &amp; Reviews</span>
       </a>
 
@@ -78,7 +60,7 @@
           <path d="M17 8h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2v4l-4-4H9a2 2 0 0 1-2-2v-1" />
           <path d="M3 4h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7l-4 4V6a2 2 0 0 1 2-2z" />
         </svg>
-        <span>Krushi Mitro 🌾</span>
+        <span>Krushi Mitro <i class="fa-solid fa-wheat-awn"></i></span>
       </a>
 
       <a href="{% url 'gov_info' %}" class="nav-item active" id="nav-gov-info">
@@ -88,7 +70,7 @@
           <path d="M9 21V11h6v10" />
           <rect x="10" y="3" width="4" height="4" rx="1" />
         </svg>
-        <span>Gov Info 🏛</span>
+        <span>Gov Info <i class="fa-solid fa-building-columns"></i></span>
       </a>
 
       <a href="{% url 'news' %}" class="nav-item" id="nav-news">
@@ -110,16 +92,7 @@
       </a>
     </nav>
 
-    <div class="sidebar-bottom">
-      <div class="lang-selector">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="2" y1="12" x2="22" y2="12" />
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span>Language</span><span class="lang-current-label">EN</span>
-      </div>
-    </div>
+    
   </aside>
 
   <!-- ════ MAIN ════ -->
@@ -136,7 +109,7 @@
           </svg>
         </button>
         <div>
-          <div class="page-title">🏛 Government Information Center</div>
+          <div class="page-title"><i class="fa-solid fa-building-columns"></i> Government Information Center</div>
           <div class="breadcrumb">Dashboard / Gov Info</div>
         </div>
       </div>
@@ -315,11 +288,11 @@
         </div>
         <div class="gi-card-body">
           <div class="gi-card-title-row">
-            <span class="gi-emoji">🌾</span>
+            <span class="gi-emoji"><i class="fa-solid fa-wheat-awn"></i></span>
             <div class="gi-name">PM Fasal Bima Yojana</div>
           </div>
           <p class="gi-desc">Comprehensive crop insurance covering loss from flood, drought, or pest attack at very low premium rates for all farmers.</p>
-          <div class="gi-benefit">🛡️ Premium as low as 1.5% (Rabi) &amp; 2% (Kharif)</div>
+          <div class="gi-benefit"><i class="fa-solid fa-shield-halved"></i>️ Premium as low as 1.5% (Rabi) &amp; 2% (Kharif)</div>
           <div class="gi-footer">
             <span class="gi-dept">Ministry of Agriculture</span>
             <a href="https://pmfby.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-pmfby">View Details →</a>
@@ -335,7 +308,7 @@
         </div>
         <div class="gi-card-body">
           <div class="gi-card-title-row">
-            <span class="gi-emoji">💳</span>
+            <span class="gi-emoji"><i class="fa-solid fa-credit-card"></i></span>
             <div class="gi-name">Kisan Credit Card (KCC)</div>
           </div>
           <p class="gi-desc">Flexible credit access for crop cultivation, post-harvest costs, and farm maintenance at subsidised interest rates.</p>
@@ -375,11 +348,11 @@
         </div>
         <div class="gi-card-body">
           <div class="gi-card-title-row">
-            <span class="gi-emoji">🌱</span>
+            <span class="gi-emoji"><i class="fa-solid fa-seedling"></i></span>
             <div class="gi-name">Soil Health Card Scheme</div>
           </div>
           <p class="gi-desc">Free soil testing &amp; crop-wise nutrient recommendations for each farm plot once every 2 years.</p>
-          <div class="gi-benefit">📋 Free soil test + personalised fertiliser advice</div>
+          <div class="gi-benefit"><i class="fa-solid fa-clipboard-list"></i> Free soil test + personalised fertiliser advice</div>
           <div class="gi-footer">
             <span class="gi-dept">Dept. of Agriculture</span>
             <a href="https://soilhealth.dac.gov.in" target="_blank" rel="noopener" class="gi-link" id="btn-shc">View Details →</a>
@@ -395,7 +368,7 @@
         </div>
         <div class="gi-card-body">
           <div class="gi-card-title-row">
-            <span class="gi-emoji">📊</span>
+            <span class="gi-emoji"><i class="fa-solid fa-chart-simple"></i></span>
             <div class="gi-name">eNAM — National Agriculture Market</div>
           </div>
           <p class="gi-desc">Pan-India e-trading portal linking APMC mandis for a unified national commodity market with online payments.</p>
@@ -411,7 +384,7 @@
       <!-- ══ HELPLINES ══ -->
       <div class="gi-panel" style="margin-bottom:12px;">
         <div class="gi-panel-head">
-          <span class="gi-panel-title">📞 Important Helplines</span>
+          <span class="gi-panel-title"><i class="fa-solid fa-headset"></i> Important Helplines</span>
         </div>
 
         <div class="gi-helplines-grid">
@@ -428,7 +401,7 @@
           </div>
 
           <div class="gi-contact">
-            <span class="gi-c-icon">🏛️</span>
+            <span class="gi-c-icon"><i class="fa-solid fa-building-columns"></i>️</span>
             <div class="gi-c-info">
               <div class="gi-c-name">Agriculture Department</div>
               <div class="gi-c-num">1800-180-1551</div>
@@ -450,7 +423,7 @@
           </div>
 
           <div class="gi-contact" style="border-bottom:none;">
-            <span class="gi-c-icon">🌾</span>
+            <span class="gi-c-icon"><i class="fa-solid fa-wheat-awn"></i></span>
             <div class="gi-c-info">
               <div class="gi-c-name">Crop Insurance Support</div>
               <div class="gi-c-num">1800-200-7710</div>
