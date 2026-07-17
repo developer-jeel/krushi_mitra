@@ -77,47 +77,24 @@
 
 <body>
 
-  <!-- ════════════ SIDEBAR ════════════ -->
+    <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <img src="../login/images/krushi_mitra_logo.png" alt="Krushi Mitra" />
-      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-title" data-translate="main">Main</div>
-      <a href="{% url 'farmer_home' %}" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg><span data-translate="home">Home</span></a>
-      <a href="{% url 'farmer_crops' %}" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2">
-          <path d="M12 2a10 10 0 0 1 10 10" />
-          <path d="M12 2v20" />
-          <path d="M2 12h20" />
-          <circle cx="12" cy="12" r="3" />
-        </svg><span data-translate="crops">My Crops</span></a>
-      <a href="{% url 'farmer_tools' %}" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2">
-          <path
-            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-        </svg><span data-translate="tools">Tools</span></a>
-      <div class="nav-section-title" data-translate="community">Community</div>
-      <a href="{% url 'farmer_blogs' %}" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-        </svg><span data-translate="blogsReviews">Blogs & Reviews</span></a>
-      <div class="nav-section-title" data-translate="account">Account</div>
-      <a href="{% url 'farmer_profile' %}" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg><span data-translate="profile">Profile</span></a>
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs" class="nav-item active"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
-    
   </aside>
 
   <!-- ════════════ MAIN ════════════ -->
@@ -125,19 +102,13 @@
     <header class="topbar">
       <div class="topbar-left">
         <div>
-          <div class="page-title" data-translate="blogsReviews">Blogs & Reviews <i class="fa-solid fa-pen"></i></div>
-          <div class="breadcrumb" data-translate="dashboardBlogsReviews">Dashboard / Blogs & Reviews</div>
+          <div class="page-title">Blogs & Reviews <i class="fa-solid fa-pen"></i></div>
+          <div class="breadcrumb">Dashboard / Blogs & Reviews</div>
         </div>
       </div>
       <div class="topbar-right">
-        <button class="topbar-icon-btn" title="Notifications">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          <span class="badge"></span>
-        </button>
-        <div class="avatar" data-translate="r">R</div>
+        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
       </div>
     </header>
 
@@ -145,30 +116,30 @@
 
       <!-- Tabs -->
       <div class="tabs">
-        <button class="tab-btn active" data-translate="allBlogs">All Blogs</button>
-        <button class="tab-btn" data-translate="writeBlog">Write Blog</button>
-        <button class="tab-btn" data-translate="reviews">Reviews</button>
-        <button class="tab-btn" data-translate="myPosts">My Posts</button>
+        <button class="tab-btn active">All Blogs</button>
+        <button class="tab-btn">Write Blog</button>
+        <button class="tab-btn">Reviews</button>
+        <button class="tab-btn">My Posts</button>
       </div>
 
       <!-- Write a Review Banner -->
       <div class="write-card">
-        <div class="section-title" style="margin-bottom:14px;" data-translate="shareYourExperience">✍️ Share Your
+        <div class="section-title" style="margin-bottom:14px;">✍️ Share Your
           Experience</div>
         <div class="form-row">
           <div class="form-field">
-            <label for="revTitle" data-translate="reviewTitle">Review Title</label>
-            <input data-translate="egGreatQualitySeeds" type="text" id="revTitle"
+            <label for="revTitle">Review Title</label>
+            <input type="text" id="revTitle"
               placeholder="e.g. Great quality seeds!" />
           </div>
           <div class="form-field">
-            <label for="revProduct" data-translate="productService">Product / Service</label>
-            <input data-translate="egBasmatiRiceByRamesh" type="text" id="revProduct"
+            <label for="revProduct">Product / Service</label>
+            <input type="text" id="revProduct"
               placeholder="e.g. Basmati Rice by Ramesh" />
           </div>
         </div>
         <div class="form-field">
-          <label data-translate="rating">Rating</label>
+          <label>Rating</label>
           <div class="rating-input">
             <span class="rating-star active">★</span>
             <span class="rating-star active">★</span>
@@ -178,11 +149,11 @@
           </div>
         </div>
         <div class="form-field">
-          <label for="revText" data-translate="yourReview">Your Review</label>
+          <label for="revText">Your Review</label>
           <textarea id="revText" rows="3" placeholder="Share your experience in detail..."></textarea>
         </div>
         <div style="display:flex; gap:10px; justify-content:flex-end;">
-          <button class="btn btn-secondary" data-translate="clear">Clear</button>
+          <button class="btn btn-secondary">Clear</button>
           <button class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
               <path d="M22 2L11 13" />
@@ -195,17 +166,13 @@
 
       <!-- Blog Posts -->
       <div class="section-header">
-        <div class="section-title" data-translate="latestBlogs">Latest Blogs</div>
+        <div class="section-title">Latest Blogs</div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn btn-primary" style="font-size:12px; padding:7px 14px;" data-translate="all">All</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="farmingTips">Farming Tips</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="market">Market</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="successStories">Success Stories</button>
-          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;"
-            data-translate="governmentSchemes">Government Schemes</button>
+          <button class="btn btn-primary" style="font-size:12px; padding:7px 14px;">All</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;">Farming Tips</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;">Market</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;">Success Stories</button>
+          <button class="btn btn-secondary" style="font-size:12px; padding:7px 14px;">Government Schemes</button>
         </div>
       </div>
 
@@ -214,14 +181,14 @@
         <div class="blog-card">
           <div class="blog-img" style="background:linear-gradient(135deg,#a8edea,#fed6e3); height:160px;"></div>
           <div class="blog-body">
-            <div class="blog-category" data-translate="farmingTips">Farming Tips</div>
-            <div class="blog-title" data-translate="bestPracticesForWheatCultivati">Best practices for wheat cultivation
+            <div class="blog-category">Farming Tips</div>
+            <div class="blog-title">Best practices for wheat cultivation
               in Rabi season</div>
-            <div class="blog-excerpt" data-translate="learnTheMostEffectiveTechnique">Learn the most effective
+            <div class="blog-excerpt">Learn the most effective
               techniques to maximize your wheat yield this winter season with minimal water usage...</div>
             <div class="blog-footer">
               <div class="blog-author">
-                <div class="blog-author-avatar" data-translate="r">R</div> Ramesh Patel
+                <div class="blog-author-avatar">R</div> Ramesh Patel
               </div>
               <div class="blog-date">28 Apr 2026</div>
             </div>
@@ -231,13 +198,13 @@
         <div class="blog-card">
           <div class="blog-img" style="background:linear-gradient(135deg,#d4fc79,#96e6a1); height:160px;"></div>
           <div class="blog-body">
-            <div class="blog-category" data-translate="marketInsight">Market Insight</div>
+            <div class="blog-category">Market Insight</div>
             <div class="blog-title">Vegetable prices expected to rise in May — What to grow?</div>
-            <div class="blog-excerpt" data-translate="marketAnalystsPredictA15RiseIn">Market analysts predict a 15% rise
+            <div class="blog-excerpt">Market analysts predict a 15% rise
               in tomato and onion prices. Here's how to capitalise on the demand...</div>
             <div class="blog-footer">
               <div class="blog-author">
-                <div class="blog-author-avatar" data-translate="k">K</div> Krushi Mitra
+                <div class="blog-author-avatar">K</div> Krushi Mitra
               </div>
               <div class="blog-date">25 Apr 2026</div>
             </div>
@@ -247,14 +214,14 @@
         <div class="blog-card">
           <div class="blog-img" style="background:linear-gradient(135deg,#ffecd2,#fcb69f); height:160px;"></div>
           <div class="blog-body">
-            <div class="blog-category" data-translate="successStory">Success Story</div>
-            <div class="blog-title" data-translate="howIDoubledMyIncomeWithOrganic">How I doubled my income with organic
+            <div class="blog-category">Success Story</div>
+            <div class="blog-title">How I doubled my income with organic
               farming</div>
-            <div class="blog-excerpt" data-translate="aFarmerFromGujaratSharesHisJou">A farmer from Gujarat shares his
+            <div class="blog-excerpt">A farmer from Gujarat shares his
               journey into organic farming and how he doubled his annual income in two years...</div>
             <div class="blog-footer">
               <div class="blog-author">
-                <div class="blog-author-avatar" data-translate="a">A</div> Arjun Desai
+                <div class="blog-author-avatar">A</div> Arjun Desai
               </div>
               <div class="blog-date">20 Apr 2026</div>
             </div>
@@ -264,13 +231,13 @@
         <div class="blog-card">
           <div class="blog-img" style="background:linear-gradient(135deg,#e0c3fc,#8ec5fc); height:160px;"></div>
           <div class="blog-body">
-            <div class="blog-category" data-translate="governmentSchemes">Government Schemes</div>
+            <div class="blog-category">Government Schemes</div>
             <div class="blog-title">PM-KISAN 2026: How to apply and what's new?</div>
-            <div class="blog-excerpt" data-translate="completeGuideToApplyingForPmki">Complete guide to applying for
+            <div class="blog-excerpt">Complete guide to applying for
               PM-KISAN benefits this year, including new eligibility criteria and payment schedule...</div>
             <div class="blog-footer">
               <div class="blog-author">
-                <div class="blog-author-avatar" data-translate="g">G</div> Govt Affairs
+                <div class="blog-author-avatar">G</div> Govt Affairs
               </div>
               <div class="blog-date">15 Apr 2026</div>
             </div>
@@ -280,14 +247,14 @@
         <div class="blog-card">
           <div class="blog-img" style="background:linear-gradient(135deg,#f9d423,#f96167); height:160px;"></div>
           <div class="blog-body">
-            <div class="blog-category" data-translate="farmingTips">Farming Tips</div>
-            <div class="blog-title" data-translate="5SignsYourSoilNeedsUrgentAtten">5 signs your soil needs urgent
+            <div class="blog-category">Farming Tips</div>
+            <div class="blog-title">5 signs your soil needs urgent
               attention</div>
-            <div class="blog-excerpt" data-translate="healthySoilIsTheFoundationOfAG">Healthy soil is the foundation of
+            <div class="blog-excerpt">Healthy soil is the foundation of
               a good harvest. Learn the warning signs before it's too late this season...</div>
             <div class="blog-footer">
               <div class="blog-author">
-                <div class="blog-author-avatar" data-translate="m">M</div> Meera Joshi
+                <div class="blog-author-avatar">M</div> Meera Joshi
               </div>
               <div class="blog-date">10 Apr 2026</div>
             </div>
@@ -297,13 +264,13 @@
         <div class="blog-card">
           <div class="blog-img" style="background:linear-gradient(135deg,#11998e,#38ef7d); height:160px;"></div>
           <div class="blog-body">
-            <div class="blog-category" data-translate="marketInsight">Market Insight</div>
+            <div class="blog-category">Market Insight</div>
             <div class="blog-title">Export opportunities for Indian spice farmers in 2026</div>
-            <div class="blog-excerpt" data-translate="internationalDemandForIndianSp">International demand for Indian
+            <div class="blog-excerpt">International demand for Indian
               spices has grown by 22%. Here's how small farmers can tap into export markets...</div>
             <div class="blog-footer">
               <div class="blog-author">
-                <div class="blog-author-avatar" data-translate="s">S</div> Samir Bose
+                <div class="blog-author-avatar">S</div> Samir Bose
               </div>
               <div class="blog-date">5 Apr 2026</div>
             </div>
@@ -314,15 +281,15 @@
 
       <!-- Reviews Section -->
       <div class="section-header">
-        <div class="section-title" data-translate="farmerReviewsFeedback">Farmer Reviews & Feedback</div>
+        <div class="section-title">Farmer Reviews & Feedback</div>
       </div>
 
       <div class="card-grid">
         <div class="review-card">
           <div class="review-header">
-            <div class="review-avatar" data-translate="s">S</div>
+            <div class="review-avatar">S</div>
             <div>
-              <div class="review-name" data-translate="sureshKumar">Suresh Kumar</div>
+              <div class="review-name">Suresh Kumar</div>
               <div class="stars">
                 <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
                   class="star">★</span><span class="star">★</span>
@@ -330,16 +297,16 @@
             </div>
             <div class="review-date" style="margin-left:auto;">28 Apr 2026</div>
           </div>
-          <div class="review-text" data-translate="rameshBhaisBasmatiRiceWasExcel">"Ramesh bhai's Basmati Rice was
+          <div class="review-text">"Ramesh bhai's Basmati Rice was
             excellent quality! Delivered on time and exactly as described. Will definitely buy again next season."</div>
         </div>
 
         <div class="review-card">
           <div class="review-header">
-            <div class="review-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c);" data-translate="p">P
+            <div class="review-avatar" style="background:linear-gradient(135deg,#f093fb,#f5576c);">P
             </div>
             <div>
-              <div class="review-name" data-translate="priyaSharma">Priya Sharma</div>
+              <div class="review-name">Priya Sharma</div>
               <div class="stars">
                 <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
                   class="star">★</span><span class="star empty">★</span>
@@ -347,16 +314,16 @@
             </div>
             <div class="review-date" style="margin-left:auto;">25 Apr 2026</div>
           </div>
-          <div class="review-text" data-translate="theDripIrrigationKitWasVeryHel">"The drip irrigation kit was very
+          <div class="review-text">"The drip irrigation kit was very
             helpful. Instructions could be clearer but the quality is good. Customer support was responsive."</div>
         </div>
 
         <div class="review-card">
           <div class="review-header">
-            <div class="review-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe);" data-translate="v">V
+            <div class="review-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">V
             </div>
             <div>
-              <div class="review-name" data-translate="vikramSingh">Vikram Singh</div>
+              <div class="review-name">Vikram Singh</div>
               <div class="stars">
                 <span class="star">★</span><span class="star">★</span><span class="star">★</span><span
                   class="star">★</span><span class="star">★</span>
@@ -364,7 +331,7 @@
             </div>
             <div class="review-date" style="margin-left:auto;">20 Apr 2026</div>
           </div>
-          <div class="review-text" data-translate="krushiMitraPlatformIsVeryEasyT">"Krushi Mitra platform is very easy
+          <div class="review-text">"Krushi Mitra platform is very easy
             to use. Listed my crops within 5 minutes and got my first order the same day. Highly recommended!"</div>
         </div>
       </div>
@@ -388,8 +355,8 @@
     <div class="lang-item"><span class="lang-flag">🇮🇳</span> ಕನ್ನಡ</div>
   </div>
   <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-    <button class="btn btn-secondary" id="langClose" data-translate="cancel">Cancel</button>
-    <button class="btn btn-primary" data-translate="applyLanguage">Apply Language</button>
+    <button class="btn btn-secondary" id="langClose">Cancel</button>
+    <button class="btn btn-primary">Apply Language</button>
   </div>
   </div>
   </div>

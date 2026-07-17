@@ -56,7 +56,7 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
+    <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -66,7 +66,7 @@
       <div class="nav-section-title">Main</div>
       <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
       <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
-      <a href="{% url 'farmer_tools' %}"   class="nav-item active" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools" class="nav-item active"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
       <div class="nav-section-title">AI Assistant</div>
       <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
       <div class="nav-section-title">Community</div>

@@ -19,48 +19,24 @@
 
 <body>
 
-  <!-- ════════════ SIDEBAR ════════════ -->
+    <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
-      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
     </div>
-
     <nav class="sidebar-nav">
-      <div class="nav-section-title" data-translate="main">Main</div>
-      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-        <i class="fa-solid fa-house"></i>
-        <span data-translate="home">Home</span>
-      </a>
-      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-        <i class="fa-solid fa-wheat-awn"></i>
-        <span data-translate="crops">My Crops</span>
-      </a>
-      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-        <i class="fa-solid fa-screwdriver-wrench"></i>
-        <span data-translate="tools">Tools</span>
-      </a>
-      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
-      <a href="{% url 'farmer_chatbot' %}" class="nav-item active" id="nav-chatbot">
-        <i class="fa-solid fa-robot"></i>
-        <span data-translate="chatbot">AI Chatbot <i class="fa-solid fa-seedling"></i></span>
-      </a>
-      <div class="nav-section-title" data-translate="community">Community</div>
-      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-        <i class="fa-solid fa-blog"></i>
-        <span data-translate="blogsReviews">Blogs & Reviews</span>
-      </a>
-      <div class="nav-section-title" data-translate="account">Account</div>
-      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-        <span data-translate="profile">Profile</span>
-      </a>
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot" class="nav-item active"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
-
-    
   </aside>
 
 
@@ -82,9 +58,9 @@
           <div class="chatbot-header-text">
             <h2>
               Krushi Mitra
-              <span class="ai-badge" data-translate="ai">AI</span>
+              <span class="ai-badge">AI</span>
             </h2>
-            <p data-translate="smartFarmingAssistantPoweredBy">Smart Farming Assistant · Powered by AI</p>
+            <p>Smart Farming Assistant · Powered by AI</p>
           </div>
         </div>
 
@@ -92,7 +68,7 @@
           <!-- Status -->
           <div class="chatbot-status">
             <span class="chatbot-status-dot"></span>
-            <span data-translate="online">Online</span>
+            <span>Online</span>
           </div>
           <!-- Clear chat -->
           <a href="{% url 'clear_history' %}" class="header-action-btn" title="Clear Chat History">
@@ -142,10 +118,10 @@
 
             <!-- Context pills (scrollable on overflow) -->
             <!-- <div class="header-context-pills">
-            <span class="context-pill" data-translate="kharifSeason"><i class="fa-solid fa-wheat-awn"></i> Kharif Season</span>
-            <span class="context-pill" data-translate="gujarat"><i class="fa-solid fa-location-dot"></i> Gujarat</span>
-            <span class="context-pill" data-translate="34c">🌡 34°C</span>
-            <span class="context-pill">💧 Humidity 62%</span>
+            <span class="context-pill"><i class="fa-solid fa-wheat-awn"></i> Kharif Season</span>
+            <span class="context-pill"><i class="fa-solid fa-location-dot"></i> Gujarat</span>
+            <span class="context-pill"><i class="fa-solid fa-temperature-half"></i> 34°C</span>
+            <span class="context-pill"><i class="fa-solid fa-droplet"></i> Humidity 62%</span>
             <span class="context-pill"><i class="fa-solid fa-moon"></i> Monsoon Alert</span>
           </div> -->
           </div>
@@ -159,7 +135,7 @@
           <div class="chat-message bot" style="--delay:0.08s">
             <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
             <div class="chat-bubble-wrap">
-              <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+              <div class="chat-sender">Krushi Mitra AI</div>
               <div class="chat-bubble bot-bubble">
                 <div class="bubble-content">
                   🙏 Namaste, <strong>{{ uid.name }}</strong>! Main aapka smart farming assistant hoon.
@@ -167,10 +143,10 @@
                   Main aapki in cheezon mein madad kar sakta hoon:
                   <div class="capability-grid">
                     <div class="cap-item"><span><i class="fa-solid fa-wheat-awn"></i></span> Fasal Salah</div>
-                    <div class="cap-item"><span>🌦</span> Mausam</div>
+                    <div class="cap-item"><span><i class="fa-solid fa-cloud-sun-rain"></i></span> Mausam</div>
                     <div class="cap-item"><span>💰</span> Mandi Bhav</div>
                     <div class="cap-item"><span>🐛</span> Keeda Rog</div>
-                    <div class="cap-item"><span>💧</span> Sinchai</div>
+                    <div class="cap-item"><span><i class="fa-solid fa-droplet"></i></span> Sinchai</div>
                     <div class="cap-item"><span><i class="fa-solid fa-seedling"></i></span> Beej Salah</div>
                   </div>
                 </div>
@@ -189,13 +165,13 @@
                 <div class="chat-time">{{ message.created_at|default:"" }}</div>
               </div>
             </div>
-            <div class="chat-avatar user-avatar"><span data-translate="r">R</span></div>
+            <div class="chat-avatar user-avatar"><span>R</span></div>
           </div>
           {% else %}
           <div class="chat-message bot" style="--delay:0.04s">
             <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
             <div class="chat-bubble-wrap">
-              <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+              <div class="chat-sender">Krushi Mitra AI</div>
               <div class="chat-bubble bot-bubble">
                 <div class="bubble-content">{{ message.content|safe }}</div>
                 <div class="chat-time">{{ message.created_at|default:"" }}</div>
@@ -209,7 +185,7 @@
           <div class="chat-message bot typing-message" id="typingIndicator" style="display:none; --delay:0s">
             <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
             <div class="chat-bubble-wrap">
-              <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+              <div class="chat-sender">Krushi Mitra AI</div>
               <div class="chat-bubble bot-bubble typing-bubble">
                 <div class="typing-dots">
                   <span></span><span></span><span></span>
@@ -225,14 +201,14 @@
              QUICK CHIPS
              ══════════════════════════════════ -->
         <div class="chatbot-chips-bar">
-          <div class="chips-label" data-translate="quickAsk">Quick Ask:</div>
+          <div class="chips-label">Quick Ask:</div>
           <div class="chips-scroll">
-            <button class="chip" onclick="useChip(this)" data-translate="fasalSalah"><i class="fa-solid fa-wheat-awn"></i> Fasal Salah</button>
-            <button class="chip" onclick="useChip(this)" data-translate="aajKaMausam">🌦 Aaj ka Mausam</button>
-            <button class="chip" onclick="useChip(this)" data-translate="mandiBhav">💰 Mandi Bhav</button>
-            <button class="chip" onclick="useChip(this)" data-translate="keedaRog">🐛 Keeda Rog</button>
-            <button class="chip" onclick="useChip(this)" data-translate="sinchaiTips">💧 Sinchai Tips</button>
-            <button class="chip" onclick="useChip(this)" data-translate="beejChunav"><i class="fa-solid fa-seedling"></i> Beej Chunav</button>
+            <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-wheat-awn"></i> Fasal Salah</button>
+            <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-cloud-sun-rain"></i> Aaj ka Mausam</button>
+            <button class="chip" onclick="useChip(this)">💰 Mandi Bhav</button>
+            <button class="chip" onclick="useChip(this)">🐛 Keeda Rog</button>
+            <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-droplet"></i> Sinchai Tips</button>
+            <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-seedling"></i> Beej Chunav</button>
             <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-flask"></i> Mitti Pareeksha</button>
             <button class="chip" onclick="useChip(this)"><i class="fa-solid fa-box"></i> Fasal Bhandar</button>
           </div>
@@ -287,7 +263,7 @@
 
             <!-- Footer -->
             <div class="input-footer">
-              <span class="input-hint" data-translate="enterToSendShiftenterForNewLin">
+              <span class="input-hint">
                 Enter to send · Shift+Enter for new line
               </span>
               <span class="char-count" id="charCount">0 / 500</span>
@@ -396,7 +372,7 @@
             <div class="chat-time">${timeStr}</div>
           </div>
         </div>
-        <div class="chat-avatar user-avatar"><span data-translate="r">R</span></div>
+        <div class="chat-avatar user-avatar"><span>R</span></div>
       `;
       const typingIndicator = document.getElementById('typingIndicator');
       chatMessages.insertBefore(msgDiv, typingIndicator);
@@ -413,7 +389,7 @@
       msgDiv.innerHTML = `
         <div class="chat-avatar bot-avatar"><span><i class="fa-solid fa-seedling"></i></span></div>
         <div class="chat-bubble-wrap">
-          <div class="chat-sender" data-translate="krushiMitraAi">Krushi Mitra AI</div>
+          <div class="chat-sender">Krushi Mitra AI</div>
           <div class="chat-bubble bot-bubble">
             <div class="bubble-content">${htmlContent}</div>
             <div class="chat-time">${timeStr}</div>

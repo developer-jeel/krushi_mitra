@@ -19,57 +19,24 @@
 
 <body>
 
-  <!-- ════════════ SIDEBAR ════════════ -->
+    <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
-      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
     </div>
-
     <nav class="sidebar-nav">
-      <div class="nav-section-title" data-translate="main">Main</div>
-
-      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-        <i class="fa-solid fa-house"></i>
-        <span data-translate="home">Home</span>
-      </a>
-
-      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-        <i class="fa-solid fa-wheat-awn"></i>
-        <span data-translate="crops">My Crops</span>
-      </a>
-
-      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools">
-        <i class="fa-solid fa-screwdriver-wrench"></i>
-        <span data-translate="tools">Tools</span>
-      </a>
-
-      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
-
-      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
-        <i class="fa-solid fa-robot"></i>
-        <span data-translate="chatbot">AI Chatbot <i class="fa-solid fa-seedling"></i></span>
-      </a>
-
-      <div class="nav-section-title" data-translate="community">Community</div>
-
-      <a href="{% url 'farmer_blogs' %}" class="nav-item active" id="nav-blogs">
-        <i class="fa-solid fa-blog"></i>
-        <span data-translate="blogsReviews">Blogs & Reviews</span>
-      </a>
-
-      <div class="nav-section-title" data-translate="account">Account</div>
-
-      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-        <span data-translate="profile">Profile</span>
-      </a>
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs" class="nav-item active"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
-
-    
   </aside>
 
   <!-- ════════════ MAIN ════════════ -->
@@ -77,31 +44,19 @@
 
     <header class="topbar">
       <div class="topbar-left">
-        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
         <div>
-          <div class="page-title" data-translate="writeBlog">Write a Blog ✍️</div>
+          <div class="page-title">Write a Blog ✍️</div>
           <div class="breadcrumb">
-            <a href="{% url 'farmer_blogs' %}" data-translate="blogsReviews">Blogs & Reviews</a>
+            <a href="{% url 'farmer_blogs' %}">Blogs & Reviews</a>
             &nbsp;/&nbsp;
-            <span data-translate="writeBlog">Write Blog</span>
+            <span>Write Blog</span>
           </div>
         </div>
       </div>
       <div class="topbar-right">
-        <button class="topbar-icon-btn" title="Notifications">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          <span class="badge"></span>
-        </button>
-        <div class="avatar">R</div>
+        <button class="topbar-icon-btn" title="Notifications"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
       </div>
     </header>
 
@@ -109,9 +64,9 @@
 
       <!-- ── Navigation shortcut tabs ── -->
       <div class="tabs" style="margin-bottom:28px;">
-        <a href="{% url 'farmer_blogs' %}" class="tab-btn" data-translate="allBlogs">All Blogs</a>
-        <a href="{% url 'write_blog' %}" class="tab-btn active" data-translate="writeBlog">Write Blog</a>
-        <a href="{% url 'my_posts' %}" class="tab-btn" data-translate="myPosts">My Posts</a>
+        <a href="{% url 'farmer_blogs' %}" class="tab-btn">All Blogs</a>
+        <a href="{% url 'write_blog' %}" class="tab-btn active">Write Blog</a>
+        <a href="{% url 'my_posts' %}" class="tab-btn">My Posts</a>
       </div>
 
       <!-- ── Two-column layout ── -->
@@ -133,7 +88,7 @@
 
               <!-- Title -->
               <div class="blog-form-field">
-                <label for="blog_title" data-translate="blogTitle">Blog Title</label>
+                <label for="blog_title">Blog Title</label>
                 <input type="text" id="blog_title" name="title" maxlength="20"
                   placeholder="Enter a catchy title (max 20 chars)" autocomplete="off"
                   data-translate-placeholder="enterACatchyTitle" />
@@ -142,7 +97,7 @@
 
               <!-- Content -->
               <div class="blog-form-field">
-                <label for="blog_content" data-translate="blogContent">Blog Content</label>
+                <label for="blog_content">Blog Content</label>
                 <textarea id="blog_content" name="content" rows="10"
                   placeholder="Write your farming experience, tips, or story here..."
                   data-translate-placeholder="writeYourFarmingExperience"></textarea>
@@ -199,14 +154,14 @@
 
             <!-- Submit row -->
             <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:24px;">
-              <a href="{% url 'farmer_blogs' %}" class="b-btn b-btn-secondary" data-translate="cancel">
+              <a href="{% url 'farmer_blogs' %}" class="b-btn b-btn-secondary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
                 Cancel
               </a>
-              <button type="submit" class="b-btn b-btn-primary" data-translate="publishBlog">
+              <button type="submit" class="b-btn b-btn-primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
                   <path d="M22 2L11 13" />
                   <polygon points="22 2 15 22 11 13 2 9 22 2" />

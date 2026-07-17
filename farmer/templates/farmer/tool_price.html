@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
     <link rel="stylesheet" href="{% static 'farmer/css/tool_price.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
 </head>
 
 <body>
@@ -16,7 +17,7 @@
     <div class="page-wrapper">
 
         <div class="top-tag">
-            <span data-translate="127807AgricultureMachinerySyst">&#127807; Agriculture Machinery System</span>
+            <span>&#127807; Agriculture Machinery System</span>
         </div>
 
         <div class="card">
@@ -29,8 +30,8 @@
                             d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z" />
                     </svg>
                 </div>
-                <h1 data-translate="machinePricePrediction">Machine Price Prediction</h1>
-                <p data-translate="estimateCurrentResaleValueOfYo">Estimate current resale value of your agriculture
+                <h1>Machine Price Prediction</h1>
+                <p>Estimate current resale value of your agriculture
                     machinery</p>
             </div>
 
@@ -42,35 +43,26 @@
                     <div class="field">
                         <label><span class="dot"></span> Category</label>
                         <select name="category">
-                            <option value="" disabled {% if not category %}selected{% endif %}
-                                data-translate="selectMachineCategory">Select machine
+                            <option value="" disabled {% if not category %}selected{% endif %}>Select machine
                                 category</option>
-                            <option value="tractor" {% if category == 'tractor' %}selected{% endif %}
-                                data-translate="tractor">Tractor</option>
-                            <option value="harvester" {% if category == 'harvester' %}selected{% endif %}
-                                data-translate="harvester">Harvester</option>
-                            <option value="other" {% if category == 'other' %}selected{% endif %}
-                                data-translate="otherMachinery">Other Machinery</option>
-                            <option value="tools" {% if category == 'tools' %}selected{% endif %}
-                                data-translate="machineryTools">Machinery Tools</option>
-                            <option value="hand" {% if category == 'hand' %}selected{% endif %}
-                                data-translate="handTools">Hand Tools</option>
+                            <option value="tractor" {% if category == 'tractor' %}selected{% endif %}>Tractor</option>
+                            <option value="harvester" {% if category == 'harvester' %}selected{% endif %}>Harvester</option>
+                            <option value="other" {% if category == 'other' %}selected{% endif %}>Other Machinery</option>
+                            <option value="tools" {% if category == 'tools' %}selected{% endif %}>Machinery Tools</option>
+                            <option value="hand" {% if category == 'hand' %}selected{% endif %}>Hand Tools</option>
                         </select>
                     </div>
 
                     <div class="field">
                         <label><span class="dot"></span> Condition</label>
                         <select name="condition">
-                            <option value="" disabled {% if not condition %}selected{% endif %}
-                                data-translate="selectCurrentCondition">Select current
+                            <option value="" disabled {% if not condition %}selected{% endif %}>Select current
                                 condition</option>
-                            <option value="excellent" {% if condition == 'excellent' %}selected{% endif %}
-                                data-translate="excellent">Excellent</option>
-                            <option value="good" {% if condition == 'good' %}selected{% endif %} data-translate="good">
+                            <option value="excellent" {% if condition == 'excellent' %}selected{% endif %}>Excellent</option>
+                            <option value="good" {% if condition == 'good' %}selected{% endif %}>
                                 Good</option>
-                            <option value="average" {% if condition == 'average' %}selected{% endif %}
-                                data-translate="average">Average</option>
-                            <option value="poor" {% if condition == 'poor' %}selected{% endif %} data-translate="poor">
+                            <option value="average" {% if condition == 'average' %}selected{% endif %}>Average</option>
+                            <option value="poor" {% if condition == 'poor' %}selected{% endif %}>
                                 Poor</option>
                         </select>
                     </div>
@@ -78,12 +70,12 @@
                     <div class="row2">
                         <div class="field">
                             <label><span class="dot"></span> Years Used</label>
-                            <input data-translate="eg5" type="number" placeholder="e.g. 5" min="0" max="50" name="years"
+                            <input type="number" placeholder="e.g. 5" min="0" max="50" name="years"
                                 value="{{ years }}" />
                         </div>
                         <div class="field">
                             <label><span class="dot"></span> Purchase Price</label>
-                            <input data-translate="8377Eg500000" type="number" placeholder="&#8377; e.g. 500000" min="0"
+                            <input type="number" placeholder="&#8377; e.g. 500000" min="0"
                                 name="price" value="{{ price }}" />
                         </div>
                     </div>
@@ -105,17 +97,17 @@
                     </div>
                     {% else %}
                     <div class="output-section">
-                        <div class="output-eyebrow" data-translate="128200PredictedMarketValue">&#128200; Predicted
+                        <div class="output-eyebrow">&#128200; Predicted
                             Market Value</div>
 
                         {% if result is not None %}
                         <div class="output-value">₹ {{ result }}</div>
                         {% else %}
-                        <div class="output-value" data-translate="mdashMdashMdash">₹ &mdash; &mdash; &mdash;</div>
+                        <div class="output-value">₹ &mdash; &mdash; &mdash;</div>
                         {% endif %}
 
                         <div class="output-hint">
-                            Fill in all fields above and click <strong data-translate="predictPrice">Predict
+                            Fill in all fields above and click <strong>Predict
                                 Price</strong>
                         </div>
                     </div>
@@ -126,7 +118,7 @@
 
             <!-- Footer -->
             <div class="card-footer">
-                <p>Powered by <strong data-translate="agritechMlEngine">AgriTech ML Engine</strong> &nbsp;&bull;&nbsp;
+                <p>Powered by <strong>AgriTech ML Engine</strong> &nbsp;&bull;&nbsp;
                     Prices are estimates only</p>
             </div>
 

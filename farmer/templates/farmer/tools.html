@@ -51,70 +51,31 @@
 
 <body>
 
-  <!-- ════════════ SIDEBAR ════════════ -->
+    <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
-      <div class="brand">Krushi Mitra <span data-translate="farmerPanel">Farmer Panel</span></div>
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
     </div>
-
     <nav class="sidebar-nav">
-      <div class="nav-section-title" data-translate="main">Main</div>
-
-      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home">
-        <i class="fa-solid fa-house"></i>
-        <span data-translate="home">Home</span>
-      </a>
-
-      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops">
-        <i class="fa-solid fa-wheat-awn"></i>
-        <span data-translate="crops">My Crops</span>
-      </a>
-
-      <a href="{% url 'farmer_tools' %}" class="nav-item active" id="nav-tools">
-        <i class="fa-solid fa-screwdriver-wrench"></i>
-        <span data-translate="tools">Tools</span>
-      </a>
-
-      <div class="nav-section-title" data-translate="aiAssistant">AI Assistant</div>
-
-      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot">
-        <i class="fa-solid fa-robot"></i>
-        <span data-translate="chatbot">AI Chatbot <i class="fa-solid fa-seedling"></i></span>
-      </a>
-
-      <div class="nav-section-title" data-translate="community">Community</div>
-
-      <a href="{% url 'farmer_blogs' %}" class="nav-item" id="nav-blogs">
-        <i class="fa-solid fa-blog"></i>
-        <span data-translate="blogsReviews">Blogs & Reviews</span>
-      </a>
-
-      <div class="nav-section-title" data-translate="account">Account</div>
-
-      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-        <span data-translate="profile">Profile</span>
-      </a>
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}"    class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}"   class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}"   class="nav-item" id="nav-tools" class="nav-item active"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'farmer_blogs' %}"   class="nav-item" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
     </nav>
-
-    
   </aside>
 
   <!-- ════════════ MAIN ════════════ -->
   <div class="main">
     <header class="topbar">
       <div class="topbar-left">
-        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="18" x2="21" y2="18" />
-          </svg>
-        </button>
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
         <div>
           <div class="page-title"><i class="fa-solid fa-screwdriver-wrench"></i> Tools Marketplace</div>
           <div class="breadcrumb">Dashboard / Tools</div>
@@ -164,22 +125,22 @@
       <div id="panel-browse">
         <!-- Filter Row -->
         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; align-items:center;">
-          <input data-translate="searchTools" type="text" placeholder="Search tools..."
+          <input type="text" placeholder="Search tools..."
             style="padding:9px 16px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; font-family:inherit; outline:none; min-width:220px; background:var(--white);" />
           <select
             style="padding:9px 14px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; font-family:inherit; outline:none; background:var(--white); color:var(--gray-800);">
-            <option data-translate="allCategories">All Categories</option>
-            <option data-translate="tractorsMachinery">Tractors & Machinery</option>
-            <option data-translate="handTools">Hand Tools</option>
-            <option data-translate="irrigation">Irrigation</option>
-            <option data-translate="storage">Storage</option>
-            <option data-translate="sprayers">Sprayers</option>
+            <option>All Categories</option>
+            <option>Tractors & Machinery</option>
+            <option>Hand Tools</option>
+            <option>Irrigation</option>
+            <option>Storage</option>
+            <option>Sprayers</option>
           </select>
           <select
             style="padding:9px 14px; border:1.5px solid var(--gray-200); border-radius:8px; font-size:14px; font-family:inherit; outline:none; background:var(--white); color:var(--gray-800);">
-            <option data-translate="buy">Buy</option>
-            <option data-translate="forSale">For Sale</option>
-            <option data-translate="forSale">For Sale</option>
+            <option>Buy</option>
+            <option>For Sale</option>
+            <option>For Sale</option>
           </select>
         </div>
 
