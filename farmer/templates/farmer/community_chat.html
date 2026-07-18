@@ -258,7 +258,7 @@
 
         <!-- ░░░ RECEIVED — Ramesh Patel ░░░ -->
         {%for message in messages%}
-        {% if message.sender != uid %}
+        {% if message.sender.id != uid.id %}
         <div class="wa-msg recv" id="m1">
           <div class="wa-av av-g" title="{{message.sender.name}}">{{message.sender.name|make_list|first|upper}}</div>
           <div class="wa-bubble-wrap">
