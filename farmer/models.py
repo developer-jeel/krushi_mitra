@@ -285,3 +285,68 @@ class FarmerTool(models.Model):
 
     def __str__(self):
         return f"{self.tool_name} — {self.user.name}"
+
+
+class farmer_premium_plans(models.Model):
+    standard_price = models.IntegerField(blank=True, null=True,default=99)
+    premium_price = models.IntegerField(blank=True, null=True,default=199)
+    year_dis = models.IntegerField(blank=True, null=True,default=20)
+
+    @property
+    def standard_yearly(self):
+        yearly_price = self.standard_price * 12
+        return yearly_price - (yearly_price * self.year_dis / 100)
+
+    @property
+    def premium_yearly(self):
+        yearly_price = self.premium_price * 12
+        return yearly_price - (yearly_price * self.year_dis / 100)
+    
+    @property
+    def standard_dis(self):
+        yearly_price = self.standard_price * 12
+        yearly_dic = yearly_price- (yearly_price * self.year_dis / 100)
+        return yearly_dic//12
+
+    @property
+    def premium_dis(self):
+        yearly_price = self.premium_price * 12
+        yearly_dic = yearly_price- (yearly_price * self.year_dis / 100)
+        return yearly_dic//12
+    
+    def __str__(self):
+        return f"standard_price:{self.standard_price} and premium_price :{self.premium_price}"
+
+
+class premium_buyer(models.Model):
+    PREMIUM_CHOOSE =  (
+        ('Free', 'Free'),
+        ('Standard', 'Standard'),
+        ('Premium', 'Premium'),
+    )
+    PREMIUM_TYPECHOOSE =  (
+        ('Monthly', 'Monthly'),
+        ('Yearly', 'Yearly'),
+    )
+    user = models.ForeignKey(Farmer, on_delete=models.CASCADE, related_name='Premium_user')
+    premium_type = models.CharField(max_length=20,choices=PREMIUM_CHOOSE)
+    premium_time = models.CharField(max_length=20,choices=PREMIUM_TYPECHOOSE)
+    purchase_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.user.user.username} buys {self.premium_type} in {self.premium_time} way"
+
+class farmer_selling_limit(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='limit'
+    )
+    comision = models.IntegerField(blank=True, null=True,default=2.5)
+    total_sell_kg = models.IntegerField(blank=True, null=True,default = 0)
+    sellilimit = models.IntegerField(blank=True, null=True,default=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} used :{self.total_sell_kg} of {self.sellilimit}"
