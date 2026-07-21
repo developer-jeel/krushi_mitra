@@ -1,268 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  {% load static %}
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Manage Buyers – Admin | Krushi Mitra</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-</head>
-<body>
+{% extends "subadmin/base.html" %}
+{% block title %}Manage Buyers{% endblock %}
+{% block page_title %}Manage Buyers{% endblock %}
+{% block breadcrumb %}Admin / Buyers{% endblock %}
+{% block nav_buyers %}active{% endblock %}
 
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
-    <div class="brand">Krushi Mitra <span>Admin Panel</span><div class="admin-badge">Admin</div></div>
+{% block content %}
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search name, contact, GST…"
+    style="flex:1;min-width:220px;background:var(--card-bg);border:1px solid var(--border);
+    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="status" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Status</option>
+    <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
+    <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
+  </select>
+  <select name="verified" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All KYC</option>
+    <option value="yes" {% if verified == 'yes' %}selected{% endif %}>Verified</option>
+    <option value="no" {% if verified == 'no' %}selected{% endif %}>Unverified</option>
+  </select>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;">
+    <i class="fa-solid fa-search"></i> Search
+  </button>
+  <a href="{% url 'subadmin:manage_buyers' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">Buyers <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+    <a href="{% url 'subadmin:export_buyers' %}" class="btn btn-secondary btn-sm">
+      <i class="fa-solid fa-download"></i> Export CSV
+    </a>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section-title">Main</div>
-    <a href="{% url 'subadmin:dashboard' %}" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
-    <div class="nav-section-title">User Management</div>
-    <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item"><i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
-    <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item active"><i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
-    <div class="nav-section-title">Operations</div>
-    <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item"><i class="fa-solid fa-id-card"></i><span>KYC Approval</span><span class="nav-badge">8</span></a>
-    <a href="{% url 'subadmin:order_management' %}" class="nav-item"><i class="fa-solid fa-cart-flatbed"></i><span>Order Management</span></a>
-    <a href="{% url 'subadmin:product_approval' %}" class="nav-item"><i class="fa-solid fa-seedling"></i><span>Product Approval</span><span class="nav-badge amber">5</span></a>
-    <div class="nav-section-title">Support</div>
-    <a href="{% url 'subadmin:support_tickets' %}" class="nav-item"><i class="fa-solid fa-headset"></i><span>Support Tickets</span><span class="nav-badge">3</span></a>
-    <div class="nav-section-title">More</div>
-    <a href="{% url 'subadmin:reports' %}" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Reports & Analytics</span></a>
-    <a href="{% url 'subadmin:profile' %}" class="nav-item"><i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
-    <a href="{% url 'subadmin:system_settings' %}" class="nav-item"><i class="fa-solid fa-gears"></i><span>System Settings</span></a>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="sidebar-user">
-      <div class="sidebar-user-av">A</div>
-      <div class="sidebar-user-info"><div class="sidebar-user-name">Amit Sharma</div><div class="sidebar-user-role">Super Admin</div></div>
-    </div>
-  </div>
-</aside>
-
-<div class="main">
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
-      <div>
-        <div class="page-title">Manage Buyers</div>
-        <div class="breadcrumb">Dashboard / User Management / Buyers</div>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <button class="topbar-icon-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
-      <div class="avatar">A</div>
-    </div>
-  </header>
-
-  <div class="page-content">
-
-    <!-- Summary Cards -->
-    <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
-        <div class="stat-info"><div class="stat-value">3,567</div><div class="stat-label">Total Buyers</div><div class="stat-change up">↑ 120 this month</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="stat-info"><div class="stat-value">3,240</div><div class="stat-label">Verified Buyers</div><div class="stat-change up">↑ Active</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon amber"><i class="fa-solid fa-clock"></i></div>
-        <div class="stat-info"><div class="stat-value">210</div><div class="stat-label">KYC Pending</div><div class="stat-change down">Needs review</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon purple"><i class="fa-solid fa-crown"></i></div>
-        <div class="stat-info"><div class="stat-value">480</div><div class="stat-label">Premium Buyers</div><div class="stat-change up">↑ 12 this week</div></div>
-      </div>
-    </div>
-
-    <!-- Filter Bar -->
-    <div class="filter-bar">
-      <div class="search-input-wrap">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search buyer by name, ID, city…"/>
-      </div>
-      <select class="filter-select">
-        <option>All Cities</option>
-        <option>Mumbai</option>
-        <option>Delhi</option>
-        <option>Ahmedabad</option>
-        <option>Pune</option>
-        <option>Surat</option>
-      </select>
-      <select class="filter-select">
-        <option>All Types</option>
-        <option>Individual</option>
-        <option>Business</option>
-        <option>Premium</option>
-      </select>
-      <select class="filter-select">
-        <option>All Status</option>
-        <option>Active</option>
-        <option>Pending KYC</option>
-        <option>Suspended</option>
-      </select>
-      <button class="btn btn-primary btn-sm" data-modal-open="addBuyerModal"><i class="fa-solid fa-plus"></i> Add Buyer</button>
-    </div>
-
-    <!-- Buyers Table -->
-    <div class="table-wrapper">
-      <div class="table-header">
-        <div class="table-title">All Buyers <span style="font-size:12px;color:var(--gray-400);font-weight:400;">(3,567 records)</span></div>
-        <div class="table-actions">
-          <button class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-export"></i> Export</button>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Buyer</th><th>Buyer ID</th><th>City / State</th><th>Type</th><th>Total Orders</th><th>Total Spent</th><th>KYC</th><th>Status</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><div class="user-cell"><div class="user-av blue">S</div><div><div class="user-name">Suresh Kumar</div><div class="user-sub">suresh@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#BYR-2001</code></td>
-            <td>Ahmedabad, Gujarat</td><td><span class="status-pill active">Premium</span></td><td>34</td><td>₹1,24,500</td>
-            <td><span class="status-pill approved">Verified</span></td><td><span class="status-pill active">Active</span></td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewBuyerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av purple">P</div><div><div class="user-name">Priya Sharma</div><div class="user-sub">priya@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#BYR-2002</code></td>
-            <td>Mumbai, Maharashtra</td><td><span class="status-pill shipped">Business</span></td><td>18</td><td>₹86,200</td>
-            <td><span class="status-pill approved">Verified</span></td><td><span class="status-pill active">Active</span></td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewBuyerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av teal">R</div><div><div class="user-name">Rakesh Patel</div><div class="user-sub">rakesh@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#BYR-2003</code></td>
-            <td>Surat, Gujarat</td><td><span class="status-pill review">Individual</span></td><td>7</td><td>₹23,100</td>
-            <td><span class="status-pill pending">Pending</span></td><td><span class="status-pill pending">Pending KYC</span></td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewBuyerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av amber">A</div><div><div class="user-name">Anita Verma</div><div class="user-sub">anita@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#BYR-2004</code></td>
-            <td>Jaipur, Rajasthan</td><td><span class="status-pill shipped">Business</span></td><td>22</td><td>₹95,000</td>
-            <td><span class="status-pill approved">Verified</span></td><td><span class="status-pill active">Active</span></td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewBuyerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av green">M</div><div><div class="user-name">Meena Joshi</div><div class="user-sub">meena@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#BYR-2005</code></td>
-            <td>Pune, Maharashtra</td><td><span class="status-pill review">Individual</span></td><td>3</td><td>₹8,400</td>
-            <td><span class="status-pill pending">Pending</span></td><td><span class="status-pill pending">Pending KYC</span></td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewBuyerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av blue">V</div><div><div class="user-name">Vikram Singh</div><div class="user-sub">vikram@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#BYR-2006</code></td>
-            <td>Lucknow, UP</td><td><span class="status-pill review">Individual</span></td><td>0</td><td>₹0</td>
-            <td><span class="status-pill rejected">Rejected</span></td><td><span class="status-pill inactive">Suspended</span></td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewBuyerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <span style="font-size:13px;color:var(--gray-400);">Showing 1–6 of 3,567 buyers</span>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-secondary btn-sm">← Prev</button>
-        <button class="btn btn-primary btn-sm">1</button>
-        <button class="btn btn-secondary btn-sm">2</button>
-        <button class="btn btn-secondary btn-sm">3</button>
-        <button class="btn btn-secondary btn-sm">Next →</button>
-      </div>
-    </div>
-
-  </div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Name</th><th>Contact</th><th>State</th><th>GST</th><th>KYC</th><th>Premium</th><th>Status</th><th>Joined</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for b in buyers %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#2563eb);
+              display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;">
+              {{ b.user.name|make_list|first|upper }}
+            </div>
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ b.user.name }}</div>
+              <div style="font-size:12px;color:#94a3b8;">{{ b.user.email|default:"—" }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ b.user.contact|default:"—" }}</td>
+        <td>{{ b.state }}</td>
+        <td>{{ b.gst_no|default:"—" }}</td>
+        <td>{% if b.is_verified %}<span class="badge-verified">Verified</span>
+            {% else %}<span class="badge-pending">Pending</span>{% endif %}</td>
+        <td>{% if b.is_premiume %}<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">Premium</span>
+            {% else %}<span style="color:#94a3b8;font-size:12px;">Free</span>{% endif %}</td>
+        <td>{% if b.user.is_active %}<span class="badge-active">Active</span>
+            {% else %}<span class="badge-inactive">Inactive</span>{% endif %}</td>
+        <td style="font-size:12px;color:#94a3b8;">{{ b.created_at|date:"M d, Y" }}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <a href="{% url 'subadmin:buyer_detail' b.pk %}" class="btn btn-secondary btn-sm" title="View">
+              <i class="fa-solid fa-eye"></i></a>
+            <a href="#" onclick="openConfirm('{% url 'subadmin:toggle_buyer' b.pk %}',
+              '{% if b.user.is_active %}Deactivate{% else %}Activate{% endif %} Buyer?','')"
+              class="btn btn-sm {% if b.user.is_active %}btn-warning{% else %}btn-primary{% endif %}">
+              <i class="fa-solid {% if b.user.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i>
+            </a>
+            <a href="#" onclick="openConfirm('{% url 'subadmin:delete_buyer' b.pk %}','Delete Buyer?','All data will be permanently deleted.')"
+              class="btn btn-danger btn-sm">
+              <i class="fa-solid fa-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:40px;">No buyers found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
-
-<!-- View Buyer Modal -->
-<div class="modal-overlay" id="viewBuyerModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fa-solid fa-user" style="color:var(--blue);margin-right:8px;"></i>Buyer Details</div>
-      <button class="modal-close" data-modal-close="viewBuyerModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-        <div class="user-av blue" style="width:60px;height:60px;font-size:22px;">S</div>
-        <div>
-          <div style="font-size:18px;font-weight:800;color:var(--gray-800);">Suresh Kumar</div>
-          <div style="font-size:13px;color:var(--gray-400);">#BYR-2001 · Ahmedabad, Gujarat</div>
-          <span class="status-pill active" style="margin-top:6px;display:inline-flex;">Active</span>
-        </div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group"><label>Phone</label><input class="form-control" value="+91 99001 12345" disabled/></div>
-        <div class="form-group"><label>Email</label><input class="form-control" value="suresh@mail.com" disabled/></div>
-        <div class="form-group"><label>Total Orders</label><input class="form-control" value="34 Orders" disabled/></div>
-        <div class="form-group"><label>Total Spent</label><input class="form-control" value="₹1,24,500" disabled/></div>
-        <div class="form-group"><label>Buyer Type</label><input class="form-control" value="Premium" disabled/></div>
-        <div class="form-group"><label>Joined</label><input class="form-control" value="January 2026" disabled/></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-modal-close="viewBuyerModal">Close</button>
-      <button class="btn btn-primary"><i class="fa-solid fa-id-card"></i> View KYC</button>
-    </div>
-  </div>
-</div>
-
-<!-- Add Buyer Modal -->
-<div class="modal-overlay" id="addBuyerModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fa-solid fa-user-plus" style="color:var(--blue);margin-right:8px;"></i>Add New Buyer</div>
-      <button class="modal-close" data-modal-close="addBuyerModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group"><label>Full Name</label><input class="form-control" placeholder="Enter full name"/></div>
-        <div class="form-group"><label>Phone Number</label><input class="form-control" placeholder="+91 XXXXX XXXXX"/></div>
-        <div class="form-group"><label>Email</label><input class="form-control" placeholder="email@example.com"/></div>
-        <div class="form-group"><label>Buyer Type</label><select class="form-control filter-select"><option>Individual</option><option>Business</option><option>Premium</option></select></div>
-        <div class="form-group"><label>City</label><input class="form-control" placeholder="Enter city"/></div>
-        <div class="form-group"><label>State</label><select class="form-control filter-select"><option>Gujarat</option><option>Maharashtra</option><option>Rajasthan</option><option>Punjab</option></select></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-modal-close="addBuyerModal">Cancel</button>
-      <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Buyer</button>
-    </div>
-  </div>
-</div>
-
-<script src="{% static 'js/admin.js' %}"></script>
-</body>
-</html>
+{% endblock %}

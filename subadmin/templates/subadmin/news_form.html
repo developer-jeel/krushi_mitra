@@ -1,0 +1,81 @@
+{% extends "subadmin/base.html" %}
+{% block title %}{% if action == 'Add' %}Add News{% else %}Edit News{% endif %}{% endblock %}
+{% block page_title %}{% if action == 'Add' %}Add News{% else %}Edit News{% endif %}{% endblock %}
+{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_news' %}" style="color:#22c55e;">News</a> / {{ action }}{% endblock %}
+{% block nav_news %}active{% endblock %}
+
+{% block content %}
+<div style="max-width:760px;">
+  <div class="table-wrapper" style="padding:28px;">
+    <div style="font-size:17px;font-weight:700;color:var(--gray-100);margin-bottom:24px;">
+      {{ action }} News Article
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Title *</label>
+          <input type="text" name="title" required value="{{ news_obj.title|default:'' }}"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;
+            padding:11px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"/>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Category *</label>
+          <select name="category" required style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+            border-radius:10px;padding:11px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+            {% for val, label in category_choices %}
+            <option value="{{ val }}" {% if news_obj.category == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">State *</label>
+          <select name="state" required style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+            border-radius:10px;padding:11px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+            {% for val, label in state_choices %}
+            <option value="{{ val }}" {% if news_obj.state == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div style="grid-column:1/-1;">
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Description *</label>
+          <textarea name="description" required rows="6"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;
+            padding:11px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;resize:vertical;box-sizing:border-box;">{{ news_obj.description|default:'' }}</textarea>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Source Link</label>
+          <input type="url" name="source_link" value="{{ news_obj.source_link|default:'' }}"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;
+            padding:11px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"
+            placeholder="https://…"/>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Image</label>
+          {% if news_obj.image %}<img src="{{ news_obj.image.url }}" style="height:48px;border-radius:8px;margin-bottom:6px;display:block;">{% endif %}
+          <input type="file" name="image" accept="image/*" style="color:var(--gray-400);"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <input type="checkbox" name="is_breaking" id="is_breaking" {% if news_obj.is_breaking %}checked{% endif %}
+            style="width:18px;height:18px;cursor:pointer;accent-color:#22c55e;"/>
+          <label for="is_breaking" style="font-size:14px;font-weight:600;color:var(--gray-100);cursor:pointer;">
+            Mark as Breaking News
+          </label>
+        </div>
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Breaking Duration (hours)</label>
+          <input type="number" name="breaking_hours" value="{{ news_obj.breaking_hours|default:24 }}" min="1" max="168"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;
+            padding:11px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;">
+        <a href="{% url 'subadmin:manage_news' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-save"></i> {{ action }} Article
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

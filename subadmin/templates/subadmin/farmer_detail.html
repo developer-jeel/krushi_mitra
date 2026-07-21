@@ -1,0 +1,186 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Farmer: {{ farmer_user.name }}{% endblock %}
+{% block page_title %}Farmer Profile{% endblock %}
+{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_farmers' %}" style="color:#22c55e;">Farmers</a> / {{ farmer_user.name }}{% endblock %}
+{% block nav_farmers %}active{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;">
+
+  <!-- Left Card -->
+  <div>
+    <div class="table-wrapper" style="padding:24px;text-align:center;">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);
+        display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:32px;margin:0 auto 16px;">
+        {% if farmer and farmer.photo %}
+          <img src="{{ farmer.photo.url }}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">
+        {% else %}{{ farmer_user.name|make_list|first|upper }}{% endif %}
+      </div>
+      <div style="font-size:20px;font-weight:700;color:var(--gray-100);">{{ farmer_user.name }}</div>
+      <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{{ farmer.farm_name|default:"No farm name" }}</div>
+      <div style="margin:12px 0;">
+        {% if farmer_user.is_active %}<span class="badge-active">Active Account</span>
+        {% else %}<span class="badge-inactive">Inactive Account</span>{% endif %}
+      </div>
+      <div style="text-align:left;margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-phone" style="width:18px;color:#22c55e;"></i> {{ farmer_user.contact|default:"—" }}</div>
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-envelope" style="width:18px;color:#60a5fa;"></i> {{ farmer_user.email|default:"—" }}</div>
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-location-dot" style="width:18px;color:#f59e0b;"></i> {{ farmer_user.city|default:"—" }}</div>
+        {% if farmer %}
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-land-mine-on" style="width:18px;color:#a78bfa;"></i> {{ farmer.acres|default:"—" }} Acres</div>
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-map-pin" style="width:18px;color:#f87171;"></i> {{ farmer.address|default:"—"|truncatechars:40 }}</div>
+        {% endif %}
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-calendar" style="width:18px;color:#38bdf8;"></i> Joined {{ farmer_user.date_joined|date:"M d, Y" }}</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="table-wrapper" style="padding:20px;margin-top:16px;">
+      <div style="font-size:14px;font-weight:600;color:var(--gray-100);margin-bottom:12px;">Actions</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="{% url 'subadmin:toggle_farmer' farmer_user.pk %}" class="btn {% if farmer_user.is_active %}btn-warning{% else %}btn-primary{% endif %}" style="width:100%;text-align:center;">
+          <i class="fa-solid {% if farmer_user.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i>
+          {% if farmer_user.is_active %}Deactivate{% else %}Activate{% endif %} Account
+        </a>
+        {% if farmer %}
+        <a href="{% url 'subadmin:grant_doc_permission' farmer_user.pk %}" class="btn btn-secondary" style="width:100%;text-align:center;">
+          <i class="fa-solid fa-file-shield"></i>
+          {% if farmer.doc_edit_permission %}Revoke{% else %}Grant{% endif %} Doc Permission
+        </a>
+        {% endif %}
+        <a href="#" onclick="openConfirm('{% url 'subadmin:delete_farmer' farmer_user.pk %}','Delete Farmer?','This permanently deletes {{ farmer_user.name }} and ALL their data.')"
+          class="btn btn-danger" style="width:100%;text-align:center;">
+          <i class="fa-solid fa-trash"></i> Delete Account
+        </a>
+      </div>
+
+      <!-- Reset Password Form -->
+      <form method="POST" action="{% url 'subadmin:reset_farmer_password' farmer_user.pk %}" style="margin-top:16px;">
+        {% csrf_token %}
+        <div style="font-size:13px;font-weight:600;color:var(--gray-100);margin-bottom:8px;">Reset Password</div>
+        <input type="password" name="new_password" placeholder="New password (min 4 chars)"
+          style="width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;
+          padding:10px;color:var(--gray-100);font-family:Inter,sans-serif;margin-bottom:8px;box-sizing:border-box;"/>
+        <button type="submit" class="btn btn-secondary" style="width:100%;">
+          <i class="fa-solid fa-key"></i> Reset Password
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right Tabs -->
+  <div>
+    <!-- Documents -->
+    {% if farmer %}
+    <div class="table-wrapper" style="margin-bottom:16px;padding:20px;">
+      <div style="font-size:15px;font-weight:600;color:var(--gray-100);margin-bottom:16px;">Documents</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
+        {% for doc_label, doc_field in farmer.adharcard,farmer.pancard,farmer.passbook,farmer.seventwel %}{% empty %}{% endfor %}
+        <div style="background:var(--main-bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+          <i class="fa-solid fa-id-card" style="font-size:24px;color:{% if farmer.adharcard %}#22c55e{% else %}#ef4444{% endif %};margin-bottom:8px;display:block;"></i>
+          <div style="font-size:13px;font-weight:600;color:var(--gray-100);">Aadhaar Card</div>
+          {% if farmer.adharcard %}<a href="{{ farmer.adharcard.url }}" target="_blank" style="font-size:12px;color:#22c55e;">View</a>
+          {% else %}<span style="font-size:12px;color:#ef4444;">Not Uploaded</span>{% endif %}
+        </div>
+        <div style="background:var(--main-bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+          <i class="fa-solid fa-credit-card" style="font-size:24px;color:{% if farmer.pancard %}#22c55e{% else %}#ef4444{% endif %};margin-bottom:8px;display:block;"></i>
+          <div style="font-size:13px;font-weight:600;color:var(--gray-100);">PAN Card</div>
+          {% if farmer.pancard %}<a href="{{ farmer.pancard.url }}" target="_blank" style="font-size:12px;color:#22c55e;">View</a>
+          {% else %}<span style="font-size:12px;color:#ef4444;">Not Uploaded</span>{% endif %}
+        </div>
+        <div style="background:var(--main-bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+          <i class="fa-solid fa-book" style="font-size:24px;color:{% if farmer.passbook %}#22c55e{% else %}#ef4444{% endif %};margin-bottom:8px;display:block;"></i>
+          <div style="font-size:13px;font-weight:600;color:var(--gray-100);">Bank Passbook</div>
+          {% if farmer.passbook %}<a href="{{ farmer.passbook.url }}" target="_blank" style="font-size:12px;color:#22c55e;">View</a>
+          {% else %}<span style="font-size:12px;color:#ef4444;">Not Uploaded</span>{% endif %}
+        </div>
+        <div style="background:var(--main-bg);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+          <i class="fa-solid fa-file-alt" style="font-size:24px;color:{% if farmer.seventwel %}#22c55e{% else %}#ef4444{% endif %};margin-bottom:8px;display:block;"></i>
+          <div style="font-size:13px;font-weight:600;color:var(--gray-100);">7/12 Extract</div>
+          {% if farmer.seventwel %}<a href="{{ farmer.seventwel.url }}" target="_blank" style="font-size:12px;color:#22c55e;">View</a>
+          {% else %}<span style="font-size:12px;color:#ef4444;">Not Uploaded</span>{% endif %}
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:#94a3b8;">
+        Aadhaar No: <strong style="color:var(--gray-100);">{{ farmer.adharno|default:"Not set" }}</strong>
+        &nbsp;|&nbsp; Doc Edit Permission: 
+        {% if farmer.doc_edit_permission %}<span class="badge-active">Granted</span>
+        {% else %}<span class="badge-inactive">Locked</span>{% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Crops -->
+    <div class="table-wrapper" style="margin-bottom:16px;">
+      <div class="table-header">
+        <div class="table-title">Listed Crops ({{ crops.count }})</div>
+      </div>
+      <table>
+        <thead><tr><th>Crop</th><th>Category</th><th>Qty</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for c in crops %}
+          <tr>
+            <td>{{ c.cropname }}</td>
+            <td>{{ c.category }}</td>
+            <td>{{ c.quantity }} kg</td>
+            <td>₹{{ c.price }}</td>
+            <td>{% if c.is_approved %}<span class="badge-approved">Approved</span>
+                {% else %}<span class="badge-pending">Pending</span>{% endif %}</td>
+            <td>
+              {% if not c.is_approved %}
+              <a href="{% url 'subadmin:crop_approve' c.pk %}" class="btn btn-primary btn-sm">Approve</a>
+              {% else %}
+              <a href="{% url 'subadmin:crop_reject' c.pk %}" class="btn btn-warning btn-sm">Reject</a>
+              {% endif %}
+              <a href="{% url 'subadmin:crop_delete' c.pk %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" style="text-align:center;color:#94a3b8;">No crops listed</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tools -->
+    <div class="table-wrapper" style="margin-bottom:16px;">
+      <div class="table-header"><div class="table-title">Listed Tools ({{ tools.count }})</div></div>
+      <table>
+        <thead><tr><th>Tool</th><th>Category</th><th>Condition</th><th>Price</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for t in tools %}
+          <tr>
+            <td>{{ t.tool_name }}</td>
+            <td>{{ t.get_category_display }}</td>
+            <td>{{ t.get_condition_display }}</td>
+            <td>₹{{ t.predicted_price|default:t.original_price }}</td>
+            <td>{{ t.availability_status }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" style="text-align:center;color:#94a3b8;">No tools listed</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Blogs -->
+    <div class="table-wrapper">
+      <div class="table-header"><div class="table-title">Blogs ({{ blogs.count }})</div></div>
+      <table>
+        <thead><tr><th>Title</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for b in blogs %}
+          <tr>
+            <td>{{ b.title|default:"Untitled"|truncatechars:40 }}</td>
+            <td>{{ b.created_at|date:"M d, Y" }}</td>
+            <td><a href="{% url 'subadmin:blog_delete' b.pk %}" class="btn btn-danger btn-sm">Delete</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" style="text-align:center;color:#94a3b8;">No blogs</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

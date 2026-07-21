@@ -1,0 +1,94 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Buyer: {{ buyer.user.name }}{% endblock %}
+{% block page_title %}Buyer Profile{% endblock %}
+{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_buyers' %}" style="color:#22c55e;">Buyers</a> / {{ buyer.user.name }}{% endblock %}
+{% block nav_buyers %}active{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start;">
+  <!-- Left -->
+  <div>
+    <div class="table-wrapper" style="padding:24px;text-align:center;">
+      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#2563eb);
+        display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:28px;margin:0 auto 14px;">
+        {{ buyer.user.name|make_list|first|upper }}
+      </div>
+      <div style="font-size:19px;font-weight:700;color:var(--gray-100);">{{ buyer.user.name }}</div>
+      <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{{ buyer.business_type|default:"Buyer" }}</div>
+      <div style="margin:10px 0;">
+        {% if buyer.user.is_active %}<span class="badge-active">Active</span>{% else %}<span class="badge-inactive">Inactive</span>{% endif %}
+        {% if buyer.is_verified %}<span class="badge-verified">KYC Verified</span>{% else %}<span class="badge-pending">Unverified</span>{% endif %}
+      </div>
+      <div style="text-align:left;margin-top:14px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-phone" style="width:18px;color:#22c55e;"></i> {{ buyer.user.contact|default:"—" }}</div>
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-envelope" style="width:18px;color:#60a5fa;"></i> {{ buyer.user.email|default:"—" }}</div>
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-map-pin" style="width:18px;color:#f59e0b;"></i> {{ buyer.state }}</div>
+        <div style="font-size:13px;color:#94a3b8;"><i class="fa-solid fa-file-invoice" style="width:18px;color:#a78bfa;"></i> GST: {{ buyer.gst_no|default:"—" }}</div>
+      </div>
+    </div>
+    <div class="table-wrapper" style="padding:18px;margin-top:14px;">
+      <div style="font-size:14px;font-weight:600;color:var(--gray-100);margin-bottom:10px;">Actions</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="{% url 'subadmin:toggle_buyer' buyer.pk %}" class="btn {% if buyer.user.is_active %}btn-warning{% else %}btn-primary{% endif %}" style="text-align:center;">
+          <i class="fa-solid {% if buyer.user.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i>
+          {% if buyer.user.is_active %}Deactivate{% else %}Activate{% endif %}
+        </a>
+        <a href="{% url 'subadmin:verify_buyer' buyer.pk %}" class="btn btn-secondary" style="text-align:center;">
+          <i class="fa-solid fa-shield-check"></i>
+          {% if buyer.is_verified %}Unverify{% else %}Verify KYC{% endif %}
+        </a>
+        <a href="#" onclick="openConfirm('{% url 'subadmin:delete_buyer' buyer.pk %}','Delete Buyer?','This is permanent.')"
+          class="btn btn-danger" style="text-align:center;">
+          <i class="fa-solid fa-trash"></i> Delete
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div>
+    <!-- Orders -->
+    <div class="table-wrapper" style="margin-bottom:16px;">
+      <div class="table-header"><div class="table-title">Orders ({{ orders.count }})</div></div>
+      <table>
+        <thead><tr><th>Order ID</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for o in orders %}
+          <tr>
+            <td>{{ o.order_id }}</td>
+            <td>₹{{ o.total_amount }}</td>
+            <td>{% if o.status == 'Delivered' %}<span class="badge-approved">Delivered</span>
+                {% elif o.status == 'Pending' %}<span class="badge-pending">Pending</span>
+                {% elif o.status == 'Cancelled' %}<span class="badge-inactive">Cancelled</span>
+                {% else %}<span class="badge-verified">{{ o.status }}</span>{% endif %}</td>
+            <td>{{ o.created_at|date:"M d, Y" }}</td>
+            <td><a href="{% url 'subadmin:order_detail' o.pk %}" class="btn btn-secondary btn-sm">View</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" style="text-align:center;color:#94a3b8;">No orders yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Premium -->
+    <div class="table-wrapper">
+      <div class="table-header"><div class="table-title">Premium History</div></div>
+      <table>
+        <thead><tr><th>Plan</th><th>Cycle</th><th>Purchase Date</th></tr></thead>
+        <tbody>
+          {% for p in premiums %}
+          <tr>
+            <td>{{ p.premium_type }}</td>
+            <td>{{ p.premium_time }}</td>
+            <td>{{ p.purchase_date|date:"M d, Y" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" style="text-align:center;color:#94a3b8;">No premium subscriptions</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

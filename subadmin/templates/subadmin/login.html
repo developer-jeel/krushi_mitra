@@ -1,100 +1,67 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  {% load static %}
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login – Admin Panel | Krushi Mitra</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <title>Admin Login — Krushi Mitra</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="{% static 'js/admin.js' %}"/>
+  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f4f7fa;
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-    }
-    .login-container {
-      background: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    .login-logo img {
-      width: 80px;
-      margin-bottom: 20px;
-    }
-    .login-container h2 {
-      margin-top: 0;
-      margin-bottom: 24px;
-      color: #2c3e50;
-      font-weight: 700;
-    }
-    .form-group {
-      margin-bottom: 20px;
-      text-align: left;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #4b5563;
-      font-weight: 500;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #2e7d32;
-      box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
-    }
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      background: #2e7d32;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .login-btn:hover {
-      background: #1b5e20;
-    }
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#0f1729 0%,#1a2540 50%,#0d1f3c 100%);}
+    .login-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;padding:44px 40px;width:100%;max-width:420px;
+      box-shadow:0 20px 60px rgba(0,0,0,.5);backdrop-filter:blur(12px);}
+    .login-logo{display:flex;align-items:center;gap:14px;margin-bottom:32px;justify-content:center;}
+    .login-logo img{width:48px;border-radius:10px;}
+    .login-logo-text{font-size:20px;font-weight:800;color:#f1f5f9;}
+    .login-logo-text span{color:#22c55e;}
+    .login-title{font-size:26px;font-weight:700;color:#f1f5f9;text-align:center;margin-bottom:6px;}
+    .login-sub{font-size:14px;color:#94a3b8;text-align:center;margin-bottom:28px;}
+    .form-group{margin-bottom:18px;}
+    .form-group label{display:block;font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:6px;}
+    .form-group input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+      border-radius:10px;padding:12px 16px;color:#f1f5f9;font-size:15px;font-family:Inter,sans-serif;
+      outline:none;transition:.2s;}
+    .form-group input:focus{border-color:#22c55e;background:rgba(34,197,94,.05);}
+    .login-btn{width:100%;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;
+      border-radius:10px;padding:13px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;
+      font-family:Inter,sans-serif;transition:.2s;margin-top:8px;}
+    .login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(34,197,94,.35);}
+    .alert{padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:14px;}
+    .alert-error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5;}
+    .admin-icon{width:64px;height:64px;background:linear-gradient(135deg,#22c55e,#16a34a);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      margin:0 auto 20px;font-size:28px;color:#fff;}
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="login-logo">
-      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
+<div class="login-card">
+  <div class="admin-icon"><i class="fa-solid fa-user-shield"></i></div>
+  <div class="login-title">Admin Sign In</div>
+  <div class="login-sub">Access the Krushi Mitra Admin Panel</div>
+
+  {% for msg in messages %}
+  <div class="alert alert-error"><i class="fa-solid fa-circle-xmark"></i> {{ msg }}</div>
+  {% endfor %}
+
+  <form method="POST" action="{% url 'subadmin:login' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="contact">Mobile Number</label>
+      <input type="text" id="contact" name="contact" placeholder="Enter registered mobile" required
+        maxlength="10" pattern="[0-9]{10}"/>
     </div>
-    <h2>Admin Login</h2>
-    <form action="{% url 'subadmin:dashboard' %}" method="get">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter username" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter password" required>
-      </div>
-      <button type="submit" class="login-btn">Login</button>
-    </form>
-  </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" required/>
+    </div>
+    <button type="submit" class="login-btn">
+      <i class="fa-solid fa-right-to-bracket"></i> Sign In
+    </button>
+  </form>
+</div>
 </body>
 </html>

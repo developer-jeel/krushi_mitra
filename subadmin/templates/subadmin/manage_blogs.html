@@ -1,0 +1,47 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Blogs{% endblock %}
+{% block page_title %}Blog Management{% endblock %}
+{% block breadcrumb %}Admin / Blogs{% endblock %}
+{% block nav_blogs %}active{% endblock %}
+
+{% block content %}
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search title or author…"
+    style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
+    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i> Search</button>
+  <a href="{% url 'subadmin:manage_blogs' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">All Blogs <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>Title</th><th>Author</th><th>Date</th><th>Delete</th></tr></thead>
+    <tbody>
+      {% for b in blogs %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            {% if b.image %}
+            <img src="{{ b.image.url }}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+            {% endif %}
+            <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ b.title|default:"Untitled"|truncatechars:50 }}</div>
+          </div>
+        </td>
+        <td>{{ b.user.name }}</td>
+        <td style="font-size:12px;color:#94a3b8;">{{ b.created_at|date:"M d, Y" }}</td>
+        <td>
+          <a href="#" onclick="openConfirm('{% url 'subadmin:blog_delete' b.pk %}','Delete Blog?','This removes the blog permanently.')"
+            class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:40px;">No blogs found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

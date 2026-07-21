@@ -1,0 +1,62 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Orders{% endblock %}
+{% block page_title %}Order Management{% endblock %}
+{% block breadcrumb %}Admin / Orders{% endblock %}
+{% block nav_orders %}active{% endblock %}
+
+{% block content %}
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search order ID or buyer…"
+    style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
+    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="status" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Status</option>
+    {% for val, label in status_choices %}
+    <option value="{{ val }}" {% if status == val %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i> Filter</button>
+  <a href="{% url 'subadmin:manage_orders' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+  <a href="{% url 'subadmin:export_orders' %}" class="btn btn-secondary" style="padding:10px 20px;">
+    <i class="fa-solid fa-download"></i> Export CSV
+  </a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">All Orders <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Order ID</th><th>Buyer</th><th>Items</th><th>Amount</th><th>Status</th><th>Payment</th><th>Date</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td style="font-weight:600;color:#22c55e;">{{ o.order_id }}</td>
+        <td>{{ o.user.name }}</td>
+        <td>{{ o.items.count }}</td>
+        <td>₹{{ o.total_amount }}</td>
+        <td>
+          {% if o.status == 'Delivered' %}<span class="badge-approved">Delivered</span>
+          {% elif o.status == 'Pending' %}<span class="badge-pending">Pending</span>
+          {% elif o.status == 'Shipped' %}<span class="badge-verified">Shipped</span>
+          {% elif o.status == 'Cancelled' %}<span class="badge-inactive">Cancelled</span>
+          {% else %}<span class="badge-pending">{{ o.status }}</span>{% endif %}
+        </td>
+        <td>{{ o.payment_status }}</td>
+        <td style="font-size:12px;color:#94a3b8;">{{ o.created_at|date:"M d, Y" }}</td>
+        <td>
+          <a href="{% url 'subadmin:order_detail' o.pk %}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-eye"></i> View
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:40px;">No orders found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

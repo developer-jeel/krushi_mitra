@@ -1,0 +1,97 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Order {{ order.order_id }}{% endblock %}
+{% block page_title %}Order Detail{% endblock %}
+{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_orders' %}" style="color:#22c55e;">Orders</a> / {{ order.order_id }}{% endblock %}
+{% block nav_orders %}active{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;">
+  <!-- Order Items -->
+  <div class="table-wrapper">
+    <div class="table-header">
+      <div class="table-title">Order Items</div>
+    </div>
+    <table>
+      <thead><tr><th>Crop</th><th>Qty</th><th>Price/Unit</th><th>Subtotal</th></tr></thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>
+            <div style="font-weight:600;color:var(--gray-100);">{{ item.crop_name }}</div>
+          </td>
+          <td>{{ item.quantity }} kg</td>
+          <td>₹{{ item.price }}</td>
+          <td>₹{{ item.subtotal }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;color:#94a3b8;">No items</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div style="padding:16px;border-top:1px solid var(--border);">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span style="color:#94a3b8;">Subtotal</span><span style="color:var(--gray-100);">₹{{ order.subtotal }}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span style="color:#94a3b8;">Tax</span><span style="color:var(--gray-100);">₹{{ order.tax }}</span>
+      </div>
+      {% if order.discount_amount %}
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span style="color:#94a3b8;">Discount ({{ order.coupon_code }})</span>
+        <span style="color:#22c55e;">-₹{{ order.discount_amount }}</span>
+      </div>
+      {% endif %}
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+        <span style="color:var(--gray-100);">Total</span>
+        <span style="color:#22c55e;">₹{{ order.total_amount }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Meta -->
+  <div>
+    <div class="table-wrapper" style="padding:20px;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:700;color:var(--gray-100);margin-bottom:16px;">{{ order.order_id }}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#94a3b8;">Buyer</span>
+          <span style="font-size:13px;font-weight:600;color:var(--gray-100);">{{ order.user.name }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#94a3b8;">Order Date</span>
+          <span style="font-size:13px;color:var(--gray-100);">{{ order.created_at|date:"M d, Y H:i" }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-size:13px;color:#94a3b8;">Payment</span>
+          <span style="font-size:13px;color:var(--gray-100);">{{ order.payment_method|default:"—" }}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;color:#94a3b8;">Status</span>
+          {% if order.status == 'Delivered' %}<span class="badge-approved">Delivered</span>
+          {% elif order.status == 'Pending' %}<span class="badge-pending">Pending</span>
+          {% elif order.status == 'Cancelled' %}<span class="badge-inactive">Cancelled</span>
+          {% else %}<span class="badge-verified">{{ order.status }}</span>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Status -->
+    <div class="table-wrapper" style="padding:20px;">
+      <div style="font-size:14px;font-weight:600;color:var(--gray-100);margin-bottom:12px;">Update Status</div>
+      <form method="POST" action="{% url 'subadmin:order_update_status' order.pk %}">
+        {% csrf_token %}
+        <select name="status" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
+          border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;
+          outline:none;margin-bottom:10px;">
+          {% for val, label in status_choices %}
+          <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary" style="width:100%;">
+          <i class="fa-solid fa-save"></i> Update Status
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,287 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  {% load static %}
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Manage Farmers – Admin | Krushi Mitra</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-</head>
-<body>
+{% extends "subadmin/base.html" %}
+{% block title %}Manage Farmers{% endblock %}
+{% block page_title %}Manage Farmers{% endblock %}
+{% block breadcrumb %}Admin / Farmers{% endblock %}
+{% block nav_farmers %}active{% endblock %}
 
-<!-- ══ SIDEBAR ══ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
-    <div class="brand">Krushi Mitra <span>Admin Panel</span><div class="admin-badge">Admin</div></div>
+{% block content %}
+<!-- Filters -->
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search name, contact, email…"
+    style="flex:1;min-width:220px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="status" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    <option value="" {% if not status %}selected{% endif %}>All Status</option>
+    <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
+    <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
+  </select>
+  <input type="text" name="city" value="{{ city }}" placeholder="Filter by city"
+    style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;width:160px;"/>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;">
+    <i class="fa-solid fa-search"></i> Search
+  </button>
+  <a href="{% url 'subadmin:manage_farmers' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">Farmers <span style="font-size:13px;color:#94a3b8;">({{ total }} results)</span></div>
+    <a href="{% url 'subadmin:export_farmers' %}" class="btn btn-secondary btn-sm">
+      <i class="fa-solid fa-download"></i> Export CSV
+    </a>
   </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section-title">Main</div>
-    <a href="{% url 'subadmin:dashboard' %}" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
-    <div class="nav-section-title">User Management</div>
-    <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item active"><i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
-    <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item"><i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
-    <div class="nav-section-title">Operations</div>
-    <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item"><i class="fa-solid fa-id-card"></i><span>KYC Approval</span><span class="nav-badge">8</span></a>
-    <a href="{% url 'subadmin:order_management' %}" class="nav-item"><i class="fa-solid fa-cart-flatbed"></i><span>Order Management</span></a>
-    <a href="{% url 'subadmin:product_approval' %}" class="nav-item"><i class="fa-solid fa-seedling"></i><span>Product Approval</span><span class="nav-badge amber">5</span></a>
-    <div class="nav-section-title">Support</div>
-    <a href="{% url 'subadmin:support_tickets' %}" class="nav-item"><i class="fa-solid fa-headset"></i><span>Support Tickets</span><span class="nav-badge">3</span></a>
-    <div class="nav-section-title">More</div>
-    <a href="{% url 'subadmin:reports' %}" class="nav-item"><i class="fa-solid fa-chart-line"></i><span>Reports & Analytics</span></a>
-    <a href="{% url 'subadmin:profile' %}" class="nav-item"><i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
-    <a href="{% url 'subadmin:system_settings' %}" class="nav-item"><i class="fa-solid fa-gears"></i><span>System Settings</span></a>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="sidebar-user">
-      <div class="sidebar-user-av">A</div>
-      <div class="sidebar-user-info">
-        <div class="sidebar-user-name">Amit Sharma</div>
-        <div class="sidebar-user-role">Super Admin</div>
-      </div>
-    </div>
-  </div>
-</aside>
-
-<!-- ══ MAIN ══ -->
-<div class="main">
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
-      <div>
-        <div class="page-title">Manage Farmers</div>
-        <div class="breadcrumb">Dashboard / User Management / Farmers</div>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <button class="topbar-icon-btn"><i class="fa-solid fa-bell"></i><span class="badge"></span></button>
-      <div class="avatar">A</div>
-    </div>
-  </header>
-
-  <div class="page-content">
-
-    <!-- Summary Cards -->
-    <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fa-solid fa-tractor"></i></div>
-        <div class="stat-info"><div class="stat-value">1,284</div><div class="stat-label">Total Farmers</div><div class="stat-change up">↑ 48 this month</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="stat-info"><div class="stat-value">1,102</div><div class="stat-label">Active Farmers</div><div class="stat-change up">↑ Verified</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon amber"><i class="fa-solid fa-clock"></i></div>
-        <div class="stat-info"><div class="stat-value">124</div><div class="stat-label">KYC Pending</div><div class="stat-change down">Needs review</div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon red"><i class="fa-solid fa-ban"></i></div>
-        <div class="stat-info"><div class="stat-value">58</div><div class="stat-label">Suspended</div><div class="stat-change down">↓ 3 this week</div></div>
-      </div>
-    </div>
-
-    <!-- Filter Bar -->
-    <div class="filter-bar">
-      <div class="search-input-wrap">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search farmer by name, ID, state…"/>
-      </div>
-      <select class="filter-select">
-        <option>All States</option>
-        <option>Gujarat</option>
-        <option>Maharashtra</option>
-        <option>Rajasthan</option>
-        <option>Punjab</option>
-        <option>Uttar Pradesh</option>
-      </select>
-      <select class="filter-select">
-        <option>All Status</option>
-        <option>Active</option>
-        <option>Pending KYC</option>
-        <option>Suspended</option>
-      </select>
-      <button class="btn btn-primary btn-sm" data-modal-open="addFarmerModal"><i class="fa-solid fa-plus"></i> Add Farmer</button>
-    </div>
-
-    <!-- Farmers Table -->
-    <div class="table-wrapper">
-      <div class="table-header">
-        <div class="table-title">All Farmers <span style="font-size:12px;color:var(--gray-400);font-weight:400;">(1,284 records)</span></div>
-        <div class="table-actions">
-          <button class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-export"></i> Export</button>
-        </div>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Farmer</th>
-            <th>Farmer ID</th>
-            <th>State / District</th>
-            <th>Land (Acres)</th>
-            <th>Products</th>
-            <th>KYC</th>
-            <th>Status</th>
-            <th>Joined</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><div class="user-cell"><div class="user-av green">R</div><div><div class="user-name">Ramesh Patel</div><div class="user-sub">ramesh@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#FRM-1001</code></td>
-            <td>Gujarat, Anand</td><td>12.5</td><td>8</td>
-            <td><span class="status-pill approved">Verified</span></td>
-            <td><span class="status-pill active">Active</span></td>
-            <td>Jan 2026</td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewFarmerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av teal">M</div><div><div class="user-name">Mahesh Kumar</div><div class="user-sub">mahesh@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#FRM-1002</code></td>
-            <td>Rajasthan, Jaipur</td><td>8.0</td><td>5</td>
-            <td><span class="status-pill pending">Pending</span></td>
-            <td><span class="status-pill pending">Pending KYC</span></td>
-            <td>Feb 2026</td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewFarmerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av purple">A</div><div><div class="user-name">Arjun Desai</div><div class="user-sub">arjun@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#FRM-1003</code></td>
-            <td>Punjab, Ludhiana</td><td>20.0</td><td>12</td>
-            <td><span class="status-pill approved">Verified</span></td>
-            <td><span class="status-pill active">Active</span></td>
-            <td>Mar 2026</td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewFarmerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av amber">V</div><div><div class="user-name">Vikas Singh</div><div class="user-sub">vikas@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#FRM-1004</code></td>
-            <td>Maharashtra, Nashik</td><td>6.5</td><td>3</td>
-            <td><span class="status-pill rejected">Rejected</span></td>
-            <td><span class="status-pill inactive">Suspended</span></td>
-            <td>Apr 2026</td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewFarmerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av green">S</div><div><div class="user-name">Suresh Yadav</div><div class="user-sub">suresh.y@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#FRM-1005</code></td>
-            <td>UP, Varanasi</td><td>15.0</td><td>9</td>
-            <td><span class="status-pill approved">Verified</span></td>
-            <td><span class="status-pill active">Active</span></td>
-            <td>Apr 2026</td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewFarmerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-          <tr>
-            <td><div class="user-cell"><div class="user-av blue">N</div><div><div class="user-name">Nirmala Devi</div><div class="user-sub">nirmala@mail.com</div></div></div></td>
-            <td><code style="font-size:12px;">#FRM-1006</code></td>
-            <td>Madhya Pradesh, Bhopal</td><td>4.0</td><td>2</td>
-            <td><span class="status-pill pending">Pending</span></td>
-            <td><span class="status-pill pending">Pending KYC</span></td>
-            <td>May 2026</td>
-            <td><div class="action-btns">
-              <button class="btn btn-blue btn-sm" data-modal-open="viewFarmerModal"><i class="fa-solid fa-eye"></i></button>
-              <button class="btn btn-success btn-sm btn-approve"><i class="fa-solid fa-check"></i></button>
-              <button class="btn btn-danger btn-sm btn-reject"><i class="fa-solid fa-ban"></i></button>
-            </div></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <span style="font-size:13px;color:var(--gray-400);">Showing 1–6 of 1,284 farmers</span>
-      <div style="display:flex;gap:6px;">
-        <button class="btn btn-secondary btn-sm">← Prev</button>
-        <button class="btn btn-primary btn-sm">1</button>
-        <button class="btn btn-secondary btn-sm">2</button>
-        <button class="btn btn-secondary btn-sm">3</button>
-        <button class="btn btn-secondary btn-sm">Next →</button>
-      </div>
-    </div>
-
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Name</th><th>Contact</th><th>City</th>
+        <th>Crops</th><th>Tools</th><th>Docs</th><th>Status</th><th>Joined</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in farmers %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);
+              display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;">
+              {{ u.name|make_list|first|upper }}
+            </div>
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ u.name }}</div>
+              <div style="font-size:12px;color:#94a3b8;">{{ u.email|default:"—" }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ u.contact|default:"—" }}</td>
+        <td>{{ u.city|default:"—" }}</td>
+        <td>{{ u.seller.count }}</td>
+        <td>{{ u.farmer_tools.count }}</td>
+        <td>
+          {% if u.farmer.adharcard %}<span class="badge-verified">Uploaded</span>
+          {% else %}<span class="badge-pending">Missing</span>{% endif %}
+        </td>
+        <td>
+          {% if u.is_active %}<span class="badge-active">Active</span>
+          {% else %}<span class="badge-inactive">Inactive</span>{% endif %}
+        </td>
+        <td style="font-size:12px;color:#94a3b8;">{{ u.date_joined|date:"M d, Y" }}</td>
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <a href="{% url 'subadmin:farmer_detail' u.pk %}" class="btn btn-secondary btn-sm" title="View">
+              <i class="fa-solid fa-eye"></i></a>
+            <a href="#" onclick="openConfirm('{% url 'subadmin:toggle_farmer' u.pk %}',
+              '{% if u.is_active %}Deactivate{% else %}Activate{% endif %} Farmer?',
+              'This will {% if u.is_active %}block{% else %}restore{% endif %} {{ u.name }}\'s access.')"
+              class="btn btn-sm {% if u.is_active %}btn-warning{% else %}btn-primary{% endif %}" title="Toggle">
+              <i class="fa-solid {% if u.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i>
+            </a>
+            <a href="#" onclick="openConfirm('{% url 'subadmin:delete_farmer' u.pk %}',
+              'Delete Farmer?','This permanently deletes {{ u.name }} and ALL their data.')"
+              class="btn btn-danger btn-sm" title="Delete">
+              <i class="fa-solid fa-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="10" style="text-align:center;color:#94a3b8;padding:40px;">No farmers found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
-
-<!-- View Farmer Modal -->
-<div class="modal-overlay" id="viewFarmerModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fa-solid fa-tractor" style="color:var(--primary-mid);margin-right:8px;"></i>Farmer Details</div>
-      <button class="modal-close" data-modal-close="viewFarmerModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-        <div class="user-av green" style="width:60px;height:60px;font-size:22px;">R</div>
-        <div>
-          <div style="font-size:18px;font-weight:800;color:var(--gray-800);">Ramesh Patel</div>
-          <div style="font-size:13px;color:var(--gray-400);">#FRM-1001 · Gujarat, Anand</div>
-          <span class="status-pill active" style="margin-top:6px;display:inline-flex;">Active</span>
-        </div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group"><label>Phone</label><input class="form-control" value="+91 98765 43210" disabled/></div>
-        <div class="form-group"><label>Email</label><input class="form-control" value="ramesh@mail.com" disabled/></div>
-        <div class="form-group"><label>Land Area</label><input class="form-control" value="12.5 Acres" disabled/></div>
-        <div class="form-group"><label>Products Listed</label><input class="form-control" value="8 Products" disabled/></div>
-        <div class="form-group"><label>Total Earnings</label><input class="form-control" value="₹48,250" disabled/></div>
-        <div class="form-group"><label>Joined</label><input class="form-control" value="January 2026" disabled/></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-modal-close="viewFarmerModal">Close</button>
-      <button class="btn btn-primary"><i class="fa-solid fa-id-card"></i> View KYC</button>
-    </div>
-  </div>
-</div>
-
-<!-- Add Farmer Modal -->
-<div class="modal-overlay" id="addFarmerModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title"><i class="fa-solid fa-plus" style="color:var(--primary-mid);margin-right:8px;"></i>Add New Farmer</div>
-      <button class="modal-close" data-modal-close="addFarmerModal"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group"><label>Full Name</label><input class="form-control" placeholder="Enter full name"/></div>
-        <div class="form-group"><label>Phone Number</label><input class="form-control" placeholder="+91 XXXXX XXXXX"/></div>
-        <div class="form-group"><label>Email</label><input class="form-control" placeholder="email@example.com"/></div>
-        <div class="form-group"><label>State</label><select class="form-control filter-select"><option>Gujarat</option><option>Maharashtra</option><option>Punjab</option><option>Rajasthan</option></select></div>
-        <div class="form-group"><label>District</label><input class="form-control" placeholder="Enter district"/></div>
-        <div class="form-group"><label>Land Area (Acres)</label><input class="form-control" type="number" placeholder="0.0"/></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" data-modal-close="addFarmerModal">Cancel</button>
-      <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Farmer</button>
-    </div>
-  </div>
-</div>
-
-<script src="{% static 'js/admin.js' %}"></script>
-</body>
-</html>
+{% endblock %}

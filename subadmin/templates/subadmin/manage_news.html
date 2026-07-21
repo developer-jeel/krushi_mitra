@@ -1,0 +1,72 @@
+{% extends "subadmin/base.html" %}
+{% block title %}News Management{% endblock %}
+{% block page_title %}News Management{% endblock %}
+{% block breadcrumb %}Admin / News{% endblock %}
+{% block nav_news %}active{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+  <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex:1;">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search news…"
+      style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
+      border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
+    <select name="category" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+      padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+      <option value="">All Categories</option>
+      {% for val, label in category_choices %}
+      <option value="{{ val }}" {% if category == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i></button>
+    <a href="{% url 'subadmin:manage_news' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+  </form>
+  <a href="{% url 'subadmin:news_add' %}" class="btn btn-primary" style="margin-left:16px;white-space:nowrap;">
+    <i class="fa-solid fa-plus"></i> Add News
+  </a>
+</div>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">All News <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Title</th><th>Category</th><th>State</th><th>Breaking</th><th>Published</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for n in all_news %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            {% if n.image %}<img src="{{ n.image.url }}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">{% endif %}
+            <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ n.title|truncatechars:55 }}</div>
+          </div>
+        </td>
+        <td><span class="badge-verified">{{ n.category }}</span></td>
+        <td>{{ n.state }}</td>
+        <td>
+          <a href="{% url 'subadmin:news_toggle_breaking' n.pk %}" style="text-decoration:none;">
+            {% if n.is_breaking %}<span class="badge-breaking">🔴 Breaking</span>
+            {% else %}<span style="color:#94a3b8;font-size:12px;">—</span>{% endif %}
+          </a>
+        </td>
+        <td style="font-size:12px;color:#94a3b8;">{{ n.created_at|date:"M d, Y" }}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <a href="{% url 'subadmin:news_edit' n.pk %}" class="btn btn-secondary btn-sm" title="Edit">
+              <i class="fa-solid fa-pen"></i></a>
+            <a href="{% url 'subadmin:news_toggle_breaking' n.pk %}" class="btn btn-sm btn-warning" title="Toggle Breaking">
+              <i class="fa-solid fa-bolt"></i></a>
+            <a href="#" onclick="openConfirm('{% url 'subadmin:news_delete' n.pk %}','Delete News?','Removes this article permanently.')"
+              class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:40px;">No news articles found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

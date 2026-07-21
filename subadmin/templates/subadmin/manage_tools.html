@@ -1,0 +1,70 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Manage Tools{% endblock %}
+{% block page_title %}Tool Management{% endblock %}
+{% block breadcrumb %}Admin / Tools{% endblock %}
+{% block nav_tools %}active{% endblock %}
+
+{% block content %}
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search tool or farmer…"
+    style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
+    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="category" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Categories</option>
+    {% for val, label in category_choices %}
+    <option value="{{ val }}" {% if category == val %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i> Filter</button>
+  <a href="{% url 'subadmin:manage_tools' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">All Tools <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Tool</th><th>Category</th><th>Farmer</th><th>Condition</th><th>Price</th><th>Status</th><th>Listed</th><th>Delete</th></tr>
+    </thead>
+    <tbody>
+      {% for t in tools %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            {% if t.image %}
+            <img src="{{ t.image.url }}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+            {% else %}
+            <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#f59e0b,#d97706);
+              display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0;">
+              <i class="fa-solid fa-screwdriver-wrench"></i></div>
+            {% endif %}
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ t.tool_name }}</div>
+              <div style="font-size:12px;color:#94a3b8;">{{ t.company|default:"" }} {{ t.model_name|default:"" }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ t.get_category_display }}</td>
+        <td>{{ t.user.name }}</td>
+        <td>{{ t.get_condition_display }}</td>
+        <td>₹{{ t.predicted_price|default:t.original_price }}</td>
+        <td>
+          {% if t.availability_status == 'available' %}<span class="badge-active">Available</span>
+          {% else %}<span class="badge-inactive">Sold</span>{% endif %}
+        </td>
+        <td style="font-size:12px;color:#94a3b8;">{{ t.created_at|date:"M d, Y" }}</td>
+        <td>
+          <a href="#" onclick="openConfirm('{% url 'subadmin:tool_delete' t.pk %}','Delete Tool?','Removes {{ t.tool_name }} permanently.')"
+            class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:40px;">No tools found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
