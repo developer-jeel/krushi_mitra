@@ -331,19 +331,11 @@ def farmer_profile(request):
     approved_count = crop.objects.filter(user=uid, is_approved=True).count()
     
     # Crops Sold & Total Revenue
-    sold_items = OrderItem.objects.filter(crop__user=uid, order__status__in=['Confirmed', 'Shipped', 'Delivered'])
-    crops_sold_count = sold_items.count()
+    sold_items = OrderItem.objects.filter(crop__user=uid).exclude(order__status='Cancelled')
+    crops_sold_count = sold_items.aggregate(Sum('quantity'))['quantity__sum'] or 0
     total_revenue = sold_items.aggregate(Sum('subtotal'))['subtotal__sum'] or 0
     
-    # Format total revenue beautifully
-    if total_revenue >= 10000000:
-        formatted_revenue = f"₹{total_revenue/10000000:.1f}Cr"
-    elif total_revenue >= 100000:
-        formatted_revenue = f"₹{total_revenue/100000:.1f}L"
-    elif total_revenue >= 1000:
-        formatted_revenue = f"₹{total_revenue/1000:.1f}K"
-    else:
-        formatted_revenue = f"₹{int(total_revenue)}"
+    formatted_revenue = f"₹{int(total_revenue):,}"
 
     context = {
         'uid': uid, 
