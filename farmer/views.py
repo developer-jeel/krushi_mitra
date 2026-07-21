@@ -12,6 +12,58 @@ from sklearn.ensemble import RandomForestClassifier
 from buyer.models import *
 from pathlib import Path
 import pandas as pd
+import joblib
+from django.db.models import Sum
+from django.core.cache import cache
+
+
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+
+PRICE_MODEL = DATA_DIR / "price_model.pkl"
+RAIN_MODEL = DATA_DIR / "rain_model.pkl"
+
+
+# ---------------- PRICE MODEL ----------------
+
+if not PRICE_MODEL.exists():
+
+    df = pd.read_csv(DATA_DIR / "tool_prices_1000000_dataset.csv")
+
+    X = df[["category", "years", "condition"]]
+    y = df["rate"].apply(math.log)
+
+    price_model = LinearRegression()
+    price_model.fit(X, y)
+
+    joblib.dump(price_model, PRICE_MODEL)
+
+else:
+    price_model = joblib.load(PRICE_MODEL)
+
+
+# ---------------- RAIN MODEL ----------------
+
+if not RAIN_MODEL.exists():
+
+    df = pd.read_csv(DATA_DIR / "weather_prediction.csv")
+
+    X = df[["temperature", "humidity", "wind_speed", "clouds"]]
+    y = df["rain"]
+
+    rain_model = RandomForestClassifier(
+        n_estimators=200,
+        random_state=42
+    )
+
+    rain_model.fit(X, y)
+
+    joblib.dump(rain_model, RAIN_MODEL)
+
+else:
+    rain_model = joblib.load(RAIN_MODEL)
 
 def register(request):
     if request.method == 'POST':
@@ -262,13 +314,37 @@ def my_posts(request):
 def delete_blog(request):
     return render(request,"farmer/my_post.html")
 
+
 @check_login(['Farmer'])
 def farmer_profile(request):
     uid = request.uid
     farmer_obj = getattr(uid, 'farmer', None)
-    crop_count = crop.objects.filter(user=uid).count()
+    
+    # Active Listings
     approved_count = crop.objects.filter(user=uid, is_approved=True).count()
-    context = {'uid': uid, 'farmer': farmer_obj, 'crop_count': crop_count, 'approved_count': approved_count}
+    
+    # Crops Sold & Total Revenue
+    sold_items = OrderItem.objects.filter(crop__user=uid, order__status__in=['Confirmed', 'Shipped', 'Delivered'])
+    crops_sold_count = sold_items.count()
+    total_revenue = sold_items.aggregate(Sum('subtotal'))['subtotal__sum'] or 0
+    
+    # Format total revenue beautifully
+    if total_revenue >= 10000000:
+        formatted_revenue = f"₹{total_revenue/10000000:.1f}Cr"
+    elif total_revenue >= 100000:
+        formatted_revenue = f"₹{total_revenue/100000:.1f}L"
+    elif total_revenue >= 1000:
+        formatted_revenue = f"₹{total_revenue/1000:.1f}K"
+    else:
+        formatted_revenue = f"₹{int(total_revenue)}"
+
+    context = {
+        'uid': uid, 
+        'farmer': farmer_obj, 
+        'approved_count': approved_count,
+        'crops_sold_count': crops_sold_count,
+        'formatted_revenue': formatted_revenue
+    }
 
     if request.method == 'POST':
         action = request.POST.get('action', 'personal')
@@ -463,7 +539,6 @@ def community_chat(request):
         sender = User.objects.get(id = uid.id)
         # message_content = request.POST.get('message')
         message_content = request.POST['message']
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++MESSAGE : " , message_content)
         if len(message_content) <= 0:
             messages.error(request, "Message cannot be empty")
             return render(request, "farmer/community_chat.html", context)
@@ -493,32 +568,13 @@ def predict_price(price, category, years, condition):
 
     years = max(years, 0)
 
-    BASE_DIR = Path(__file__).resolve().parent
-    csv_path = BASE_DIR / "data" / "tool_prices_1000000_dataset.csv"
-    df = pd.read_csv(csv_path)
-
-    X = df[["category", "years", "condition"]]
-    y = df["rate"]
-
-    log_y = [math.log(v) for v in y]
-
-    model = LinearRegression()
-    model.fit(X, log_y)
-
-    log_pred = model.predict([
+    log_pred = price_model.predict([
         [category, years, condition]
     ])[0]
 
-    print("LOG PRED :", log_pred)
-    
     rate = math.exp(log_pred)
 
-    print("RATE :", rate)
-
-    final_price = price * rate
-
-    # minimum protection
-    final_price = max(final_price, price * 0.1)
+    final_price = max(price * rate, price * 0.1)
 
     return round(final_price, 2)
 
@@ -586,49 +642,17 @@ def edit_crop(request, pk):
     return redirect('farmer_crops')
 
 def rain_probability(temperature,humidity,wind_speed,clouds):
-    model = RandomForestClassifier()
-    
-    X = [
-        [45,20,5,5],
-        [44,22,6,10],
-        [43,25,8,15],
-        [42,28,10,20],
-        [41,30,12,25],
-        [40,35,14,30],
-        [39,40,16,35],
-        [38,45,18,40],
-        [37,50,20,45],
-        [36,55,22,50],
-        [35,60,24,55],
-        [34,65,20,60],
-        [33,70,18,65],
-        [32,75,16,70],
-        [31,80,14,75],
-        [30,85,12,80],
-        [29,90,10,85],
-        [28,92,8,90],
-        [27,95,6,95],
-        [26,98,5,100],
-        [35,72,18,68],
-        [34,74,16,72],
-        [33,78,15,78],
-        [32,82,14,82],
-        [31,86,12,86],
-        [30,88,10,88],
-        [29,91,9,92],
-        [28,94,8,95],
-        [27,96,7,97],
-        [26,99,6,100]
-    ]
+    BASE_DIR = Path(__file__).resolve().parent
+    csv_path = BASE_DIR / "data" / "weather_prediction.csv"
+    df = pd.read_csv(csv_path)
 
-    y = [
-        0,0,0,0,0,
-        0,0,0,0,0,
-        0,1,1,1,1,
-        1,1,1,1,1,
-        1,1,1,1,1,
-        1,1,1,1,1
-    ] # 1 is rain, 0 is no rain
+    X = df[["temperature", "humidity", "wind_speed", "clouds"]]
+    y = df["rain"]
+
+    model = RandomForestClassifier(
+    n_estimators=200,
+    random_state=42)
+
     model.fit(X, y)
     result = model.predict_proba([
         [temperature, humidity, wind_speed, clouds]
@@ -637,25 +661,37 @@ def rain_probability(temperature,humidity,wind_speed,clouds):
 
 @check_login(['Farmer'])
 def farmer_news(request):
-    # api_key = "cda9b54ada6d720cbc78948d2e86b4d8"
+    api_key = "cda9b54ada6d720cbc78948d2e86b4d8"
     uid = request.uid
     city = uid.city if uid.city else "Delhi"
     all_news = news.objects.all().order_by('-created_at')
 
-    # response= requests.get(f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric")
-    # data = response.json()
-    # print("WEATHER DATA :", data)
-    # temperature = round(data["main"]["temp"])
-    # condition = data["weather"][0]["main"]
-    # humidity = data["main"]["humidity"]
-    # wind_speed = round(data["wind"]["speed"]*3.6)
-    # clouds = data["clouds"]["all"]
-    # 
-    temperature = 10
-    condition = "Rainy"
-    humidity = 90
-    wind_speed = 10
-    clouds = 90
+    cache_key = f"weather_{city}"
+
+    data = cache.get(cache_key)
+    print('+++++++++++++++++++>',data)
+    if data is None:
+        response = requests.get(
+        f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+        )
+        data = response.json()
+        cache.set(cache_key, data, 600)
+
+        print('========================>',data)
+
+    temperature = round(data["main"]["temp"])
+    condition = data["weather"][0]["main"]
+    humidity = data["main"]["humidity"]
+    wind_speed = round(data["wind"]["speed"]*3.6)
+    clouds = data["clouds"]["all"]
+
+    rain = rain_probability(
+        temperature,
+        humidity,
+        wind_speed,
+        clouds
+    )
+
     if request.method == "POST":
         state = request.POST.get('state')
         if state: 
@@ -678,11 +714,11 @@ def farmer_news(request):
         "condition": condition,
         "humidity": humidity,
         "wind_speed": wind_speed,
-        "rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)
+        "rain_probability": rain
         }
         return render(request, "farmer/news.html", context)
 
-    context = {'all_news': all_news,"city": city.upper(),"temperature": temperature,"condition": condition,"humidity": humidity,"wind_speed": wind_speed,"rain_probability": rain_probability(temperature, humidity, wind_speed, clouds)}
+    context = {'all_news': all_news,"city": city.upper(),"temperature": temperature,"condition": condition,"humidity": humidity,"wind_speed": wind_speed,"rain_probability": rain}
     return render(request, "farmer/news.html", context)
 
 

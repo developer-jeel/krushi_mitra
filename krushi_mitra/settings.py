@@ -103,6 +103,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "weather-cache",
+    }
+}
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
