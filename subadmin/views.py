@@ -11,7 +11,10 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from farmer.models import User, Farmer, crop, FarmerTool, bloag, community_message, news, gov_info
-from buyer.models import Buyer, Order, OrderItem, premium_buyer, verification_details
+from buyer.models import (
+    Buyer, Order, OrderItem, premium_buyer, verification_details,
+    premium_coupon, discount_coupon, premium_history,
+)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -95,7 +98,7 @@ def dashboard(request):
     total_revenue   = OrderItem.objects.aggregate(s=Sum('subtotal'))['s'] or 0
     premium_buyers  = Buyer.objects.filter(is_premiume=True).count()
 
-    # Pending KYC: farmers with no adhar verification
+    # Pending KYC
     pending_kyc = Farmer.objects.filter(
         Q(adharcard='') | Q(adharcard__isnull=True)
     ).count()
@@ -120,8 +123,23 @@ def dashboard(request):
     # Crop category breakdown
     crop_categories = list(crop.objects.values('category').annotate(c=Count('id')).order_by('-c')[:6])
 
-    # Recent registrations (last 5 users)
+    # Recent registrations
     recent_users = User.objects.filter(role__in=['Farmer', 'Buyer']).order_by('-date_joined')[:8]
+
+    # ── Coupon stats ──────────────────────────────────────────────────────────
+    prem_total   = premium_coupon.objects.count()
+    prem_active  = premium_coupon.objects.filter(is_active=True).count()
+    prem_expired = premium_coupon.objects.filter(expiry_date__lt=now).count()
+    prem_used    = premium_coupon.objects.aggregate(s=Sum('used_count'))['s'] or 0
+
+    disc_total   = discount_coupon.objects.count()
+    disc_active  = discount_coupon.objects.filter(is_active=True).count()
+    disc_expired = discount_coupon.objects.filter(expiry_date__lt=now).count()
+    disc_used    = discount_coupon.objects.aggregate(s=Sum('used_count'))['s'] or 0
+
+    most_used_prem = premium_coupon.objects.order_by('-used_count').first()
+    most_used_disc = discount_coupon.objects.order_by('-used_count').first()
+    total_coupon_usage = prem_used + disc_used
 
     context = {
         'admin_user': request.admin_user,
@@ -143,8 +161,21 @@ def dashboard(request):
         'monthly_labels': json.dumps(monthly_labels),
         'crop_categories': json.dumps(crop_categories),
         'recent_users': recent_users,
+        # Coupons
+        'prem_total': prem_total,
+        'prem_active': prem_active,
+        'prem_expired': prem_expired,
+        'prem_used': prem_used,
+        'disc_total': disc_total,
+        'disc_active': disc_active,
+        'disc_expired': disc_expired,
+        'disc_used': disc_used,
+        'most_used_prem': most_used_prem,
+        'most_used_disc': most_used_disc,
+        'total_coupon_usage': total_coupon_usage,
     }
     return render(request, 'subadmin/dashboard.html', context)
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -817,3 +848,366 @@ def support_tickets(request):
 def system_settings(request):
     context = {'admin_user': request.admin_user}
     return render(request, 'subadmin/system_settings.html', context)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Coupon helpers
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _coupon_is_expired(c):
+    from django.utils import timezone
+    return c.expiry_date is not None and timezone.now() > c.expiry_date
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Premium Coupon Management
+# ─────────────────────────────────────────────────────────────────────────────
+
+@check_subadmin
+def manage_premium_coupons(request):
+    qs = premium_coupon.objects.order_by('-created_at')
+
+    q       = request.GET.get('q', '')
+    status  = request.GET.get('status', '')
+    expired = request.GET.get('expired', '')
+
+    if q:
+        qs = qs.filter(Q(code__icontains=q) | Q(label__icontains=q))
+    if status == 'active':
+        qs = qs.filter(is_active=True)
+    elif status == 'inactive':
+        qs = qs.filter(is_active=False)
+
+    now = timezone.now()
+    if expired == 'yes':
+        qs = qs.filter(expiry_date__lt=now)
+    elif expired == 'no':
+        qs = qs.filter(Q(expiry_date__isnull=True) | Q(expiry_date__gte=now))
+
+    # Stats
+    total_all     = premium_coupon.objects.count()
+    total_active  = premium_coupon.objects.filter(is_active=True).count()
+    total_expired = premium_coupon.objects.filter(expiry_date__lt=now).count()
+    total_used    = premium_coupon.objects.aggregate(s=Sum('used_count'))['s'] or 0
+    most_used     = premium_coupon.objects.order_by('-used_count').first()
+
+    context = {
+        'admin_user': request.admin_user,
+        'coupons': qs,
+        'q': q, 'status': status, 'expired': expired,
+        'total': qs.count(),
+        'total_all': total_all,
+        'total_active': total_active,
+        'total_expired': total_expired,
+        'total_used': total_used,
+        'most_used': most_used,
+        'coupon_type': 'premium',
+    }
+    return render(request, 'subadmin/manage_coupons.html', context)
+
+
+@check_subadmin
+def premium_coupon_add(request):
+    if request.method == 'POST':
+        try:
+            import decimal
+            expiry_raw = request.POST.get('expiry_date', '').strip()
+            from django.utils.dateparse import parse_datetime
+            expiry = parse_datetime(expiry_raw) if expiry_raw else None
+
+            premium_coupon.objects.create(
+                code           = request.POST.get('code', '').strip().upper(),
+                label          = request.POST.get('label', '').strip(),
+                discount_type  = request.POST.get('discount_type', 'percent'),
+                discount_value = decimal.Decimal(request.POST.get('discount_value', 0)),
+                minimum_amount = decimal.Decimal(request.POST.get('minimum_amount', 0)),
+                usage_limit    = int(request.POST.get('usage_limit', 100)),
+                expiry_date    = expiry,
+                is_active      = request.POST.get('is_active') == 'on',
+            )
+            messages.success(request, 'Premium coupon created successfully.')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+        return redirect('subadmin:manage_premium_coupons')
+    context = {'admin_user': request.admin_user, 'coupon_type': 'premium', 'action': 'Add'}
+    return render(request, 'subadmin/coupon_form.html', context)
+
+
+@check_subadmin
+def premium_coupon_edit(request, pk):
+    c = get_object_or_404(premium_coupon, pk=pk)
+    if request.method == 'POST':
+        try:
+            import decimal
+            from django.utils.dateparse import parse_datetime
+            expiry_raw = request.POST.get('expiry_date', '').strip()
+            expiry = parse_datetime(expiry_raw) if expiry_raw else None
+
+            c.code           = request.POST.get('code', c.code).strip().upper()
+            c.label          = request.POST.get('label', c.label).strip()
+            c.discount_type  = request.POST.get('discount_type', c.discount_type)
+            c.discount_value = decimal.Decimal(request.POST.get('discount_value', c.discount_value))
+            c.minimum_amount = decimal.Decimal(request.POST.get('minimum_amount', c.minimum_amount))
+            c.usage_limit    = int(request.POST.get('usage_limit', c.usage_limit))
+            c.expiry_date    = expiry
+            c.is_active      = request.POST.get('is_active') == 'on'
+            c.save()
+            messages.success(request, f'Coupon "{c.code}" updated.')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+        return redirect('subadmin:manage_premium_coupons')
+    context = {
+        'admin_user': request.admin_user,
+        'coupon_obj': c,
+        'coupon_type': 'premium',
+        'action': 'Edit',
+    }
+    return render(request, 'subadmin/coupon_form.html', context)
+
+
+@check_subadmin
+def premium_coupon_delete(request, pk):
+    c = get_object_or_404(premium_coupon, pk=pk)
+    code = c.code
+    c.delete()
+    messages.success(request, f'Coupon "{code}" deleted.')
+    return redirect('subadmin:manage_premium_coupons')
+
+
+@check_subadmin
+def premium_coupon_toggle(request, pk):
+    c = get_object_or_404(premium_coupon, pk=pk)
+    c.is_active = not c.is_active
+    c.save()
+    state = 'activated' if c.is_active else 'deactivated'
+    messages.success(request, f'Coupon "{c.code}" {state}.')
+    return redirect('subadmin:manage_premium_coupons')
+
+
+@check_subadmin
+def premium_coupon_duplicate(request, pk):
+    c = get_object_or_404(premium_coupon, pk=pk)
+    import uuid
+    new_code = f'{c.code}-{uuid.uuid4().hex[:4].upper()}'
+    try:
+        premium_coupon.objects.create(
+            code=new_code, label=c.label,
+            discount_type=c.discount_type, discount_value=c.discount_value,
+            minimum_amount=c.minimum_amount, usage_limit=c.usage_limit,
+            expiry_date=c.expiry_date, is_active=False,
+        )
+        messages.success(request, f'Coupon duplicated as "{new_code}" (inactive by default).')
+    except Exception as e:
+        messages.error(request, f'Duplicate failed: {e}')
+    return redirect('subadmin:manage_premium_coupons')
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Discount Coupon Management
+# ─────────────────────────────────────────────────────────────────────────────
+
+@check_subadmin
+def manage_discount_coupons(request):
+    qs = discount_coupon.objects.order_by('-created_at')
+
+    q      = request.GET.get('q', '')
+    status = request.GET.get('status', '')
+    now    = timezone.now()
+
+    if q:
+        qs = qs.filter(Q(code__icontains=q) | Q(label__icontains=q))
+    if status == 'active':
+        qs = qs.filter(is_active=True)
+    elif status == 'inactive':
+        qs = qs.filter(is_active=False)
+
+    total_all     = discount_coupon.objects.count()
+    total_active  = discount_coupon.objects.filter(is_active=True).count()
+    total_expired = discount_coupon.objects.filter(expiry_date__lt=now).count()
+    total_used    = discount_coupon.objects.aggregate(s=Sum('used_count'))['s'] or 0
+    most_used     = discount_coupon.objects.order_by('-used_count').first()
+
+    context = {
+        'admin_user': request.admin_user,
+        'coupons': qs,
+        'q': q, 'status': status,
+        'total': qs.count(),
+        'total_all': total_all,
+        'total_active': total_active,
+        'total_expired': total_expired,
+        'total_used': total_used,
+        'most_used': most_used,
+        'coupon_type': 'discount',
+    }
+    return render(request, 'subadmin/manage_coupons.html', context)
+
+
+@check_subadmin
+def discount_coupon_add(request):
+    if request.method == 'POST':
+        try:
+            import decimal
+            from django.utils.dateparse import parse_datetime
+            expiry_raw = request.POST.get('expiry_date', '').strip()
+            expiry = parse_datetime(expiry_raw) if expiry_raw else None
+            discount_coupon.objects.create(
+                code           = request.POST.get('code', '').strip().upper(),
+                label          = request.POST.get('label', '').strip(),
+                discount_type  = request.POST.get('discount_type', 'percent'),
+                discount_value = decimal.Decimal(request.POST.get('discount_value', 0)),
+                minimum_amount = decimal.Decimal(request.POST.get('minimum_amount', 0)),
+                usage_limit    = int(request.POST.get('usage_limit', 100)),
+                expiry_date    = expiry,
+                is_active      = request.POST.get('is_active') == 'on',
+            )
+            messages.success(request, 'Discount coupon created.')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+        return redirect('subadmin:manage_discount_coupons')
+    context = {'admin_user': request.admin_user, 'coupon_type': 'discount', 'action': 'Add'}
+    return render(request, 'subadmin/coupon_form.html', context)
+
+
+@check_subadmin
+def discount_coupon_edit(request, pk):
+    c = get_object_or_404(discount_coupon, pk=pk)
+    if request.method == 'POST':
+        try:
+            import decimal
+            from django.utils.dateparse import parse_datetime
+            expiry_raw = request.POST.get('expiry_date', '').strip()
+            expiry = parse_datetime(expiry_raw) if expiry_raw else None
+            c.code           = request.POST.get('code', c.code).strip().upper()
+            c.label          = request.POST.get('label', c.label).strip()
+            c.discount_type  = request.POST.get('discount_type', c.discount_type)
+            c.discount_value = decimal.Decimal(request.POST.get('discount_value', c.discount_value))
+            c.minimum_amount = decimal.Decimal(request.POST.get('minimum_amount', c.minimum_amount))
+            c.usage_limit    = int(request.POST.get('usage_limit', c.usage_limit))
+            c.expiry_date    = expiry
+            c.is_active      = request.POST.get('is_active') == 'on'
+            c.save()
+            messages.success(request, f'Coupon "{c.code}" updated.')
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
+        return redirect('subadmin:manage_discount_coupons')
+    context = {'admin_user': request.admin_user, 'coupon_obj': c, 'coupon_type': 'discount', 'action': 'Edit'}
+    return render(request, 'subadmin/coupon_form.html', context)
+
+
+@check_subadmin
+def discount_coupon_delete(request, pk):
+    c = get_object_or_404(discount_coupon, pk=pk)
+    code = c.code
+    c.delete()
+    messages.success(request, f'Coupon "{code}" deleted.')
+    return redirect('subadmin:manage_discount_coupons')
+
+
+@check_subadmin
+def discount_coupon_toggle(request, pk):
+    c = get_object_or_404(discount_coupon, pk=pk)
+    c.is_active = not c.is_active
+    c.save()
+    state = 'activated' if c.is_active else 'deactivated'
+    messages.success(request, f'Coupon "{c.code}" {state}.')
+    return redirect('subadmin:manage_discount_coupons')
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Transactions / Payment History
+# ─────────────────────────────────────────────────────────────────────────────
+
+@check_subadmin
+def transactions(request):
+    qs = premium_history.objects.select_related('user', 'user__user').order_by('-start_date')
+
+    q    = request.GET.get('q', '')
+    plan = request.GET.get('plan', '')
+    date = request.GET.get('date', '')
+
+    if q:
+        qs = qs.filter(Q(user__user__name__icontains=q) | Q(user__user__contact__icontains=q))
+    if plan:
+        qs = qs.filter(plan=plan)
+    if date:
+        qs = qs.filter(start_date__date=date)
+
+    total_revenue = qs.aggregate(s=Sum('price'))['s'] or 0
+
+    context = {
+        'admin_user': request.admin_user,
+        'transactions': qs,
+        'q': q, 'plan': plan, 'date': date,
+        'total': qs.count(),
+        'total_revenue': int(total_revenue),
+    }
+    return render(request, 'subadmin/transactions.html', context)
+
+
+@check_subadmin
+def export_premium_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="premium_users.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Buyer', 'Contact', 'Plan', 'Billing', 'Purchase Date'])
+    for p in premium_buyer.objects.select_related('user', 'user__user').all():
+        writer.writerow([
+            p.user.user.name, p.user.user.contact,
+            p.premium_type, p.premium_time,
+            p.purchase_date.strftime('%Y-%m-%d'),
+        ])
+    return response
+
+
+@check_subadmin
+def export_transactions_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Buyer', 'Contact', 'Plan', 'Billing', 'Price', 'Coupon', 'Date'])
+    for t in premium_history.objects.select_related('user', 'user__user').all():
+        writer.writerow([
+            t.user.user.name, t.user.user.contact,
+            t.plan, t.billing_cycle, t.price,
+            t.coupon_code or '—',
+            t.start_date.strftime('%Y-%m-%d'),
+        ])
+    return response
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Premium Subscription Actions (manual admin control)
+# ─────────────────────────────────────────────────────────────────────────────
+
+@check_subadmin
+def premium_manual_upgrade(request, pk):
+    """Admin force-upgrades/downgrades a buyer's plan."""
+    p = get_object_or_404(premium_buyer, pk=pk)
+    if request.method == 'POST':
+        new_plan  = request.POST.get('plan', p.premium_type)
+        new_cycle = request.POST.get('cycle', p.premium_time)
+        p.premium_type  = new_plan
+        p.premium_time  = new_cycle
+        p.purchase_date = timezone.now()
+        p.save()
+        # Sync Buyer.is_premiume flag
+        b = p.user
+        b.is_premiume = (new_plan != 'Free')
+        b.save()
+        messages.success(request, f'Plan for {b.user.name} updated to {new_plan} ({new_cycle}).')
+    return redirect('subadmin:manage_premium')
+
+
+@check_subadmin
+def premium_cancel(request, pk):
+    """Admin cancels a buyer's subscription (reverts to Free)."""
+    p = get_object_or_404(premium_buyer, pk=pk)
+    buyer_name = p.user.user.name
+    p.premium_type = 'Free'
+    p.premium_time = 'Monthly'
+    p.save()
+    p.user.is_premiume = False
+    p.user.save()
+    messages.success(request, f'Subscription for {buyer_name} cancelled (reverted to Free).')
+    return redirect('subadmin:manage_premium')
+

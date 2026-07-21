@@ -7,10 +7,10 @@
 {% block content %}
 <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
   <input type="text" name="q" value="{{ q }}" placeholder="Search order ID or buyer…"
-    style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
-    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
-  <select name="status" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
-    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="status" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All Status</option>
     {% for val, label in status_choices %}
     <option value="{{ val }}" {% if status == val %}selected{% endif %}>{{ label }}</option>

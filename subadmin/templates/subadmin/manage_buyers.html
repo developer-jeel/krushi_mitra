@@ -7,16 +7,16 @@
 {% block content %}
 <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
   <input type="text" name="q" value="{{ q }}" placeholder="Search name, contact, GST…"
-    style="flex:1;min-width:220px;background:var(--card-bg);border:1px solid var(--border);
-    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
-  <select name="status" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
-    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    style="flex:1;min-width:220px;background:var(--white);border:1px solid var(--gray-200);
+    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="status" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All Status</option>
     <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
     <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
   </select>
-  <select name="verified" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
-    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+  <select name="verified" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All KYC</option>
     <option value="yes" {% if verified == 'yes' %}selected{% endif %}>Verified</option>
     <option value="no" {% if verified == 'no' %}selected{% endif %}>Unverified</option>
@@ -45,11 +45,11 @@
         <td>
           <div style="display:flex;align-items:center;gap:10px;">
             <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#2563eb);
-              display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0;">
+              display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:700;font-size:13px;flex-shrink:0;">
               {{ b.user.name|make_list|first|upper }}
             </div>
             <div>
-              <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ b.user.name }}</div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-800);">{{ b.user.name }}</div>
               <div style="font-size:12px;color:#94a3b8;">{{ b.user.email|default:"—" }}</div>
             </div>
           </div>

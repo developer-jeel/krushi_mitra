@@ -17,7 +17,7 @@
         {% for item in items %}
         <tr>
           <td>
-            <div style="font-weight:600;color:var(--gray-100);">{{ item.crop_name }}</div>
+            <div style="font-weight:600;color:var(--gray-800);">{{ item.crop_name }}</div>
           </td>
           <td>{{ item.quantity }} kg</td>
           <td>₹{{ item.price }}</td>
@@ -28,12 +28,12 @@
         {% endfor %}
       </tbody>
     </table>
-    <div style="padding:16px;border-top:1px solid var(--border);">
+    <div style="padding:16px;border-top:1px solid var(--gray-200);">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-        <span style="color:#94a3b8;">Subtotal</span><span style="color:var(--gray-100);">₹{{ order.subtotal }}</span>
+        <span style="color:#94a3b8;">Subtotal</span><span style="color:var(--gray-800);">₹{{ order.subtotal }}</span>
       </div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-        <span style="color:#94a3b8;">Tax</span><span style="color:var(--gray-100);">₹{{ order.tax }}</span>
+        <span style="color:#94a3b8;">Tax</span><span style="color:var(--gray-800);">₹{{ order.tax }}</span>
       </div>
       {% if order.discount_amount %}
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
@@ -41,8 +41,8 @@
         <span style="color:#22c55e;">-₹{{ order.discount_amount }}</span>
       </div>
       {% endif %}
-      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-        <span style="color:var(--gray-100);">Total</span>
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-200);">
+        <span style="color:var(--gray-800);">Total</span>
         <span style="color:#22c55e;">₹{{ order.total_amount }}</span>
       </div>
     </div>
@@ -51,19 +51,19 @@
   <!-- Order Meta -->
   <div>
     <div class="table-wrapper" style="padding:20px;margin-bottom:16px;">
-      <div style="font-size:15px;font-weight:700;color:var(--gray-100);margin-bottom:16px;">{{ order.order_id }}</div>
+      <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:16px;">{{ order.order_id }}</div>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#94a3b8;">Buyer</span>
-          <span style="font-size:13px;font-weight:600;color:var(--gray-100);">{{ order.user.name }}</span>
+          <span style="font-size:13px;font-weight:600;color:var(--gray-800);">{{ order.user.name }}</span>
         </div>
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#94a3b8;">Order Date</span>
-          <span style="font-size:13px;color:var(--gray-100);">{{ order.created_at|date:"M d, Y H:i" }}</span>
+          <span style="font-size:13px;color:var(--gray-800);">{{ order.created_at|date:"M d, Y H:i" }}</span>
         </div>
         <div style="display:flex;justify-content:space-between;">
           <span style="font-size:13px;color:#94a3b8;">Payment</span>
-          <span style="font-size:13px;color:var(--gray-100);">{{ order.payment_method|default:"—" }}</span>
+          <span style="font-size:13px;color:var(--gray-800);">{{ order.payment_method|default:"—" }}</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:13px;color:#94a3b8;">Status</span>
@@ -77,11 +77,11 @@
 
     <!-- Update Status -->
     <div class="table-wrapper" style="padding:20px;">
-      <div style="font-size:14px;font-weight:600;color:var(--gray-100);margin-bottom:12px;">Update Status</div>
+      <div style="font-size:14px;font-weight:600;color:var(--gray-800);margin-bottom:12px;">Update Status</div>
       <form method="POST" action="{% url 'subadmin:order_update_status' order.pk %}">
         {% csrf_token %}
-        <select name="status" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);
-          border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;
+        <select name="status" style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);
+          border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;
           outline:none;margin-bottom:10px;">
           {% for val, label in status_choices %}
           <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>

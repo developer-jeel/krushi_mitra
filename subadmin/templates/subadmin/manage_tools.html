@@ -7,10 +7,10 @@
 {% block content %}
 <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
   <input type="text" name="q" value="{{ q }}" placeholder="Search tool or farmer…"
-    style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
-    border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
-  <select name="category" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
-    padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+    style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="category" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All Categories</option>
     {% for val, label in category_choices %}
     <option value="{{ val }}" {% if category == val %}selected{% endif %}>{{ label }}</option>
@@ -38,11 +38,11 @@
             <img src="{{ t.image.url }}" style="width:36px;height:36px;border-radius:8px;object-fit:cover;flex-shrink:0;">
             {% else %}
             <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#f59e0b,#d97706);
-              display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0;">
+              display:flex;align-items:center;justify-content:center;color:var(--white);font-size:15px;flex-shrink:0;">
               <i class="fa-solid fa-screwdriver-wrench"></i></div>
             {% endif %}
             <div>
-              <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ t.tool_name }}</div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-800);">{{ t.tool_name }}</div>
               <div style="font-size:12px;color:#94a3b8;">{{ t.company|default:"" }} {{ t.model_name|default:"" }}</div>
             </div>
           </div>

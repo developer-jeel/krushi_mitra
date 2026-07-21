@@ -8,10 +8,10 @@
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
   <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex:1;">
     <input type="text" name="q" value="{{ q }}" placeholder="Search news…"
-      style="flex:1;min-width:200px;background:var(--card-bg);border:1px solid var(--border);
-      border-radius:10px;padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;"/>
-    <select name="category" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
-      padding:10px 14px;color:var(--gray-100);font-family:Inter,sans-serif;outline:none;">
+      style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+      border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+    <select name="category" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+      padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
       <option value="">All Categories</option>
       {% for val, label in category_choices %}
       <option value="{{ val }}" {% if category == val %}selected{% endif %}>{{ label }}</option>
@@ -40,7 +40,7 @@
         <td>
           <div style="display:flex;align-items:center;gap:10px;">
             {% if n.image %}<img src="{{ n.image.url }}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">{% endif %}
-            <div style="font-weight:600;font-size:14px;color:var(--gray-100);">{{ n.title|truncatechars:55 }}</div>
+            <div style="font-weight:600;font-size:14px;color:var(--gray-800);">{{ n.title|truncatechars:55 }}</div>
           </div>
         </td>
         <td><span class="badge-verified">{{ n.category }}</span></td>

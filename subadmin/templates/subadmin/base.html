@@ -89,12 +89,19 @@
       <i class="fa-solid fa-crown"></i><span>Premium</span></a>
 
     <div class="nav-section-title">More</div>
+    <a href="{% url 'subadmin:manage_premium_coupons' %}" class="nav-item {% block nav_prem_coup %}{% endblock %}">
+      <i class="fa-solid fa-ticket"></i><span>Premium Coupons</span></a>
+    <a href="{% url 'subadmin:manage_discount_coupons' %}" class="nav-item {% block nav_disc_coup %}{% endblock %}">
+      <i class="fa-solid fa-tag"></i><span>Discount Coupons</span></a>
+    <a href="{% url 'subadmin:transactions' %}" class="nav-item {% block nav_transactions %}{% endblock %}">
+      <i class="fa-solid fa-money-bill-transfer"></i><span>Transactions</span></a>
     <a href="{% url 'subadmin:reports' %}" class="nav-item {% block nav_reports %}{% endblock %}">
       <i class="fa-solid fa-chart-line"></i><span>Reports</span></a>
     <a href="{% url 'subadmin:profile' %}" class="nav-item {% block nav_profile %}{% endblock %}">
       <i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
     <a href="{% url 'subadmin:system_settings' %}" class="nav-item {% block nav_settings %}{% endblock %}">
       <i class="fa-solid fa-gears"></i><span>Settings</span></a>
+
   </nav>
   <div class="sidebar-bottom">
     <div class="sidebar-user">

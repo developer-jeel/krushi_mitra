@@ -1,0 +1,199 @@
+{% extends "subadmin/base.html" %}
+{% block title %}{% if coupon_type == 'premium' %}Premium Coupons{% else %}Discount Coupons{% endif %}{% endblock %}
+{% block page_title %}{% if coupon_type == 'premium' %}Premium Coupon Management{% else %}Discount Coupon Management{% endif %}{% endblock %}
+{% block breadcrumb %}Admin / {% if coupon_type == 'premium' %}Premium Coupons{% else %}Discount Coupons{% endif %}{% endblock %}
+{% block nav_prem_coup %}{% if coupon_type == 'premium' %}active{% endif %}{% endblock %}
+{% block nav_disc_coup %}{% if coupon_type == 'discount' %}active{% endif %}{% endblock %}
+
+{% block content %}
+
+<!-- Stats cards -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;">
+  <div class="stat-card">
+    <div class="stat-icon {% if coupon_type == 'premium' %}amber{% else %}blue{% endif %}">
+      <i class="fa-solid fa-ticket"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ total_all }}</div>
+      <div class="stat-label">Total Coupons</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ total_active }}</div>
+      <div class="stat-label">Active</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon red"><i class="fa-solid fa-clock"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ total_expired }}</div>
+      <div class="stat-label">Expired</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon purple"><i class="fa-solid fa-chart-bar"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ total_used }}</div>
+      <div class="stat-label">Total Uses</div>
+    </div>
+  </div>
+  {% if most_used %}
+  <div class="stat-card" style="grid-column:span 2;">
+    <div class="stat-icon amber"><i class="fa-solid fa-fire"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" style="font-size:18px;">{{ most_used.code }}</div>
+      <div class="stat-label">Most Used · {{ most_used.used_count }} times</div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Tab switch between premium/discount -->
+<div style="display:flex;gap:10px;margin-bottom:20px;">
+  <a href="{% url 'subadmin:manage_premium_coupons' %}"
+    class="btn {% if coupon_type == 'premium' %}btn-primary{% else %}btn-secondary{% endif %}">
+    <i class="fa-solid fa-ticket"></i> Premium Coupons
+  </a>
+  <a href="{% url 'subadmin:manage_discount_coupons' %}"
+    class="btn {% if coupon_type == 'discount' %}btn-primary{% else %}btn-secondary{% endif %}">
+    <i class="fa-solid fa-tag"></i> Discount Coupons
+  </a>
+</div>
+
+<!-- Filters -->
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search code or label…"
+    style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="status" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Status</option>
+    <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
+    <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive</option>
+  </select>
+  {% if coupon_type == 'premium' %}
+  <select name="expired" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Expiry</option>
+    <option value="yes" {% if expired == 'yes' %}selected{% endif %}>Expired</option>
+    <option value="no" {% if expired == 'no' %}selected{% endif %}>Not Expired</option>
+  </select>
+  {% endif %}
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;">
+    <i class="fa-solid fa-search"></i> Filter
+  </button>
+  <a href="{% if coupon_type == 'premium' %}{% url 'subadmin:manage_premium_coupons' %}{% else %}{% url 'subadmin:manage_discount_coupons' %}{% endif %}"
+    class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">
+      {% if coupon_type == 'premium' %}Premium{% else %}Discount{% endif %} Coupons
+      <span style="font-size:13px;color:#94a3b8;">({{ total }})</span>
+    </div>
+    <a href="{% if coupon_type == 'premium' %}{% url 'subadmin:premium_coupon_add' %}{% else %}{% url 'subadmin:discount_coupon_add' %}{% endif %}"
+      class="btn btn-primary btn-sm">
+      <i class="fa-solid fa-plus"></i> Add Coupon
+    </a>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Code</th><th>Label</th><th>Type</th><th>Value</th>
+        <th>Min. Amount</th><th>Usage</th><th>Remaining</th><th>Expiry</th><th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in coupons %}
+      {% with expired_flag=c.expiry_date|date:"U" remaining=c.usage_limit|add:0 %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <span style="font-family:monospace;font-size:14px;font-weight:700;
+            color:{% if coupon_type == 'premium' %}#f59e0b{% else %}#60a5fa{% endif %};">
+            {{ c.code }}
+          </span>
+        </td>
+        <td>{{ c.label|truncatechars:35 }}</td>
+        <td>
+          {% if c.discount_type == 'percent' %}
+          <span class="badge-verified">% Off</span>
+          {% else %}
+          <span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">₹ Flat</span>
+          {% endif %}
+        </td>
+        <td style="font-weight:700;color:#22c55e;">
+          {% if c.discount_type == 'percent' %}{{ c.discount_value }}%
+          {% else %}₹{{ c.discount_value }}{% endif %}
+        </td>
+        <td>₹{{ c.minimum_amount }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;background:var(--gray-100);border-radius:20px;height:6px;min-width:60px;">
+              <div style="height:6px;border-radius:20px;background:#22c55e;width:{% widthratio c.used_count c.usage_limit 100 %}%;max-width:100%;"></div>
+            </div>
+            <span style="font-size:12px;color:#94a3b8;">{{ c.used_count }}/{{ c.usage_limit }}</span>
+          </div>
+        </td>
+        <td>
+          {% with rem=c.usage_limit %}
+          <span style="font-size:13px;font-weight:600;
+            color:{% if c.used_count >= c.usage_limit %}#ef4444{% else %}#22c55e{% endif %};">
+            {{ c.usage_limit|add:"-0" }}
+          </span>
+          {% endwith %}
+          <span style="font-size:11px;color:#94a3b8;display:block;">left</span>
+        </td>
+        <td>
+          {% if c.expiry_date %}
+            {% now "U" as now_ts %}
+            <span style="font-size:12px;
+              color:{% if c.expiry_date|date:'U' < now_ts %}#ef4444{% else %}#94a3b8{% endif %};">
+              {{ c.expiry_date|date:"M d, Y" }}
+            </span>
+          {% else %}
+            <span style="font-size:12px;color:#94a3b8;">No expiry</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if c.is_active %}<span class="badge-active">Active</span>
+          {% else %}<span class="badge-inactive">Inactive</span>{% endif %}
+        </td>
+        <td>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            {% if coupon_type == 'premium' %}
+              <a href="{% url 'subadmin:premium_coupon_edit' c.pk %}" class="btn btn-secondary btn-sm" title="Edit">
+                <i class="fa-solid fa-pen"></i></a>
+              <a href="{% url 'subadmin:premium_coupon_toggle' c.pk %}" class="btn btn-sm btn-warning" title="Toggle">
+                <i class="fa-solid {% if c.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i></a>
+              <a href="{% url 'subadmin:premium_coupon_duplicate' c.pk %}" class="btn btn-secondary btn-sm" title="Duplicate">
+                <i class="fa-solid fa-copy"></i></a>
+              <a href="#" onclick="openConfirm('{% url 'subadmin:premium_coupon_delete' c.pk %}','Delete Coupon?','Removes {{ c.code }} permanently.')"
+                class="btn btn-danger btn-sm" title="Delete">
+                <i class="fa-solid fa-trash"></i></a>
+            {% else %}
+              <a href="{% url 'subadmin:discount_coupon_edit' c.pk %}" class="btn btn-secondary btn-sm" title="Edit">
+                <i class="fa-solid fa-pen"></i></a>
+              <a href="{% url 'subadmin:discount_coupon_toggle' c.pk %}" class="btn btn-sm btn-warning" title="Toggle">
+                <i class="fa-solid {% if c.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i></a>
+              <a href="#" onclick="openConfirm('{% url 'subadmin:discount_coupon_delete' c.pk %}','Delete Coupon?','Removes {{ c.code }} permanently.')"
+                class="btn btn-danger btn-sm" title="Delete">
+                <i class="fa-solid fa-trash"></i></a>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endwith %}
+      {% empty %}
+      <tr><td colspan="11" style="text-align:center;color:#94a3b8;padding:48px;">
+        <div style="font-size:40px;margin-bottom:12px;">🎫</div>
+        No coupons found. <a href="{% if coupon_type == 'premium' %}{% url 'subadmin:premium_coupon_add' %}{% else %}{% url 'subadmin:discount_coupon_add' %}{% endif %}"
+          style="color:#22c55e;">Create one</a>
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

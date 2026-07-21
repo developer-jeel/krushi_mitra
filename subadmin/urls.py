@@ -74,4 +74,29 @@ urlpatterns = [
     path('profile/',                         views.profile,          name='profile'),
     path('support/',                         views.support_tickets,  name='support_tickets'),
     path('settings/',                        views.system_settings,  name='system_settings'),
+
+    # Premium Coupon Management
+    path('coupons/premium/',                         views.manage_premium_coupons,     name='manage_premium_coupons'),
+    path('coupons/premium/add/',                     views.premium_coupon_add,          name='premium_coupon_add'),
+    path('coupons/premium/<int:pk>/edit/',            views.premium_coupon_edit,         name='premium_coupon_edit'),
+    path('coupons/premium/<int:pk>/delete/',          views.premium_coupon_delete,       name='premium_coupon_delete'),
+    path('coupons/premium/<int:pk>/toggle/',          views.premium_coupon_toggle,       name='premium_coupon_toggle'),
+    path('coupons/premium/<int:pk>/duplicate/',       views.premium_coupon_duplicate,    name='premium_coupon_duplicate'),
+
+    # Discount Coupon Management
+    path('coupons/discount/',                        views.manage_discount_coupons,     name='manage_discount_coupons'),
+    path('coupons/discount/add/',                    views.discount_coupon_add,         name='discount_coupon_add'),
+    path('coupons/discount/<int:pk>/edit/',           views.discount_coupon_edit,        name='discount_coupon_edit'),
+    path('coupons/discount/<int:pk>/delete/',         views.discount_coupon_delete,      name='discount_coupon_delete'),
+    path('coupons/discount/<int:pk>/toggle/',         views.discount_coupon_toggle,      name='discount_coupon_toggle'),
+
+    # Transactions / Payment History
+    path('transactions/',                            views.transactions,                name='transactions'),
+    path('reports/export/premium/',                  views.export_premium_csv,          name='export_premium'),
+    path('reports/export/transactions/',             views.export_transactions_csv,     name='export_transactions'),
+
+    # Premium subscription actions
+    path('premium/<int:pk>/upgrade/',                views.premium_manual_upgrade,      name='premium_manual_upgrade'),
+    path('premium/<int:pk>/cancel/',                 views.premium_cancel,              name='premium_cancel'),
 ]
+

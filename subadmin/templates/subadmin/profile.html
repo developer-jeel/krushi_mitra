@@ -8,37 +8,37 @@
 <div style="max-width:520px;">
   <div class="table-wrapper" style="padding:28px;text-align:center;">
     <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#22c55e,#16a34a);
-      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:32px;margin:0 auto 16px;">
+      display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;font-size:32px;margin:0 auto 16px;">
       {{ admin_user.name|make_list|first|upper }}
     </div>
-    <div style="font-size:22px;font-weight:700;color:var(--gray-100);">{{ admin_user.name }}</div>
+    <div style="font-size:22px;font-weight:700;color:var(--gray-800);">{{ admin_user.name }}</div>
     <div style="font-size:14px;color:#94a3b8;margin-top:4px;">Sub Administrator</div>
     <div style="margin-top:12px;">
       <span class="badge-active">Active</span>
     </div>
     <div style="text-align:left;margin-top:24px;display:flex;flex-direction:column;gap:12px;">
-      <div style="display:flex;gap:12px;align-items:center;background:var(--main-bg);
-        border:1px solid var(--border);border-radius:10px;padding:14px;">
+      <div style="display:flex;gap:12px;align-items:center;background:var(--gray-50);
+        border:1px solid var(--gray-200);border-radius:10px;padding:14px;">
         <i class="fa-solid fa-phone" style="color:#22c55e;width:20px;"></i>
         <div>
           <div style="font-size:12px;color:#94a3b8;">Mobile Number</div>
-          <div style="font-size:14px;font-weight:600;color:var(--gray-100);">{{ admin_user.contact|default:"Not set" }}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--gray-800);">{{ admin_user.contact|default:"Not set" }}</div>
         </div>
       </div>
-      <div style="display:flex;gap:12px;align-items:center;background:var(--main-bg);
-        border:1px solid var(--border);border-radius:10px;padding:14px;">
+      <div style="display:flex;gap:12px;align-items:center;background:var(--gray-50);
+        border:1px solid var(--gray-200);border-radius:10px;padding:14px;">
         <i class="fa-solid fa-envelope" style="color:#60a5fa;width:20px;"></i>
         <div>
           <div style="font-size:12px;color:#94a3b8;">Email Address</div>
-          <div style="font-size:14px;font-weight:600;color:var(--gray-100);">{{ admin_user.email|default:"Not set" }}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--gray-800);">{{ admin_user.email|default:"Not set" }}</div>
         </div>
       </div>
-      <div style="display:flex;gap:12px;align-items:center;background:var(--main-bg);
-        border:1px solid var(--border);border-radius:10px;padding:14px;">
+      <div style="display:flex;gap:12px;align-items:center;background:var(--gray-50);
+        border:1px solid var(--gray-200);border-radius:10px;padding:14px;">
         <i class="fa-solid fa-calendar" style="color:#f59e0b;width:20px;"></i>
         <div>
           <div style="font-size:12px;color:#94a3b8;">Member Since</div>
-          <div style="font-size:14px;font-weight:600;color:var(--gray-100);">{{ admin_user.date_joined|date:"M d, Y" }}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--gray-800);">{{ admin_user.date_joined|date:"M d, Y" }}</div>
         </div>
       </div>
     </div>

@@ -10,10 +10,10 @@
   <div>
     <div class="table-wrapper" style="padding:24px;text-align:center;">
       <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#2563eb);
-        display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:28px;margin:0 auto 14px;">
+        display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:800;font-size:28px;margin:0 auto 14px;">
         {{ buyer.user.name|make_list|first|upper }}
       </div>
-      <div style="font-size:19px;font-weight:700;color:var(--gray-100);">{{ buyer.user.name }}</div>
+      <div style="font-size:19px;font-weight:700;color:var(--gray-800);">{{ buyer.user.name }}</div>
       <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{{ buyer.business_type|default:"Buyer" }}</div>
       <div style="margin:10px 0;">
         {% if buyer.user.is_active %}<span class="badge-active">Active</span>{% else %}<span class="badge-inactive">Inactive</span>{% endif %}
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="table-wrapper" style="padding:18px;margin-top:14px;">
-      <div style="font-size:14px;font-weight:600;color:var(--gray-100);margin-bottom:10px;">Actions</div>
+      <div style="font-size:14px;font-weight:600;color:var(--gray-800);margin-bottom:10px;">Actions</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
         <a href="{% url 'subadmin:toggle_buyer' buyer.pk %}" class="btn {% if buyer.user.is_active %}btn-warning{% else %}btn-primary{% endif %}" style="text-align:center;">
           <i class="fa-solid {% if buyer.user.is_active %}fa-toggle-off{% else %}fa-toggle-on{% endif %}"></i>

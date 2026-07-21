@@ -1,0 +1,114 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Transactions{% endblock %}
+{% block page_title %}Payment Transactions{% endblock %}
+{% block breadcrumb %}Admin / Transactions{% endblock %}
+{% block nav_transactions %}active{% endblock %}
+
+{% block content %}
+<!-- Summary row -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px;">
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fa-solid fa-receipt"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ total }}</div>
+      <div class="stat-label">Total Transactions</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">₹{{ total_revenue }}</div>
+      <div class="stat-label">Revenue (filtered)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Filters -->
+<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search buyer name or contact…"
+    style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <select name="plan" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Plans</option>
+    <option value="Standard" {% if plan == 'Standard' %}selected{% endif %}>Standard</option>
+    <option value="Premium" {% if plan == 'Premium' %}selected{% endif %}>Premium</option>
+  </select>
+  <input type="date" name="date" value="{{ date }}"
+    style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;">
+    <i class="fa-solid fa-search"></i> Filter
+  </button>
+  <a href="{% url 'subadmin:transactions' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+  <a href="{% url 'subadmin:export_transactions' %}" class="btn btn-secondary" style="padding:10px 20px;">
+    <i class="fa-solid fa-download"></i> Export CSV
+  </a>
+  <a href="{% url 'subadmin:export_premium' %}" class="btn btn-secondary" style="padding:10px 20px;">
+    <i class="fa-solid fa-users"></i> Premium CSV
+  </a>
+</form>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">
+      Transaction History
+      <span style="font-size:13px;color:#94a3b8;">({{ total }} records · ₹{{ total_revenue }} total)</span>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Buyer</th><th>Plan</th><th>Billing</th>
+        <th>Amount</th><th>Method</th><th>Coupon</th><th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in transactions %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#2563eb);
+              display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:700;font-size:13px;flex-shrink:0;">
+              {{ t.user.user.name|make_list|first|upper }}
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--gray-800);">{{ t.user.user.name }}</div>
+              <div style="font-size:11px;color:#94a3b8;">{{ t.user.user.contact }}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          {% if t.plan == 'Premium' %}
+          <span style="background:linear-gradient(135deg,#f59e0b,#d97706);color:var(--white);
+            padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">⭐ Premium</span>
+          {% elif t.plan == 'Standard' %}
+          <span class="badge-verified">Standard</span>
+          {% else %}
+          <span style="color:#94a3b8;font-size:12px;">{{ t.plan }}</span>
+          {% endif %}
+        </td>
+        <td>{{ t.billing_cycle }}</td>
+        <td style="font-weight:700;color:#22c55e;font-size:15px;">₹{{ t.price }}</td>
+        <td style="font-size:13px;color:#94a3b8;">{{ t.payment_method|default:"—" }}</td>
+        <td>
+          {% if t.coupon_code %}
+          <span style="font-family:monospace;font-size:12px;font-weight:700;color:#f59e0b;
+            background:rgba(245,158,11,.1);padding:3px 8px;border-radius:6px;">{{ t.coupon_code }}</span>
+          {% else %}
+          <span style="color:#94a3b8;font-size:12px;">—</span>
+          {% endif %}
+        </td>
+        <td style="font-size:12px;color:#94a3b8;">{{ t.start_date|date:"M d, Y" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:48px;">
+        <div style="font-size:40px;margin-bottom:12px;">📭</div>
+        No transactions found.
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
