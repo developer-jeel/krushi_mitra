@@ -657,15 +657,18 @@ def farmer_news(request):
     wind_speed = 10
     clouds = 90
     if request.method == "POST":
-        state = request.POST.get('state').capitalize()
+        state = request.POST.get('state')
+        if state: 
+            state = state.capitalize()
+            all_news = all_news.filter(state=state)
+            
         category = request.POST.get('category')
-        print("FILTERS :", category)
-        if state and category:
-            all_news = news.objects.filter(state=state, category=category , is_breaking=True).order_by('-created_at')
-        elif state:
-            all_news = news.objects.filter(state=state,is_breaking=True).order_by('-created_at')
-        elif category:
-            all_news = news.objects.filter(category=category,is_breaking=True).order_by('-created_at')
+        if category:
+            all_news = all_news.filter(category=category)
+            
+        search_date = request.POST.get('date')
+        if search_date:
+            all_news = all_news.filter(created_at__date=search_date)
 
         print(all_news)
         context = {

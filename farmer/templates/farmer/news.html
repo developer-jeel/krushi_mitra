@@ -142,6 +142,7 @@
             <option value="Agricultural Equipment">Agricultural Equipment</option>
             <option value="Other">Other</option>
           </select>
+          <input type="date" name="date" class="news-filter-select" id="news-date-filter" aria-label="Search by date" style="cursor: pointer;">
           <button type="submit" class="news-search-btn" id="news-search-btn">
             <span>Search</span>
           </button>
@@ -180,39 +181,56 @@
         <div class="news-section-header">
           <h2 class="news-section-title">📰 Latest Agriculture News</h2>
         </div>
-        <div class="news-cards-grid">
+        
+        <div class="news-cards-grid" id="latest-news-grid">
           {% for newss in all_news %}
           {% if not newss.is_breaking %}
           <article class="news-card">
             <div class="news-card-img-wrap">
-              <img src="{{newss.image.url}}" alt="Pusa Wheat Variety" class="news-card-img">
+              <img src="{% if newss.image %}{{newss.image.url}}{% else %}{% static 'farmer/images/default_news.jpg' %}{% endif %}" alt="News Image" class="news-card-img">
               <span class="news-card-badge"><span class="news-category-pill crop">{{ newss.category }}</span></span>
             </div>
             <div class="news-card-body">
               <h3 class="news-card-title">{{ newss.title }}</h3>
               <p class="news-card-desc">{{ newss.description }}</p>
               <div class="news-card-footer">
-                <span class="news-date-row" style="margin-bottom:0;">{{ newss.created_at}}</span>
+                <span class="news-date-row" style="margin-bottom:0;">{{ newss.created_at|date:"M d, Y" }}</span>
+                {% if newss.source_link %}
                 <a href="{{ newss.source_link }}" target="_blank" class="news-readmore-btn">Read More</a>
+                {% endif %}
               </div>
             </div>
           </article>
           {% endif %}
           {% endfor %}
+        </div>
 
+        <!-- See More News Button -->
+        <div class="news-see-more-container" id="see-more-container" style="display: none; text-align: center; margin-top: 20px;">
+          <button class="news-see-more-btn" onclick="document.getElementById('latest-news-grid').classList.add('expanded'); this.style.display='none';">
+            <span>See More News</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="vertical-align: middle; margin-left: 5px;">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
 
-          <!-- See More News Button -->
-          <div class="news-see-more-container">
-            <button class="news-see-more-btn"
-              onclick="this.style.display='none'; document.getElementById('more-news-grid').style.display='grid';">
-              <span>See More News</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- More News Cards (Hidden by default) -->
+        <style>
+          #latest-news-grid .news-card:nth-child(n+7) {
+              display: none;
+          }
+          #latest-news-grid.expanded .news-card:nth-child(n+7) {
+              display: flex; /* Assuming news-card is flex */
+          }
+        </style>
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              var cards = document.querySelectorAll("#latest-news-grid .news-card");
+              if (cards.length > 6) {
+                  document.getElementById("see-more-container").style.display = "block";
+              }
+          });
+        </script>
       </section>
 
     </div><!-- /page-content -->
