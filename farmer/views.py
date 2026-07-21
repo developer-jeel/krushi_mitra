@@ -1,21 +1,28 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth import login as auth_login
-from django.contrib.auth.hashers import make_password, check_password
-from django.contrib import messages
-from django.utils import timezone
-from .models import * 
-import requests , math ,json,sseclient,random
-from django.contrib.auth.decorators import login_required
-from sklearn.linear_model import LinearRegression 
-from sklearn.ensemble import RandomForestClassifier
-from buyer.models import *
+import json
+import math
+import random
 from pathlib import Path
-import pandas as pd
-import joblib
-from django.db.models import Sum
-from django.core.cache import cache
 
+import joblib
+import pandas as pd
+import requests
+import sseclient
+
+from django.contrib import messages
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password, make_password
+from django.core.cache import cache
+from django.db.models import Sum
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
+from django.utils import timezone
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
+
+from buyer.models import *
+from .models import *
 
 
 
@@ -669,15 +676,12 @@ def farmer_news(request):
     cache_key = f"weather_{city}"
 
     data = cache.get(cache_key)
-    print('+++++++++++++++++++>',data)
     if data is None:
         response = requests.get(
         f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
         )
         data = response.json()
         cache.set(cache_key, data, 600)
-
-        print('========================>',data)
 
     temperature = round(data["main"]["temp"])
     condition = data["weather"][0]["main"]
