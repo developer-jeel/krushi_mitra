@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 from farmer.models import User, Farmer, crop, FarmerTool, bloag, community_message, news, gov_info
 from buyer.models import (
     Buyer, Order, OrderItem, premium_buyer, verification_details,
-    premium_coupon, discount_coupon, premium_history,
+    premium_coupon, discount_coupon, premium_history, premium_plans,
 )
 
 
@@ -738,6 +738,51 @@ def product_approval(request):
 # ─────────────────────────────────────────────────────────────────────────────
 # Premium Management
 # ─────────────────────────────────────────────────────────────────────────────
+
+@check_subadmin
+def premium_settings(request):
+    try:
+        plan = premium_plans.objects.get()
+    except premium_plans.DoesNotExist:
+        plan = premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
+    except premium_plans.MultipleObjectsReturned:
+        plan = premium_plans.objects.first()
+
+    if request.method == 'POST':
+        try:
+            sp = request.POST.get('standard_price', '')
+            pp = request.POST.get('premium_price', '')
+            yd = request.POST.get('year_dis', '')
+            
+            if sp == '' or pp == '' or yd == '':
+                messages.error(request, 'All fields are required.')
+            else:
+                sp = int(sp)
+                pp = int(pp)
+                yd = int(yd)
+                
+                if sp < 0 or pp < 0:
+                    messages.error(request, 'Prices cannot be negative.')
+                elif yd < 0 or yd > 100:
+                    messages.error(request, 'Yearly discount must be between 0 and 100.')
+                else:
+                    plan.standard_price = sp
+                    plan.premium_price = pp
+                    plan.year_dis = yd
+                    plan.save()
+                    messages.success(request, 'Premium plan prices updated successfully.')
+        except ValueError:
+            messages.error(request, 'Invalid input. Please enter valid numbers.')
+            
+        return redirect('subadmin:premium_settings')
+
+    context = {
+        'admin_user': request.admin_user,
+        'plan': plan,
+        'nav_premium_settings': 'active'
+    }
+    return render(request, 'subadmin/premium_settings.html', context)
+
 
 @check_subadmin
 def manage_premium(request):

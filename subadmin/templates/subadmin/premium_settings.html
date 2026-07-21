@@ -1,0 +1,91 @@
+{% extends 'subadmin/base.html' %}
+{% block title %}Premium Plan Settings{% endblock %}
+{% block page_title %}Premium Settings{% endblock %}
+{% block breadcrumb %}Admin / Premium / Settings{% endblock %}
+{% block nav_premium_settings %}active{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px;">
+  <!-- Alerts -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" style="border-radius:12px;font-size:14px;border:none;box-shadow:var(--shadow-sm);background:{% if message.tags == 'error' %}var(--red-pale){% else %}var(--primary-pale){% endif %};color:{% if message.tags == 'error' %}var(--red){% else %}var(--primary-mid){% endif %};" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Settings Form -->
+  <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm);">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;border-bottom:1px solid var(--gray-200);padding-bottom:16px;">
+      <div style="width:40px;height:40px;border-radius:10px;background:var(--primary-pale);color:var(--primary-mid);display:flex;align-items:center;justify-content:center;font-size:18px;">
+        <i class="fa-solid fa-tags"></i>
+      </div>
+      <div>
+        <h3 style="font-size:16px;font-weight:700;color:var(--gray-800);margin:0;">Premium Price Settings</h3>
+        <div style="font-size:13px;color:var(--gray-400);margin-top:2px;">Update monthly prices and yearly discount</div>
+      </div>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      
+      <!-- Standard Plan -->
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Standard Monthly Price (₹)</label>
+        <div style="position:relative;">
+          <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+          <input type="number" name="standard_price" value="{{ plan.standard_price|default:0 }}" required min="0"
+            style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+        </div>
+      </div>
+
+      <!-- Premium Plan -->
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Premium Monthly Price (₹)</label>
+        <div style="position:relative;">
+          <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+          <input type="number" name="premium_price" value="{{ plan.premium_price|default:0 }}" required min="0"
+            style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+        </div>
+      </div>
+
+      <!-- Yearly Discount -->
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Yearly Discount (%)</label>
+        <div style="position:relative;">
+          <i class="fa-solid fa-percent" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+          <input type="number" name="year_dis" value="{{ plan.year_dis|default:0 }}" required min="0" max="100"
+            style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+        </div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:6px;">This discount is automatically applied when users purchase a yearly subscription.</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:10px;border-top:1px solid var(--gray-200);padding-top:20px;">
+        <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;font-size:14px;padding:12px;">
+          <i class="fa-solid fa-floppy-disk"></i> Save Changes
+        </button>
+        <a href="{% url 'subadmin:dashboard' %}" class="btn btn-secondary" style="flex:1;justify-content:center;font-size:14px;padding:12px;">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Add focus styles to inputs
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('focus', function() {
+      this.style.borderColor = 'var(--primary-mid)';
+      this.previousElementSibling.style.color = 'var(--primary-mid)';
+    });
+    input.addEventListener('blur', function() {
+      this.style.borderColor = 'var(--gray-200)';
+      this.previousElementSibling.style.color = 'var(--gray-400)';
+    });
+  });
+</script>
+{% endblock %}

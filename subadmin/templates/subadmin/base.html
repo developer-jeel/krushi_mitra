@@ -86,7 +86,9 @@
     <a href="{% url 'subadmin:manage_orders' %}" class="nav-item {% block nav_orders %}{% endblock %}">
       <i class="fa-solid fa-cart-flatbed"></i><span>Orders</span></a>
     <a href="{% url 'subadmin:manage_premium' %}" class="nav-item {% block nav_premium %}{% endblock %}">
-      <i class="fa-solid fa-crown"></i><span>Premium</span></a>
+      <i class="fa-solid fa-crown"></i><span>Premium Users</span></a>
+    <a href="{% url 'subadmin:premium_settings' %}" class="nav-item {% block nav_premium_settings %}{% endblock %}">
+      <i class="fa-solid fa-tags"></i><span>Premium Prices</span></a>
 
     <div class="nav-section-title">More</div>
     <a href="{% url 'subadmin:manage_premium_coupons' %}" class="nav-item {% block nav_prem_coup %}{% endblock %}">

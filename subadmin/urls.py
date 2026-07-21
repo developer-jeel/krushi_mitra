@@ -63,6 +63,7 @@ urlpatterns = [
 
     # Premium Management
     path('premium/',                         views.manage_premium,   name='manage_premium'),
+    path('premium/settings/',                views.premium_settings, name='premium_settings'),
 
     # Reports & Exports
     path('reports/',                         views.reports,              name='reports'),
