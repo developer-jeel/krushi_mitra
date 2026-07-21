@@ -197,36 +197,44 @@
           <div class="form-row">
             <div class="form-field">
               <label>Aadhar Card Upload</label>
-              {% if farmer.adharcard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
-                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.adharcard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if not farmer.adharcard or farmer.doc_edit_permission %}
               <input type="file" name="adharcard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+              {% endif %}
             </div>
             <div class="form-field">
               <label>PAN Card Upload</label>
-              {% if farmer.pancard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
-                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.pancard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if not farmer.pancard or farmer.doc_edit_permission %}
               <input type="file" name="pancard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+              {% endif %}
             </div>
             <div class="form-field">
               <label>Bank Passbook</label>
-              {% if farmer.passbook %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
-                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.passbook %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if not farmer.passbook or farmer.doc_edit_permission %}
               <input type="file" name="passbook" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+              {% endif %}
             </div>
             <div class="form-field">
               <label>7/12 Extract (Satbara)</label>
-              {% if farmer.seventwel %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i
-                  class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.seventwel %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if not farmer.seventwel or farmer.doc_edit_permission %}
               <input type="file" name="seventwel" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
+              {% endif %}
             </div>
           </div>
           <div class="form-field">
             <label for="pfAadharInput">Aadhar Number</label>
             <input type="text" id="pfAadharInput" name="adharno" value="{{ farmer.adharno|default:'' }}"
-              placeholder="12-digit Aadhar number" />
+              placeholder="12-digit Aadhar number" {% if farmer.adharno and not farmer.doc_edit_permission %}readonly style="opacity:0.6;cursor:not-allowed;"{% endif %} />
           </div>
           <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+            {% if not farmer.adharcard or not farmer.pancard or not farmer.passbook or not farmer.seventwel or not farmer.adharno or farmer.doc_edit_permission %}
             <button class="btn btn-primary" type="submit">Save Documents</button>
+            {% else %}
+            <div style="font-size:13px; color:var(--gray-400); padding:10px 0;">Documents are locked. Contact admin to request changes.</div>
+            {% endif %}
           </div>
         </form>
         {% else %}
@@ -238,60 +246,78 @@
       <div id="sec-notif" style="display:none;">
         <div class="profile-section">
           <div class="profile-section-title">Notification Preferences</div>
+          
+          {% if farmer %}
+          <form method="POST" action="{% url 'farmer_profile' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="notif">
+            
+            <!-- Replace standard toggles with checkboxes (styled natively or keeping toggle structure but adding actual hidden inputs handled by js) -->
+            <!-- For simplicity and robustness without needing extra JS, we will use native checkboxes styled appropriately, but since JS expects .toggle-switch, we'll keep the JS structure and use hidden inputs -->
+            
+            <input type="hidden" name="notif_new_order" id="h_notif_new_order" value="{{ farmer.notif_new_order|yesno:'on,off' }}">
+            <input type="hidden" name="notif_price_alerts" id="h_notif_price_alerts" value="{{ farmer.notif_price_alerts|yesno:'on,off' }}">
+            <input type="hidden" name="notif_blog" id="h_notif_blog" value="{{ farmer.notif_blog|yesno:'on,off' }}">
+            <input type="hidden" name="notif_sms" id="h_notif_sms" value="{{ farmer.notif_sms|yesno:'on,off' }}">
+            <input type="hidden" name="notif_gov_schemes" id="h_notif_gov_schemes" value="{{ farmer.notif_gov_schemes|yesno:'on,off' }}">
 
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">New Order Alerts</div>
-              <div class="toggle-desc">Get notified when someone places an
-                order</div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">New Order Alerts</div>
+                <div class="toggle-desc">Get notified when someone places an order</div>
+              </div>
+              <div class="toggle-switch {% if farmer.notif_new_order %}on{% endif %}" onclick="document.getElementById('h_notif_new_order').value = this.classList.contains('on') ? 'off' : 'on'"></div>
             </div>
-            <div class="toggle-switch on" id="t1"></div>
-          </div>
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">Price Alerts</div>
-              <div class="toggle-desc">Daily market price updates for your
-                crops</div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Price Alerts</div>
+                <div class="toggle-desc">Daily market price updates for your crops</div>
+              </div>
+              <div class="toggle-switch {% if farmer.notif_price_alerts %}on{% endif %}" onclick="document.getElementById('h_notif_price_alerts').value = this.classList.contains('on') ? 'off' : 'on'"></div>
             </div>
-            <div class="toggle-switch on" id="t2"></div>
-          </div>
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">Blog Notifications</div>
-              <div class="toggle-desc">Get notified about new blogs and
-                articles</div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Blog Notifications</div>
+                <div class="toggle-desc">Get notified about new blogs and articles</div>
+              </div>
+              <div class="toggle-switch {% if farmer.notif_blog %}on{% endif %}" onclick="document.getElementById('h_notif_blog').value = this.classList.contains('on') ? 'off' : 'on'"></div>
             </div>
-            <div class="toggle-switch" id="t3"></div>
-          </div>
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">Promotional SMS</div>
-              <div class="toggle-desc">Receive offers and deals via SMS</div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Promotional SMS</div>
+                <div class="toggle-desc">Receive offers and deals via SMS</div>
+              </div>
+              <div class="toggle-switch {% if farmer.notif_sms %}on{% endif %}" onclick="document.getElementById('h_notif_sms').value = this.classList.contains('on') ? 'off' : 'on'"></div>
             </div>
-            <div class="toggle-switch" id="t4"></div>
-          </div>
-          <div class="toggle-row" style="border-bottom:none;">
-            <div>
-              <div class="toggle-label">Government Scheme Updates</div>
-              <div class="toggle-desc">Stay informed about PM-KISAN and
-                other schemes</div>
+            <div class="toggle-row" style="border-bottom:none;">
+              <div>
+                <div class="toggle-label">Government Scheme Updates</div>
+                <div class="toggle-desc">Stay informed about PM-KISAN and other schemes</div>
+              </div>
+              <div class="toggle-switch {% if farmer.notif_gov_schemes %}on{% endif %}" onclick="document.getElementById('h_notif_gov_schemes').value = this.classList.contains('on') ? 'off' : 'on'"></div>
             </div>
-            <div class="toggle-switch on" id="t5"></div>
-          </div>
+            <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+              <button class="btn btn-primary" type="submit">Save Preferences</button>
+            </div>
+          </form>
+          {% else %}
+          <div style="color:rgba(255,255,255,0.5);font-size:14px;">No farmer profile linked. Please contact admin.</div>
+          {% endif %}
         </div>
 
         <!-- Danger Zone -->
         <div class="profile-section" style="border:1.5px solid #fee2e2;">
-          <div class="profile-section-title" style="color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i>
-            Danger Zone</div>
+          <div class="profile-section-title" style="color:#dc2626;"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
           <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
             <div>
-              <div style="font-size:14px; font-weight:600; color:var(--gray-800);">Delete
-                Account</div>
-              <div style="font-size:12px; color:var(--gray-400);">
-                Permanently delete your farmer account and all data</div>
+              <div style="font-size:14px; font-weight:600; color:var(--gray-800);">Delete Account</div>
+              <div style="font-size:12px; color:var(--gray-400);">Permanently delete your farmer account and all data</div>
             </div>
-            <button class="btn btn-danger">Delete My Account</button>
+            <form method="POST" action="{% url 'farmer_profile' %}" onsubmit="return confirm('Are you sure you want to permanently delete your account? This action cannot be undone.');">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="delete_account">
+              <button class="btn btn-danger" type="submit">Delete My Account</button>
+            </form>
           </div>
         </div>
       </div>

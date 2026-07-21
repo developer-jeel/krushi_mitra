@@ -37,6 +37,17 @@ class Farmer(models.Model):
     passbook = models.FileField(upload_to='farmer/documents/passbook/', blank=True, null=True)
     seventwel = models.FileField(upload_to='farmer/documents/7_12/', blank=True, null=True)
     photo = models.ImageField(upload_to='farmer/profile_photos/', blank=True, null=True)
+    
+    # Notification Preferences
+    notif_new_order = models.BooleanField(default=True)
+    notif_price_alerts = models.BooleanField(default=True)
+    notif_blog = models.BooleanField(default=False)
+    notif_sms = models.BooleanField(default=False)
+    notif_gov_schemes = models.BooleanField(default=True)
+    
+    # Document Edit Permission
+    doc_edit_permission = models.BooleanField(default=False, help_text="Allow farmer to edit documents after initial upload")
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -251,7 +262,7 @@ class FarmerTool(models.Model):
     )
     STATUS_CHOICES = (
         ('available', 'Available'),
-        ('sold',      'Sold'),
+        ('sold','Sold'),
     )
 
     user                  = models.ForeignKey(User, on_delete=models.CASCADE, related_name='farmer_tools')
@@ -267,6 +278,7 @@ class FarmerTool(models.Model):
     availability_status   = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
     location              = models.CharField(max_length=200, blank=True, null=True)
     original_price        = models.PositiveIntegerField(help_text='Original purchase price (used for auto price estimation)')
+    predicted_price       = models.PositiveIntegerField(blank=True, null=True, help_text='AI Predicted price at the time of listing')
     years_used            = models.PositiveIntegerField(default=0, help_text='Number of years the tool has been used')
     created_at            = models.DateTimeField(auto_now_add=True)
     updated_at            = models.DateTimeField(auto_now=True)

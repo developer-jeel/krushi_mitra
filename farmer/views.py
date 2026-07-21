@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from sklearn.linear_model import LinearRegression 
 from sklearn.ensemble import RandomForestClassifier
 from buyer.models import *
+from pathlib import Path
+import pandas as pd
 
 def register(request):
     if request.method == 'POST':
@@ -292,7 +294,21 @@ def farmer_profile(request):
                 farmer_obj.passbook = request.FILES['passbook']
             if request.FILES.get('seventwel'):
                 farmer_obj.seventwel = request.FILES['seventwel']
+            # Reset permission after successful update
+            farmer_obj.doc_edit_permission = False
             farmer_obj.save()
+        elif action == 'notif' and farmer_obj:
+            farmer_obj.notif_new_order = request.POST.get('notif_new_order') == 'on'
+            farmer_obj.notif_price_alerts = request.POST.get('notif_price_alerts') == 'on'
+            farmer_obj.notif_blog = request.POST.get('notif_blog') == 'on'
+            farmer_obj.notif_sms = request.POST.get('notif_sms') == 'on'
+            farmer_obj.notif_gov_schemes = request.POST.get('notif_gov_schemes') == 'on'
+            farmer_obj.save()
+        elif action == 'delete_account':
+            uid.delete()
+            messages.success(request, 'Your account has been permanently deleted.')
+            return redirect('login')
+            
         messages.success(request, 'Profile updated successfully!')
         return redirect('farmer_profile')
 
@@ -472,24 +488,17 @@ def community_chat(request):
 def community_chat_delet(request,pk):
     community_message.objects.filter(id=pk).delete()
     return redirect('community_chat')
+
 def predict_price(price, category, years, condition):
 
-    years = min(years, 5)
+    years = max(years, 0)
 
-    X = [
-        [0, 1, 5],
-        [0, 3, 4],
-        [1, 2, 3],
-        [1, 4, 2],
-        [2, 2, 4],
-        [2, 5, 2],
-        [3, 1, 4],
-        [3, 3, 3],
-        [4, 1, 5],
-        [4, 2, 3]
-    ]
+    BASE_DIR = Path(__file__).resolve().parent
+    csv_path = BASE_DIR / "data" / "tool_prices_1000000_dataset.csv"
+    df = pd.read_csv(csv_path)
 
-    y = [0.90, 0.75, 0.70, 0.55, 0.80, 0.60, 0.85, 0.65, 0.90, 0.70]
+    X = df[["category", "years", "condition"]]
+    y = df["rate"]
 
     log_y = [math.log(v) for v in y]
 
@@ -501,7 +510,7 @@ def predict_price(price, category, years, condition):
     ])[0]
 
     print("LOG PRED :", log_pred)
-
+    
     rate = math.exp(log_pred)
 
     print("RATE :", rate)
@@ -525,10 +534,10 @@ def tool_price(request):
         
         category_map = {"tractor": 0,"harvester": 1,"other": 2,"tools": 3,"hand": 4}
 
-        condition_map = {"poor": 5,"average": 4,"good": 3,"excellent": 2}
+        condition_map = {"poor": 1,"average": 2,"good": 4,"excellent": 5}
 
         category_no = category_map.get(category, 0)
-        condition_no = condition_map.get(condition, 3)
+        condition_no = condition_map.get(condition, 2)
 
         result = predict_price(price, category_no, years, condition_no)
 
@@ -714,7 +723,11 @@ def my_tool_list(request):
     # Attach predicted price to each tool
     tools_with_price = []
     for t in qs:
-        predicted = _tool_predicted_price(t.category, t.condition, t.years_used, t.original_price)
+        predicted = t.predicted_price
+        if predicted is None:
+            predicted = _tool_predicted_price(t.category, t.condition, t.years_used, t.original_price)
+            t.predicted_price = predicted
+            t.save(update_fields=['predicted_price'])
         tools_with_price.append({'tool': t, 'predicted_price': predicted})
 
     context = {
@@ -768,6 +781,8 @@ def tool_add(request):
             }
             return render(request, 'farmer/tool_add.html', context)
 
+        predicted_val = _tool_predicted_price(category, condition, int(years_used) if years_used else 0, int(original_price))
+
         t = FarmerTool.objects.create(
             user=uid,
             tool_name=tool_name,
@@ -781,12 +796,13 @@ def tool_add(request):
             availability_status=availability_status,
             location=location or None,
             original_price=int(original_price),
+            predicted_price=predicted_val,
             years_used=int(years_used) if years_used else 0,
         )
         if image:
             t.image = image
             t.save()
-        messages.success(request, f'Tool "{tool_name}" added successfully!')
+        messages.success(request, f'Tool "{tool_name}" added successfully! Predicted selling price: ₹{predicted_val}')
         return redirect('my_tool_list')
 
     return render(request, 'farmer/tool_add.html', {'uid': uid})
@@ -817,6 +833,9 @@ def tool_edit(request, pk):
         tool_obj.location            = request.POST.get('location', '').strip() or None
         tool_obj.original_price      = int(request.POST.get('original_price', tool_obj.original_price))
         tool_obj.years_used          = int(request.POST.get('years_used', 0))
+        predicted = _tool_predicted_price(tool_obj.category, tool_obj.condition, tool_obj.years_used, tool_obj.original_price)
+        tool_obj.predicted_price = predicted
+
         if request.FILES.get('image'):
             tool_obj.image = request.FILES['image']
         tool_obj.save()
@@ -834,7 +853,11 @@ def tool_detail(request, pk):
     if not tool_obj:
         messages.error(request, 'Tool not found or access denied.')
         return redirect('my_tool_list')
-    predicted = _tool_predicted_price(tool_obj.category, tool_obj.condition, tool_obj.years_used, tool_obj.original_price)
+    predicted = tool_obj.predicted_price
+    if predicted is None:
+        predicted = _tool_predicted_price(tool_obj.category, tool_obj.condition, tool_obj.years_used, tool_obj.original_price)
+        tool_obj.predicted_price = predicted
+        tool_obj.save(update_fields=['predicted_price'])
     context   = {'uid': uid, 'tool': tool_obj, 'predicted': predicted}
     return render(request, 'farmer/tool_detail.html', context)
 
