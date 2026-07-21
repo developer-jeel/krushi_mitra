@@ -6,42 +6,60 @@
 
 {% block content %}
 <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
-  <input type="text" name="q" value="{{ q }}" placeholder="Search buyer name…"
-    style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
-    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+  <input type="text" name="q" value="{{ q }}" placeholder="Search buyer name…" style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
   <select name="plan" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
     padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All Plans</option>
     <option value="Free" {% if plan == 'Free' %}selected{% endif %}>Free</option>
     <option value="Standard" {% if plan == 'Standard' %}selected{% endif %}>Standard</option>
-    <option value="Premium" {% if plan == 'Premium' %}selected{% endif %}>Premium</option>
+<option value="Premium" {% if plan == 'Premium' %}selected{% endif %}>Premium</option>
   </select>
-  <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i> Filter</button>
+  <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i>
+    Filter</button>
   <a href="{% url 'subadmin:manage_premium' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+  <a href="{% url 'subadmin:transactions' %}" class="btn btn-primary" style="padding:10px 20px;margin-left:auto;"><i class="fa-solid fa-money-bill-transfer"></i> View Transactions</a>
 </form>
 
 <div class="table-wrapper">
   <div class="table-header">
     <div class="table-title">Premium Records <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+    <div class="table-actions">
+      <a href="{% url 'subadmin:transactions' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-receipt"></i> Transactions
+      </a>
+    </div>
   </div>
   <table>
-    <thead><tr><th>#</th><th>Buyer</th><th>Plan</th><th>Cycle</th><th>Purchase Date</th><th>Status</th></tr></thead>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Buyer</th>
+        <th>Plan</th>
+        <th>Cycle</th>
+        <th>Purchase Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
     <tbody>
       {% for p in premiums %}
       <tr>
         <td>{{ forloop.counter }}</td>
         <td>
-          <a href="{% url 'subadmin:buyer_detail' p.user.pk %}" style="color:#22c55e;text-decoration:none;font-weight:600;">
+          <a href="{% url 'subadmin:buyer_detail' p.user.pk %}"
+            style="color:#22c55e;text-decoration:none;font-weight:600;">
             {{ p.user.user.name }}
           </a>
         </td>
         <td>
           {% if p.premium_type == 'Premium' %}
-          <span style="background:linear-gradient(135deg,#f59e0b,#d97706);color:var(--white);padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">
+          <span
+            style="background:linear-gradient(135deg,#f59e0b,#d97706);color:var(--white);padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">
             ⭐ Premium
           </span>
           {% elif p.premium_type == 'Standard' %}
-          <span style="background:#dbeafe;color:#1e40af;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">Standard</span>
+          <span
+            style="background:#dbeafe;color:#1e40af;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">Standard</span>
           {% else %}
           <span style="color:#94a3b8;font-size:12px;">Free</span>
           {% endif %}
@@ -50,8 +68,8 @@
         <td>{{ p.purchase_date|date:"M d, Y" }}</td>
         <td>
           {% if p.premium_type != 'Free' %}
-            {% if p.is_expired %}<span class="badge-inactive">Expired</span>
-            {% else %}<span class="badge-active">Active</span>{% endif %}
+          {% if p.is_expired %}<span class="badge-inactive">Expired</span>
+          {% else %}<span class="badge-active">Active</span>{% endif %}
           {% else %}<span style="color:#94a3b8;font-size:12px;">—</span>{% endif %}
         </td>
         <!-- Actions column: inline upgrade form + cancel -->
@@ -80,8 +98,8 @@
             {% if p.premium_type != 'Free' %}
             <a href="#" onclick="openConfirm('{% url 'subadmin:premium_cancel' p.pk %}',
               'Cancel Subscription?',
-              'This will revert {{ p.user.user.name }} to Free plan immediately.')"
-              class="btn btn-danger btn-sm" title="Cancel">
+              'This will revert {{ p.user.user.name }} to Free plan immediately.')" class="btn btn-danger btn-sm"
+              title="Cancel">
               <i class="fa-solid fa-ban"></i>
             </a>
             {% endif %}
@@ -89,10 +107,11 @@
         </td>
       </tr>
       {% empty %}
-      <tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:40px;">No premium records</td></tr>
+      <tr>
+        <td colspan="7" style="text-align:center;color:#94a3b8;padding:40px;">No premium records</td>
+      </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 {% endblock %}
-

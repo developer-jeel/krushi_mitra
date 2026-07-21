@@ -54,14 +54,17 @@
 <!-- Export Section -->
 <div class="table-wrapper" style="padding:28px;">
   <div style="font-size:17px;font-weight:700;color:var(--gray-800);margin-bottom:6px;">Data Export</div>
-  <div style="font-size:13px;color:#94a3b8;margin-bottom:24px;">Download reports as CSV files for offline analysis.</div>
+  <div style="font-size:13px;color:#94a3b8;margin-bottom:24px;">Download reports as CSV files for offline analysis.
+  </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
     <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:12px;padding:20px;">
       <div style="font-size:32px;margin-bottom:12px;">🧑‍🌾</div>
       <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:4px;">Farmer Report</div>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Name, contact, city, farm details, status, join date</div>
-      <a href="{% url 'subadmin:export_farmers' %}" class="btn btn-primary" style="width:100%;text-align:center;display:block;">
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Name, contact, city, farm details, status, join date
+      </div>
+      <a href="{% url 'subadmin:export_farmers' %}" class="btn btn-primary"
+        style="width:100%;text-align:center;display:block;">
         <i class="fa-solid fa-download"></i> Download CSV
       </a>
     </div>
@@ -69,8 +72,10 @@
     <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:12px;padding:20px;">
       <div style="font-size:32px;margin-bottom:12px;">🛒</div>
       <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:4px;">Buyer Report</div>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Name, contact, state, GST, verification, premium, join date</div>
-      <a href="{% url 'subadmin:export_buyers' %}" class="btn btn-primary" style="width:100%;text-align:center;display:block;">
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Name, contact, state, GST, verification, premium,
+        join date</div>
+      <a href="{% url 'subadmin:export_buyers' %}" class="btn btn-primary"
+        style="width:100%;text-align:center;display:block;">
         <i class="fa-solid fa-download"></i> Download CSV
       </a>
     </div>
@@ -78,8 +83,10 @@
     <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:12px;padding:20px;">
       <div style="font-size:32px;margin-bottom:12px;">📦</div>
       <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:4px;">Order Report</div>
-      <div style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Order ID, buyer, amount, status, payment method, date</div>
-      <a href="{% url 'subadmin:export_orders' %}" class="btn btn-primary" style="width:100%;text-align:center;display:block;">
+      <div style="font-size:13px;color:#94a3b8;margin-bottom:16px;">Order ID, buyer, amount, status, payment method,
+        date</div>
+      <a href="{% url 'subadmin:export_orders' %}" class="btn btn-primary"
+        style="width:100%;text-align:center;display:block;">
         <i class="fa-solid fa-download"></i> Download CSV
       </a>
     </div>

@@ -1,7 +1,8 @@
 {% extends "subadmin/base.html" %}
 {% block title %}Order {{ order.order_id }}{% endblock %}
 {% block page_title %}Order Detail{% endblock %}
-{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_orders' %}" style="color:#22c55e;">Orders</a> / {{ order.order_id }}{% endblock %}
+{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_orders' %}" style="color:#22c55e;">Orders</a> / {{
+order.order_id }}{% endblock %}
 {% block nav_orders %}active{% endblock %}
 
 {% block content %}
@@ -12,7 +13,14 @@
       <div class="table-title">Order Items</div>
     </div>
     <table>
-      <thead><tr><th>Crop</th><th>Qty</th><th>Price/Unit</th><th>Subtotal</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Crop</th>
+          <th>Qty</th>
+          <th>Price/Unit</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
       <tbody>
         {% for item in items %}
         <tr>
@@ -24,7 +32,9 @@
           <td>₹{{ item.subtotal }}</td>
         </tr>
         {% empty %}
-        <tr><td colspan="4" style="text-align:center;color:#94a3b8;">No items</td></tr>
+        <tr>
+          <td colspan="4" style="text-align:center;color:#94a3b8;">No items</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
@@ -41,7 +51,8 @@
         <span style="color:#22c55e;">-₹{{ order.discount_amount }}</span>
       </div>
       {% endif %}
-      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-200);">
+      <div
+        style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-200);">
         <span style="color:var(--gray-800);">Total</span>
         <span style="color:#22c55e;">₹{{ order.total_amount }}</span>
       </div>
@@ -84,7 +95,7 @@
           border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;
           outline:none;margin-bottom:10px;">
           {% for val, label in status_choices %}
-          <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+          <option value="{{ val }}" {% if order.status==val %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
         <button type="submit" class="btn btn-primary" style="width:100%;">

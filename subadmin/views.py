@@ -15,8 +15,10 @@ from buyer.models import (
     Buyer, Order, OrderItem, premium_buyer, verification_details,
     premium_coupon, discount_coupon, premium_history, premium_plans,
 )
+from buyer.views import format_indian_number
 
 
+#format_indian_number
 # ─────────────────────────────────────────────────────────────────────────────
 # Auth helpers
 # ─────────────────────────────────────────────────────────────────────────────
@@ -96,6 +98,7 @@ def dashboard(request):
     pending_crops   = crop.objects.filter(is_approved=False).count()
     active_users    = User.objects.filter(is_active=True).count()
     total_revenue   = OrderItem.objects.aggregate(s=Sum('subtotal'))['s'] or 0
+    total_revenue   = "" + format_indian_number(total_revenue)
     premium_buyers  = Buyer.objects.filter(is_premiume=True).count()
 
     # Pending KYC
@@ -153,7 +156,7 @@ def dashboard(request):
         'total_news': total_news,
         'pending_crops': pending_crops,
         'active_users': active_users,
-        'total_revenue': int(total_revenue),
+        'total_revenue': total_revenue,
         'premium_buyers': premium_buyers,
         'pending_kyc': pending_kyc,
         'recent_orders': recent_orders,

@@ -2,12 +2,12 @@
 {% block title %}{{ action }} {% if coupon_type == 'premium' %}Premium{% else %}Discount{% endif %} Coupon{% endblock %}
 {% block page_title %}{{ action }} Coupon{% endblock %}
 {% block breadcrumb %}Admin /
-  {% if coupon_type == 'premium' %}
-    <a href="{% url 'subadmin:manage_premium_coupons' %}" style="color:#22c55e;">Premium Coupons</a>
-  {% else %}
-    <a href="{% url 'subadmin:manage_discount_coupons' %}" style="color:#22c55e;">Discount Coupons</a>
-  {% endif %}
-  / {{ action }}
+{% if coupon_type == 'premium' %}
+<a href="{% url 'subadmin:manage_premium_coupons' %}" style="color:#22c55e;">Premium Coupons</a>
+{% else %}
+<a href="{% url 'subadmin:manage_discount_coupons' %}" style="color:#22c55e;">Discount Coupons</a>
+{% endif %}
+/ {{ action }}
 {% endblock %}
 {% block nav_prem_coup %}{% if coupon_type == 'premium' %}active{% endif %}{% endblock %}
 {% block nav_disc_coup %}{% if coupon_type == 'discount' %}active{% endif %}{% endblock %}
@@ -16,9 +16,8 @@
 <div style="max-width:680px;">
   <div class="table-wrapper" style="padding:28px;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
-      <div style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-        background:linear-gradient(135deg,{% if coupon_type == 'premium' %}#f59e0b,#d97706{% else %}#60a5fa,#2563eb{% endif %});
-        color:var(--white);font-size:20px;">
+      <div
+        style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,{% if coupon_type == 'premium' %}#f59e0b,#d97706{% else %}#60a5fa,#2563eb{% endif %}); color:var(--white);font-size:20px;">
         <i class="fa-solid {% if coupon_type == 'premium' %}fa-ticket{% else %}fa-tag{% endif %}"></i>
       </div>
       <div>
@@ -26,7 +25,8 @@
           {{ action }} {% if coupon_type == 'premium' %}Premium{% else %}Discount{% endif %} Coupon
         </div>
         <div style="font-size:13px;color:#94a3b8;">
-          {% if action == 'Edit' %}Editing: <strong style="color:#22c55e;">{{ coupon_obj.code }}</strong>{% else %}Create a new coupon code{% endif %}
+          {% if action == 'Edit' %}Editing: <strong style="color:#22c55e;">{{ coupon_obj.code }}</strong>{% else
+          %}Create a new coupon code{% endif %}
         </div>
       </div>
     </div>
@@ -39,14 +39,11 @@
         <div style="grid-column:1/-1;">
           <label class="form-label">Coupon Code *</label>
           <div style="position:relative;">
-            <input type="text" name="code" required
-              value="{{ coupon_obj.code|default:'' }}"
-              placeholder="e.g. PREMIUM20"
-              oninput="this.value=this.value.toUpperCase()"
+            <input type="text" name="code" required value="{{ coupon_obj.code|default:'' }}"
+              placeholder="e.g. PREMIUM20" oninput="this.value=this.value.toUpperCase()"
               style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
-              padding:11px 14px;color:var(--gray-800);font-family:monospace;font-size:15px;font-weight:700;outline:none;letter-spacing:1px;"/>
-            <button type="button" onclick="generateCode()" title="Auto-generate"
-              style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;
+              padding:11px 14px;color:var(--gray-800);font-family:monospace;font-size:15px;font-weight:700;outline:none;letter-spacing:1px;" />
+            <button type="button" onclick="generateCode()" title="Auto-generate" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;
               color:#94a3b8;cursor:pointer;font-size:16px;"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
           </div>
         </div>
@@ -55,19 +52,18 @@
         <div style="grid-column:1/-1;">
           <label class="form-label">Label / Description *</label>
           <input type="text" name="label" required value="{{ coupon_obj.label|default:'' }}"
-            placeholder="e.g. 20% off on Premium plan"
-            style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
-            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+            placeholder="e.g. 20% off on Premium plan" style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
         </div>
 
         <!-- Discount Type -->
         <div>
           <label class="form-label">Discount Type *</label>
-          <select name="discount_type" id="discountType" onchange="updateValueLabel()"
-            style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+          <select name="discount_type" id="discountType" onchange="updateValueLabel()" style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
             padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
-            <option value="percent" {% if coupon_obj.discount_type == 'percent' %}selected{% endif %}>Percentage (%)</option>
-            <option value="flat" {% if coupon_obj.discount_type == 'flat' %}selected{% endif %}>Flat Amount (₹)</option>
+            <option value="percent" {% if coupon_obj.discount_type=='percent' %}selected{% endif %}>Percentage (%)
+            </option>
+            <option value="flat" {% if coupon_obj.discount_type=='flat' %}selected{% endif %}>Flat Amount (₹)</option>
           </select>
         </div>
 
@@ -75,11 +71,11 @@
         <div>
           <label class="form-label" id="valueLabel">Discount Value *</label>
           <div style="position:relative;">
-            <span id="valuePrefix" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-weight:600;"></span>
+            <span id="valuePrefix"
+              style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#94a3b8;font-weight:600;"></span>
             <input type="number" name="discount_value" required min="0" step="0.01"
-              value="{{ coupon_obj.discount_value|default:'' }}"
-              style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
-              padding:11px 14px 11px 28px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+              value="{{ coupon_obj.discount_value|default:'' }}" style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+              padding:11px 14px 11px 28px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
           </div>
         </div>
 
@@ -87,18 +83,15 @@
         <div>
           <label class="form-label">Minimum Purchase Amount (₹)</label>
           <input type="number" name="minimum_amount" min="0" step="0.01"
-            value="{{ coupon_obj.minimum_amount|default:'0' }}"
-            style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
-            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+            value="{{ coupon_obj.minimum_amount|default:'0' }}" style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
         </div>
 
         <!-- Usage Limit -->
         <div>
           <label class="form-label">Usage Limit (total)</label>
-          <input type="number" name="usage_limit" min="1"
-            value="{{ coupon_obj.usage_limit|default:'100' }}"
-            style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
-            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+          <input type="number" name="usage_limit" min="1" value="{{ coupon_obj.usage_limit|default:'100' }}" style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
         </div>
 
         <!-- Expiry Date -->
@@ -107,17 +100,17 @@
           <input type="datetime-local" name="expiry_date"
             value="{% if coupon_obj.expiry_date %}{{ coupon_obj.expiry_date|date:'Y-m-d' }}T{{ coupon_obj.expiry_date|date:'H:i' }}{% endif %}"
             style="width:100%;box-sizing:border-box;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
-            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
         </div>
 
         <!-- Active toggle -->
         <div style="grid-column:1/-1;display:flex;align-items:center;gap:12px;
           background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;padding:14px 16px;">
-          <input type="checkbox" name="is_active" id="is_active"
-            {% if coupon_obj.is_active or not coupon_obj %}checked{% endif %}
-            style="width:18px;height:18px;cursor:pointer;accent-color:#22c55e;"/>
+          <input type="checkbox" name="is_active" id="is_active" {% if coupon_obj.is_active or not coupon_obj
+            %}checked{% endif %} style="width:18px;height:18px;cursor:pointer;accent-color:#22c55e;" />
           <div>
-            <label for="is_active" style="font-size:14px;font-weight:600;color:var(--gray-800);cursor:pointer;display:block;">
+            <label for="is_active"
+              style="font-size:14px;font-weight:600;color:var(--gray-800);cursor:pointer;display:block;">
               Activate Coupon
             </label>
             <div style="font-size:12px;color:#94a3b8;">Inactive coupons cannot be applied by buyers</div>
@@ -163,7 +156,9 @@
 
   <!-- Quick coupon preview card -->
   <div class="table-wrapper" style="margin-top:16px;padding:20px;" id="previewCard">
-    <div style="font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;">Live Preview</div>
+    <div
+      style="font-size:13px;font-weight:600;color:#94a3b8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;">
+      Live Preview</div>
     <div style="background:linear-gradient(135deg,{% if coupon_type == 'premium' %}rgba(245,158,11,.15),rgba(217,119,6,.08){% else %}rgba(96,165,250,.15),rgba(37,99,235,.08){% endif %});
       border:1px dashed {% if coupon_type == 'premium' %}#f59e0b{% else %}#60a5fa{% endif %};
       border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;">
@@ -183,50 +178,50 @@
 
 {% block extra_js %}
 <script>
-const form = document.getElementById('couponForm');
+  const form = document.getElementById('couponForm');
 
-function updateValueLabel() {
-  const t = document.getElementById('discountType').value;
-  document.getElementById('valueLabel').textContent = t === 'percent' ? 'Discount Value (%)' : 'Discount Value (₹)';
-  document.getElementById('valuePrefix').textContent = t === 'percent' ? '%' : '₹';
+  function updateValueLabel() {
+    const t = document.getElementById('discountType').value;
+    document.getElementById('valueLabel').textContent = t === 'percent' ? 'Discount Value (%)' : 'Discount Value (₹)';
+    document.getElementById('valuePrefix').textContent = t === 'percent' ? '%' : '₹';
+    updatePreview();
+  }
+
+  function updatePreview() {
+    const code = form.querySelector('[name=code]').value || '—';
+    const label = form.querySelector('[name=label]').value || 'Label appears here';
+    const val = form.querySelector('[name=discount_value]').value || '—';
+    const type = document.getElementById('discountType').value;
+
+    document.getElementById('previewCode').textContent = code;
+    document.getElementById('previewLabel').textContent = label;
+    document.getElementById('previewValue').textContent = val !== '—'
+      ? (type === 'percent' ? val + '% OFF' : '₹' + val + ' OFF') : '—';
+  }
+
+  function generateCode() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '{{ coupon_type|upper }}-';
+    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    form.querySelector('[name=code]').value = code;
+    updatePreview();
+  }
+
+  // Bind all inputs to live preview
+  form.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', updatePreview);
+    el.addEventListener('change', updatePreview);
+  });
+  updateValueLabel();
   updatePreview();
-}
-
-function updatePreview() {
-  const code  = form.querySelector('[name=code]').value || '—';
-  const label = form.querySelector('[name=label]').value || 'Label appears here';
-  const val   = form.querySelector('[name=discount_value]').value || '—';
-  const type  = document.getElementById('discountType').value;
-
-  document.getElementById('previewCode').textContent  = code;
-  document.getElementById('previewLabel').textContent = label;
-  document.getElementById('previewValue').textContent = val !== '—'
-    ? (type === 'percent' ? val + '% OFF' : '₹' + val + ' OFF') : '—';
-}
-
-function generateCode() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let code = '{{ coupon_type|upper }}-';
-  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-  form.querySelector('[name=code]').value = code;
-  updatePreview();
-}
-
-// Bind all inputs to live preview
-form.querySelectorAll('input, select').forEach(el => {
-  el.addEventListener('input', updatePreview);
-  el.addEventListener('change', updatePreview);
-});
-updateValueLabel();
-updatePreview();
 </script>
 <style>
-.form-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #94a3b8;
-  margin-bottom: 6px;
-}
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 6px;
+  }
 </style>
 {% endblock %}

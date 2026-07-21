@@ -1,190 +1,312 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Admin Panel{% endblock %} — Krushi Mitra</title>
-  <meta name="description" content="Krushi Mitra Sub Admin Panel"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <meta name="description" content="Krushi Mitra Sub Admin Panel" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'subadmin/css/admin.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     /* Toast */
-    .toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;}
-    .toast{background:var(--card-bg,#1a2540);color:var(--gray-100,#f1f5f9);border-radius:10px;padding:14px 18px;
-      display:flex;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.35);
-      border-left:4px solid #22c55e;min-width:280px;font-size:14px;animation:slideIn .3s ease;}
-    .toast.error{border-left-color:#ef4444;}
-    .toast.warning{border-left-color:#f59e0b;}
-    @keyframes slideIn{from{transform:translateX(120%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--card-bg, #1a2540);
+      color: var(--gray-100, #f1f5f9);
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .35);
+      border-left: 4px solid #22c55e;
+      min-width: 280px;
+      font-size: 14px;
+      animation: slideIn .3s ease;
+    }
+
+    .toast.error {
+      border-left-color: #ef4444;
+    }
+
+    .toast.warning {
+      border-left-color: #f59e0b;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(120%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
     /* Confirmation modal */
-    .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9000;align-items:center;justify-content:center;}
-    .confirm-overlay.active{display:flex;}
-    .confirm-box{background:var(--card-bg,#1a2540);border-radius:16px;padding:32px;max-width:400px;width:90%;
-      box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center;}
-    .confirm-box h3{font-size:18px;margin-bottom:8px;color:var(--gray-100,#f1f5f9);}
-    .confirm-box p{font-size:14px;color:var(--gray-400,#94a3b8);margin-bottom:24px;}
-    .confirm-box .btn-row{display:flex;gap:12px;justify-content:center;}
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .6);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .confirm-overlay.active {
+      display: flex;
+    }
+
+    .confirm-box {
+      background: var(--card-bg, #1a2540);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+      text-align: center;
+    }
+
+    .confirm-box h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--gray-100, #f1f5f9);
+    }
+
+    .confirm-box p {
+      font-size: 14px;
+      color: var(--gray-400, #94a3b8);
+      margin-bottom: 24px;
+    }
+
+    .confirm-box .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
     /* Badge styles */
-    .badge-active{background:#dcfce7;color:#166534;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-    .badge-inactive{background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-    .badge-pending{background:#fef9c3;color:#854d0e;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-    .badge-approved{background:#dcfce7;color:#166534;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-    .badge-verified{background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
-    .badge-breaking{background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+    .badge-active {
+      background: #dcfce7;
+      color: #166534;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-inactive {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-pending {
+      background: #fef9c3;
+      color: #854d0e;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-approved {
+      background: #dcfce7;
+      color: #166534;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-verified {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-breaking {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
   </style>
   {% block extra_head %}{% endblock %}
 </head>
+
 <body>
 
-<!-- Toast messages -->
-<div class="toast-container">
-  {% for msg in messages %}
-  <div class="toast {% if msg.tags == 'error' %}error{% elif msg.tags == 'warning' %}warning{% endif %}">
-    <i class="fa-solid {% if msg.tags == 'error' %}fa-circle-xmark{% elif msg.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
-    {{ msg }}
+  <!-- Toast messages -->
+  <div class="toast-container">
+    {% for msg in messages %}
+    <div class="toast {% if msg.tags == 'error' %}error{% elif msg.tags == 'warning' %}warning{% endif %}">
+      <i
+        class="fa-solid {% if msg.tags == 'error' %}fa-circle-xmark{% elif msg.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+      {{ msg }}
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
-</div>
 
-<!-- ══ SIDEBAR ══ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra"/>
-    <div class="brand">Krushi Mitra <span>Admin Panel</span><div class="admin-badge">Admin</div></div>
-  </div>
-  <nav class="sidebar-nav">
-    <div class="nav-section-title">Main</div>
-    <a href="{% url 'subadmin:dashboard' %}" class="nav-item {% block nav_dashboard %}{% endblock %}" id="nav-dash">
-      <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
-
-    <div class="nav-section-title">User Management</div>
-    <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item {% block nav_farmers %}{% endblock %}">
-      <i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
-    <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item {% block nav_buyers %}{% endblock %}">
-      <i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
-
-    <div class="nav-section-title">Content</div>
-    <a href="{% url 'subadmin:manage_crops' %}" class="nav-item {% block nav_crops %}{% endblock %}">
-      <i class="fa-solid fa-wheat-awn"></i><span>Crops</span></a>
-    <a href="{% url 'subadmin:manage_tools' %}" class="nav-item {% block nav_tools %}{% endblock %}">
-      <i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
-    <a href="{% url 'subadmin:manage_blogs' %}" class="nav-item {% block nav_blogs %}{% endblock %}">
-      <i class="fa-solid fa-blog"></i><span>Blogs</span></a>
-    <a href="{% url 'subadmin:manage_community' %}" class="nav-item {% block nav_community %}{% endblock %}">
-      <i class="fa-solid fa-comments"></i><span>Community</span></a>
-    <a href="{% url 'subadmin:manage_news' %}" class="nav-item {% block nav_news %}{% endblock %}">
-      <i class="fa-solid fa-newspaper"></i><span>News</span></a>
-
-    <div class="nav-section-title">Operations</div>
-    <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item {% block nav_kyc %}{% endblock %}">
-      <i class="fa-solid fa-id-card"></i><span>KYC Approval</span></a>
-    <a href="{% url 'subadmin:product_approval' %}" class="nav-item {% block nav_products %}{% endblock %}">
-      <i class="fa-solid fa-seedling"></i><span>Product Approval</span></a>
-    <a href="{% url 'subadmin:manage_orders' %}" class="nav-item {% block nav_orders %}{% endblock %}">
-      <i class="fa-solid fa-cart-flatbed"></i><span>Orders</span></a>
-    <a href="{% url 'subadmin:manage_premium' %}" class="nav-item {% block nav_premium %}{% endblock %}">
-      <i class="fa-solid fa-crown"></i><span>Premium Users</span></a>
-    <a href="{% url 'subadmin:premium_settings' %}" class="nav-item {% block nav_premium_settings %}{% endblock %}">
-      <i class="fa-solid fa-tags"></i><span>Premium Prices</span></a>
-
-    <div class="nav-section-title">More</div>
-    <a href="{% url 'subadmin:manage_premium_coupons' %}" class="nav-item {% block nav_prem_coup %}{% endblock %}">
-      <i class="fa-solid fa-ticket"></i><span>Premium Coupons</span></a>
-    <a href="{% url 'subadmin:manage_discount_coupons' %}" class="nav-item {% block nav_disc_coup %}{% endblock %}">
-      <i class="fa-solid fa-tag"></i><span>Discount Coupons</span></a>
-    <a href="{% url 'subadmin:transactions' %}" class="nav-item {% block nav_transactions %}{% endblock %}">
-      <i class="fa-solid fa-money-bill-transfer"></i><span>Transactions</span></a>
-    <a href="{% url 'subadmin:reports' %}" class="nav-item {% block nav_reports %}{% endblock %}">
-      <i class="fa-solid fa-chart-line"></i><span>Reports</span></a>
-    <a href="{% url 'subadmin:profile' %}" class="nav-item {% block nav_profile %}{% endblock %}">
-      <i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
-    <a href="{% url 'subadmin:system_settings' %}" class="nav-item {% block nav_settings %}{% endblock %}">
-      <i class="fa-solid fa-gears"></i><span>Settings</span></a>
-
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="sidebar-user">
-      <div class="sidebar-user-av">{{ admin_user.name|make_list|first|upper }}</div>
-      <div class="sidebar-user-info">
-        <div class="sidebar-user-name">{{ admin_user.name }}</div>
-        <div class="sidebar-user-role">Sub Admin</div>
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Admin Panel</span>
+        <div class="admin-badge">Admin</div>
       </div>
     </div>
-    <a href="{% url 'subadmin:logout' %}" style="display:block;margin-top:10px;text-align:center;
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'subadmin:dashboard' %}" class="nav-item {% block nav_dashboard %}{% endblock %}" id="nav-dash">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+
+      <div class="nav-section-title">User Management</div>
+      <a href="{% url 'subadmin:manage_farmers' %}" class="nav-item {% block nav_farmers %}{% endblock %}">
+        <i class="fa-solid fa-tractor"></i><span>Manage Farmers</span></a>
+      <a href="{% url 'subadmin:manage_buyers' %}" class="nav-item {% block nav_buyers %}{% endblock %}">
+        <i class="fa-solid fa-users"></i><span>Manage Buyers</span></a>
+
+      <div class="nav-section-title">Content</div>
+      <a href="{% url 'subadmin:manage_crops' %}" class="nav-item {% block nav_crops %}{% endblock %}">
+        <i class="fa-solid fa-wheat-awn"></i><span>Crops</span></a>
+      <a href="{% url 'subadmin:manage_tools' %}" class="nav-item {% block nav_tools %}{% endblock %}">
+        <i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      <a href="{% url 'subadmin:manage_blogs' %}" class="nav-item {% block nav_blogs %}{% endblock %}">
+        <i class="fa-solid fa-blog"></i><span>Blogs</span></a>
+      <a href="{% url 'subadmin:manage_community' %}" class="nav-item {% block nav_community %}{% endblock %}">
+        <i class="fa-solid fa-comments"></i><span>Community</span></a>
+      <a href="{% url 'subadmin:manage_news' %}" class="nav-item {% block nav_news %}{% endblock %}">
+        <i class="fa-solid fa-newspaper"></i><span>News</span></a>
+
+      <div class="nav-section-title">Operations</div>
+      <a href="{% url 'subadmin:kyc_approval' %}" class="nav-item {% block nav_kyc %}{% endblock %}">
+        <i class="fa-solid fa-id-card"></i><span>KYC Approval</span></a>
+      <a href="{% url 'subadmin:product_approval' %}" class="nav-item {% block nav_products %}{% endblock %}">
+        <i class="fa-solid fa-seedling"></i><span>Product Approval</span></a>
+      <a href="{% url 'subadmin:manage_orders' %}" class="nav-item {% block nav_orders %}{% endblock %}">
+        <i class="fa-solid fa-cart-flatbed"></i><span>Orders</span></a>
+      <a href="{% url 'subadmin:manage_premium' %}" class="nav-item {% block nav_premium %}{% endblock %}">
+        <i class="fa-solid fa-crown"></i><span>Premium Users</span></a>
+      <a href="{% url 'subadmin:premium_settings' %}" class="nav-item {% block nav_premium_settings %}{% endblock %}">
+        <i class="fa-solid fa-tags"></i><span>Premium Prices</span></a>
+
+      <div class="nav-section-title">More</div>
+      <a href="{% url 'subadmin:manage_premium_coupons' %}" class="nav-item {% block nav_prem_coup %}{% endblock %} {% block nav_coupons %}{% endblock %}">
+        <i class="fa-solid fa-ticket"></i><span>Coupons</span></a>
+      <a href="{% url 'subadmin:reports' %}" class="nav-item {% block nav_reports %}{% endblock %}">
+        <i class="fa-solid fa-chart-line"></i><span>Reports</span></a>
+      <a href="{% url 'subadmin:profile' %}" class="nav-item {% block nav_profile %}{% endblock %}">
+        <i class="fa-solid fa-user-shield"></i><span>Admin Profile</span></a>
+      <a href="{% url 'subadmin:system_settings' %}" class="nav-item {% block nav_settings %}{% endblock %}">
+        <i class="fa-solid fa-gears"></i><span>Settings</span></a>
+
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="sidebar-user-av">{{ admin_user.name|make_list|first|upper }}</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">{{ admin_user.name }}</div>
+          <div class="sidebar-user-role">Sub Admin</div>
+        </div>
+      </div>
+      <a href="{% url 'subadmin:logout' %}" style="display:block;margin-top:10px;text-align:center;
       color:#94a3b8;font-size:13px;text-decoration:none;padding:8px;border-radius:8px;
       background:rgba(239,68,68,.1);color:#ef4444;">
-      <i class="fa-solid fa-right-from-bracket"></i> Logout
-    </a>
-  </div>
-</aside>
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
 
-<!-- ══ MAIN ══ -->
-<div class="main">
-  <header class="topbar">
-    <div class="topbar-left">
-      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
-      <div>
-        <div class="page-title">{% block page_title %}Dashboard{% endblock %}</div>
-        <div class="breadcrumb">{% block breadcrumb %}Admin / Dashboard{% endblock %}</div>
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title">{% block page_title %}Dashboard{% endblock %}</div>
+          <div class="breadcrumb">{% block breadcrumb %}Admin / Dashboard{% endblock %}</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <a href="{% url 'subadmin:manage_news' %}" class="topbar-icon-btn" title="News">
+          <i class="fa-solid fa-newspaper"></i></a>
+        <a href="{% url 'subadmin:kyc_approval' %}" class="topbar-icon-btn" title="KYC">
+          <i class="fa-solid fa-id-card"></i></a>
+        <div class="avatar">{{ admin_user.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      {% block content %}{% endblock %}
+    </div>
+  </div><!-- /main -->
+
+  <!-- Confirmation modal -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <h3 id="confirmTitle">Are you sure?</h3>
+      <p id="confirmMsg">This action cannot be undone.</p>
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+        <a class="btn btn-danger" id="confirmBtn" href="#">Confirm</a>
       </div>
     </div>
-    <div class="topbar-right">
-      <a href="{% url 'subadmin:manage_news' %}" class="topbar-icon-btn" title="News">
-        <i class="fa-solid fa-newspaper"></i></a>
-      <a href="{% url 'subadmin:kyc_approval' %}" class="topbar-icon-btn" title="KYC">
-        <i class="fa-solid fa-id-card"></i></a>
-      <div class="avatar">{{ admin_user.name|make_list|first|upper }}</div>
-    </div>
-  </header>
-
-  <div class="page-content">
-    {% block content %}{% endblock %}
   </div>
-</div><!-- /main -->
 
-<!-- Confirmation modal -->
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
-    <h3 id="confirmTitle">Are you sure?</h3>
-    <p id="confirmMsg">This action cannot be undone.</p>
-    <div class="btn-row">
-      <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
-      <a class="btn btn-danger" id="confirmBtn" href="#">Confirm</a>
-    </div>
-  </div>
-</div>
+  <script src="{% static 'js/admin.js' %}"></script>
+  <script>
+    // Auto-dismiss toasts
+    document.querySelectorAll('.toast').forEach(t => {
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(120%)'; t.style.transition = 'all .4s'; setTimeout(() => t.remove(), 400); }, 4000);
+    });
 
-<script src="{% static 'js/admin.js' %}"></script>
-<script>
-  // Auto-dismiss toasts
-  document.querySelectorAll('.toast').forEach(t => {
-    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(120%)'; t.style.transition = 'all .4s'; setTimeout(() => t.remove(), 400); }, 4000);
-  });
+    // Sidebar toggle
+    const hamburger = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+    if (hamburger && sidebar) {
+      hamburger.addEventListener('click', () => sidebar.classList.toggle('open-mobile'));
+    }
 
-  // Sidebar toggle
-  const hamburger = document.getElementById('hamburgerBtn');
-  const sidebar = document.getElementById('sidebar');
-  if (hamburger && sidebar) {
-    hamburger.addEventListener('click', () => sidebar.classList.toggle('open-mobile'));
-  }
-
-  // Confirm modal
-  function openConfirm(href, title, msg) {
-    document.getElementById('confirmTitle').textContent = title || 'Are you sure?';
-    document.getElementById('confirmMsg').textContent = msg || 'This action cannot be undone.';
-    document.getElementById('confirmBtn').href = href;
-    document.getElementById('confirmOverlay').classList.add('active');
-  }
-  function closeConfirm() {
-    document.getElementById('confirmOverlay').classList.remove('active');
-  }
-  document.getElementById('confirmOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeConfirm();
-  });
-</script>
-{% block extra_js %}{% endblock %}
+    // Confirm modal
+    function openConfirm(href, title, msg) {
+      document.getElementById('confirmTitle').textContent = title || 'Are you sure?';
+      document.getElementById('confirmMsg').textContent = msg || 'This action cannot be undone.';
+      document.getElementById('confirmBtn').href = href;
+      document.getElementById('confirmOverlay').classList.add('active');
+    }
+    function closeConfirm() {
+      document.getElementById('confirmOverlay').classList.remove('active');
+    }
+    document.getElementById('confirmOverlay').addEventListener('click', function (e) {
+      if (e.target === this) closeConfirm();
+    });
+  </script>
+  {% block extra_js %}{% endblock %}
 </body>
+
 </html>
