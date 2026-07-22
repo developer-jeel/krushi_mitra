@@ -6,14 +6,20 @@
 
 {% block content %}
 <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
-  <input type="text" name="q" value="{{ q }}" placeholder="Search buyer name…" style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+  <input type="text" name="q" value="{{ q }}" placeholder="Search user name…" style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
     border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
+  <select name="user_type" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Roles</option>
+    <option value="Buyer" {% if user_type == 'Buyer' %}selected{% endif %}>Buyer</option>
+    <option value="Farmer" {% if user_type == 'Farmer' %}selected{% endif %}>Farmer</option>
+  </select>
   <select name="plan" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
     padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All Plans</option>
     <option value="Free" {% if plan == 'Free' %}selected{% endif %}>Free</option>
     <option value="Standard" {% if plan == 'Standard' %}selected{% endif %}>Standard</option>
-<option value="Premium" {% if plan == 'Premium' %}selected{% endif %}>Premium</option>
+    <option value="Premium" {% if plan == 'Premium' %}selected{% endif %}>Premium</option>
   </select>
   <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i>
     Filter</button>
@@ -34,11 +40,13 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Buyer</th>
+        <th>User</th>
+        <th>Role</th>
         <th>Plan</th>
         <th>Cycle</th>
         <th>Purchase Date</th>
         <th>Status</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -46,20 +54,30 @@
       <tr>
         <td>{{ forloop.counter }}</td>
         <td>
-          <a href="{% url 'subadmin:buyer_detail' p.user.pk %}"
-            style="color:#22c55e;text-decoration:none;font-weight:600;">
+          {% if p.user_role == 'Farmer' %}
+          <a href="{% url 'subadmin:farmer_detail' p.user.pk %}" style="color:#22c55e;text-decoration:none;font-weight:600;">
             {{ p.user.user.name }}
           </a>
+          {% else %}
+          <a href="{% url 'subadmin:buyer_detail' p.user.pk %}" style="color:#22c55e;text-decoration:none;font-weight:600;">
+            {{ p.user.user.name }}
+          </a>
+          {% endif %}
+        </td>
+        <td>
+          {% if p.user_role == 'Farmer' %}
+          <span style="background:#fef3c7;color:#d97706;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;"><i class="fa-solid fa-tractor"></i> Farmer</span>
+          {% else %}
+          <span style="background:#e0e7ff;color:#4338ca;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;"><i class="fa-solid fa-user"></i> Buyer</span>
+          {% endif %}
         </td>
         <td>
           {% if p.premium_type == 'Premium' %}
-          <span
-            style="background:linear-gradient(135deg,#f59e0b,#d97706);color:var(--white);padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">
+          <span style="background:linear-gradient(135deg,#f59e0b,#d97706);color:var(--white);padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;">
             ⭐ Premium
           </span>
           {% elif p.premium_type == 'Standard' %}
-          <span
-            style="background:#dbeafe;color:#1e40af;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">Standard</span>
+          <span style="background:#dbeafe;color:#1e40af;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;">Standard</span>
           {% else %}
           <span style="color:#94a3b8;font-size:12px;">Free</span>
           {% endif %}
@@ -76,9 +94,9 @@
         <td>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <!-- Manual upgrade/downgrade -->
-            <form method="POST" action="{% url 'subadmin:premium_manual_upgrade' p.pk %}"
-              style="display:flex;gap:4px;align-items:center;">
+            <form method="POST" action="{% url 'subadmin:premium_manual_upgrade' p.pk %}" style="display:flex;gap:4px;align-items:center;">
               {% csrf_token %}
+              <input type="hidden" name="user_role" value="{{ p.user_role }}" />
               <select name="plan" style="background:var(--white);border:1px solid var(--gray-200);border-radius:8px;
                 padding:5px 8px;color:var(--gray-800);font-size:12px;font-family:Inter,sans-serif;outline:none;">
                 <option value="Free" {% if p.premium_type == 'Free' %}selected{% endif %}>Free</option>
@@ -96,10 +114,9 @@
             </form>
             <!-- Cancel subscription -->
             {% if p.premium_type != 'Free' %}
-            <a href="#" onclick="openConfirm('{% url 'subadmin:premium_cancel' p.pk %}',
+            <a href="#" onclick="openConfirm('{% url 'subadmin:premium_cancel' p.pk %}?user_role={{ p.user_role }}',
               'Cancel Subscription?',
-              'This will revert {{ p.user.user.name }} to Free plan immediately.')" class="btn btn-danger btn-sm"
-              title="Cancel">
+              'This will revert {{ p.user.user.name }} to Free plan immediately.')" class="btn btn-danger btn-sm" title="Cancel">
               <i class="fa-solid fa-ban"></i>
             </a>
             {% endif %}
@@ -108,7 +125,7 @@
       </tr>
       {% empty %}
       <tr>
-        <td colspan="7" style="text-align:center;color:#94a3b8;padding:40px;">No premium records</td>
+        <td colspan="8" style="text-align:center;color:#94a3b8;padding:40px;">No premium records</td>
       </tr>
       {% endfor %}
     </tbody>

@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmer Premium Membership | Krushi Mitra</title>
+  <meta name="description" content="Upgrade your Farmer account to unlock higher crop selling limits and premium features." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .plans-header { text-align: center; margin-bottom: 30px; }
+    .plans-header h2 { font-size: 28px; font-weight: 800; color: var(--em-400); margin-bottom: 8px; }
+    .plans-header p { font-size: 15px; color: rgba(255,255,255,0.7); }
+    
+    .billing-toggle-wrapper { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 40px; }
+    .billing-toggle-label { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.8); }
+    .toggle-switch { position: relative; width: 60px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 20px; cursor: pointer; transition: background 0.3s; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; background: var(--em-400); border-radius: 50%; transition: transform 0.3s; }
+    input:checked + .slider { transform: translateX(28px); }
+
+    .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 40px; }
+    .plan-card { background: var(--glass-card); border: 1.5px solid var(--glass-border); border-radius: 20px; padding: 32px 24px; display: flex; flex-direction: column; position: relative; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
+    .plan-card:hover { transform: translateY(-6px); border-color: var(--em-500); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .plan-card.featured { border-color: #f59e0b; background: linear-gradient(180deg, rgba(245,158,11,0.1) 0%, rgba(13,34,17,0.8) 100%); }
+    .featured-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 11px; font-weight: 800; text-transform: uppercase; padding: 4px 16px; border-radius: 12px; letter-spacing: 0.5px; }
+
+    .plan-name { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .plan-desc { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 20px; min-height: 38px; }
+    .plan-price { font-size: 36px; font-weight: 800; color: var(--em-400); margin-bottom: 4px; }
+    .plan-price span { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.6); }
+    
+    .plan-features { list-style: none; padding: 0; margin: 24px 0; flex: 1; }
+    .plan-features li { font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .plan-features li i { color: #4ade80; font-size: 14px; }
+    .plan-features li.disabled { color: rgba(255,255,255,0.4); }
+    .plan-features li.disabled i { color: rgba(255,255,255,0.3); }
+
+    .plan-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none; display: inline-block; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--em-500); color: var(--em-400); }
+    .btn-outline:hover { background: var(--em-500); color: #000; }
+    .btn-solid { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 20px rgba(245,158,11,0.4); }
+    .btn-solid:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.5); }
+    .btn-current { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); cursor: default; }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
+      <div class="brand">Krushi Mitra <span>Farmer Panel</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <a href="{% url 'farmer_home' %}" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}" class="nav-item"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}" class="nav-item"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
+      
+      <div class="nav-section-title">Membership</div>
+      <a href="{% url 'farmer_premium' %}" class="nav-item active"><i class="fa-solid fa-crown"></i><span>Premium Plans</span></a>
+      <a href="{% url 'farmer_current_plan' %}" class="nav-item"><i class="fa-solid fa-id-card"></i><span>My Subscription</span></a>
+
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="page-title"><i class="fa-solid fa-crown" style="color:#f59e0b;"></i> Farmer Premium Plans</div>
+          <div class="breadcrumb">Dashboard / Premium Plans</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="plans-header">
+        <h2>Choose Your Farmer Selling Plan</h2>
+        <p>Unlock higher crop listing limits, priority buyer connections, and zero platform listing friction.</p>
+      </div>
+
+      <!-- Billing Toggle -->
+      <div class="billing-toggle-wrapper">
+        <span class="billing-toggle-label">Monthly Billing</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="billingCycleToggle" onchange="toggleBillingCycle(this.checked)">
+          <span class="slider"></span>
+        </label>
+        <span class="billing-toggle-label">Yearly Billing <span style="color:#4ade80;font-size:12px;">(Save {{ plans.year_dis|default:20 }}%)</span></span>
+      </div>
+
+      <!-- Plans Grid -->
+      <div class="plans-grid">
+        <!-- Free Plan -->
+        <div class="plan-card">
+          <div class="plan-name">Free Plan</div>
+          <div class="plan-desc">For new farmers listing small crop batches</div>
+          <div class="plan-price">₹0 <span>/ month</span></div>
+          
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> <strong>1,000 kg</strong> Crop Selling Limit</li>
+            <li><i class="fa-solid fa-check"></i> Standard Crop Visibility</li>
+            <li><i class="fa-solid fa-check"></i> Community Chat Access</li>
+            <li class="disabled"><i class="fa-solid fa-xmark"></i> Priority Buyer Listing</li>
+            <li class="disabled"><i class="fa-solid fa-xmark"></i> Direct Inquiry Contact</li>
+          </ul>
+
+          {% if premium_type.premium_type == 'Free' %}
+          <button class="plan-btn btn-current">Current Active Plan</button>
+          {% else %}
+          <button class="plan-btn btn-outline" disabled>Free Default</button>
+          {% endif %}
+        </div>
+
+        <!-- Standard Plan -->
+        <div class="plan-card">
+          <div class="plan-name">Standard Plan</div>
+          <div class="plan-desc">For active farmers looking for higher selling volume</div>
+          <div class="plan-price" id="standardPrice">₹{{ plans.standard_price|default:99 }} <span>/ month</span></div>
+          
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> <strong>5,000 kg</strong> Crop Selling Limit</li>
+            <li><i class="fa-solid fa-check"></i> Enhanced Crop Visibility</li>
+            <li><i class="fa-solid fa-check"></i> Priority Buyer Inquiry Alerts</li>
+            <li><i class="fa-solid fa-check"></i> Tool Rental Listing Access</li>
+            <li class="disabled"><i class="fa-solid fa-xmark"></i> Unlimited Crop Selling Limit</li>
+          </ul>
+
+          {% if premium_type.premium_type == 'Standard' and not premium_type.is_expired %}
+          <a href="{% url 'farmer_current_plan' %}" class="plan-btn btn-current">Active Plan</a>
+          {% else %}
+          <form method="POST" action="{% url 'farmer_premium' %}">
+            {% csrf_token %}
+            <input type="hidden" name="plan" value="Standard">
+            <button type="submit" class="plan-btn btn-outline">Choose Standard</button>
+          </form>
+          {% endif %}
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="plan-card featured">
+          <div class="featured-badge">⭐ Recommended</div>
+          <div class="plan-name">Premium Plan</div>
+          <div class="plan-desc">Unlimited selling limit for large-scale production</div>
+          <div class="plan-price" id="premiumPrice">₹{{ plans.premium_price|default:199 }} <span>/ month</span></div>
+          
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-check"></i> <strong>50,000 kg</strong> Crop Selling Limit</li>
+            <li><i class="fa-solid fa-check"></i> Top Featured Crop Listings</li>
+            <li><i class="fa-solid fa-check"></i> Direct Wholesale Buyer Contact</li>
+            <li><i class="fa-solid fa-check"></i> Priority AI Price Trend Insights</li>
+            <li><i class="fa-solid fa-check"></i> Dedicated Support Badge</li>
+          </ul>
+
+          {% if premium_type.premium_type == 'Premium' and not premium_type.is_expired %}
+          <a href="{% url 'farmer_current_plan' %}" class="plan-btn btn-current">Active Plan</a>
+          {% else %}
+          <form method="POST" action="{% url 'farmer_premium' %}">
+            {% csrf_token %}
+            <input type="hidden" name="plan" value="Premium">
+            <button type="submit" class="plan-btn btn-solid">Choose Premium ⭐</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const standardMonthly = {{ plans.standard_price|default:99 }};
+    const premiumMonthly = {{ plans.premium_price|default:199 }};
+    const standardYearly = {{ plans.standard_yearly|default:950 }};
+    const premiumYearly = {{ plans.premium_yearly|default:1910 }};
+
+    function toggleBillingCycle(isYearly) {
+      const stdPriceEl = document.getElementById('standardPrice');
+      const premPriceEl = document.getElementById('premiumPrice');
+      if (isYearly) {
+        stdPriceEl.innerHTML = `₹${Math.round(standardYearly)} <span>/ year</span>`;
+        premPriceEl.innerHTML = `₹${Math.round(premiumYearly)} <span>/ year</span>`;
+      } else {
+        stdPriceEl.innerHTML = `₹${standardMonthly} <span>/ month</span>`;
+        premPriceEl.innerHTML = `₹${premiumMonthly} <span>/ month</span>`;
+      }
+    }
+  </script>
+</body>
+</html>

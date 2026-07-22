@@ -239,15 +239,37 @@ def farmer_home(request):
 @check_login(['Farmer'])
 def farmer_crops(request):
     uid = request.uid
+    farmer = Farmer.objects.get(user=uid)
+    prem = check_farmer_premium(farmer)
+    limit_obj = farmer_selling_limit.objects.get(user=uid)
+    rem_limit = remaining_selling_limit(farmer)
+
     all_crops = crop.objects.filter(user=uid).order_by('-created_at')
-    context = {"uid" : uid , "all_crops" : all_crops}
+    context = {
+        "uid": uid,
+        "farmer": farmer,
+        "all_crops": all_crops,
+        "premium_type": prem,
+        "limit_obj": limit_obj,
+        "remaining_limit": rem_limit,
+    }
     if request.method == "POST":
         cropname = request.POST.get("cropname")
         category = request.POST.get("category")
-        quantity = request.POST.get("quantity")
+        try:
+            quantity = float(request.POST.get("quantity") or 0)
+        except (ValueError, TypeError):
+            quantity = 0
         price = request.POST.get("price")
         description = request.POST.get("description")
         image = request.FILES.get('image')
+
+        if quantity > rem_limit:
+            messages.error(
+                request,
+                f"Cannot add crop! Listed quantity ({quantity} kg) exceeds your remaining selling limit ({rem_limit} kg) for your {prem.premium_type} plan. Please upgrade your plan."
+            )
+            return redirect('farmer_crops')
 
         crop.objects.create(
             user = uid,
@@ -259,9 +281,11 @@ def farmer_crops(request):
             image = image,
             is_approved = False
         )
-    
+        
+        check_farmer_premium(farmer)
+        messages.success(request, "Crop listed successfully!")
         return redirect('farmer_crops')
-    return render(request, "farmer/crops.html",context)
+    return render(request, "farmer/crops.html", context)
 
 @check_login(['Farmer'])
 def farmer_tools(request):
@@ -626,18 +650,36 @@ def edit_crop(request, pk):
         return redirect('farmer_crops')
 
     if request.method == 'POST':
+        farmer = Farmer.objects.get(user=uid)
+        try:
+            new_qty = float(request.POST.get('quantity', crop_obj.quantity) or 0)
+        except (ValueError, TypeError):
+            new_qty = float(crop_obj.quantity or 0)
+        old_qty = float(crop_obj.quantity or 0)
+        delta_qty = new_qty - old_qty
+
+        if delta_qty > 0:
+            rem_limit = remaining_selling_limit(farmer)
+            if delta_qty > rem_limit:
+                messages.error(
+                    request,
+                    f"Cannot update crop! Additional quantity ({delta_qty} kg) exceeds your remaining selling limit ({rem_limit} kg). Please upgrade your plan."
+                )
+                return redirect('farmer_crops')
+
         crop_obj.cropname = request.POST.get('cropname', crop_obj.cropname)
         crop_obj.category = request.POST.get('category', crop_obj.category)
-        crop_obj.quantity = request.POST.get('quantity', crop_obj.quantity)
+        crop_obj.quantity = new_qty
         crop_obj.price = request.POST.get('price', crop_obj.price)
         crop_obj.description = request.POST.get('description', crop_obj.description)
         if request.FILES.get('image'):
             crop_obj.image = request.FILES['image']
         crop_obj.save()
+
+        check_farmer_premium(farmer)
         messages.success(request, 'Crop updated successfully!')
         return redirect('farmer_crops')
 
-    # For GET requests redirect back (we use inline modal)
     return redirect('farmer_crops')
 
 def rain_probability(temperature,humidity,wind_speed,clouds):
@@ -924,3 +966,175 @@ def get_tool_price_api(request):
         return JsonResponse({'status': 'not_found', 'price': None})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FARMER PREMIUM HELPERS & VIEWS
+# ─────────────────────────────────────────────────────────────────────────────
+
+def update_farmer_limit(farmer, plan):
+    limit_obj, _ = farmer_selling_limit.objects.get_or_create(
+        user=farmer.user,
+        defaults={'sellilimit': 1000, 'total_sell_kg': 0}
+    )
+    if plan == 'Free':
+        limit_obj.sellilimit = 1000
+    elif plan == 'Standard':
+        limit_obj.sellilimit = 5000
+    elif plan == 'Premium':
+        limit_obj.sellilimit = 50000
+    limit_obj.save()
+    return limit_obj
+
+
+def check_farmer_premium(farmer):
+    from farmer.models import premium_buyer as farmer_premium_buyer
+    prem, created = farmer_premium_buyer.objects.get_or_create(
+        user=farmer,
+        defaults={'premium_type': 'Free', 'premium_time': 'Monthly'}
+    )
+    prem.check_subscription()
+
+    update_farmer_limit(farmer, prem.premium_type)
+
+    total_kg = crop.objects.filter(user=farmer.user).aggregate(s=Sum('quantity'))['s'] or 0
+    limit_obj = farmer_selling_limit.objects.get(user=farmer.user)
+    limit_obj.total_sell_kg = int(total_kg)
+    limit_obj.save()
+
+    return prem
+
+
+def is_farmer_premium(farmer):
+    prem = check_farmer_premium(farmer)
+    return prem.premium_type in ['Standard', 'Premium'] and not prem.is_expired
+
+
+def remaining_selling_limit(farmer):
+    check_farmer_premium(farmer)
+    limit_obj = farmer_selling_limit.objects.get(user=farmer.user)
+    rem = (limit_obj.sellilimit or 1000) - (limit_obj.total_sell_kg or 0)
+    return max(0, rem)
+
+
+@check_login(['Farmer'])
+def farmer_premium(request):
+    uid = request.uid
+    farmer = Farmer.objects.get(user=uid)
+    prem = check_farmer_premium(farmer)
+    plans = farmer_premium_plans.objects.first()
+    if not plans:
+        plans = farmer_premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
+
+    from buyer.models import premium_coupon
+    coupons = premium_coupon.objects.filter(is_active=True).values('code', 'discount_type', 'discount_value', 'label')
+    coupon_data = {
+        c["code"]: {
+            "type": c["discount_type"],
+            "value": float(c["discount_value"]),
+            "label": c["label"],
+        }
+        for c in coupons
+    }
+
+    if request.method == 'POST':
+        plan = request.POST.get('plan', 'Standard')
+        return render(request, "farmer/premiumcheckout.html", {
+            'uid': uid,
+            'farmer': farmer,
+            'plans': plans,
+            'premium_type': prem,
+            'plan': plan,
+            'coupons': json.dumps(coupon_data),
+        })
+
+    return render(request, "farmer/premium.html", {
+        'uid': uid,
+        'farmer': farmer,
+        'plans': plans,
+        'premium_type': prem,
+        'coupons': json.dumps(coupon_data),
+    })
+
+
+@check_login(['Farmer'])
+def farmer_premium_checkout(request):
+    uid = request.uid
+    farmer = Farmer.objects.get(user=uid)
+    prem = check_farmer_premium(farmer)
+    plans = farmer_premium_plans.objects.first()
+    if not plans:
+        plans = farmer_premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
+
+    from buyer.models import premium_coupon
+    coupons = premium_coupon.objects.filter(is_active=True).values('code', 'discount_type', 'discount_value', 'label')
+    coupon_data = {
+        c["code"]: {
+            "type": c["discount_type"],
+            "value": float(c["discount_value"]),
+            "label": c["label"],
+        }
+        for c in coupons
+    }
+
+    if request.method == 'POST':
+        plan = request.POST.get('plan', '').strip()
+        total = request.POST.get('total', '0').strip()
+        billing_cycle = request.POST.get('billing_cycle', 'Monthly').capitalize()
+        payment_method = request.POST.get('payment_method', 'UPI / QR')
+        coupon_code = request.POST.get('coupon_code', '')
+
+        if not plan or plan not in ['Free', 'Standard', 'Premium']:
+            messages.error(request, "Invalid plan selected. Please choose a plan.")
+            return redirect('farmer_premium')
+
+        if not billing_cycle or billing_cycle not in ['Monthly', 'Yearly']:
+            billing_cycle = 'Monthly'
+
+        prem.premium_type = plan
+        prem.premium_time = billing_cycle
+        prem.purchase_date = timezone.now()
+        prem.save()
+
+        update_farmer_limit(farmer, plan)
+
+        messages.success(
+            request,
+            f"Congratulations! You are now subscribed to the {plan} Plan ({billing_cycle}). Your selling limit has been updated."
+        )
+        return redirect('farmer_current_plan')
+
+    # GET: show checkout page (plan passed as query param)
+    plan = request.GET.get('plan', 'Standard')
+    return render(request, "farmer/premiumcheckout.html", {
+        'uid': uid,
+        'farmer': farmer,
+        'plans': plans,
+        'premium_type': prem,
+        'plan': plan,
+        'coupons': json.dumps(coupon_data),
+    })
+
+
+@check_login(['Farmer'])
+def farmer_current_plan(request):
+    uid = request.uid
+    farmer = Farmer.objects.get(user=uid)
+    prem = check_farmer_premium(farmer)
+    limit_obj = farmer_selling_limit.objects.get(user=farmer.user)
+
+    used_limit = limit_obj.total_sell_kg or 0
+    total_limit = limit_obj.sellilimit or 1000
+    remaining_limit = max(0, total_limit - used_limit)
+    usage_pct = min(100, int((used_limit / total_limit) * 100)) if total_limit > 0 else 100
+
+    return render(request, "farmer/current_plan.html", {
+        'uid': uid,
+        'farmer': farmer,
+        'premium_type': prem,
+        'limit_obj': limit_obj,
+        'used_limit': used_limit,
+        'total_limit': total_limit,
+        'remaining_limit': remaining_limit,
+        'usage_pct': usage_pct,
+    })

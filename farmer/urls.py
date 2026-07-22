@@ -55,6 +55,8 @@ urlpatterns = [
     path('tool_delete/<int:pk>',   views.tool_delete,        name='tool_delete'),
     path('get_tool_price/',        views.get_tool_price_api, name='get_tool_price_api'),
 
-
-    # path('home', views.home, name='home'),
+    # ── Farmer Premium ────────────────────────────────────────────────────────
+    path('premium/',               views.farmer_premium,          name='farmer_premium'),
+    path('premium_checkout/',      views.farmer_premium_checkout, name='farmer_premium_checkout'),
+    path('current_plan/',          views.farmer_current_plan,     name='farmer_current_plan'),
 ]

@@ -57,6 +57,10 @@
       
       <div class="nav-section-title">Account</div>
       <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+
+      <div class="nav-section-title">Membership</div>
+      <a href="{% url 'farmer_premium' %}" class="nav-item" id="nav-premium"><i class="fa-solid fa-crown" style="color:#f59e0b;"></i><span>Premium Plans</span></a>
+      <a href="{% url 'farmer_current_plan' %}" class="nav-item" id="nav-plan"><i class="fa-solid fa-id-card"></i><span>My Subscription</span></a>
     </nav>
   </aside>
 
@@ -85,6 +89,32 @@
           {{ message }}
         </div>
         {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Premium Selling Limit Banner -->
+      {% if premium_type %}
+      <div style="background:var(--glass-card);border:1px solid var(--glass-border);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          {% if premium_type.premium_type == 'Premium' %}
+          <span style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:4px 14px;border-radius:16px;font-size:12px;font-weight:800;">⭐ PREMIUM</span>
+          {% elif premium_type.premium_type == 'Standard' %}
+          <span style="background:#dbeafe;color:#1e40af;padding:4px 14px;border-radius:16px;font-size:12px;font-weight:700;">STANDARD</span>
+          {% else %}
+          <span style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);padding:4px 14px;border-radius:16px;font-size:12px;font-weight:700;">FREE</span>
+          {% endif %}
+          <div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">Selling Limit: <strong style="color:#4ade80;">{{ remaining_limit|default:0 }} kg</strong> remaining of <strong>{{ limit_obj.sellilimit|default:1000 }} kg</strong></div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;">Total listed: {{ limit_obj.total_sell_kg|default:0 }} kg</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          {% if premium_type.premium_type == 'Free' or premium_type.is_expired %}
+          <a href="{% url 'farmer_premium' %}" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;padding:8px 16px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;"><i class="fa-solid fa-crown"></i> Upgrade Plan</a>
+          {% else %}
+          <a href="{% url 'farmer_current_plan' %}" style="color:rgba(255,255,255,0.7);font-size:12px;text-decoration:none;"><i class="fa-solid fa-id-card"></i> View Plan</a>
+          {% endif %}
+        </div>
       </div>
       {% endif %}
 

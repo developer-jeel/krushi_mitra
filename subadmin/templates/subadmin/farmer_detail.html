@@ -75,7 +75,6 @@
     <div class="table-wrapper" style="margin-bottom:16px;padding:20px;">
       <div style="font-size:15px;font-weight:600;color:var(--gray-800);margin-bottom:16px;">Documents</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
-        {% for doc_label, doc_field in farmer.adharcard,farmer.pancard,farmer.passbook,farmer.seventwel %}{% empty %}{% endfor %}
         <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;padding:14px;text-align:center;">
           <i class="fa-solid fa-id-card" style="font-size:24px;color:{% if farmer.adharcard %}#22c55e{% else %}#ef4444{% endif %};margin-bottom:8px;display:block;"></i>
           <div style="font-size:13px;font-weight:600;color:var(--gray-800);">Aadhaar Card</div>

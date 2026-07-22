@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import django.utils.timezone as timezone
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 class User(AbstractUser):
     ROLE_CHOICES = (
@@ -335,6 +336,26 @@ class premium_buyer(models.Model):
 
     def __str__(self):
         return f"{self.user.user.username} buys {self.premium_type} in {self.premium_time} way"
+
+    @property
+    def end_date(self):
+        if self.premium_time == "Monthly":
+            return self.purchase_date + relativedelta(months=1)
+        elif self.premium_time == "Yearly":
+            return self.purchase_date + relativedelta(years=1)
+        return self.purchase_date
+
+    @property
+    def is_expired(self):
+        if self.premium_type == "Free":
+            return False
+        return timezone.now() > self.end_date
+
+    def check_subscription(self):
+        if self.is_expired:
+            self.premium_type = "Free"
+            self.premium_time = "Monthly"
+            self.save()
 
 class farmer_selling_limit(models.Model):
     user = models.OneToOneField(

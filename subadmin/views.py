@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
-from farmer.models import User, Farmer, crop, FarmerTool, bloag, community_message, news, gov_info
+from farmer.models import User, Farmer, crop, FarmerTool, bloag, community_message, news, gov_info, premium_buyer as farmer_premium_buyer
 from buyer.models import (
     Buyer, Order, OrderItem, premium_buyer, verification_details,
     premium_coupon, discount_coupon, premium_history, premium_plans,
@@ -789,22 +789,35 @@ def premium_settings(request):
 
 @check_subadmin
 def manage_premium(request):
-    premiums = premium_buyer.objects.select_related('user', 'user__user').order_by('-purchase_date')
+    buyer_prems = list(premium_buyer.objects.select_related('user', 'user__user').order_by('-purchase_date'))
+    for b in buyer_prems:
+        b.user_role = 'Buyer'
+        
+    farmer_prems = list(farmer_premium_buyer.objects.select_related('user', 'user__user').order_by('-purchase_date'))
+    for f in farmer_prems:
+        f.user_role = 'Farmer'
 
-    q = request.GET.get('q', '')
+    all_prems = buyer_prems + farmer_prems
+    all_prems.sort(key=lambda x: x.purchase_date, reverse=True)
+
+    q = request.GET.get('q', '').strip()
     plan = request.GET.get('plan', '')
+    user_type = request.GET.get('user_type', '')
 
     if q:
-        premiums = premiums.filter(Q(user__user__name__icontains=q))
+        all_prems = [p for p in all_prems if q.lower() in p.user.user.name.lower()]
     if plan:
-        premiums = premiums.filter(premium_type=plan)
+        all_prems = [p for p in all_prems if p.premium_type == plan]
+    if user_type:
+        all_prems = [p for p in all_prems if p.user_role == user_type]
 
     context = {
         'admin_user': request.admin_user,
-        'premiums': premiums,
+        'premiums': all_prems,
         'q': q,
         'plan': plan,
-        'total': premiums.count(),
+        'user_type': user_type,
+        'total': len(all_prems),
     }
     return render(request, 'subadmin/manage_premium.html', context)
 
@@ -1229,8 +1242,15 @@ def export_transactions_csv(request):
 
 @check_subadmin
 def premium_manual_upgrade(request, pk):
-    """Admin force-upgrades/downgrades a buyer's plan."""
-    p = get_object_or_404(premium_buyer, pk=pk)
+    """Admin force-upgrades/downgrades a buyer or farmer plan."""
+    user_role = request.POST.get('user_role', '')
+    if user_role == 'Farmer':
+        p = get_object_or_404(farmer_premium_buyer, pk=pk)
+    elif user_role == 'Buyer':
+        p = get_object_or_404(premium_buyer, pk=pk)
+    else:
+        p = premium_buyer.objects.filter(pk=pk).first() or get_object_or_404(farmer_premium_buyer, pk=pk)
+
     if request.method == 'POST':
         new_plan  = request.POST.get('plan', p.premium_type)
         new_cycle = request.POST.get('cycle', p.premium_time)
@@ -1238,24 +1258,41 @@ def premium_manual_upgrade(request, pk):
         p.premium_time  = new_cycle
         p.purchase_date = timezone.now()
         p.save()
-        # Sync Buyer.is_premiume flag
-        b = p.user
-        b.is_premiume = (new_plan != 'Free')
-        b.save()
-        messages.success(request, f'Plan for {b.user.name} updated to {new_plan} ({new_cycle}).')
+
+        if hasattr(p.user, 'is_premiume'):
+            p.user.is_premiume = (new_plan != 'Free')
+            p.user.save()
+        else:
+            from farmer.views import update_farmer_limit
+            update_farmer_limit(p.user, new_plan)
+
+        messages.success(request, f'Plan for {p.user.user.name} updated to {new_plan} ({new_cycle}).')
     return redirect('subadmin:manage_premium')
 
 
 @check_subadmin
 def premium_cancel(request, pk):
-    """Admin cancels a buyer's subscription (reverts to Free)."""
-    p = get_object_or_404(premium_buyer, pk=pk)
-    buyer_name = p.user.user.name
+    """Admin cancels a subscription (reverts to Free)."""
+    user_role = request.GET.get('user_role', '')
+    if user_role == 'Farmer':
+        p = get_object_or_404(farmer_premium_buyer, pk=pk)
+    elif user_role == 'Buyer':
+        p = get_object_or_404(premium_buyer, pk=pk)
+    else:
+        p = premium_buyer.objects.filter(pk=pk).first() or get_object_or_404(farmer_premium_buyer, pk=pk)
+
+    user_name = p.user.user.name
     p.premium_type = 'Free'
     p.premium_time = 'Monthly'
     p.save()
-    p.user.is_premiume = False
-    p.user.save()
-    messages.success(request, f'Subscription for {buyer_name} cancelled (reverted to Free).')
+
+    if hasattr(p.user, 'is_premiume'):
+        p.user.is_premiume = False
+        p.user.save()
+    else:
+        from farmer.views import update_farmer_limit
+        update_farmer_limit(p.user, 'Free')
+
+    messages.success(request, f'Subscription for {user_name} cancelled (reverted to Free).')
     return redirect('subadmin:manage_premium')
 

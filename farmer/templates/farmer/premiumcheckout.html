@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Farmer Premium | Krushi Mitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background: #07170a; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .checkout-card { background: rgba(13, 34, 17, 0.95); border: 1.5px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 900px; padding: 36px; box-shadow: 0 24px 64px rgba(0,0,0,0.6); display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    @media (max-width: 768px) { .checkout-card { grid-template-columns: 1fr; } }
+    
+    .section-title { font-size: 18px; font-weight: 700; color: var(--em-400); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .plan-summary-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: rgba(255,255,255,0.8); }
+    .summary-row.total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; font-size: 18px; font-weight: 800; color: #4ade80; margin-bottom: 0; }
+    
+    .billing-opt { display: flex; gap: 10px; margin-bottom: 20px; }
+    .billing-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; }
+    .billing-btn.active { background: var(--em-500); color: #000; border-color: var(--em-500); }
+
+    .coupon-group { display: flex; gap: 10px; margin-bottom: 20px; }
+    .coupon-group input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; outline: none; font-size: 14px; text-transform: uppercase; }
+    .coupon-group button { padding: 10px 18px; border-radius: 10px; border: none; background: #4ade80; color: #000; font-weight: 700; cursor: pointer; }
+    
+    .pay-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .pay-opt { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.2); cursor: pointer; }
+    .pay-opt input { accent-color: var(--em-500); width: 18px; height: 18px; }
+    
+    .pay-btn { width: 100%; padding: 16px; border-radius: 14px; border: none; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 20px rgba(245,158,11,0.4); transition: transform 0.2s; }
+    .pay-btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+
+<body>
+  <div class="checkout-card">
+    <!-- Left Column: Order Summary -->
+    <div>
+      <a href="{% url 'farmer_premium' %}" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;">
+        <i class="fa-solid fa-arrow-left"></i> Change Plan
+      </a>
+      <div class="section-title"><i class="fa-solid fa-receipt"></i> Subscription Summary</div>
+
+      <div class="billing-opt">
+        <button class="billing-btn active" id="btnMonthly" onclick="setBilling('Monthly')">Monthly</button>
+        <button class="billing-btn" id="btnYearly" onclick="setBilling('Yearly')">Yearly (Save {{ plans.year_dis|default:20 }}%)</button>
+      </div>
+
+      <div class="plan-summary-box">
+        <div class="summary-row">
+          <span>Plan Selected:</span>
+          <strong id="planNameDisplay" style="color:var(--em-400);">{{ plan|default:'Standard' }} Plan</strong>
+        </div>
+        <div class="summary-row">
+          <span>Selling Limit:</span>
+          <strong id="limitDisplay" style="color:#fff;">
+            {% if plan == 'Premium' %}50,000 kg{% else %}5,000 kg{% endif %}
+          </strong>
+        </div>
+        <div class="summary-row">
+          <span>Base Price:</span>
+          <span id="basePriceDisplay">₹99</span>
+        </div>
+        <div class="summary-row" id="discountRow" style="display:none;color:#4ade80;">
+          <span>Discount Code (<span id="couponCodeLabel"></span>):</span>
+          <span id="discountValDisplay">-₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total Amount:</span>
+          <span id="totalAmountDisplay">₹99</span>
+        </div>
+      </div>
+
+      <!-- Coupon Form -->
+      <div class="coupon-group">
+        <input type="text" id="couponInput" placeholder="ENTER COUPON (OPTIONAL)">
+        <button type="button" onclick="applyCoupon()">Apply</button>
+      </div>
+      <div id="couponMsg" style="font-size:12px;margin-top:-12px;margin-bottom:16px;"></div>
+    </div>
+
+    <!-- Right Column: Payment Form -->
+    <div>
+      <div class="section-title"><i class="fa-solid fa-shield-halved"></i> Payment Details</div>
+      
+      <form method="POST" action="{% url 'farmer_premium_checkout' %}" id="checkoutForm">
+        {% csrf_token %}
+        <input type="hidden" name="plan" id="inputPlan" value="{{ plan|default:'Standard' }}">
+        <input type="hidden" name="total" id="inputTotal" value="99">
+        <input type="hidden" name="billing_cycle" id="inputBilling" value="Monthly">
+        <input type="hidden" name="coupon_code" id="inputCoupon" value="">
+
+        <div class="pay-methods">
+          <label class="pay-opt">
+            <input type="radio" name="payment_method" value="UPI / QR" checked>
+            <i class="fa-solid fa-qrcode" style="font-size:20px;color:#4ade80;"></i>
+            <div>
+              <div style="font-weight:700;font-size:14px;">UPI / QR Code</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.6);">Google Pay, PhonePe, Paytm</div>
+            </div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payment_method" value="Card">
+            <i class="fa-solid fa-credit-card" style="font-size:20px;color:#60a5fa;"></i>
+            <div>
+              <div style="font-weight:700;font-size:14px;">Credit / Debit Card</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.6);">Visa, Mastercard, RuPay</div>
+            </div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payment_method" value="NetBanking">
+            <i class="fa-solid fa-building-columns" style="font-size:20px;color:#f59e0b;"></i>
+            <div>
+              <div style="font-weight:700;font-size:14px;">Net Banking</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.6);">All major Indian banks</div>
+            </div>
+          </label>
+        </div>
+
+        <button type="submit" class="pay-btn"><i class="fa-solid fa-lock"></i> Pay Securely & Activate Plan</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const plan = "{{ plan|default:'Standard' }}";
+    const stdMonthly = {{ plans.standard_price|default:99 }};
+    const premMonthly = {{ plans.premium_price|default:199 }};
+    const stdYearly = {{ plans.standard_yearly|default:950 }};
+    const premYearly = {{ plans.premium_yearly|default:1910 }};
+    const couponData = {{ coupons|safe }};
+
+    let currentBilling = 'Monthly';
+    let appliedDiscount = 0;
+
+    function recalculate() {
+      let base = 0;
+      if (plan === 'Premium') {
+        base = currentBilling === 'Yearly' ? premYearly : premMonthly;
+      } else {
+        base = currentBilling === 'Yearly' ? stdYearly : stdMonthly;
+      }
+
+      document.getElementById('basePriceDisplay').innerText = `₹${Math.round(base)}`;
+      
+      let finalTotal = base - appliedDiscount;
+      if (finalTotal < 0) finalTotal = 0;
+
+      document.getElementById('totalAmountDisplay').innerText = `₹${Math.round(finalTotal)}`;
+      document.getElementById('inputTotal').value = Math.round(finalTotal);
+    }
+
+    function setBilling(cycle) {
+      currentBilling = cycle;
+      document.getElementById('inputBilling').value = cycle;
+      document.getElementById('btnMonthly').classList.toggle('active', cycle === 'Monthly');
+      document.getElementById('btnYearly').classList.toggle('active', cycle === 'Yearly');
+      recalculate();
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponInput').value.trim().toUpperCase();
+      const msgEl = document.getElementById('couponMsg');
+      
+      if (!code) {
+        msgEl.style.color = '#f87171';
+        msgEl.innerText = 'Please enter a coupon code.';
+        return;
+      }
+
+      if (couponData[code]) {
+        const c = couponData[code];
+        let base = (plan === 'Premium') ? (currentBilling === 'Yearly' ? premYearly : premMonthly) : (currentBilling === 'Yearly' ? stdYearly : stdMonthly);
+        
+        if (c.type === 'percent') {
+          appliedDiscount = (base * c.value) / 100;
+        } else {
+          appliedDiscount = c.value;
+        }
+
+        document.getElementById('discountRow').style.display = 'flex';
+        document.getElementById('couponCodeLabel').innerText = code;
+        document.getElementById('discountValDisplay').innerText = `-₹${Math.round(appliedDiscount)}`;
+        document.getElementById('inputCoupon').value = code;
+
+        msgEl.style.color = '#4ade80';
+        msgEl.innerText = `Coupon "${code}" applied successfully!`;
+      } else {
+        msgEl.style.color = '#f87171';
+        msgEl.innerText = 'Invalid or expired coupon code.';
+      }
+      recalculate();
+    }
+
+    recalculate();
+  </script>
+</body>
+</html>
