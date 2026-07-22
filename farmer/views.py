@@ -241,7 +241,10 @@ def farmer_crops(request):
     uid = request.uid
     farmer = Farmer.objects.get(user=uid)
     prem = check_farmer_premium(farmer)
-    limit_obj = farmer_selling_limit.objects.get(user=uid)
+    limit_obj, _ = farmer_selling_limit.objects.get_or_create(
+        user=uid,
+        defaults={'sellilimit': 1000, 'total_sell_kg': 0}
+    )
     rem_limit = remaining_selling_limit(farmer)
 
     all_crops = crop.objects.filter(user=uid).order_by('-created_at')
@@ -1121,12 +1124,15 @@ def farmer_current_plan(request):
     uid = request.uid
     farmer = Farmer.objects.get(user=uid)
     prem = check_farmer_premium(farmer)
-    limit_obj = farmer_selling_limit.objects.get(user=farmer.user)
+    limit_obj, _ = farmer_selling_limit.objects.get_or_create(
+        user=farmer.user,
+        defaults={'sellilimit': 1000, 'total_sell_kg': 0}
+    )
 
     used_limit = limit_obj.total_sell_kg or 0
     total_limit = limit_obj.sellilimit or 1000
     remaining_limit = max(0, total_limit - used_limit)
-    usage_pct = min(100, int((used_limit / total_limit) * 100)) if total_limit > 0 else 100
+    usage_pct = min(100, int((used_limit / total_limit) * 100)) if total_limit > 0 else 0
 
     return render(request, "farmer/current_plan.html", {
         'uid': uid,

@@ -8,18 +8,15 @@
   <title>My Posts – Farmer Panel | Krushi Mitra</title>
   <meta name="description" content="Manage your blog posts on Krushi Mitra." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=DM+Sans:wght@400;500;600&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
   <link rel="stylesheet" href="{% static 'farmer/css/animations.css' %}">
-  <link rel="stylesheet" href="{% static 'farmer/css/blog.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
-  <!-- ════════════ SIDEBAR ════════════ -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <img src="{% static 'farmer/images/krushi_mitra_logo.png' %}" alt="Krushi Mitra" />
@@ -27,108 +24,105 @@
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section-title">Main</div>
-      <a href="{% url 'farmer_home' %}" class="nav-item">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
-      </a>
-      <a href="{% url 'farmer_crops' %}" class="nav-item">
-        <i class="fa-solid fa-wheat-awn"></i>
-        <span>My Crops</span>
-      </a>
-      <a href="{% url 'farmer_tools' %}" class="nav-item">
-        <i class="fa-solid fa-wheat-awn"></i>
-                  </a>
-                  <a href="#" class="b-btn-icon" title="Edit this post">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-                      <path d="M12 20h9" />
-                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                    </svg>
-                  </a>
-                </div>
-              </td>
-            </tr>
-            {%endfor%}
-          </tbody>
-        </table>
-      </div><!-- /blog-table-wrap -->
+      <a href="{% url 'farmer_home' %}" class="nav-item" id="nav-home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a href="{% url 'farmer_crops' %}" class="nav-item" id="nav-crops"><i class="fa-solid fa-wheat-awn"></i><span>My Crops</span></a>
+      <a href="{% url 'farmer_tools' %}" class="nav-item" id="nav-tools"><i class="fa-solid fa-screwdriver-wrench"></i><span>Tools</span></a>
 
-      <!-- ── Card grid view (same dummy data, alternate layout) ── -->
-      <div class="section-header" style="margin-bottom:16px;">
-        <div class="section-title" style="font-family:var(--font-display); font-size:18px;">
-          Card View</div>
+      <div class="nav-section-title">AI Assistant</div>
+      <a href="{% url 'farmer_chatbot' %}" class="nav-item" id="nav-chatbot"><i class="fa-solid fa-robot"></i><span>AI Chatbot</span></a>
+
+      <div class="nav-section-title">Community</div>
+      <a href="{% url 'community_chat' %}" class="nav-item" id="nav-community"><i class="fa-solid fa-comments"></i><span>Community Chat</span></a>
+      <a href="{% url 'farmer_blogs' %}" class="nav-item active" id="nav-blogs"><i class="fa-solid fa-blog"></i><span>Blogs &amp; Reviews</span></a>
+
+      <div class="nav-section-title">Account</div>
+      <a href="{% url 'farmer_profile' %}" class="nav-item" id="nav-profile"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+
+      <div class="nav-section-title">Membership</div>
+      <a href="{% url 'farmer_premium' %}" class="nav-item" id="nav-premium"><i class="fa-solid fa-crown" style="color:#f59e0b;"></i><span>Premium Plans</span></a>
+      <a href="{% url 'farmer_current_plan' %}" class="nav-item" id="nav-plan"><i class="fa-solid fa-id-card"></i><span>My Subscription</span></a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-icon-btn menu-toggle-btn" id="menuToggle" title="Menu"><i class="fa-solid fa-bars"></i></button>
+        <div>
+          <div class="page-title"><i class="fa-solid fa-blog"></i> My Posts</div>
+          <div class="breadcrumb">Dashboard / Blogs / My Posts</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="avatar">{{ uid.name|make_list|first|upper }}</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      {% if messages %}
+      <div class="django-messages">
+        {% for message in messages %}
+        <div class="django-msg {{ message.tags }}">
+          {% if message.tags == 'success' %}<i class="fa-solid fa-circle-check"></i>{% else %}<i class="fa-solid fa-triangle-exclamation"></i>{% endif %}
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Posts Grid -->
+      <div class="section-header">
+        <div class="section-title"><i class="fa-solid fa-list"></i> All My Posts</div>
+        <a href="{% url 'write_blog' %}" style="background:var(--em-500);color:#000;padding:10px 18px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+          <i class="fa-solid fa-plus"></i> Write New Post
+        </a>
       </div>
 
-      <div class="blog-grid" style="margin-bottom:36px;">
-
-        <!-- Card 1: with image -->
+      <div class="card-grid">
         {% for blog in my_blogs %}
-        <div class="b-card">
+        <div class="product-card">
           {% if blog.image %}
-          <img class="b-card-thumb" src="{{ blog.image.url }}" alt="{{ blog.title }}" />
+          <div class="card-img">
+            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          {% elif blog.video %}
+          <div class="card-img" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1b4332,#081c15);">
+            <i class="fa-solid fa-video" style="font-size:40px;color:var(--em-400);"></i>
+          </div>
           {% else %}
-          <video class="b-card-thumb" src="{{ blog.video.url }}" alt="{{ blog.title }}"></video>
+          <div class="card-img" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1b4332,#081c15);">
+            <i class="fa-solid fa-blog" style="font-size:40px;color:var(--em-400);"></i>
+          </div>
           {% endif %}
-          <div class="b-card-body">
-            <span class="b-card-cat">My Post</span>
-            <div class="b-card-title">{{blog.title}}</div>
-            <div class="b-card-excerpt">{{blog.content}}</div>
-
-            <div class="b-media-badges">
-              <div class="b-media-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21 15 16 10 5 21" />
-                </svg>
-                {% if blog.image%}
-                Image
-                {% else %}
-                Video
-                {%endif%}
-              </div>
-            </div>
-
-            <div class="b-card-footer">
-              <div class="b-card-author">
-                <div class="b-card-avatar">{{blog.user.name|make_list|first|upper}}</div>
-                {{blog.user.name}}
-              </div>
-              <div class="b-card-date">{{blog.created_at}}</div>
-            </div>
-
-            <div class="b-card-actions">
-              <a href="#" class="b-btn b-btn-secondary"
-                style="flex:1; justify-content:center; font-size:12.5px; padding:7px 10px;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                  <path d="M12 20h9" />
-                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-                </svg>
-                Edit
-              </a>
-              <button type="button" class="b-btn"
-                style="width:100%; justify-content:center; background:#fef2f2; color:#dc2626; border:1.5px solid #fecaca; font-size:12.5px; padding:7px 10px;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6l-1 14H6L5 6" />
-                  <path d="M9 6V4h6v2" />
-                </svg>
-                Delete
-              </button>
+          <div class="card-body">
+            <div class="card-name">{{ blog.title }}</div>
+            <div class="card-meta" style="font-size:12px;opacity:0.6;margin-top:6px;">{{ blog.content|truncatechars:80 }}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;">{{ blog.created_at|date:"M d, Y" }}</div>
+            <div class="card-actions" style="margin-top:12px;">
+              <form method="POST" action="{% url 'delete_blog' %}" style="display:inline;" onsubmit="return confirm('Delete this post?')">
+                {% csrf_token %}
+                <input type="hidden" name="blog_id" value="{{ blog.id }}">
+                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+              </form>
             </div>
           </div>
         </div>
-        {%endfor%}
-
-
+        {% empty %}
+        <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:rgba(255,255,255,0.4);">
+          <i class="fa-solid fa-blog" style="font-size:48px;color:var(--em-700);margin-bottom:16px;display:block;"></i>
+          <div style="font-size:18px;font-weight:600;margin-bottom:8px;">No posts yet</div>
+          <div style="font-size:14px;margin-bottom:20px;">Share your farming knowledge with the community!</div>
+          <a href="{% url 'write_blog' %}" class="btn btn-primary"><i class="fa-solid fa-pen"></i> Write Your First Post</a>
+        </div>
+        {% endfor %}
       </div>
 
-    </div><!-- /page-content -->
-  </div><!-- /main -->
-
+    </div>
   </div>
 
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
-  <script src="{% static 'farmer/js/animations.js' %}"></script>
 </body>
 
 </html>
