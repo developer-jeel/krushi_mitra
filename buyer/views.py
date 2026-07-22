@@ -231,7 +231,7 @@ def buyer_checkout(request):
         
     cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    premium_type = chek_premium(buyr)
     total_quantity = 0
     quantity_limit = cart.cart_limit
 
@@ -636,103 +636,114 @@ def kyc(request):
 @check_login(['Buyer'])
 def buyer_premium(request):
     uid = request.uid
-    plans = premium_plans.objects.get()
+    plans = premium_plans.objects.first()
+    if not plans:
+        plans = premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
     buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    premium_type = chek_premium(buyr)
     coupons = premium_coupon.objects.filter(is_active=True).values('code','discount_type','discount_value','label')
     coupon_data = {
-    c["code"]: {
-        "type": c["discount_type"],
-        "value": float(c["discount_value"]),
-        "label": c["label"],
+        c["code"]: {
+            "type": c["discount_type"],
+            "value": float(c["discount_value"]),
+            "label": c["label"],
+        }
+        for c in coupons
     }
-    for c in coupons
-    }
-    print("=====================>",coupon_data)
     if request.method == 'POST':
-        plan = request.POST.get('plan')
-        return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type,'plan':plan, 'coupons': json.dumps(coupon_data),})
-    return render(request, "buyer/premium.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':premium_type})
+        plan = request.POST.get('plan', 'Standard')
+        billing_cycle = request.POST.get('billing_cycle', 'Monthly').capitalize()
+        return render(request, "buyer/premiumcheckout.html", {
+            'uid': uid,
+            'plans': plans,
+            'buyr': buyr,
+            'premium_type': premium_type,
+            'plan': plan,
+            'billing_cycle': billing_cycle,
+            'coupons': json.dumps(coupon_data),
+        })
+    return render(request, "buyer/premium.html", {
+        'uid': uid,
+        'plans': plans,
+        'buyr': buyr,
+        'premium_type': premium_type
+    })
 
 @check_login(['Buyer'])
 def premium_checkout(request):
     uid = request.uid
-    plans = premium_plans.objects.get()
+    plans = premium_plans.objects.first()
+    if not plans:
+        plans = premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
     buyr = Buyer.objects.get(user=uid)
-    alrady_premium = premium_buyer.objects.get(user=buyr)
+    alrady_premium = chek_premium(buyr)
     coupons = premium_coupon.objects.filter(is_active=True).values('code','discount_type','discount_value','label')
     coupon_data = {
-    c["code"]: {
-        "type": c["discount_type"],
-        "value": c["discount_value"],
-        "label": c["label"],
+        c["code"]: {
+            "type": c["discount_type"],
+            "value": float(c["discount_value"]),
+            "label": c["label"],
+        }
+        for c in coupons
     }
-    for c in coupons
-    }
-    print("=====================>",coupon_data)
 
     if request.method == 'POST':
-        plan = request.POST.get('plan')
-        total = request.POST.get('total')
-        billing_cycle = request.POST.get('billing_cycle')
-        billing_cycle = billing_cycle.capitalize()
-        payment_method = request.POST.get('payment_method')
-        coupon_code = request.POST.get('coupon_code')
-        cart = Cart.objects.get(user = uid)
-        print("++++++++++++++++++++++++}",plan ,total,billing_cycle,payment_method,coupon_code)
-        
+        plan = request.POST.get('plan', 'Standard').strip()
+        total = request.POST.get('total', '0').strip()
+        billing_cycle = request.POST.get('billing_cycle', 'Monthly').capitalize()
+        payment_method = request.POST.get('payment_method', 'UPI / QR')
+        coupon_code = request.POST.get('coupon_code', '')
+        cart, _ = Cart.objects.get_or_create(user=uid)
+
         if not plan or not billing_cycle:
             messages.error(request, "Invalid checkout data. Please select a plan again.")
             return redirect('buyer_premium')
-            
-        if alrady_premium:
-            alrady_premium.premium_type = plan
-            alrady_premium.premium_time = billing_cycle
-            alrady_premium.purchase_date = timezone.now()
-            alrady_premium.save()
-            cart.cart_limit = 5000
-            cart.save()
 
-            buy_premium_his = premium_history.objects.create(
-                user = buyr,
-                plan = plan,
-                billing_cycle = billing_cycle,
-                payment_method = payment_method,
-                price = total,
-                coupon_code = coupon_code,
-                start_date =  timezone.now()
-            )
-            buy_premium_his.save()
-        
-        else:
-            buy_premium = premium_buyer.objects.create(
-                user=buyr,
-                premium_type=plan,
-                premium_time=billing_cycle,
-                purchase_date = timezone.now()
-            )
-            buy_premium_his = premium_history.objects.create(
-                user = buyr,
-                plan = plan,
-                billing_cycle = billing_cycle,
-                payment_method = payment_method,
-                price = total,
-                coupon_code = coupon_code,
-                start_date =  timezone.now()
-            )
-            buy_premium_his.save()
+        cart_limit_val = 50000 if plan == 'Premium' else 5000
 
-            cart.cart_limit = 5000
-            cart.save()
-            buyr.is_premiume = True
-            buyr.save()
+        alrady_premium.premium_type = plan
+        alrady_premium.premium_time = billing_cycle
+        alrady_premium.purchase_date = timezone.now()
+        alrady_premium.save()
+
+        cart.cart_limit = cart_limit_val
+        cart.save()
+
+        buyr.is_premiume = (plan in ['Standard', 'Premium'])
+        buyr.save()
+
+        buy_premium_his = premium_history.objects.create(
+            user=buyr,
+            plan=plan,
+            billing_cycle=billing_cycle,
+            payment_method=payment_method,
+            price=total,
+            coupon_code=coupon_code,
+            start_date=timezone.now()
+        )
+        buy_premium_his.save()
+
         notification = notifications.objects.create(
-        user = buyr,
-        notification_type = "Premium",
-        message = f"You buy {plan} plan at ₹{total} in {billing_cycle} term.")
+            user=buyr,
+            notification_type="Premium",
+            message=f"You bought {plan} plan at ₹{total} ({billing_cycle})."
+        )
         notification.save()
-        return redirect('buyer_dashboard')
-    return render(request, "buyer/premiumcheckout.html", {'uid': uid ,'plans':plans,'buyr':buyr,'premium_type':alrady_premium, "coupons": json.dumps(list(coupon_data))})
+
+        messages.success(request, f"Congratulations! You are now subscribed to the {plan} Plan ({billing_cycle}).")
+        return redirect('current_plan')
+
+    plan = request.GET.get('plan', 'Standard')
+    billing_cycle = request.GET.get('billing_cycle', 'Monthly').capitalize()
+    return render(request, "buyer/premiumcheckout.html", {
+        'uid': uid,
+        'plans': plans,
+        'buyr': buyr,
+        'premium_type': alrady_premium,
+        'plan': plan,
+        'billing_cycle': billing_cycle,
+        'coupons': json.dumps(coupon_data)
+    })
 
 @check_login(['Buyer'])
 def current_plan(request):

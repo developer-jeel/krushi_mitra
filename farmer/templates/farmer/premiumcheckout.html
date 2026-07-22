@@ -6,126 +6,614 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout — Farmer Premium | Krushi Mitra</title>
+  <meta name="description" content="Complete your Krushi Mitra Farmer Premium subscription securely." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'farmer/css/farmer.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background: #07170a; color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-    .checkout-card { background: rgba(13, 34, 17, 0.95); border: 1.5px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 900px; padding: 36px; box-shadow: 0 24px 64px rgba(0,0,0,0.6); display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
-    @media (max-width: 768px) { .checkout-card { grid-template-columns: 1fr; } }
-    
-    .section-title { font-size: 18px; font-weight: 700; color: var(--em-400); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-    .plan-summary-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-    .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: rgba(255,255,255,0.8); }
-    .summary-row.total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; font-size: 18px; font-weight: 800; color: #4ade80; margin-bottom: 0; }
-    
-    .billing-opt { display: flex; gap: 10px; margin-bottom: 20px; }
-    .billing-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; }
-    .billing-btn.active { background: var(--em-500); color: #000; border-color: var(--em-500); }
+    :root {
+      --bg-dark: #051207;
+      --card-bg: rgba(11, 29, 14, 0.85);
+      --card-border: rgba(34, 197, 94, 0.2);
+      --em-green: #22c55e;
+      --em-light: #4ade80;
+      --gold-accent: #f59e0b;
+    }
 
-    .coupon-group { display: flex; gap: 10px; margin-bottom: 20px; }
-    .coupon-group input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; outline: none; font-size: 14px; text-transform: uppercase; }
-    .coupon-group button { padding: 10px 18px; border-radius: 10px; border: none; background: #4ade80; color: #000; font-weight: 700; cursor: pointer; }
-    
-    .pay-methods { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-    .pay-opt { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.2); cursor: pointer; }
-    .pay-opt input { accent-color: var(--em-500); width: 18px; height: 18px; }
-    
-    .pay-btn { width: 100%; padding: 16px; border-radius: 14px; border: none; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 20px rgba(245,158,11,0.4); transition: transform 0.2s; }
-    .pay-btn:hover { transform: translateY(-2px); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #051207;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(34, 197, 94, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(245, 158, 11, 0.08) 0%, transparent 45%);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Header */
+    .checkout-header {
+      background: rgba(5, 18, 7, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      color: #fff;
+      font-size: 18px;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--em-light);
+      font-weight: 600;
+    }
+
+    .secure-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: var(--em-light);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Main Container */
+    .checkout-main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+
+    /* Steps Progress Bar */
+    .steps-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .step-item.active { color: var(--em-light); }
+    .step-item.completed { color: rgba(255, 255, 255, 0.8); }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .step-item.active .step-num {
+      background: var(--em-green);
+      color: #000;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
+    }
+
+    .step-item.completed .step-num {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--em-light);
+    }
+
+    .step-line {
+      height: 2px;
+      width: 40px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .step-line.active { background: var(--em-green); }
+
+    /* Layout Grid */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+    }
+
+    @media (max-width: 868px) {
+      .checkout-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+    }
+
+    .card-head {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--em-light);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Selected Plan Card */
+    .plan-header-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .plan-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .plan-crown {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--gold-accent);
+    }
+
+    .plan-name-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .plan-limit-badge {
+      font-size: 12px;
+      color: var(--em-light);
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* Billing Toggle Buttons */
+    .cycle-selector {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+
+    .cycle-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .cycle-btn.active {
+      background: var(--em-green);
+      color: #000;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    /* Price Summary Box */
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .summary-row strong {
+      color: #fff;
+    }
+
+    .summary-row.total-row {
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-top: 12px;
+      margin-top: 4px;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--em-light);
+    }
+
+    /* Coupon Box */
+    .coupon-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .coupon-box input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.4);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .coupon-box input:focus {
+      border-color: var(--em-green);
+    }
+
+    .coupon-box button {
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      background: var(--em-green);
+      color: #000;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .coupon-box button:hover {
+      background: var(--em-light);
+    }
+
+    .coupon-msg {
+      font-size: 12px;
+      font-weight: 600;
+      min-height: 18px;
+      margin-bottom: 12px;
+    }
+
+    /* Payment Methods */
+    .pay-methods-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pay-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pay-item:hover {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.05);
+    }
+
+    .pay-item input[type="radio"] {
+      accent-color: var(--em-green);
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .pay-icon {
+      font-size: 22px;
+      width: 32px;
+      text-align: center;
+    }
+
+    .pay-info-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .pay-info-sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 2px;
+    }
+
+    /* Submit CTA */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.5);
+    }
+
+    .guarantee-note {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
   </style>
 </head>
 
 <body>
-  <div class="checkout-card">
-    <!-- Left Column: Order Summary -->
-    <div>
-      <a href="{% url 'farmer_premium' %}" style="color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;">
-        <i class="fa-solid fa-arrow-left"></i> Change Plan
+
+  <!-- TOP HEADER -->
+  <header class="checkout-header">
+    <div class="header-inner">
+      <a href="{% url 'farmer_premium' %}" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Plans
       </a>
-      <div class="section-title"><i class="fa-solid fa-receipt"></i> Subscription Summary</div>
 
-      <div class="billing-opt">
-        <button class="billing-btn active" id="btnMonthly" onclick="setBilling('Monthly')">Monthly</button>
-        <button class="billing-btn" id="btnYearly" onclick="setBilling('Yearly')">Yearly (Save {{ plans.year_dis|default:20 }}%)</button>
-      </div>
-
-      <div class="plan-summary-box">
-        <div class="summary-row">
-          <span>Plan Selected:</span>
-          <strong id="planNameDisplay" style="color:var(--em-400);">{{ plan|default:'Standard' }} Plan</strong>
-        </div>
-        <div class="summary-row">
-          <span>Selling Limit:</span>
-          <strong id="limitDisplay" style="color:#fff;">
-            {% if plan == 'Premium' %}50,000 kg{% else %}5,000 kg{% endif %}
-          </strong>
-        </div>
-        <div class="summary-row">
-          <span>Base Price:</span>
-          <span id="basePriceDisplay">₹99</span>
-        </div>
-        <div class="summary-row" id="discountRow" style="display:none;color:#4ade80;">
-          <span>Discount Code (<span id="couponCodeLabel"></span>):</span>
-          <span id="discountValDisplay">-₹0</span>
-        </div>
-        <div class="summary-row total">
-          <span>Total Amount:</span>
-          <span id="totalAmountDisplay">₹99</span>
+      <div class="brand-group">
+        <div class="brand-icon">K</div>
+        <div>
+          <div class="brand-title">Krushi Mitra</div>
+          <div class="brand-sub">Farmer Premium Checkout</div>
         </div>
       </div>
 
-      <!-- Coupon Form -->
-      <div class="coupon-group">
-        <input type="text" id="couponInput" placeholder="ENTER COUPON (OPTIONAL)">
-        <button type="button" onclick="applyCoupon()">Apply</button>
+      <div class="secure-badge">
+        <i class="fa-solid fa-shield-halved"></i> 256-Bit SSL Secure
       </div>
-      <div id="couponMsg" style="font-size:12px;margin-top:-12px;margin-bottom:16px;"></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="checkout-main">
+
+    <!-- STEPS PROGRESS BAR -->
+    <div class="steps-bar">
+      <div class="step-item completed">
+        <div class="step-num"><i class="fa-solid fa-check"></i></div>
+        <span>Select Plan</span>
+      </div>
+      <div class="step-line active"></div>
+      <div class="step-item active">
+        <div class="step-num">2</div>
+        <span>Checkout Details</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <span>Instant Activation</span>
+      </div>
     </div>
 
-    <!-- Right Column: Payment Form -->
-    <div>
-      <div class="section-title"><i class="fa-solid fa-shield-halved"></i> Payment Details</div>
-      
-      <form method="POST" action="{% url 'farmer_premium_checkout' %}" id="checkoutForm">
-        {% csrf_token %}
-        <input type="hidden" name="plan" id="inputPlan" value="{{ plan|default:'Standard' }}">
-        <input type="hidden" name="total" id="inputTotal" value="99">
-        <input type="hidden" name="billing_cycle" id="inputBilling" value="Monthly">
-        <input type="hidden" name="coupon_code" id="inputCoupon" value="">
+    <!-- GRID CONTAINER -->
+    <div class="checkout-grid">
 
-        <div class="pay-methods">
-          <label class="pay-opt">
-            <input type="radio" name="payment_method" value="UPI / QR" checked>
-            <i class="fa-solid fa-qrcode" style="font-size:20px;color:#4ade80;"></i>
-            <div>
-              <div style="font-weight:700;font-size:14px;">UPI / QR Code</div>
-              <div style="font-size:12px;color:rgba(255,255,255,0.6);">Google Pay, PhonePe, Paytm</div>
-            </div>
-          </label>
-          <label class="pay-opt">
-            <input type="radio" name="payment_method" value="Card">
-            <i class="fa-solid fa-credit-card" style="font-size:20px;color:#60a5fa;"></i>
-            <div>
-              <div style="font-weight:700;font-size:14px;">Credit / Debit Card</div>
-              <div style="font-size:12px;color:rgba(255,255,255,0.6);">Visa, Mastercard, RuPay</div>
-            </div>
-          </label>
-          <label class="pay-opt">
-            <input type="radio" name="payment_method" value="NetBanking">
-            <i class="fa-solid fa-building-columns" style="font-size:20px;color:#f59e0b;"></i>
-            <div>
-              <div style="font-weight:700;font-size:14px;">Net Banking</div>
-              <div style="font-size:12px;color:rgba(255,255,255,0.6);">All major Indian banks</div>
-            </div>
-          </label>
+      <!-- LEFT COLUMN: PLAN & ORDER SUMMARY -->
+      <div class="card-box">
+        <div class="card-head">
+          <i class="fa-solid fa-receipt"></i> Subscription Order Summary
         </div>
 
-        <button type="submit" class="pay-btn"><i class="fa-solid fa-lock"></i> Pay Securely & Activate Plan</button>
-      </form>
+        <!-- PLAN CARD HEADER -->
+        <div class="plan-header-box">
+          <div class="plan-title-wrap">
+            <div class="plan-crown">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+            <div>
+              <div class="plan-name-text" id="planTitleDisplay">{{ plan|default:'Standard' }} Plan</div>
+              <div class="plan-limit-badge" id="planLimitDisplay">
+                {% if plan == 'Premium' %}50,000 kg Selling Limit{% else %}5,000 kg Selling Limit{% endif %}
+              </div>
+            </div>
+          </div>
+          <a href="{% url 'farmer_premium' %}" style="color:rgba(255,255,255,0.5);font-size:12px;text-decoration:underline;">Change</a>
+        </div>
+
+        <!-- BILLING CYCLE TOGGLE -->
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:8px;">BILLING CYCLE</div>
+        <div class="cycle-selector">
+          <button type="button" class="cycle-btn" id="btnMonthly" onclick="setBilling('Monthly')">Monthly Billing</button>
+          <button type="button" class="cycle-btn" id="btnYearly" onclick="setBilling('Yearly')">Yearly (Save {{ plans.year_dis|default:20 }}%)</button>
+        </div>
+
+        <!-- PRICE BREAKDOWN -->
+        <div class="summary-list">
+          <div class="summary-row">
+            <span>Base Subscription Price:</span>
+            <strong id="basePriceDisplay">₹99</strong>
+          </div>
+          <div class="summary-row">
+            <span>Selling Limit Included:</span>
+            <strong id="summaryLimitText">{% if plan == 'Premium' %}50,000 kg{% else %}5,000 kg{% endif %}</strong>
+          </div>
+          <div class="summary-row" id="discountRow" style="display:none;color:var(--em-light);">
+            <span>Coupon Discount (<span id="couponCodeLabel"></span>):</span>
+            <strong id="discountValDisplay" style="color:var(--em-light);">-₹0</strong>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total Payable Amount:</span>
+            <span id="totalAmountDisplay">₹99</span>
+          </div>
+        </div>
+
+        <!-- COUPON CODE -->
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:8px;">HAVE A DISCOUNT COUPON?</div>
+        <div class="coupon-box">
+          <input type="text" id="couponInput" placeholder="ENTER COUPON CODE">
+          <button type="button" onclick="applyCoupon()">Apply</button>
+        </div>
+        <div class="coupon-msg" id="couponMsg"></div>
+      </div>
+
+      <!-- RIGHT COLUMN: PAYMENT SELECTION -->
+      <div class="card-box">
+        <div class="card-head">
+          <i class="fa-solid fa-credit-card"></i> Select Payment Method
+        </div>
+
+        <form method="POST" action="{% url 'farmer_premium_checkout' %}" id="checkoutForm">
+          {% csrf_token %}
+          <input type="hidden" name="plan" id="inputPlan" value="{{ plan|default:'Standard' }}">
+          <input type="hidden" name="total" id="inputTotal" value="99">
+          <input type="hidden" name="billing_cycle" id="inputBilling" value="{{ billing_cycle|default:'Monthly' }}">
+          <input type="hidden" name="coupon_code" id="inputCoupon" value="">
+
+          <div class="pay-methods-list">
+            <label class="pay-item">
+              <input type="radio" name="payment_method" value="UPI / QR" checked>
+              <div class="pay-icon" style="color:#4ade80;"><i class="fa-solid fa-qrcode"></i></div>
+              <div>
+                <div class="pay-info-title">UPI / QR Code Instant</div>
+                <div class="pay-info-sub">Google Pay, PhonePe, Paytm, BHIM</div>
+              </div>
+            </label>
+
+            <label class="pay-item">
+              <input type="radio" name="payment_method" value="Card">
+              <div class="pay-icon" style="color:#60a5fa;"><i class="fa-solid fa-credit-card"></i></div>
+              <div>
+                <div class="pay-info-title">Credit / Debit Card</div>
+                <div class="pay-info-sub">Visa, Mastercard, RuPay, Maestro</div>
+              </div>
+            </label>
+
+            <label class="pay-item">
+              <input type="radio" name="payment_method" value="NetBanking">
+              <div class="pay-icon" style="color:#f59e0b;"><i class="fa-solid fa-building-columns"></i></div>
+              <div>
+                <div class="pay-info-title">Net Banking</div>
+                <div class="pay-info-sub">All major Indian public & private banks</div>
+              </div>
+            </label>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fa-solid fa-lock"></i> Pay Securely & Activate Plan
+          </button>
+
+          <div class="guarantee-note">
+            <i class="fa-solid fa-circle-check" style="color:var(--em-light);"></i> Instant activation · Upgrade anytime · 100% Secure
+          </div>
+        </form>
+      </div>
+
     </div>
-  </div>
+  </main>
 
   <script>
     const plan = "{{ plan|default:'Standard' }}";
@@ -135,19 +623,20 @@
     const premYearly = {{ plans.premium_yearly|default:1910 }};
     const couponData = {{ coupons|safe }};
 
-    let currentBilling = 'Monthly';
+    let currentBilling = "{{ billing_cycle|default:'Monthly' }}";
     let appliedDiscount = 0;
 
     function recalculate() {
       let base = 0;
-      if (plan === 'Premium') {
-        base = currentBilling === 'Yearly' ? premYearly : premMonthly;
+      const isPrem = (plan.toLowerCase() === 'premium');
+      if (isPrem) {
+        base = (currentBilling === 'Yearly') ? premYearly : premMonthly;
       } else {
-        base = currentBilling === 'Yearly' ? stdYearly : stdMonthly;
+        base = (currentBilling === 'Yearly') ? stdYearly : stdMonthly;
       }
 
       document.getElementById('basePriceDisplay').innerText = `₹${Math.round(base)}`;
-      
+
       let finalTotal = base - appliedDiscount;
       if (finalTotal < 0) finalTotal = 0;
 
@@ -158,25 +647,35 @@
     function setBilling(cycle) {
       currentBilling = cycle;
       document.getElementById('inputBilling').value = cycle;
-      document.getElementById('btnMonthly').classList.toggle('active', cycle === 'Monthly');
-      document.getElementById('btnYearly').classList.toggle('active', cycle === 'Yearly');
+      
+      const btnM = document.getElementById('btnMonthly');
+      const btnY = document.getElementById('btnYearly');
+      
+      if (cycle === 'Yearly') {
+        btnY.classList.add('active');
+        btnM.classList.remove('active');
+      } else {
+        btnM.classList.add('active');
+        btnY.classList.remove('active');
+      }
       recalculate();
     }
 
     function applyCoupon() {
       const code = document.getElementById('couponInput').value.trim().toUpperCase();
       const msgEl = document.getElementById('couponMsg');
-      
+
       if (!code) {
         msgEl.style.color = '#f87171';
         msgEl.innerText = 'Please enter a coupon code.';
         return;
       }
 
-      if (couponData[code]) {
+      if (couponData && couponData[code]) {
         const c = couponData[code];
-        let base = (plan === 'Premium') ? (currentBilling === 'Yearly' ? premYearly : premMonthly) : (currentBilling === 'Yearly' ? stdYearly : stdMonthly);
-        
+        const isPrem = (plan.toLowerCase() === 'premium');
+        let base = isPrem ? (currentBilling === 'Yearly' ? premYearly : premMonthly) : (currentBilling === 'Yearly' ? stdYearly : stdMonthly);
+
         if (c.type === 'percent') {
           appliedDiscount = (base * c.value) / 100;
         } else {
@@ -197,7 +696,9 @@
       recalculate();
     }
 
-    recalculate();
+    // Initial setup on load
+    setBilling(currentBilling);
   </script>
 </body>
+
 </html>
