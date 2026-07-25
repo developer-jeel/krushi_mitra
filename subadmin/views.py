@@ -95,6 +95,7 @@ def dashboard(request):
     total_community = community_message.objects.count()
     total_orders    = Order.objects.count()
     total_news      = news.objects.count()
+    total_gov_schemes = gov_info.objects.count()
     pending_crops   = crop.objects.filter(is_approved=False).count()
     active_users    = User.objects.filter(is_active=True).count()
     total_revenue   = OrderItem.objects.aggregate(s=Sum('subtotal'))['s'] or 0
@@ -178,6 +179,7 @@ def dashboard(request):
         'total_community': total_community,
         'total_orders': total_orders,
         'total_news': total_news,
+        'total_gov_schemes': total_gov_schemes,
         'pending_crops': pending_crops,
         'active_users': active_users,
         'total_revenue': total_revenue,
@@ -712,27 +714,116 @@ def order_update_status(request, pk):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Government Schemes Management
+# ─────────────────────────────────────────────────────────────────────────────
+
+@check_subadmin
+def manage_gov_schemes(request):
+    qs = gov_info.objects.order_by('-created_at')
+
+    q = request.GET.get('q', '')
+    state = request.GET.get('state', '')
+
+    if q:
+        qs = qs.filter(Q(title__icontains=q) | Q(description__icontains=q) | Q(department__icontains=q))
+    if state:
+        qs = qs.filter(state=state)
+
+    context = {
+        'admin_user': request.admin_user,
+        'all_schemes': qs,
+        'q': q,
+        'state': state,
+        'total': qs.count(),
+        'state_choices': gov_info.STATE_CHOICES,
+    }
+    return render(request, 'subadmin/manage_gov_schemes.html', context)
+
+
+@check_subadmin
+def gov_scheme_add(request):
+    if request.method == 'POST':
+        try:
+            g = gov_info(
+                title=request.POST.get('title', '').strip(),
+                description=request.POST.get('description', '').strip(),
+                oneline_info=request.POST.get('oneline_info', '').strip() or None,
+                state=request.POST.get('state', ''),
+                department=request.POST.get('department', '').strip() or None,
+                source_link=request.POST.get('source_link', '').strip() or None,
+            )
+            if request.FILES.get('image'):
+                g.image = request.FILES['image']
+            g.save()
+            messages.success(request, f'Government Scheme "{g.title}" added successfully.')
+            return redirect('subadmin:manage_gov_schemes')
+        except Exception as e:
+            messages.error(request, f'Error adding scheme: {e}')
+
+    context = {
+        'admin_user': request.admin_user,
+        'state_choices': gov_info.STATE_CHOICES,
+        'action': 'Add',
+    }
+    return render(request, 'subadmin/gov_scheme_form.html', context)
+
+
+@check_subadmin
+def gov_scheme_edit(request, pk):
+    g = get_object_or_404(gov_info, pk=pk)
+    if request.method == 'POST':
+        try:
+            g.title = request.POST.get('title', g.title).strip()
+            g.description = request.POST.get('description', g.description).strip()
+            g.oneline_info = request.POST.get('oneline_info', '').strip() or None
+            g.state = request.POST.get('state', g.state)
+            g.department = request.POST.get('department', '').strip() or None
+            g.source_link = request.POST.get('source_link', '').strip() or None
+            if request.FILES.get('image'):
+                g.image = request.FILES['image']
+            g.save()
+            messages.success(request, f'Government Scheme "{g.title}" updated successfully.')
+            return redirect('subadmin:manage_gov_schemes')
+        except Exception as e:
+            messages.error(request, f'Error updating scheme: {e}')
+
+    context = {
+        'admin_user': request.admin_user,
+        'scheme_obj': g,
+        'state_choices': gov_info.STATE_CHOICES,
+        'action': 'Edit',
+    }
+    return render(request, 'subadmin/gov_scheme_form.html', context)
+
+
+@check_subadmin
+def gov_scheme_delete(request, pk):
+    g = get_object_or_404(gov_info, pk=pk)
+    title = g.title
+    g.delete()
+    messages.success(request, f'Government Scheme "{title}" deleted successfully.')
+    return redirect('subadmin:manage_gov_schemes')
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # KYC Approval
 # ─────────────────────────────────────────────────────────────────────────────
 
 @check_subadmin
 def kyc_approval(request):
-    # Farmers who uploaded at least one document
-    farmers_with_docs = Farmer.objects.select_related('user').filter(
-        Q(adharcard__isnull=False) | Q(pancard__isnull=False)
-    ).exclude(adharcard='').order_by('-created_at')
+    farmers_qs = Farmer.objects.select_related('user').all().order_by('-created_at')
 
     q = request.GET.get('q', '')
     if q:
-        farmers_with_docs = farmers_with_docs.filter(
-            Q(user__name__icontains=q) | Q(adharno__icontains=q)
+        farmers_qs = farmers_qs.filter(
+            Q(user__name__icontains=q) | Q(adharno__icontains=q) | Q(user__contact__icontains=q)
         )
 
     context = {
         'admin_user': request.admin_user,
-        'farmers': farmers_with_docs,
+        'farmers': farmers_qs,
         'q': q,
-        'total': farmers_with_docs.count(),
+        'total': farmers_qs.count(),
     }
     return render(request, 'subadmin/kyc_approval.html', context)
 
@@ -740,9 +831,20 @@ def kyc_approval(request):
 @check_subadmin
 def kyc_grant_doc(request, pk):
     farmer_obj = get_object_or_404(Farmer, user_id=pk)
-    farmer_obj.doc_edit_permission = True
+    farmer_obj.doc_edit_permission = not farmer_obj.doc_edit_permission
     farmer_obj.save()
-    messages.success(request, f'Document edit permission granted to {farmer_obj.user.name}.')
+    status_text = "granted" if farmer_obj.doc_edit_permission else "revoked"
+    messages.success(request, f'Document edit permission {status_text} for {farmer_obj.user.name}.')
+    return redirect('subadmin:kyc_approval')
+
+
+@check_subadmin
+def kyc_toggle_status(request, pk):
+    farmer_user = get_object_or_404(User, pk=pk, role='Farmer')
+    farmer_user.is_active = not farmer_user.is_active
+    farmer_user.save()
+    status_text = "Verified / Active" if farmer_user.is_active else "Unverified / Inactive"
+    messages.success(request, f'KYC status for {farmer_user.name} set to {status_text}.')
     return redirect('subadmin:kyc_approval')
 
 

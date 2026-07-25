@@ -51,14 +51,21 @@ urlpatterns = [
     path('news/<int:pk>/delete/',            views.news_delete,          name='news_delete'),
     path('news/<int:pk>/toggle-breaking/',   views.news_toggle_breaking, name='news_toggle_breaking'),
 
+    # Government Schemes Management
+    path('gov-schemes/',                     views.manage_gov_schemes,   name='manage_gov_schemes'),
+    path('gov-schemes/add/',                 views.gov_scheme_add,       name='gov_scheme_add'),
+    path('gov-schemes/<int:pk>/edit/',        views.gov_scheme_edit,      name='gov_scheme_edit'),
+    path('gov-schemes/<int:pk>/delete/',      views.gov_scheme_delete,    name='gov_scheme_delete'),
+
     # Order Management
     path('orders/',                          views.manage_orders,        name='manage_orders'),
     path('orders/<int:pk>/',                 views.order_detail,         name='order_detail'),
     path('orders/<int:pk>/update-status/',   views.order_update_status,  name='order_update_status'),
 
     # KYC & Product Approval
-    path('kyc/',                             views.kyc_approval,     name='kyc_approval'),
-    path('kyc/<int:pk>/grant-doc/',          views.kyc_grant_doc,    name='kyc_grant_doc'),
+    path('kyc/',                             views.kyc_approval,      name='kyc_approval'),
+    path('kyc/<int:pk>/grant-doc/',          views.kyc_grant_doc,     name='kyc_grant_doc'),
+    path('kyc/<int:pk>/toggle-status/',       views.kyc_toggle_status, name='kyc_toggle_status'),
     path('product-approval/',                views.product_approval, name='product_approval'),
 
     # Premium Management

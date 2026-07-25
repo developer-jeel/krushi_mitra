@@ -185,36 +185,63 @@
 
       <!-- Documents Section -->
       <div id="sec-docs" class="profile-section" style="display:none;">
-        <div class="profile-section-title">Verified Documents</div>
+        <div class="profile-section-title">Verified Documents & KYC</div>
         {% if farmer %}
+        {% if farmer.doc_edit_permission %}
+        <div style="background:rgba(34,197,94,0.15);border:1px solid #22c55e;color:#22c55e;padding:12px 16px;border-radius:10px;margin-bottom:18px;font-size:14px;display:flex;align-items:center;gap:10px;">
+          <i class="fa-solid fa-key" style="font-size:18px;"></i>
+          <div><strong>Document Edit Permission Granted by Admin!</strong> You can update your Aadhaar, PAN, Passbook, and 7/12 Extract documents below.</div>
+        </div>
+        {% endif %}
+
         <form method="POST" action="{% url 'farmer_profile' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <input type="hidden" name="action" value="docs">
           <div class="form-row">
             <div class="form-field">
               <label>Aadhar Card Upload</label>
-              {% if farmer.adharcard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.adharcard %}
+              <div style="font-size:12px; color:var(--em-400); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <span><i class="fa-solid fa-check-circle"></i> Uploaded</span>
+                <a href="{{ farmer.adharcard.url }}" target="_blank" style="color:#38bdf8; text-decoration:underline;">View Document</a>
+              </div>
+              {% endif %}
               {% if not farmer.adharcard or farmer.doc_edit_permission %}
               <input type="file" name="adharcard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
               {% endif %}
             </div>
             <div class="form-field">
               <label>PAN Card Upload</label>
-              {% if farmer.pancard %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.pancard %}
+              <div style="font-size:12px; color:var(--em-400); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <span><i class="fa-solid fa-check-circle"></i> Uploaded</span>
+                <a href="{{ farmer.pancard.url }}" target="_blank" style="color:#38bdf8; text-decoration:underline;">View Document</a>
+              </div>
+              {% endif %}
               {% if not farmer.pancard or farmer.doc_edit_permission %}
               <input type="file" name="pancard" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
               {% endif %}
             </div>
             <div class="form-field">
               <label>Bank Passbook</label>
-              {% if farmer.passbook %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.passbook %}
+              <div style="font-size:12px; color:var(--em-400); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <span><i class="fa-solid fa-check-circle"></i> Uploaded</span>
+                <a href="{{ farmer.passbook.url }}" target="_blank" style="color:#38bdf8; text-decoration:underline;">View Document</a>
+              </div>
+              {% endif %}
               {% if not farmer.passbook or farmer.doc_edit_permission %}
               <input type="file" name="passbook" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
               {% endif %}
             </div>
             <div class="form-field">
               <label>7/12 Extract (Satbara)</label>
-              {% if farmer.seventwel %}<div style="font-size:12px; color:var(--em-400); margin-bottom:4px;"><i class="fa-solid fa-check-circle"></i> Uploaded</div>{% endif %}
+              {% if farmer.seventwel %}
+              <div style="font-size:12px; color:var(--em-400); margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+                <span><i class="fa-solid fa-check-circle"></i> Uploaded</span>
+                <a href="{{ farmer.seventwel.url }}" target="_blank" style="color:#38bdf8; text-decoration:underline;">View Document</a>
+              </div>
+              {% endif %}
               {% if not farmer.seventwel or farmer.doc_edit_permission %}
               <input type="file" name="seventwel" accept=".pdf,image/*" style="color:rgba(255,255,255,0.7);" />
               {% endif %}
@@ -225,9 +252,9 @@
             <input type="text" id="pfAadharInput" name="adharno" value="{{ farmer.adharno|default:'' }}"
               placeholder="12-digit Aadhar number" {% if farmer.adharno and not farmer.doc_edit_permission %}readonly style="opacity:0.6;cursor:not-allowed;"{% endif %} />
           </div>
-          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:4px;">
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:12px;">
             {% if not farmer.adharcard or not farmer.pancard or not farmer.passbook or not farmer.seventwel or not farmer.adharno or farmer.doc_edit_permission %}
-            <button class="btn btn-primary" type="submit">Save Documents</button>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-cloud-arrow-up"></i> Save Documents</button>
             {% else %}
             <div style="font-size:13px; color:var(--gray-400); padding:10px 0;">Documents are locked. Contact admin to request changes.</div>
             {% endif %}
@@ -337,8 +364,23 @@
 
       // Show selected section and activate tab
       document.getElementById(sectionId).style.display = 'block';
-      if (btnElem) btnElem.classList.add('active');
+      if (btnElem) {
+        btnElem.classList.add('active');
+      } else {
+        const targetBtn = document.querySelector(`.settings-tab[onclick*="${sectionId}"]`);
+        if (targetBtn) targetBtn.classList.add('active');
+      }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tabParam = urlParams.get('tab');
+      if (tabParam) {
+        if (tabParam === 'docs') switchTab('sec-docs');
+        else if (tabParam === 'farm') switchTab('sec-farm');
+        else if (tabParam === 'notif') switchTab('sec-notif');
+      }
+    });
   </script>
   <script src="{% static 'farmer/js/farmer.js' %}"></script>
   <script src="{% static 'farmer/js/animations.js' %}"></script>

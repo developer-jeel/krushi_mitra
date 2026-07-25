@@ -1,0 +1,90 @@
+{% extends "subadmin/base.html" %}
+{% block title %}Government Schemes Management{% endblock %}
+{% block page_title %}Government Schemes Management{% endblock %}
+{% block breadcrumb %}Admin / Government Schemes{% endblock %}
+{% block nav_gov %}active{% endblock %}
+
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+  <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex:1;">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search schemes, department, info…"
+      style="flex:1;min-width:220px;background:var(--white);border:1px solid var(--gray-200);
+      border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+    <select name="state" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+      padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+      <option value="">All States / UTs</option>
+      {% for val, label in state_choices %}
+      <option value="{{ val }}" {% if state == val %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i></button>
+    <a href="{% url 'subadmin:manage_gov_schemes' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+  </form>
+  <a href="{% url 'subadmin:gov_scheme_add' %}" class="btn btn-primary" style="margin-left:16px;white-space:nowrap;">
+    <i class="fa-solid fa-plus"></i> Add Scheme
+  </a>
+</div>
+
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">Government Schemes <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Scheme Title</th>
+        <th>State / Scope</th>
+        <th>Department</th>
+        <th>Key Benefit</th>
+        <th>Published</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in all_schemes %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:12px;">
+            {% if g.image %}
+            <img src="{{ g.image.url }}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+            {% else %}
+            <div style="width:44px;height:44px;border-radius:8px;background:rgba(34,197,94,0.1);color:#22c55e;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            {% endif %}
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-800);">{{ g.title }}</div>
+              <div style="font-size:12px;color:#64748b;">{{ g.description|truncatewords:10 }}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge-verified">{{ g.state }}</span></td>
+        <td>{{ g.department|default:"Ministry of Agriculture" }}</td>
+        <td style="font-size:13px;color:#334155;">{{ g.oneline_info|default:"—"|truncatechars:45 }}</td>
+        <td style="font-size:12px;color:#94a3b8;">{{ g.created_at|date:"M d, Y" }}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <a href="{% url 'subadmin:gov_scheme_edit' g.pk %}" class="btn btn-secondary btn-sm" title="Edit Scheme">
+              <i class="fa-solid fa-pen"></i>
+            </a>
+            {% if g.source_link %}
+            <a href="{{ g.source_link }}" target="_blank" class="btn btn-secondary btn-sm" title="Source Link">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            {% endif %}
+            <a href="#" onclick="openConfirm('{% url 'subadmin:gov_scheme_delete' g.pk %}','Delete Government Scheme?','This will permanently remove this scheme from the portal.')"
+              class="btn btn-danger btn-sm" title="Delete Scheme">
+              <i class="fa-solid fa-trash"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:40px;">No Government Schemes found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

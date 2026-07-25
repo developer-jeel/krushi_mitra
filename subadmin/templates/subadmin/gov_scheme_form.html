@@ -1,0 +1,83 @@
+{% extends "subadmin/base.html" %}
+{% block title %}{% if action == 'Add' %}Add Scheme{% else %}Edit Scheme{% endif %}{% endblock %}
+{% block page_title %}{% if action == 'Add' %}Add Government Scheme{% else %}Edit Government Scheme{% endif %}{% endblock %}
+{% block breadcrumb %}Admin / <a href="{% url 'subadmin:manage_gov_schemes' %}" style="color:#22c55e;">Government Schemes</a> / {{ action }}{% endblock %}
+{% block nav_gov %}active{% endblock %}
+
+{% block content %}
+<div style="max-width:780px;">
+  <div class="table-wrapper" style="padding:28px;">
+    <div style="font-size:17px;font-weight:700;color:var(--gray-800);margin-bottom:24px;">
+      {{ action }} Government Scheme
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Scheme Title *</label>
+          <input type="text" name="title" required value="{{ scheme_obj.title|default:'' }}"
+            placeholder="e.g. Pradhan Mantri Fasal Bima Yojana"
+            style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"/>
+        </div>
+        
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">State / Scope *</label>
+          <select name="state" required style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);
+            border-radius:10px;padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+            {% for val, label in state_choices %}
+            <option value="{{ val }}" {% if scheme_obj.state == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Department / Ministry</label>
+          <input type="text" name="department" value="{{ scheme_obj.department|default:'' }}"
+            placeholder="e.g. Ministry of Agriculture & Farmers Welfare"
+            style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"/>
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">One-Line Highlight / Key Benefit</label>
+          <input type="text" name="oneline_info" value="{{ scheme_obj.oneline_info|default:'' }}"
+            placeholder="e.g. Up to 80% subsidy for solar water pump installation."
+            style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"/>
+        </div>
+
+        <div style="grid-column:1/-1;">
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Full Scheme Description *</label>
+          <textarea name="description" required rows="6"
+            placeholder="Provide comprehensive details regarding eligibility, benefits, application process, and required documents..."
+            style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;resize:vertical;box-sizing:border-box;">{{ scheme_obj.description|default:'' }}</textarea>
+        </div>
+
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Official Source Link</label>
+          <input type="url" name="source_link" value="{{ scheme_obj.source_link|default:'' }}"
+            placeholder="https://pmkisan.gov.in"
+            style="width:100%;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:10px;
+            padding:11px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;box-sizing:border-box;"/>
+        </div>
+
+        <div>
+          <label style="font-size:13px;font-weight:600;color:#94a3b8;display:block;margin-bottom:6px;">Scheme Image</label>
+          {% if scheme_obj.image %}
+          <img src="{{ scheme_obj.image.url }}" style="height:54px;border-radius:8px;margin-bottom:6px;display:block;object-fit:cover;">
+          {% endif %}
+          <input type="file" name="image" accept="image/*" style="color:var(--gray-400);"/>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;">
+        <a href="{% url 'subadmin:manage_gov_schemes' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-save"></i> {{ action }} Scheme
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
