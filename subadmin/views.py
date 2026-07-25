@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 
 from farmer.models import User, Farmer, crop, FarmerTool, bloag, community_message, news, gov_info, premium_buyer as farmer_premium_buyer
 from buyer.models import (
-    Buyer, Order, OrderItem, premium_buyer, verification_details,
+    Buyer, Order, OrderItem, premium_buyer, verification_details, bank_details,
     premium_coupon, discount_coupon, premium_history, premium_plans,
 )
 from buyer.views import format_indian_number
