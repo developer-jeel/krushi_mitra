@@ -20,11 +20,12 @@ urlpatterns = [
     path('farmers/<int:pk>/grant-doc/',       views.grant_doc_permission,  name='grant_doc_permission'),
 
     # Buyer Management
-    path('buyers/',                    views.manage_buyers,  name='manage_buyers'),
-    path('buyers/<int:pk>/',           views.buyer_detail,   name='buyer_detail'),
-    path('buyers/<int:pk>/toggle/',    views.toggle_buyer,   name='toggle_buyer'),
-    path('buyers/<int:pk>/delete/',    views.delete_buyer,   name='delete_buyer'),
-    path('buyers/<int:pk>/verify/',    views.verify_buyer,   name='verify_buyer'),
+    path('buyers/',                    views.manage_buyers,   name='manage_buyers'),
+    path('buyers/<int:pk>/',           views.buyer_detail,    name='buyer_detail'),
+    path('buyers/<int:pk>/toggle/',    views.toggle_buyer,    name='toggle_buyer'),
+    path('buyers/<int:pk>/delete/',    views.delete_buyer,    name='delete_buyer'),
+    path('buyers/<int:pk>/verify/',    views.verify_buyer,    name='verify_buyer'),
+    path('buyers/<int:pk>/grant-doc/', views.buyer_grant_doc, name='buyer_grant_doc'),
 
     # Crop Management
     path('crops/',                     views.manage_crops,  name='manage_crops'),

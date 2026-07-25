@@ -593,45 +593,63 @@ def buyer_settings(request):
 
 @check_login(['Buyer'])
 def kyc(request):
-    user = getattr(request, 'uid', request.user)
-    try:
-        buyer = Buyer.objects.get(user=user)
-    except Buyer.DoesNotExist:
-        buyer = Buyer(user=user)
-        
+    user = getattr(request, 'uid', None)
+    if not user:
+        return redirect('login')
+    buyer = Buyer.objects.get(user=user)
+    verification, _ = verification_details.objects.get_or_create(user=buyer)
+    bank_info, _ = bank_details.objects.get_or_create(user=buyer)
+
     if request.method == 'POST':
-        buyer.adharno = request.POST.get('adharno', buyer.adharno)
-        buyer.pan_no = request.POST.get('pan_no', buyer.pan_no)
-        buyer.gst_no = request.POST.get('gst_no', buyer.gst_no)
-        buyer.msme_no = request.POST.get('msme_no', buyer.msme_no)
-        buyer.trade_license = request.POST.get('trade_license', buyer.trade_license)
-        buyer.business_type = request.POST.get('business_type', buyer.business_type)
-        buyer.account_no = request.POST.get('account_no', buyer.account_no)
-        buyer.ifsc_code = request.POST.get('ifsc_code', buyer.ifsc_code)
-        buyer.bank_name = request.POST.get('bank_name', buyer.bank_name)
-        buyer.account_holder = request.POST.get('account_holder', buyer.account_holder)
-        buyer.address = request.POST.get('address', buyer.address)
-        
-        if 'adharcard' in request.FILES:
-            buyer.adharcard = request.FILES['adharcard']
-        if 'pancard' in request.FILES:
-            buyer.pancard = request.FILES['pancard']
+        if not buyer.enable_update:
+            messages.error(request, 'You cannot change verification data as updates are disabled by admin.')
+            return redirect('buyer_verification')
+
+        # 1. Update Buyer model fields
+        buyer.gst_no = request.POST.get('gst_no', buyer.gst_no) or None
+        if request.POST.get('business_type'):
+            buyer.business_type = request.POST.get('business_type', buyer.business_type)
+        if request.POST.get('address'):
+            buyer.address = request.POST.get('address', buyer.address)
         if 'gst_certificate' in request.FILES:
             buyer.gst_certificate = request.FILES['gst_certificate']
-        if 'seventwel' in request.FILES:
-            buyer.seventwel = request.FILES['seventwel']
-        if 'passbook' in request.FILES:
-            buyer.passbook = request.FILES['passbook']
-        if 'trade_license_doc' in request.FILES:
-            buyer.trade_license_doc = request.FILES['trade_license_doc']
-        if 'photo' in request.FILES:
-            buyer.photo = request.FILES['photo']
-            
         buyer.save()
+
+        # 2. Update verification_details model fields
+        verification.adharno = request.POST.get('adharno', verification.adharno) or None
+        verification.msme_no = request.POST.get('msme_no', verification.msme_no)
+        verification.trade_license = request.POST.get('trade_license', verification.trade_license)
+        if 'adharcard' in request.FILES:
+            verification.adharcard = request.FILES['adharcard']
+        if 'trade_license_doc' in request.FILES:
+            verification.trade_license_doc = request.FILES['trade_license_doc']
+        if 'photo' in request.FILES:
+            verification.photo = request.FILES['photo']
+        verification.save()
+
+        # 3. Update bank_details model fields
+        bank_info.pan_no = request.POST.get('pan_no', bank_info.pan_no)
+        bank_info.account_holder = request.POST.get('account_holder', bank_info.account_holder)
+        bank_info.account_no = request.POST.get('account_no', bank_info.account_no)
+        bank_info.ifsc_code = request.POST.get('ifsc_code', bank_info.ifsc_code)
+        bank_info.bank_name = request.POST.get('bank_name', bank_info.bank_name)
+        if 'pancard' in request.FILES:
+            bank_info.pancard = request.FILES['pancard']
+        if 'passbook' in request.FILES:
+            bank_info.passbook = request.FILES['passbook']
+        bank_info.save()
+
         messages.success(request, 'KYC details submitted successfully!')
-        return redirect('kyc')
-        
-    return render(request, "buyer/kyc.html", {'buyer': buyer})
+        return redirect('buyer_verification')
+
+    premium_type = premium_buyer.objects.filter(user=buyer).first()
+    context = {
+        'buyr': buyer,
+        'verification': verification,
+        'bank_info': bank_info,
+        'premium_type': premium_type,
+    }
+    return render(request, "buyer/verification.html", context)
 
 @check_login(['Buyer'])
 def buyer_premium(request):

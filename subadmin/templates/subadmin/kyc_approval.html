@@ -5,14 +5,167 @@
 {% block nav_kyc %}active{% endblock %}
 
 {% block content %}
-<form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
-  <input type="text" name="q" value="{{ q }}" placeholder="Search by Farmer Name, Contact, or Aadhaar No…"
-    style="flex:1;min-width:260px;background:var(--white);border:1px solid var(--gray-200);
-    border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
-  <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i> Search</button>
-  <a href="{% url 'subadmin:kyc_approval' %}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
-</form>
+<!-- Role Switcher & Search Bar -->
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:14px;">
+  <div style="display:flex;gap:8px;">
+    <a href="?role=farmer{% if q %}&q={{ q }}{% endif %}"
+       class="btn {% if role == 'farmer' %}btn-primary{% else %}btn-secondary{% endif %}" style="padding:10px 20px;">
+      <i class="fa-solid fa-tractor"></i> Farmer KYC
+    </a>
+    <a href="?role=buyer{% if q %}&q={{ q }}{% endif %}"
+       class="btn {% if role == 'buyer' %}btn-primary{% else %}btn-secondary{% endif %}" style="padding:10px 20px;">
+      <i class="fa-solid fa-cart-shopping"></i> Buyer KYC
+    </a>
+  </div>
 
+  <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex:1;max-width:550px;">
+    <input type="hidden" name="role" value="{{ role }}">
+    <input type="text" name="q" value="{{ q }}" placeholder="Search by Name, Contact, or Document Number…"
+      style="flex:1;min-width:240px;background:var(--white);border:1px solid var(--gray-200);
+      border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;"/>
+    <button type="submit" class="btn btn-primary" style="padding:10px 20px;"><i class="fa-solid fa-search"></i> Search</button>
+    <a href="?role={{ role }}" class="btn btn-secondary" style="padding:10px 20px;">Clear</a>
+  </form>
+</div>
+
+{% if role == 'buyer' %}
+<!-- ══ BUYER KYC SUBMISSIONS TABLE ══ -->
+<div class="table-wrapper">
+  <div class="table-header">
+    <div class="table-title">Buyer KYC Submissions <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Buyer Info</th>
+        <th>GST No & Cert</th>
+        <th>Aadhaar Card</th>
+        <th>Trade License</th>
+        <th>PAN & Passbook</th>
+        <th>Verification</th>
+        <th>Doc Edit</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in buyers %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;border-radius:50%;background:rgba(59,130,246,0.15);color:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">
+              {{ b.user.name|first|upper }}
+            </div>
+            <div>
+              <div style="font-weight:600;font-size:14px;color:var(--gray-800);">{{ b.user.name }}</div>
+              <div style="font-size:12px;color:#94a3b8;">{{ b.user.contact|default:"No contact" }}</div>
+              <div style="font-size:11px;color:#64748b;">{{ b.business_type|default:"Buyer" }} • {{ b.state }}</div>
+            </div>
+          </div>
+        </td>
+
+        <td>
+          <div>
+            <strong style="font-family:monospace;font-size:12px;">{{ b.gst_no|default:"—" }}</strong>
+          </div>
+          {% if b.gst_certificate %}
+          <a href="{{ b.gst_certificate.url }}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top:4px;">
+            <i class="fa-solid fa-file-pdf"></i> GST Cert
+          </a>
+          {% else %}
+          <span class="badge-inactive">Missing</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% for v in b.buyer_details.all %}
+            {% if v.adharcard %}
+            <a href="{{ v.adharcard.url }}" target="_blank" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-file-pdf"></i> Aadhaar
+            </a>
+            {% else %}
+            <span class="badge-inactive">Missing</span>
+            {% endif %}
+          {% empty %}
+          <span class="badge-inactive">Missing</span>
+          {% endfor %}
+        </td>
+
+        <td>
+          {% for v in b.buyer_details.all %}
+            {% if v.trade_license_doc %}
+            <a href="{{ v.trade_license_doc.url }}" target="_blank" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-file-pdf"></i> Trade Doc
+            </a>
+            {% else %}
+            <span class="badge-inactive">Missing</span>
+            {% endif %}
+          {% empty %}
+          <span class="badge-inactive">Missing</span>
+          {% endfor %}
+        </td>
+
+        <td>
+          {% for bk in b.buyer_bank.all %}
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              {% if bk.pancard %}
+              <a href="{{ bk.pancard.url }}" target="_blank" class="btn btn-secondary btn-sm" title="PAN Card">PAN</a>
+              {% endif %}
+              {% if bk.passbook %}
+              <a href="{{ bk.passbook.url }}" target="_blank" class="btn btn-secondary btn-sm" title="Passbook">Passbook</a>
+              {% endif %}
+              {% if not bk.pancard and not bk.passbook %}
+              <span class="badge-inactive">Missing</span>
+              {% endif %}
+            </div>
+          {% empty %}
+          <span class="badge-inactive">Missing</span>
+          {% endfor %}
+        </td>
+
+        <td>
+          {% if b.is_verified %}
+          <span class="badge-active"><i class="fa-solid fa-circle-check"></i> Verified</span>
+          {% else %}
+          <span class="badge-inactive"><i class="fa-solid fa-clock"></i> Unverified</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if b.enable_update %}
+          <span class="badge-active">Allowed</span>
+          {% else %}
+          <span class="badge-inactive">Locked</span>
+          {% endif %}
+        </td>
+
+        <td>
+          <div style="display:flex;gap:6px;flex-wrap:nowrap;">
+            <a href="{% url 'subadmin:verify_buyer' b.pk %}" class="btn btn-sm {% if b.is_verified %}btn-warning{% else %}btn-primary{% endif %}" title="Toggle Verification Status">
+              {% if b.is_verified %}Unverify{% else %}Verify KYC{% endif %}
+            </a>
+
+            <a href="{% url 'subadmin:buyer_grant_doc' b.pk %}" class="btn btn-sm btn-secondary" title="Allow or Lock document editing permission">
+              <i class="fa-solid fa-key"></i> {% if b.enable_update %}Lock Edit{% else %}Allow Edit{% endif %}
+            </a>
+
+            <a href="{% url 'subadmin:buyer_detail' b.pk %}" class="btn btn-secondary btn-sm" title="View Full Profile">
+              <i class="fa-solid fa-eye"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:40px;">No Buyer KYC submissions found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% else %}
+
+<!-- ══ FARMER KYC SUBMISSIONS TABLE ══ -->
 <div class="table-wrapper">
   <div class="table-header">
     <div class="table-title">Farmer KYC Submissions <span style="font-size:13px;color:#94a3b8;">({{ total }})</span></div>
@@ -131,4 +284,5 @@
     </tbody>
   </table>
 </div>
+{% endif %}
 {% endblock %}

@@ -352,12 +352,16 @@ def buyer_detail(request, pk):
     buyer_obj = get_object_or_404(Buyer, pk=pk)
     orders = Order.objects.filter(user=buyer_obj.user).order_by('-created_at')
     premiums = premium_buyer.objects.filter(user=buyer_obj).order_by('-purchase_date')
+    verification = verification_details.objects.filter(user=buyer_obj).first()
+    bank_info = bank_details.objects.filter(user=buyer_obj).first()
 
     context = {
         'admin_user': request.admin_user,
         'buyer': buyer_obj,
         'orders': orders,
         'premiums': premiums,
+        'verification': verification,
+        'bank_info': bank_info,
     }
     return render(request, 'subadmin/buyer_detail.html', context)
 
@@ -389,7 +393,17 @@ def verify_buyer(request, pk):
     buyer_obj.save()
     state = 'verified' if buyer_obj.is_verified else 'unverified'
     messages.success(request, f'Buyer {buyer_obj.user.name} has been {state}.')
-    return redirect('subadmin:buyer_detail', pk=pk)
+    return redirect(request.META.get('HTTP_REFERER', 'subadmin:manage_buyers'))
+
+
+@check_subadmin
+def buyer_grant_doc(request, pk):
+    buyer_obj = get_object_or_404(Buyer, pk=pk)
+    buyer_obj.enable_update = not buyer_obj.enable_update
+    buyer_obj.save()
+    status_text = "enabled" if buyer_obj.enable_update else "disabled"
+    messages.success(request, f'Document edit permission {status_text} for Buyer {buyer_obj.user.name}.')
+    return redirect(request.META.get('HTTP_REFERER', 'subadmin:kyc_approval'))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -811,19 +825,35 @@ def gov_scheme_delete(request, pk):
 
 @check_subadmin
 def kyc_approval(request):
-    farmers_qs = Farmer.objects.select_related('user').all().order_by('-created_at')
-
+    role = request.GET.get('role', 'farmer')
     q = request.GET.get('q', '')
-    if q:
-        farmers_qs = farmers_qs.filter(
-            Q(user__name__icontains=q) | Q(adharno__icontains=q) | Q(user__contact__icontains=q)
-        )
+
+    farmers_qs = None
+    buyers_qs = None
+
+    if role == 'buyer':
+        buyers_qs = Buyer.objects.select_related('user').all().order_by('-created_at')
+        if q:
+            buyers_qs = buyers_qs.filter(
+                Q(user__name__icontains=q) | Q(gst_no__icontains=q) | Q(user__contact__icontains=q)
+            )
+        total = buyers_qs.count()
+    else:
+        role = 'farmer'
+        farmers_qs = Farmer.objects.select_related('user').all().order_by('-created_at')
+        if q:
+            farmers_qs = farmers_qs.filter(
+                Q(user__name__icontains=q) | Q(adharno__icontains=q) | Q(user__contact__icontains=q)
+            )
+        total = farmers_qs.count()
 
     context = {
         'admin_user': request.admin_user,
+        'role': role,
         'farmers': farmers_qs,
+        'buyers': buyers_qs,
         'q': q,
-        'total': farmers_qs.count(),
+        'total': total,
     }
     return render(request, 'subadmin/kyc_approval.html', context)
 

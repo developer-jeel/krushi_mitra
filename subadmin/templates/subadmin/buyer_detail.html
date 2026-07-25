@@ -37,6 +37,10 @@
           <i class="fa-solid fa-shield-check"></i>
           {% if buyer.is_verified %}Unverify{% else %}Verify KYC{% endif %}
         </a>
+        <a href="{% url 'subadmin:buyer_grant_doc' buyer.pk %}" class="btn btn-secondary" style="text-align:center;">
+          <i class="fa-solid fa-key"></i>
+          {% if buyer.enable_update %}Lock Doc Edit{% else %}Allow Doc Edit{% endif %}
+        </a>
         <a href="#" onclick="openConfirm('{% url 'subadmin:delete_buyer' buyer.pk %}','Delete Buyer?','This is permanent.')"
           class="btn btn-danger" style="text-align:center;">
           <i class="fa-solid fa-trash"></i> Delete
@@ -47,6 +51,57 @@
 
   <!-- Right -->
   <div>
+    <!-- Submitted KYC Documents -->
+    <div class="table-wrapper" style="margin-bottom:16px;padding:20px;">
+      <div style="font-size:16px;font-weight:700;color:var(--gray-800);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">
+        <span>Submitted KYC & Verification Documents</span>
+        <a href="{% url 'subadmin:buyer_grant_doc' buyer.pk %}" class="btn btn-sm btn-secondary">
+          <i class="fa-solid fa-key"></i> {% if buyer.enable_update %}Lock Edit{% else %}Allow Edit{% endif %}
+        </a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+        <div style="background:var(--gray-50);padding:12px;border-radius:10px;border:1px solid var(--gray-200);">
+          <div style="font-size:12px;color:#94a3b8;font-weight:600;">GST Certificate</div>
+          <div style="font-size:13px;font-weight:700;color:var(--gray-800);margin:4px 0;">{{ buyer.gst_no|default:"No GST No" }}</div>
+          {% if buyer.gst_certificate %}
+          <a href="{{ buyer.gst_certificate.url }}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top:4px;"><i class="fa-solid fa-file-pdf"></i> View GST Cert</a>
+          {% else %}<span class="badge-inactive">Missing</span>{% endif %}
+        </div>
+
+        <div style="background:var(--gray-50);padding:12px;border-radius:10px;border:1px solid var(--gray-200);">
+          <div style="font-size:12px;color:#94a3b8;font-weight:600;">Aadhaar Card</div>
+          <div style="font-size:13px;font-weight:700;color:var(--gray-800);margin:4px 0;">{{ verification.adharno|default:"No Aadhaar No" }}</div>
+          {% if verification.adharcard %}
+          <a href="{{ verification.adharcard.url }}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top:4px;"><i class="fa-solid fa-file-pdf"></i> View Aadhaar</a>
+          {% else %}<span class="badge-inactive">Missing</span>{% endif %}
+        </div>
+
+        <div style="background:var(--gray-50);padding:12px;border-radius:10px;border:1px solid var(--gray-200);">
+          <div style="font-size:12px;color:#94a3b8;font-weight:600;">Trade License</div>
+          <div style="font-size:13px;font-weight:700;color:var(--gray-800);margin:4px 0;">{{ verification.trade_license|default:"No License No" }}</div>
+          {% if verification.trade_license_doc %}
+          <a href="{{ verification.trade_license_doc.url }}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top:4px;"><i class="fa-solid fa-file-pdf"></i> View License</a>
+          {% else %}<span class="badge-inactive">Missing</span>{% endif %}
+        </div>
+
+        <div style="background:var(--gray-50);padding:12px;border-radius:10px;border:1px solid var(--gray-200);">
+          <div style="font-size:12px;color:#94a3b8;font-weight:600;">PAN Card</div>
+          <div style="font-size:13px;font-weight:700;color:var(--gray-800);margin:4px 0;">{{ bank_info.pan_no|default:"No PAN No" }}</div>
+          {% if bank_info.pancard %}
+          <a href="{{ bank_info.pancard.url }}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top:4px;"><i class="fa-solid fa-file-pdf"></i> View PAN</a>
+          {% else %}<span class="badge-inactive">Missing</span>{% endif %}
+        </div>
+
+        <div style="background:var(--gray-50);padding:12px;border-radius:10px;border:1px solid var(--gray-200);">
+          <div style="font-size:12px;color:#94a3b8;font-weight:600;">Bank Passbook</div>
+          <div style="font-size:13px;font-weight:700;color:var(--gray-800);margin:4px 0;">{{ bank_info.bank_name|default:"Bank Passbook" }}</div>
+          {% if bank_info.passbook %}
+          <a href="{{ bank_info.passbook.url }}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top:4px;"><i class="fa-solid fa-file-pdf"></i> View Passbook</a>
+          {% else %}<span class="badge-inactive">Missing</span>{% endif %}
+        </div>
+      </div>
+    </div>
+
     <!-- Orders -->
     <div class="table-wrapper" style="margin-bottom:16px;">
       <div class="table-header"><div class="table-title">Orders ({{ orders.count }})</div></div>
