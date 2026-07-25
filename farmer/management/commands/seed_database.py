@@ -610,6 +610,7 @@ class Command(BaseCommand):
         blogs_to_create = []
         for idx, title in enumerate(blog_titles):
             author = random.choice(created_farmer_users)
+            safe_name = "".join([c if c.isalnum() else "_" for c in title])[:30].strip("_")
             blogs_to_create.append(bloag(
                 user=author,
                 title=title,
@@ -617,7 +618,8 @@ class Command(BaseCommand):
                     f"Comprehensive article discussing {title}. Organic farming and modern agriculture techniques "
                     "help Indian farmers increase crop yield while protecting soil health and reducing input costs. "
                     "Using scientific crop rotation and natural fertilizers produces premium quality produce."
-                )
+                ),
+                image=f"bloag/images/blog_{idx+1}_{safe_name}.jpg"
             ))
 
         bloag.objects.bulk_create(blogs_to_create, ignore_conflicts=True)
@@ -635,13 +637,16 @@ class Command(BaseCommand):
         news_to_create = []
         for i in range(50):
             t_pair = random.choice(news_titles)
+            title_text = f"{t_pair[0]} #{i+1}"
+            safe_name = "".join([c if c.isalnum() else "_" for c in title_text])[:30].strip("_")
             news_to_create.append(news(
-                title=f"{t_pair[0]} #{i+1}",
+                title=title_text,
                 description="Detailed news coverage regarding recent agricultural developments, government policy updates, and market trends.",
                 category=t_pair[1],
                 state=random.choice(["Central Government", "Gujarat", "Maharashtra", "Rajasthan"]),
                 is_breaking=random.choice([True, False, False]),
-                breaking_hours=24
+                breaking_hours=24,
+                image=f"news/images/news_{i+1}_{safe_name}.jpg"
             ))
 
         news.objects.bulk_create(news_to_create)
@@ -663,13 +668,15 @@ class Command(BaseCommand):
 
         gov_to_create = []
         for i, (stitle, sdesc) in enumerate(gov_schemes):
+            safe_name = "".join([c if c.isalnum() else "_" for c in stitle])[:30].strip("_")
             gov_to_create.append(gov_info(
                 title=stitle,
                 description=sdesc,
                 oneline_info=sdesc[:200],
                 state=random.choice(["Central Government", "Gujarat", "Maharashtra"]),
                 source_link="https://agricoop.gov.in",
-                department="Ministry of Agriculture & Farmers Welfare"
+                department="Ministry of Agriculture & Farmers Welfare",
+                image=f"gov_info/images/scheme_{i+1}_{safe_name}.jpg"
             ))
 
         gov_info.objects.bulk_create(gov_to_create)
