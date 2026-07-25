@@ -5,7 +5,7 @@
 {% block nav_premium_settings %}active{% endblock %}
 
 {% block content %}
-<div style="max-width: 600px;">
+<div style="max-width: 960px;">
   <!-- Alerts -->
   {% if messages %}
     {% for message in messages %}
@@ -16,62 +16,115 @@
     {% endfor %}
   {% endif %}
 
-  <!-- Settings Form -->
-  <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm);">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;border-bottom:1px solid var(--gray-200);padding-bottom:16px;">
-      <div style="width:40px;height:40px;border-radius:10px;background:var(--primary-pale);color:var(--primary-mid);display:flex;align-items:center;justify-content:center;font-size:18px;">
-        <i class="fa-solid fa-tags"></i>
+  <!-- Grid of Settings Cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(400px, 1fr));gap:24px;">
+
+    <!-- 🛒 BUYER PREMIUM PLAN SETTINGS -->
+    <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;border-bottom:1px solid var(--gray-200);padding-bottom:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--primary-pale);color:var(--primary-mid);display:flex;align-items:center;justify-content:center;font-size:18px;">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+        <div>
+          <h3 style="font-size:16px;font-weight:700;color:var(--gray-800);margin:0;">Buyer Premium Settings</h3>
+          <div style="font-size:13px;color:var(--gray-400);margin-top:2px;">Update Buyer plan prices and yearly discount</div>
+        </div>
       </div>
-      <div>
-        <h3 style="font-size:16px;font-weight:700;color:var(--gray-800);margin:0;">Premium Price Settings</h3>
-        <div style="font-size:13px;color:var(--gray-400);margin-top:2px;">Update monthly prices and yearly discount</div>
-      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="target" value="buyer">
+        
+        <!-- Standard Plan -->
+        <div style="margin-bottom:16px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Standard Monthly Price (₹)</label>
+          <div style="position:relative;">
+            <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+            <input type="number" name="standard_price" value="{{ buyer_plan.standard_price|default:99 }}" required min="0"
+              style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+          </div>
+        </div>
+
+        <!-- Premium Plan -->
+        <div style="margin-bottom:16px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Premium Monthly Price (₹)</label>
+          <div style="position:relative;">
+            <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+            <input type="number" name="premium_price" value="{{ buyer_plan.premium_price|default:199 }}" required min="0"
+              style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+          </div>
+        </div>
+
+        <!-- Yearly Discount -->
+        <div style="margin-bottom:24px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Yearly Discount (%)</label>
+          <div style="position:relative;">
+            <i class="fa-solid fa-percent" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+            <input type="number" name="year_dis" value="{{ buyer_plan.year_dis|default:20 }}" required min="0" max="100"
+              style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+          </div>
+          <div style="font-size:12px;color:var(--gray-400);margin-top:6px;">Automatically applied when buyers choose yearly billing.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;font-size:14px;padding:12px;">
+          <i class="fa-solid fa-floppy-disk"></i> Save Buyer Prices
+        </button>
+      </form>
     </div>
 
-    <form method="POST">
-      {% csrf_token %}
-      
-      <!-- Standard Plan -->
-      <div style="margin-bottom:16px;">
-        <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Standard Monthly Price (₹)</label>
-        <div style="position:relative;">
-          <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
-          <input type="number" name="standard_price" value="{{ plan.standard_price|default:0 }}" required min="0"
-            style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+    <!-- 🌾 FARMER PREMIUM PLAN SETTINGS -->
+    <div style="background:var(--white);border:1px solid var(--gray-200);border-radius:14px;padding:24px;box-shadow:var(--shadow-sm);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;border-bottom:1px solid var(--gray-200);padding-bottom:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(34,197,94,0.12);color:#16a34a;display:flex;align-items:center;justify-content:center;font-size:18px;">
+          <i class="fa-solid fa-wheat-awn"></i>
+        </div>
+        <div>
+          <h3 style="font-size:16px;font-weight:700;color:var(--gray-800);margin:0;">Farmer Premium Settings</h3>
+          <div style="font-size:13px;color:var(--gray-400);margin-top:2px;">Update Farmer plan prices and yearly discount</div>
         </div>
       </div>
 
-      <!-- Premium Plan -->
-      <div style="margin-bottom:16px;">
-        <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Premium Monthly Price (₹)</label>
-        <div style="position:relative;">
-          <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
-          <input type="number" name="premium_price" value="{{ plan.premium_price|default:0 }}" required min="0"
-            style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="target" value="farmer">
+        
+        <!-- Standard Plan -->
+        <div style="margin-bottom:16px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Standard Monthly Price (₹)</label>
+          <div style="position:relative;">
+            <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+            <input type="number" name="standard_price" value="{{ farmer_plan.standard_price|default:99 }}" required min="0"
+              style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+          </div>
         </div>
-      </div>
 
-      <!-- Yearly Discount -->
-      <div style="margin-bottom:24px;">
-        <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Yearly Discount (%)</label>
-        <div style="position:relative;">
-          <i class="fa-solid fa-percent" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
-          <input type="number" name="year_dis" value="{{ plan.year_dis|default:0 }}" required min="0" max="100"
-            style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+        <!-- Premium Plan -->
+        <div style="margin-bottom:16px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Premium Monthly Price (₹)</label>
+          <div style="position:relative;">
+            <i class="fa-solid fa-indian-rupee-sign" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+            <input type="number" name="premium_price" value="{{ farmer_plan.premium_price|default:199 }}" required min="0"
+              style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+          </div>
         </div>
-        <div style="font-size:12px;color:var(--gray-400);margin-top:6px;">This discount is automatically applied when users purchase a yearly subscription.</div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div style="display:flex;gap:10px;border-top:1px solid var(--gray-200);padding-top:20px;">
-        <button type="submit" class="btn btn-primary" style="flex:1;justify-content:center;font-size:14px;padding:12px;">
-          <i class="fa-solid fa-floppy-disk"></i> Save Changes
+        <!-- Yearly Discount -->
+        <div style="margin-bottom:24px;">
+          <label style="display:block;font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:6px;">Yearly Discount (%)</label>
+          <div style="position:relative;">
+            <i class="fa-solid fa-percent" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gray-400);font-size:14px;"></i>
+            <input type="number" name="year_dis" value="{{ farmer_plan.year_dis|default:20 }}" required min="0" max="100"
+              style="width:100%;padding:10px 14px 10px 36px;border:1px solid var(--gray-200);border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:var(--gray-800);outline:none;transition:border .2s;">
+          </div>
+          <div style="font-size:12px;color:var(--gray-400);margin-top:6px;">Automatically applied when farmers choose yearly billing.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;font-size:14px;padding:12px;background:#16a34a;border-color:#16a34a;">
+          <i class="fa-solid fa-floppy-disk"></i> Save Farmer Prices
         </button>
-        <a href="{% url 'subadmin:dashboard' %}" class="btn btn-secondary" style="flex:1;justify-content:center;font-size:14px;padding:12px;">
-          Cancel
-        </a>
-      </div>
-    </form>
+      </form>
+    </div>
+
   </div>
 </div>
 
@@ -80,11 +133,15 @@
   document.querySelectorAll('input').forEach(input => {
     input.addEventListener('focus', function() {
       this.style.borderColor = 'var(--primary-mid)';
-      this.previousElementSibling.style.color = 'var(--primary-mid)';
+      if (this.previousElementSibling) {
+        this.previousElementSibling.style.color = 'var(--primary-mid)';
+      }
     });
     input.addEventListener('blur', function() {
       this.style.borderColor = 'var(--gray-200)';
-      this.previousElementSibling.style.color = 'var(--gray-400)';
+      if (this.previousElementSibling) {
+        this.previousElementSibling.style.color = 'var(--gray-400)';
+      }
     });
   });
 </script>

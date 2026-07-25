@@ -111,8 +111,11 @@ def dashboard(request):
 
     # Chart data: monthly orders (last 12 months)
     from datetime import datetime, timedelta
+    from farmer.models import farmer_premium_history
     monthly_order_data = []
     monthly_labels = []
+    monthly_buyer_subs = []
+    monthly_farmer_subs = []
     now = timezone.now()
     for i in range(11, -1, -1):
         dt = now - timedelta(days=i * 30)
@@ -122,6 +125,27 @@ def dashboard(request):
         ).count()
         monthly_order_data.append(count)
         monthly_labels.append(dt.strftime('%b'))
+
+        # Buyer premium subscriptions this month
+        b_count = premium_history.objects.filter(
+            start_date__year=dt.year,
+            start_date__month=dt.month
+        ).count()
+        monthly_buyer_subs.append(b_count)
+
+        # Farmer premium subscriptions this month
+        f_count = farmer_premium_history.objects.filter(
+            start_date__year=dt.year,
+            start_date__month=dt.month
+        ).count()
+        monthly_farmer_subs.append(f_count)
+
+    # Current premium counts
+    total_premium_buyers  = premium_history.objects.values('user').distinct().count()
+    total_premium_farmers = farmer_premium_history.objects.values('user').distinct().count()
+    total_premium_revenue = (premium_history.objects.aggregate(s=Sum('price'))['s'] or 0) + \
+                            (farmer_premium_history.objects.aggregate(s=Sum('price'))['s'] or 0)
+
 
     # Crop category breakdown
     crop_categories = list(crop.objects.values('category').annotate(c=Count('id')).order_by('-c')[:6])
@@ -162,6 +186,11 @@ def dashboard(request):
         'recent_orders': recent_orders,
         'monthly_order_data': json.dumps(monthly_order_data),
         'monthly_labels': json.dumps(monthly_labels),
+        'monthly_buyer_subs': json.dumps(monthly_buyer_subs),
+        'monthly_farmer_subs': json.dumps(monthly_farmer_subs),
+        'total_premium_buyers': total_premium_buyers,
+        'total_premium_farmers': total_premium_farmers,
+        'total_premium_revenue': int(total_premium_revenue),
         'crop_categories': json.dumps(crop_categories),
         'recent_users': recent_users,
         # Coupons
@@ -744,44 +773,56 @@ def product_approval(request):
 
 @check_subadmin
 def premium_settings(request):
-    try:
-        plan = premium_plans.objects.get()
-    except premium_plans.DoesNotExist:
-        plan = premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
-    except premium_plans.MultipleObjectsReturned:
-        plan = premium_plans.objects.first()
+    buyer_plan = premium_plans.objects.first()
+    if not buyer_plan:
+        buyer_plan = premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
+
+    from farmer.models import farmer_premium_plans
+    farmer_plan = farmer_premium_plans.objects.first()
+    if not farmer_plan:
+        farmer_plan = farmer_premium_plans.objects.create(standard_price=99, premium_price=199, year_dis=20)
 
     if request.method == 'POST':
+        target = request.POST.get('target', 'buyer')
         try:
-            sp = request.POST.get('standard_price', '')
-            pp = request.POST.get('premium_price', '')
-            yd = request.POST.get('year_dis', '')
-            
+            sp = request.POST.get('standard_price', '').strip()
+            pp = request.POST.get('premium_price', '').strip()
+            yd = request.POST.get('year_dis', '').strip()
+
             if sp == '' or pp == '' or yd == '':
                 messages.error(request, 'All fields are required.')
             else:
                 sp = int(sp)
                 pp = int(pp)
                 yd = int(yd)
-                
+
                 if sp < 0 or pp < 0:
                     messages.error(request, 'Prices cannot be negative.')
                 elif yd < 0 or yd > 100:
                     messages.error(request, 'Yearly discount must be between 0 and 100.')
                 else:
-                    plan.standard_price = sp
-                    plan.premium_price = pp
-                    plan.year_dis = yd
-                    plan.save()
-                    messages.success(request, 'Premium plan prices updated successfully.')
+                    if target == 'farmer':
+                        farmer_plan.standard_price = sp
+                        farmer_plan.premium_price = pp
+                        farmer_plan.year_dis = yd
+                        farmer_plan.save()
+                        messages.success(request, 'Farmer premium plan prices updated successfully.')
+                    else:
+                        buyer_plan.standard_price = sp
+                        buyer_plan.premium_price = pp
+                        buyer_plan.year_dis = yd
+                        buyer_plan.save()
+                        messages.success(request, 'Buyer premium plan prices updated successfully.')
         except ValueError:
             messages.error(request, 'Invalid input. Please enter valid numbers.')
-            
+
         return redirect('subadmin:premium_settings')
 
     context = {
         'admin_user': request.admin_user,
-        'plan': plan,
+        'buyer_plan': buyer_plan,
+        'farmer_plan': farmer_plan,
+        'plan': buyer_plan,
         'nav_premium_settings': 'active'
     }
     return render(request, 'subadmin/premium_settings.html', context)
@@ -1180,26 +1221,44 @@ def discount_coupon_toggle(request, pk):
 
 @check_subadmin
 def transactions(request):
-    qs = premium_history.objects.select_related('user', 'user__user').order_by('-start_date')
+    from farmer.models import farmer_premium_history
+    buyer_qs = premium_history.objects.select_related('user', 'user__user').all()
+    farmer_qs = farmer_premium_history.objects.select_related('user', 'user__user').all()
 
-    q    = request.GET.get('q', '')
-    plan = request.GET.get('plan', '')
-    date = request.GET.get('date', '')
+    q    = request.GET.get('q', '').strip()
+    plan = request.GET.get('plan', '').strip()
+    role = request.GET.get('role', '').strip()
+    date = request.GET.get('date', '').strip()
 
     if q:
-        qs = qs.filter(Q(user__user__name__icontains=q) | Q(user__user__contact__icontains=q))
+        buyer_qs = buyer_qs.filter(Q(user__user__name__icontains=q) | Q(user__user__contact__icontains=q))
+        farmer_qs = farmer_qs.filter(Q(user__user__name__icontains=q) | Q(user__user__contact__icontains=q))
     if plan:
-        qs = qs.filter(plan=plan)
+        buyer_qs = buyer_qs.filter(plan=plan)
+        farmer_qs = farmer_qs.filter(plan=plan)
     if date:
-        qs = qs.filter(start_date__date=date)
+        buyer_qs = buyer_qs.filter(start_date__date=date)
+        farmer_qs = farmer_qs.filter(start_date__date=date)
 
-    total_revenue = qs.aggregate(s=Sum('price'))['s'] or 0
+    combined_list = []
+    if role != 'Farmer':
+        for b in buyer_qs:
+            b.user_role = 'Buyer'
+            combined_list.append(b)
+
+    if role != 'Buyer':
+        for f in farmer_qs:
+            f.user_role = 'Farmer'
+            combined_list.append(f)
+
+    combined_list.sort(key=lambda x: x.start_date, reverse=True)
+    total_revenue = sum(t.price or 0 for t in combined_list)
 
     context = {
         'admin_user': request.admin_user,
-        'transactions': qs,
-        'q': q, 'plan': plan, 'date': date,
-        'total': qs.count(),
+        'transactions': combined_list,
+        'q': q, 'plan': plan, 'role': role, 'date': date,
+        'total': len(combined_list),
         'total_revenue': int(total_revenue),
     }
     return render(request, 'subadmin/transactions.html', context)
@@ -1210,28 +1269,57 @@ def export_premium_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="premium_users.csv"'
     writer = csv.writer(response)
-    writer.writerow(['Buyer', 'Contact', 'Plan', 'Billing', 'Purchase Date'])
+    writer.writerow(['Role', 'Name', 'Contact', 'Plan', 'Billing', 'Purchase Date'])
+
     for p in premium_buyer.objects.select_related('user', 'user__user').all():
         writer.writerow([
+            'Buyer',
             p.user.user.name, p.user.user.contact,
             p.premium_type, p.premium_time,
             p.purchase_date.strftime('%Y-%m-%d'),
         ])
+
+    from farmer.models import premium_buyer as farmer_premium_buyer
+    for f in farmer_premium_buyer.objects.select_related('user', 'user__user').all():
+        if f.premium_type != 'Free':
+            writer.writerow([
+                'Farmer',
+                f.user.user.name, f.user.user.contact,
+                f.premium_type, f.premium_time,
+                f.purchase_date.strftime('%Y-%m-%d'),
+            ])
+
     return response
 
 
 @check_subadmin
 def export_transactions_csv(request):
+    from farmer.models import farmer_premium_history
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
     writer = csv.writer(response)
-    writer.writerow(['Buyer', 'Contact', 'Plan', 'Billing', 'Price', 'Coupon', 'Date'])
-    for t in premium_history.objects.select_related('user', 'user__user').all():
+    writer.writerow(['Role', 'Name', 'Contact', 'Plan', 'Billing', 'Price', 'Coupon', 'Date'])
+
+    buyer_txs = list(premium_history.objects.select_related('user', 'user__user').all())
+    farmer_txs = list(farmer_premium_history.objects.select_related('user', 'user__user').all())
+
+    all_txs = []
+    for b in buyer_txs:
+        b.user_role = 'Buyer'
+        all_txs.append(b)
+    for f in farmer_txs:
+        f.user_role = 'Farmer'
+        all_txs.append(f)
+
+    all_txs.sort(key=lambda x: x.start_date, reverse=True)
+
+    for t in all_txs:
         writer.writerow([
+            t.user_role,
             t.user.user.name, t.user.user.contact,
             t.plan, t.billing_cycle, t.price,
             t.coupon_code or '—',
-            t.start_date.strftime('%Y-%m-%d'),
+            t.start_date.strftime('%Y-%m-%d %H:%M'),
         ])
     return response
 

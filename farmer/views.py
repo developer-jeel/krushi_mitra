@@ -1101,6 +1101,21 @@ def farmer_premium_checkout(request):
 
         update_farmer_limit(farmer, plan)
 
+        try:
+            price_val = int(float(total))
+        except (ValueError, TypeError):
+            price_val = 0
+
+        farmer_his = farmer_premium_history.objects.create(
+            user=farmer,
+            plan=plan,
+            billing_cycle=billing_cycle,
+            payment_method=payment_method,
+            price=price_val,
+            coupon_code=coupon_code,
+            start_date=timezone.now()
+        )
+
         messages.success(
             request,
             f"Congratulations! You are now subscribed to the {plan} Plan ({billing_cycle}). Your selling limit has been updated."

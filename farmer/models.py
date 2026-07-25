@@ -371,3 +371,16 @@ class farmer_selling_limit(models.Model):
 
     def __str__(self):
         return f"{self.user.username} used :{self.total_sell_kg} of {self.sellilimit}"
+
+
+class farmer_premium_history(models.Model):
+    user = models.ForeignKey(Farmer, on_delete=models.CASCADE, related_name='premium_farmer_history')
+    plan = models.CharField(max_length=20)
+    billing_cycle = models.CharField(max_length=20)
+    payment_method = models.CharField(max_length=20)
+    price = models.IntegerField()
+    coupon_code = models.CharField(max_length=20, blank=True, null=True)
+    start_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.user.user.username} buys {self.plan} in {self.billing_cycle} way at {self.price}"

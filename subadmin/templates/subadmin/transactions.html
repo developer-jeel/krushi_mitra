@@ -25,16 +25,26 @@
 
 <!-- Filters -->
 <form method="GET" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
-  <input type="text" name="q" value="{{ q }}" placeholder="Search buyer name or contact…" style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
+  <input type="text" name="q" value="{{ q }}" placeholder="Search name or contact…" style="flex:1;min-width:200px;background:var(--white);border:1px solid var(--gray-200);
     border-radius:10px;padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
+  
+  <select name="role" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
+    padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
+    <option value="">All Roles</option>
+    <option value="Buyer" {% if role == 'Buyer' %}selected{% endif %}>Buyer</option>
+    <option value="Farmer" {% if role == 'Farmer' %}selected{% endif %}>Farmer</option>
+  </select>
+
   <select name="plan" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
     padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;">
     <option value="">All Plans</option>
     <option value="Standard" {% if plan == 'Standard' %}selected{% endif %}>Standard</option>
     <option value="Premium" {% if plan == 'Premium' %}selected{% endif %}>Premium</option>
   </select>
+  
   <input type="date" name="date" value="{{ date }}" style="background:var(--white);border:1px solid var(--gray-200);border-radius:10px;
     padding:10px 14px;color:var(--gray-800);font-family:Inter,sans-serif;outline:none;" />
+  
   <button type="submit" class="btn btn-primary" style="padding:10px 20px;">
     <i class="fa-solid fa-search"></i> Filter
   </button>
@@ -58,7 +68,8 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Buyer</th>
+        <th>User</th>
+        <th>Role</th>
         <th>Plan</th>
         <th>Billing</th>
         <th>Amount</th>
@@ -74,7 +85,7 @@
         <td>
           <div style="display:flex;align-items:center;gap:10px;">
             <div
-              style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#2563eb);
+              style="width:32px;height:32px;border-radius:50%;background:{% if t.user_role == 'Farmer' %}linear-gradient(135deg,#16a34a,#15803d){% else %}linear-gradient(135deg,#60a5fa,#2563eb){% endif %};
               display:flex;align-items:center;justify-content:center;color:var(--white);font-weight:700;font-size:13px;flex-shrink:0;">
               {{ t.user.user.name|make_list|first|upper }}
             </div>
@@ -83,6 +94,13 @@
               <div style="font-size:11px;color:#94a3b8;">{{ t.user.user.contact }}</div>
             </div>
           </div>
+        </td>
+        <td>
+          {% if t.user_role == 'Farmer' %}
+          <span style="background:rgba(34,197,94,0.15);color:#16a34a;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;">🌾 Farmer</span>
+          {% else %}
+          <span style="background:rgba(59,130,246,0.15);color:#2563eb;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;">🛒 Buyer</span>
+          {% endif %}
         </td>
         <td>
           {% if t.plan == 'Premium' %}
@@ -105,11 +123,11 @@
           <span style="color:#94a3b8;font-size:12px;">—</span>
           {% endif %}
         </td>
-        <td style="font-size:12px;color:#94a3b8;">{{ t.start_date|date:"M d, Y" }}</td>
+        <td style="font-size:12px;color:#94a3b8;">{{ t.start_date|date:"M d, Y H:i" }}</td>
       </tr>
       {% empty %}
       <tr>
-        <td colspan="8" style="text-align:center;color:#94a3b8;padding:48px;">
+        <td colspan="9" style="text-align:center;color:#94a3b8;padding:48px;">
           <div style="font-size:40px;margin-bottom:12px;">📭</div>
           No transactions found.
         </td>

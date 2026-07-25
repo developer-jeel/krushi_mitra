@@ -149,7 +149,7 @@
               <input type="number" id="cropQty" placeholder="e.g. 200" min="1" name="quantity" required />
             </div>
             <div class="form-field">
-              <label for="cropPrice"><i class="fa-solid fa-indian-rupee-sign" style="margin-right:5px;"></i> Price per kg (₹) <span style="color:#ef4444;">*</span></label>
+              <label for="cropPrice"><i class="fa-solid fa-indian-rupee-sign" style="margin-right:5px;"></i> Price per 20kg (₹) <span style="color:#ef4444;">*</span></label>
               <input type="number" id="cropPrice" placeholder="e.g. 45" min="1" name="price" required />
             </div>
           </div>
@@ -236,7 +236,7 @@
               <span><i class="fa-solid fa-weight-scale"></i> {{ c.quantity }} kg</span>
             </div>
             <div class="card-price-row">
-              <div class="card-price">₹{{ c.price }} <span class="unit">/ kg</span></div>
+              <div class="card-price">₹{{ c.price }} <span class="unit">/ 20 kg</span></div>
             </div>
             <div class="card-actions" style="margin-top:12px;">
               <button class="btn btn-secondary" onclick="openEditModal({{ c.id }}, '{{ c.cropname }}', '{{ c.category }}', {{ c.quantity }}, {{ c.price }}, '{{ c.description|default:''|escapejs }}')">
@@ -290,7 +290,7 @@
             <input type="number" name="quantity" id="editCropQty" min="1" required />
           </div>
           <div class="form-field">
-            <label>Price per kg (₹) *</label>
+            <label>Price per 20kg (₹) *</label>
             <input type="number" name="price" id="editCropPrice" min="1" required />
           </div>
         </div>

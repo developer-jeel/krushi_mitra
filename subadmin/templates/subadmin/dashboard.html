@@ -220,7 +220,7 @@
   </div>
 </div>
 
-<!-- Charts -->
+<!-- Charts Row 1: Orders + Crops -->
 <div class="chart-row">
   <div class="chart-box">
     <h3><i class="fa-solid fa-chart-bar" style="color:#22c55e;margin-right:8px;"></i>Monthly Orders (Last 12 Months)
@@ -231,6 +231,50 @@
     <h3><i class="fa-solid fa-chart-pie" style="color:#60a5fa;margin-right:8px;"></i>Crop Categories</h3>
     <canvas id="cropChart" height="180"></canvas>
   </div>
+</div>
+
+<!-- Premium Subscription Summary KPIs -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+  <div class="stat-card">
+    <div class="stat-icon" style="background:rgba(245,158,11,.15);color:#f59e0b;"><i class="fa-solid fa-crown"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" style="color:#f59e0b;">{{ total_premium_buyers }}</div>
+      <div class="stat-label">Premium Buyer Subscriptions</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:rgba(34,197,94,.15);color:#16a34a;"><i class="fa-solid fa-wheat-awn"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" style="color:#16a34a;">{{ total_premium_farmers }}</div>
+      <div class="stat-label">Premium Farmer Subscriptions</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:rgba(167,139,250,.15);color:#a78bfa;"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+    <div class="stat-info">
+      <div class="stat-value" style="color:#a78bfa;">₹{{ total_premium_revenue }}</div>
+      <div class="stat-label">Total Premium Revenue</div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row 2: Premium Subscriptions Line Chart -->
+<div class="chart-box" style="margin-bottom:24px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <h3 style="margin:0;"><i class="fa-solid fa-chart-line" style="color:#a78bfa;margin-right:8px;"></i>Monthly Premium Subscriptions (Last 12 Months)</h3>
+    <div style="display:flex;align-items:center;gap:16px;font-size:13px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;">
+        <span style="width:12px;height:12px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>
+        Buyer Subs
+      </span>
+      <span style="display:inline-flex;align-items:center;gap:6px;">
+        <span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block;"></span>
+        Farmer Subs
+      </span>
+      <a href="{% url 'subadmin:transactions' %}" class="btn btn-secondary btn-sm">View All</a>
+    </div>
+  </div>
+  <canvas id="premiumSubsChart" height="80"></canvas>
 </div>
 
 
@@ -310,9 +354,11 @@
 
 {% block extra_js %}
 <script>
-  const labels = {{ monthly_labels| safe }};
-  const orderData = {{ monthly_order_data| safe }};
-  const cropData = {{ crop_categories| safe }};
+  const labels        = {{ monthly_labels|safe }};
+  const orderData     = {{ monthly_order_data|safe }};
+  const cropData      = {{ crop_categories|safe }};
+  const buyerSubData  = {{ monthly_buyer_subs|safe }};
+  const farmerSubData = {{ monthly_farmer_subs|safe }};
 
   // Orders Bar Chart
   new Chart(document.getElementById('ordersChart'), {
@@ -330,13 +376,13 @@
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
-        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,.06)' } },
+        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(0,0,0,.05)' } },
         x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
       }
     }
   });
 
-  // Crop Pie Chart
+  // Crop Doughnut Chart
   if (cropData.length) {
     new Chart(document.getElementById('cropChart'), {
       type: 'doughnut',
@@ -356,5 +402,68 @@
       }
     });
   }
+
+  // ── Premium Subscriptions Line Chart ──────────────────────────────────────
+  new Chart(document.getElementById('premiumSubsChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Buyer Subscriptions',
+          data: buyerSubData,
+          borderColor: '#f59e0b',
+          backgroundColor: 'rgba(245,158,11,0.10)',
+          pointBackgroundColor: '#f59e0b',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 2.5,
+          tension: 0.4,
+          fill: true,
+        },
+        {
+          label: 'Farmer Subscriptions',
+          data: farmerSubData,
+          borderColor: '#22c55e',
+          backgroundColor: 'rgba(34,197,94,0.10)',
+          pointBackgroundColor: '#22c55e',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 2.5,
+          tension: 0.4,
+          fill: true,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: false  // We use our custom legend above
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y} subscriptions`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#94a3b8', precision: 0 },
+          grid: { color: 'rgba(0,0,0,.05)' }
+        },
+        x: {
+          ticks: { color: '#94a3b8' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
 </script>
 {% endblock %}
