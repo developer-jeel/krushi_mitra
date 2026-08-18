@@ -52,4 +52,10 @@ urlpatterns = [
     path('premium/', views.buyer_premium, name='buyer_premium'),
     path('premium_checkout/', views.premium_checkout, name='premium_checkout'),
     path('current_plan/', views.current_plan, name='current_plan'),
+    path('voice-assistant/', views.buyer_voice_assistant, name='buyer_voice_assistant'),
+    path('elevenlabs/config/', views.buyer_elevenlabs_config, name='buyer_elevenlabs_config'),
+    path('elevenlabs/signed-url/', views.buyer_elevenlabs_signed_url, name='buyer_elevenlabs_signed_url'),
+    path('elevenlabs/tts/', views.buyer_elevenlabs_tts, name='buyer_elevenlabs_tts'),
 ]
+
+

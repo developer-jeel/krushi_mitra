@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Voice Assistant - Krushi Mitra Buyer Panel</title>
+  <meta name="description" content="Talk to Krushi Mitra AI Voice Assistant for crop sourcing, Mandi prices, bulk procurement and buyer support.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'buyer/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'buyer/css/voice-assistant.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="sidebar-backdrop"></div>
+  <div class="toast-container"></div>
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">K</div>
+          <div>
+            <div class="sidebar-logo-text">Krushi Mitra</div>
+            <span class="sidebar-logo-sub">Buyer Panel</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" aria-label="Toggle sidebar"><i class="fa-solid fa-chevron-left"></i></button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="{% url 'buyer_dashboard' %}" class="sidebar-item" data-tooltip="Dashboard">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-chart-simple"></i></span>
+          <span class="sidebar-item-text">Dashboard</span>
+        </a>
+        <a href="{% url 'buyer_browse_crops' %}" class="sidebar-item" data-tooltip="Browse Crops">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-wheat-awn"></i></span>
+          <span class="sidebar-item-text">Browse Crops</span>
+        </a>
+        <a href="{% url 'buyer_cart' %}" class="sidebar-item" data-tooltip="Cart">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+          <span class="sidebar-item-text">Cart</span>
+        </a>
+        <a href="{% url 'buyer_orders' %}" class="sidebar-item" data-tooltip="Orders">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-box"></i></span>
+          <span class="sidebar-item-text">Orders</span>
+        </a>
+        <a href="{% url 'buyer_wishlist' %}" class="sidebar-item" data-tooltip="Wishlist">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-heart"></i></span>
+          <span class="sidebar-item-text">Wishlist</span>
+        </a>
+        <div class="sidebar-section-label">Procurement</div>
+        {% if buyr.is_premiume %}
+        <a href="{% url 'buyer_bulk_order' %}" class="sidebar-item" data-tooltip="Bulk Orders">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+          <span class="sidebar-item-text">Bulk Orders</span>
+        </a>
+        {% if premium_type.premium_type == 'Premium' %}
+        <a href="{% url 'buyer_export_inquiry' %}" class="sidebar-item">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-earth-americas"></i></span>
+          <span class="sidebar-item-text">Export Inquiry</span>
+        </a>
+        {% else %}
+        <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
+          <span class="sidebar-item-text">Export Inquiry (Premium)</span>
+        </a>
+        {% endif %}
+        {% else %}
+        <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
+          <span class="sidebar-item-text">Bulk Orders (Upgrade)</span>
+        </a>
+        <a href="{% url 'buyer_premium' %}" class="sidebar-item disabled-link">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-lock"></i></span>
+          <span class="sidebar-item-text">Export Inquiry (Upgrade)</span>
+        </a>
+        {% endif %}
+        <div class="sidebar-section-label">Communication</div>
+        <a href="{% url 'buyer_messages' %}" class="sidebar-item" data-tooltip="Messages">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-message"></i></span>
+          <span class="sidebar-item-text">Messages</span>
+        </a>
+        <a href="{% url 'buyer_notifications' %}" class="sidebar-item" data-tooltip="Notifications">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-bell"></i></span>
+          <span class="sidebar-item-text">Notifications</span>
+        </a>
+        <a href="{% url 'buyer_voice_assistant' %}" class="sidebar-item active" data-tooltip="Voice Assistant">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-microphone"></i></span>
+          <span class="sidebar-item-text">Voice Assistant</span>
+          <span class="sidebar-item-badge" style="background:var(--primary-500);color:#fff;font-size:0.6rem;padding:2px 6px;">AI</span>
+        </a>
+        <div class="sidebar-section-label">Account</div>
+        <a href="{% url 'buyer_profile' %}" class="sidebar-item" data-tooltip="Profile">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-user"></i></span>
+          <span class="sidebar-item-text">Profile</span>
+        </a>
+        <a href="{% url 'buyer_verification' %}" class="sidebar-item" data-tooltip="Verification">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-circle-check"></i></span>
+          <span class="sidebar-item-text">Verification</span>
+        </a>
+        <a href="{% url 'buyer_bank_details' %}" class="sidebar-item" data-tooltip="Bank Details">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-building-columns"></i></span>
+          <span class="sidebar-item-text">Bank Details</span>
+        </a>
+        <a href="{% url 'buyer_settings' %}" class="sidebar-item" data-tooltip="Settings">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-gear"></i></span>
+          <span class="sidebar-item-text">Settings</span>
+        </a>
+        <div class="sidebar-section-label" style="padding-top:12px;border-top:1px solid var(--border-color);margin-top:8px;">Support</div>
+        <a href="#" class="sidebar-item" onclick="showToast('info','Logout','Logging you out...')" data-tooltip="Logout">
+          <span class="sidebar-item-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+          <span class="sidebar-item-text">Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+      <!-- NAVBAR -->
+      <header class="navbar">
+        <div class="navbar-left">
+          <button class="mobile-menu-btn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+          <div>
+            <div class="breadcrumb">
+              <a href="{% url 'buyer_dashboard' %}">Home</a>
+              <span class="breadcrumb-sep">&rsaquo;</span>
+              <span class="current">Voice Assistant</span>
+            </div>
+            <h1 class="page-title">Buyer Voice Assistant</h1>
+          </div>
+        </div>
+        <div class="navbar-right">
+          <form action="{% url 'buyer_browse_crops' %}" method="GET" style="display:inline;">
+            <div class="search-box" data-search-target>
+              <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <input type="text" name="q" placeholder="Search crops, orders..." aria-label="Search">
+            </div>
+          </form>
+          <a href="{% url 'buyer_messages' %}" class="nav-btn" title="Messages">
+            <i class="fa-solid fa-message"></i>
+            <span class="badge-dot"></span>
+          </a>
+          <a href="{% url 'buyer_notifications' %}" class="nav-btn" title="Notifications">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge-dot"></span>
+          </a>
+          <button class="theme-toggle" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+          <div class="dropdown">
+            <div class="profile-btn dropdown-trigger">
+              <div class="profile-avatar">{{ buyr.user.name|make_list|first|upper }}</div>
+              <div>
+                <div class="profile-name">{{ buyr.user.name }}</div>
+                <div class="profile-role">{{ buyr.business_type|default:"Buyer" }}</div>
+              </div>
+            </div>
+            <div class="dropdown-menu">
+              <a href="{% url 'buyer_profile' %}" class="dropdown-item"><i class="fa-solid fa-user"></i> My Profile</a>
+              <a href="{% url 'buyer_premium' %}" class="dropdown-item"><i class="fa-solid fa-crown"></i> Premium</a>
+              <a href="{% url 'buyer_orders' %}" class="dropdown-item"><i class="fa-solid fa-box"></i> My Orders</a>
+              <a href="{% url 'buyer_settings' %}" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item danger" onclick="showToast('info','Logout','Logging you out...')">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content va-page">
+
+        <!-- PAGE HEADER -->
+        <div class="va-page-header">
+          <div class="va-page-header-left">
+            <p class="va-page-subtitle">Talk to Krushi Mitra AI for sourcing, orders, Mandi prices and buyer support.</p>
+          </div>
+          <div class="va-page-header-right">
+            <div class="va-status-badge" id="globalStatusBadge">
+              <span class="va-status-dot" id="globalStatusDot"></span>
+              <span id="globalStatusText">AI Assistant Online</span>
+            </div>
+            <div class="va-available-text">
+              <i class="fa-solid fa-clock"></i> Available 24/7
+            </div>
+          </div>
+        </div>
+
+        <!-- FARMER GUARDRAIL -->
+        <div class="va-guardrail-card" id="farmerGuardrail" style="display:none;" role="alert">
+          <div class="va-guardrail-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div class="va-guardrail-content">
+            <div class="va-guardrail-title">Farmer Service Detected</div>
+            <div class="va-guardrail-msg">This voice assistant is dedicated to Krushi Mitra buyers. Farmer services are on the Farmer Panel.</div>
+          </div>
+          <div class="va-guardrail-actions">
+            <button class="btn btn-sm btn-ghost" onclick="document.getElementById('farmerGuardrail').style.display='none'">Dismiss</button>
+          </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="va-main-grid">
+
+          <!-- LEFT COLUMN -->
+          <div class="va-left-col">
+
+            <!-- MAIN VOICE CARD -->
+            <div class="va-main-card" id="voiceMainCard">
+              <div class="va-card-header">
+                <div class="va-card-header-left">
+                  <div class="va-brand-mark">KM</div>
+                  <div>
+                    <div class="va-card-title">Krushi Mitra AI</div>
+                    <div class="va-card-badge">BUYER ASSISTANT</div>
+                  </div>
+                </div>
+                <div class="va-card-header-right">
+                  <button class="va-icon-btn" id="settingsBtn" title="Voice Settings" aria-label="Open voice settings">
+                    <i class="fa-solid fa-sliders"></i>
+                  </button>
+                  <div class="va-secure-badge">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>Secure</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ORB AREA -->
+              <div class="va-orb-area">
+
+                <!-- IDLE STATE -->
+                <div class="va-idle-area" id="idleArea">
+                  <div class="va-orb-wrap" id="voiceOrb">
+                    <div class="va-orb-glow"></div>
+                    <div class="va-orb-ring va-orb-ring-1"></div>
+                    <div class="va-orb-ring va-orb-ring-2"></div>
+                    <div class="va-orb-ring va-orb-ring-3"></div>
+                    <div class="va-orb-glass">
+                      <div class="va-orb-inner">
+                        <div class="va-orb-icon"><i class="fa-solid fa-microphone"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="va-state-text" id="stateText">Ready to help</div>
+                  <div class="va-state-subtext" id="stateSubtext">Tap the microphone to start a voice session</div>
+
+                  <!-- MIC ERROR -->
+                  <div class="va-error-block" id="micPermError" style="display:none;">
+                    <i class="fa-solid fa-microphone-slash va-error-icon"></i>
+                    <div class="va-error-title">Microphone access required</div>
+                    <div class="va-error-msg">Please allow microphone access in your browser.</div>
+                    <button class="btn btn-sm btn-primary" id="retryMicBtn">Try Again</button>
+                  </div>
+
+                  <!-- CONN ERROR -->
+                  <div class="va-error-block" id="connError" style="display:none;">
+                    <i class="fa-solid fa-wifi va-error-icon" style="color:var(--amber-500)"></i>
+                    <div class="va-error-title">Connection interrupted</div>
+                    <div class="va-error-msg">We could not maintain the voice session.</div>
+                    <button class="btn btn-sm btn-primary" id="reconnectBtn">Reconnect</button>
+                  </div>
+
+                  <!-- START BUTTON -->
+                  <button class="va-start-btn" id="startCallBtn" aria-label="Start voice call">
+                    <span class="va-start-btn-ripple"></span>
+                    <i class="fa-solid fa-microphone"></i>
+                    Start Voice Call
+                  </button>
+
+                  <!-- CONNECTING -->
+                  <div class="va-connecting" id="connectingArea" style="display:none;">
+                    <div class="va-spinner"></div>
+                    <span>Starting secure voice session...</span>
+                  </div>
+                </div>
+
+                <!-- ACTIVE CALL STATE -->
+                <div class="va-active-area" id="activeArea" style="display:none;">
+                  <div class="va-waveform-wrap">
+                    <div class="va-waveform" id="waveform" aria-label="Voice activity waveform" role="img"></div>
+                  </div>
+                  <div class="va-live-status" id="liveStatus">
+                    <span class="va-live-dot"></span>
+                    <span id="liveStatusText">Connected</span>
+                    <span class="va-status-sep">&middot;</span>
+                    <span class="va-timer" id="callTimer" aria-live="off">00:00</span>
+                  </div>
+                  <div class="va-controls" id="callControls">
+                    <div class="va-controls-row">
+                      <button class="va-ctrl-btn" id="muteBtn" aria-label="Mute microphone" aria-pressed="false">
+                        <div class="va-ctrl-icon"><i class="fa-solid fa-microphone"></i></div>
+                        <div class="va-ctrl-label">Mute</div>
+                      </button>
+                      <button class="va-ctrl-btn va-ctrl-end" id="endCallBtn" aria-label="End call">
+                        <div class="va-ctrl-icon"><i class="fa-solid fa-phone-slash"></i></div>
+                        <div class="va-ctrl-label">End Call</div>
+                      </button>
+                      <button class="va-ctrl-btn" id="speakerBtn" aria-label="Toggle speaker" aria-pressed="false">
+                        <div class="va-ctrl-icon"><i class="fa-solid fa-volume-high"></i></div>
+                        <div class="va-ctrl-label">Speaker</div>
+                      </button>
+                    </div>
+                    <div class="va-controls-row-2">
+                      <button class="va-ctrl-more" id="moreActionsBtn" aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis"></i>
+                        <span>More</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="va-more-menu" id="moreMenu" style="display:none;" role="menu">
+                    <button class="va-more-item" id="viewTranscriptBtn" role="menuitem"><i class="fa-solid fa-scroll"></i> View Transcript</button>
+                    <button class="va-more-item" role="menuitem"><i class="fa-solid fa-flag"></i> Report Issue</button>
+                    <button class="va-more-item" id="moreSettingsBtn" role="menuitem"><i class="fa-solid fa-sliders"></i> Voice Settings</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CALL SUMMARY -->
+              <div class="va-call-summary" id="callSummary" style="display:none;">
+                <div class="va-summary-header">
+                  <i class="fa-solid fa-clipboard-check"></i>
+                  <span>Conversation Summary</span>
+                </div>
+                <div class="va-summary-grid" id="summaryGrid"></div>
+                <div class="va-summary-actions">
+                  <button class="btn btn-sm btn-outline" id="viewFullTranscriptBtn">
+                    <i class="fa-solid fa-scroll"></i> View Transcript
+                  </button>
+                  <a href="{% url 'buyer_dashboard' %}" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-arrow-right"></i> Go to Dashboard
+                  </a>
+                </div>
+                <button class="va-new-call-btn" id="newCallBtn">
+                  <i class="fa-solid fa-microphone"></i> Start New Call
+                </button>
+              </div>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="va-section">
+              <div class="va-section-header">
+                <div class="va-section-title">What can I help you with?</div>
+                <div class="va-section-subtitle">Tap to instantly start a conversation on any topic</div>
+              </div>
+              <div class="va-quick-grid" id="quickActionsGrid">
+                <button class="va-quick-card" data-action="find-crops">
+                  <div class="va-quick-icon">&#x1F33E;</div>
+                  <div class="va-quick-label">Find Crops</div>
+                  <div class="va-quick-desc">Available crop listings</div>
+                </button>
+                <button class="va-quick-card" data-action="mandi-prices">
+                  <div class="va-quick-icon">&#x1F4CA;</div>
+                  <div class="va-quick-label">Mandi Prices</div>
+                  <div class="va-quick-desc">Today's market rates</div>
+                </button>
+                <button class="va-quick-card" data-action="bulk-procurement">
+                  <div class="va-quick-icon">&#x1F4E6;</div>
+                  <div class="va-quick-label">Bulk Procurement</div>
+                  <div class="va-quick-desc">Create a bulk request</div>
+                </button>
+                <button class="va-quick-card" data-action="order-status">
+                  <div class="va-quick-icon">&#x1F69A;</div>
+                  <div class="va-quick-label">Order Status</div>
+                  <div class="va-quick-desc">Track your orders</div>
+                </button>
+                <button class="va-quick-card" data-action="kyc-status">
+                  <div class="va-quick-icon">&#x1F6E1;</div>
+                  <div class="va-quick-label">KYC Status</div>
+                  <div class="va-quick-desc">Check verification</div>
+                </button>
+                <button class="va-quick-card" data-action="export-inquiry">
+                  <div class="va-quick-icon">&#x1F30D;</div>
+                  <div class="va-quick-label">Export Inquiry</div>
+                  <div class="va-quick-desc">International exports</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- CAPABILITIES -->
+            <div class="va-section">
+              <div class="va-section-header">
+                <div class="va-section-title">Your AI Buyer Assistant Can Help With</div>
+              </div>
+              <div class="va-capabilities-grid">
+                <div class="va-cap-card">
+                  <div class="va-cap-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+                  <div class="va-cap-title">Procurement</div>
+                  <ul class="va-cap-list">
+                    <li>Find crops by name, grade &amp; quality</li>
+                    <li>Filter by quantity &amp; price range</li>
+                    <li>Locate sellers by district &amp; state</li>
+                  </ul>
+                </div>
+                <div class="va-cap-card">
+                  <div class="va-cap-icon"><i class="fa-solid fa-chart-line"></i></div>
+                  <div class="va-cap-title">Market Intelligence</div>
+                  <ul class="va-cap-list">
+                    <li>APMC Mandi daily rates</li>
+                    <li>Price comparisons across markets</li>
+                    <li>7-day price trend insights</li>
+                  </ul>
+                </div>
+                <div class="va-cap-card">
+                  <div class="va-cap-icon"><i class="fa-solid fa-box"></i></div>
+                  <div class="va-cap-title">Orders</div>
+                  <ul class="va-cap-list">
+                    <li>Real-time order status tracking</li>
+                    <li>Delivery schedule information</li>
+                    <li>Payment settlement updates</li>
+                  </ul>
+                </div>
+                <div class="va-cap-card">
+                  <div class="va-cap-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                  <div class="va-cap-title">KYC &amp; Account</div>
+                  <ul class="va-cap-list">
+                    <li>KYC verification status</li>
+                    <li>Document requirements guide</li>
+                    <li>Account approval timeline</li>
+                  </ul>
+                </div>
+                <div class="va-cap-card">
+                  <div class="va-cap-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                  <div class="va-cap-title">Bulk Buying</div>
+                  <ul class="va-cap-list">
+                    <li>Create bulk procurement requests</li>
+                    <li>Set target price &amp; quantity</li>
+                    <li>Multi-ton sourcing support</li>
+                  </ul>
+                </div>
+                <div class="va-cap-card">
+                  <div class="va-cap-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                  <div class="va-cap-title">Export</div>
+                  <ul class="va-cap-list">
+                    <li>International export inquiries</li>
+                    <li>Quality standard guidance</li>
+                    <li>Destination &amp; port details</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /va-left-col -->
+
+          <!-- RIGHT COLUMN -->
+          <div class="va-right-col">
+
+            <!-- LIVE TRANSCRIPT -->
+            <div class="va-transcript-card" id="transcriptCard">
+              <div class="va-transcript-header">
+                <div class="va-transcript-title">
+                  <i class="fa-solid fa-scroll"></i>
+                  Live Conversation
+                </div>
+                <div class="va-transcript-live" id="transcriptLiveBadge" style="display:none;">
+                  <span class="va-transcript-live-dot"></span>
+                  Live
+                </div>
+              </div>
+              <div class="va-transcript-body" id="transcriptBody">
+                <div class="va-transcript-empty" id="transcriptEmpty">
+                  <div class="va-transcript-empty-icon"><i class="fa-solid fa-comments"></i></div>
+                  <div class="va-transcript-empty-title">No active conversation</div>
+                  <div class="va-transcript-empty-msg">Start a voice call to see the live transcript here.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RECENT CALLS -->
+            <div class="va-recent-card">
+              <div class="va-recent-header">
+                <div class="va-recent-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Conversations</div>
+              </div>
+              <div class="va-recent-list" id="recentCallsList">
+                <div class="va-recent-item">
+                  <div class="va-recent-item-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                  <div class="va-recent-item-body">
+                    <div class="va-recent-item-title">Bulk Procurement</div>
+                    <div class="va-recent-item-desc">300 Quintals Soybean</div>
+                    <div class="va-recent-item-meta">
+                      <span><i class="fa-regular fa-calendar"></i> Today</span>
+                      <span><i class="fa-regular fa-clock"></i> 04:32</span>
+                    </div>
+                  </div>
+                  <div class="va-recent-item-right">
+                    <span class="va-badge va-badge-success">Completed</span>
+                  </div>
+                </div>
+                <div class="va-recent-item">
+                  <div class="va-recent-item-icon"><i class="fa-solid fa-chart-line"></i></div>
+                  <div class="va-recent-item-body">
+                    <div class="va-recent-item-title">Mandi Price Inquiry</div>
+                    <div class="va-recent-item-desc">Groundnut &middot; Rajkot</div>
+                    <div class="va-recent-item-meta">
+                      <span><i class="fa-regular fa-calendar"></i> Yesterday</span>
+                      <span><i class="fa-regular fa-clock"></i> 02:18</span>
+                    </div>
+                  </div>
+                  <div class="va-recent-item-right">
+                    <span class="va-badge va-badge-success">Completed</span>
+                  </div>
+                </div>
+                <div class="va-recent-item">
+                  <div class="va-recent-item-icon"><i class="fa-solid fa-truck"></i></div>
+                  <div class="va-recent-item-body">
+                    <div class="va-recent-item-title">Order Tracking</div>
+                    <div class="va-recent-item-desc">ORD-2026-0105</div>
+                    <div class="va-recent-item-meta">
+                      <span><i class="fa-regular fa-calendar"></i> Yesterday</span>
+                      <span><i class="fa-regular fa-clock"></i> 01:12</span>
+                    </div>
+                  </div>
+                  <div class="va-recent-item-right">
+                    <span class="va-badge va-badge-success">Completed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /va-right-col -->
+        </div><!-- /va-main-grid -->
+
+      </main>
+    </div><!-- /main-wrapper -->
+  </div><!-- /app-layout -->
+
+  <!-- END CALL MODAL -->
+  <div class="va-modal-overlay" id="endCallModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="endCallTitle">
+    <div class="va-modal">
+      <div class="va-modal-icon va-modal-icon-warn"><i class="fa-solid fa-phone-slash"></i></div>
+      <h3 class="va-modal-title" id="endCallTitle">End this call?</h3>
+      <p class="va-modal-msg">Your conversation will be saved to recent calls.</p>
+      <div class="va-modal-actions">
+        <button class="btn btn-outline" id="continueCallBtn">Continue Call</button>
+        <button class="btn btn-danger" id="confirmEndCallBtn">End Call</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="va-modal-overlay" id="settingsModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="va-modal va-settings-modal">
+      <div class="va-modal-header">
+        <h3 class="va-modal-title" id="settingsTitle"><i class="fa-solid fa-sliders"></i> Voice Settings</h3>
+        <button class="va-modal-close" id="closeSettingsBtn" aria-label="Close settings"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="va-settings-body">
+        <div class="va-setting-group" style="background:var(--primary-50);padding:14px;border-radius:var(--radius-md);border:1px solid var(--primary-200);">
+          <div style="display:flex;align-items:center;gap:8px;font-weight:700;color:var(--primary-700);margin-bottom:8px;font-size:0.875rem;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> ElevenLabs Agent Engine
+          </div>
+          <label class="va-setting-label" for="elevenlabsAgentId">ElevenLabs Agent ID</label>
+          <input type="text" class="va-setting-select" id="elevenlabsAgentId" placeholder="e.g. agent_abc123xyz" value="{{ elevenlabs_agent_id|default:'' }}">
+          <div class="va-setting-hint" style="margin-top:4px;">Enter your ElevenLabs Conversational AI Agent ID</div>
+
+          <label class="va-setting-label" for="elevenlabsApiKey" style="margin-top:10px;">ElevenLabs API Key (Optional)</label>
+          <input type="password" class="va-setting-select" id="elevenlabsApiKey" placeholder="xi-api-key..." value="">
+          <div class="va-setting-hint" style="margin-top:4px;">Used for private agents & high-quality TTS voice generation</div>
+        </div>
+
+        <div class="va-setting-group">
+          <label class="va-setting-label" for="langSelect">Language</label>
+          <select class="va-setting-select" id="langSelect">
+            <option value="auto">Auto Detect (Multilingual)</option>
+            <option value="hi">Hindi (हिंदी)</option>
+            <option value="en">English (India)</option>
+            <option value="gu">Gujarati (ગુજરાતી)</option>
+            <option value="mr">Marathi (मराठी)</option>
+            <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
+            <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            <option value="bn">Bengali (বাংলা)</option>
+          </select>
+        </div>
+        <div class="va-setting-group">
+          <label class="va-setting-label" for="voiceSelect">ElevenLabs Voice Persona</label>
+          <select class="va-setting-select" id="voiceSelect">
+            <option value="21m00Tcm4TlvDq8ikWAM">Rachel - Friendly AI Assistant</option>
+            <option value="AZnzlk1XvdvUeBnXmlld">Domi - Professional Commercial Voice</option>
+            <option value="EXAVITQu4vr4xnSDxMaL">Bella - Calm Procurement Advisor</option>
+            <option value="ErXwobaYiN019PkySvjV">Antoni - Senior Agri Market Specialist</option>
+          </select>
+        </div>
+        <div class="va-setting-group">
+          <label class="va-setting-label">Speech Speed</label>
+          <div class="va-slider-wrap">
+            <span class="va-slider-label">Slow</span>
+            <input type="range" class="va-slider" id="speedSlider" min="0.5" max="2" step="0.25" value="1" aria-label="Speech speed">
+            <span class="va-slider-label">Fast</span>
+          </div>
+        </div>
+        <div class="va-setting-group">
+          <div class="va-setting-toggle-row">
+            <div>
+              <div class="va-setting-label">ElevenLabs Realtime Streaming</div>
+              <div class="va-setting-hint">Use WebSockets for instant Voice AI response</div>
+            </div>
+            <label class="va-toggle" aria-label="Toggle ElevenLabs Streaming">
+              <input type="checkbox" id="elevenlabsStreamingToggle" checked>
+              <span class="va-toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="va-setting-group">
+          <div class="va-setting-toggle-row">
+            <div>
+              <div class="va-setting-label">Auto Transcript</div>
+              <div class="va-setting-hint">Show live transcript while speaking</div>
+            </div>
+            <label class="va-toggle" aria-label="Toggle auto transcript">
+              <input type="checkbox" id="autoTranscriptToggle" checked>
+              <span class="va-toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="va-setting-group">
+          <div class="va-setting-toggle-row">
+            <div>
+              <div class="va-setting-label">Allow Interruption</div>
+              <div class="va-setting-hint">Interrupt AI while it is speaking</div>
+            </div>
+            <label class="va-toggle" aria-label="Toggle interruption">
+              <input type="checkbox" id="interruptToggle" checked>
+              <span class="va-toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+      <div class="va-settings-footer">
+        <button class="btn btn-primary" style="width:100%;" id="saveSettingsBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'buyer/js/app.js' %}"></script>
+  <script src="{% static 'buyer/js/voice-assistant.js' %}"></script>
+</body>
+</html>

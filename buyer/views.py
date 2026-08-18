@@ -3,13 +3,17 @@ import buyer
 import buyer
 import string , json
 from django.template import context
-from requests import request
 from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.conf import settings
 from farmer.models import *
 from farmer.views import *
 from .models import *
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import make_password, check_password
+import urllib.request
+import json
+
 
 
 # Create your views here.
@@ -216,15 +220,13 @@ def buyer_checkout(request):
     import json
     from decimal import Decimal
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
+    buyr, cart, premium_type = get_buyer_context(uid)
     
     if not buyr.is_verified:
-        messages.error(request, 'Please verify your account to checkout.')
-        return redirect('buyer_cart')
+        messages.error(request, 'Please complete account verification to proceed with checkout.')
+        return redirect('buyer_verification')
         
-    cart = Cart.objects.get(user = uid)
     cart_items = CartItem.objects.filter(cart=cart)
-    premium_type = chek_premium(buyr)
     total_quantity = 0
     quantity_limit = cart.cart_limit
 
@@ -292,8 +294,7 @@ def buyer_checkout(request):
 @check_login(['Buyer'])
 def buyer_orders(request):
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    buyr, cart, premium_type = get_buyer_context(uid)
     order = Order.objects.filter(user = uid)
     items = OrderItem.objects.filter(order__in=order)
     total_order = len(items)
@@ -313,8 +314,7 @@ def buyer_orders(request):
 @check_login(['Buyer'])
 def buyer_order_details(request,pk):
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    buyr, cart, premium_type = get_buyer_context(uid)
     item = OrderItem.objects.get(id=pk)
     context = {'uid':uid,'buyr':buyr,'item':item,'premium_type':premium_type,'buyr':buyr}
     return render(request, "buyer/order-details.html",context)
@@ -322,8 +322,7 @@ def buyer_order_details(request,pk):
 @check_login(['Buyer'])
 def buyer_wishlist(request):    
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    buyr, cart, premium_type = get_buyer_context(uid)
     saved_crops = saved.objects.filter(user=buyr)
     total_saved = len(saved_crops)
     context={'saved_crops':saved_crops,'total_saved':total_saved,'uid':uid,'premium_type':premium_type,'buyr':buyr}
@@ -332,7 +331,7 @@ def buyer_wishlist(request):
 @check_login(['Buyer'])
 def add_wishlist(request,pk): 
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
+    buyr, cart, premium_type = get_buyer_context(uid)
     crop_ = crop.objects.get(id=pk)
     if request.method == 'POST':
         saved_crop = saved.objects.filter(user=buyr)
@@ -782,3 +781,123 @@ def buyer_request_update(request):
         buyr.save()
         messages.success(request, 'Request to enable updates has been submitted successfully!')
     return redirect(request.META.get('HTTP_REFERER', 'buyer_dashboard'))
+
+@check_login(['Buyer'])
+def buyer_voice_assistant(request):
+    uid = request.uid
+    buyr, cart, premium_type = get_buyer_context(uid)
+    elevenlabs_agent_id = getattr(settings, 'ELEVENLABS_AGENT_ID', '')
+    elevenlabs_voice_id = getattr(settings, 'ELEVENLABS_VOICE_ID', '21m00Tcm4TlvDq8ikWAM')
+    has_api_key = bool(getattr(settings, 'ELEVENLABS_API_KEY', ''))
+    return render(request, "buyer/voice_assistant.html", {
+        'buyr': buyr,
+        'cart': cart,
+        'premium_type': premium_type,
+        'elevenlabs_agent_id': elevenlabs_agent_id,
+        'elevenlabs_voice_id': elevenlabs_voice_id,
+        'has_elevenlabs_key': has_api_key
+    })
+
+@check_login(['Buyer'])
+def buyer_elevenlabs_config(request):
+    """Returns or updates ElevenLabs Voice Agent configuration."""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            agent_id = data.get('agent_id', '').strip()
+            api_key = data.get('api_key', '').strip()
+            voice_id = data.get('voice_id', '').strip()
+            if agent_id:
+                request.session['elevenlabs_agent_id'] = agent_id
+            if api_key:
+                request.session['elevenlabs_api_key'] = api_key
+            if voice_id:
+                request.session['elevenlabs_voice_id'] = voice_id
+            return JsonResponse({'status': 'success', 'message': 'ElevenLabs configuration saved to session.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+
+    agent_id = request.session.get('elevenlabs_agent_id') or getattr(settings, 'ELEVENLABS_AGENT_ID', '')
+    voice_id = request.session.get('elevenlabs_voice_id') or getattr(settings, 'ELEVENLABS_VOICE_ID', '21m00Tcm4TlvDq8ikWAM')
+    has_key = bool(request.session.get('elevenlabs_api_key') or getattr(settings, 'ELEVENLABS_API_KEY', ''))
+
+    return JsonResponse({
+        'status': 'success',
+        'agent_id': agent_id,
+        'voice_id': voice_id,
+        'has_api_key': has_key
+    })
+
+@check_login(['Buyer'])
+def buyer_elevenlabs_signed_url(request):
+    """Gets signed WebSockets URL for ElevenLabs Conversational AI Agent."""
+    agent_id = request.GET.get('agent_id') or request.session.get('elevenlabs_agent_id') or getattr(settings, 'ELEVENLABS_AGENT_ID', '')
+    api_key = request.session.get('elevenlabs_api_key') or getattr(settings, 'ELEVENLABS_API_KEY', '')
+
+    if not agent_id:
+        return JsonResponse({'status': 'error', 'message': 'ElevenLabs Agent ID is not configured.'}, status=400)
+
+    try:
+        url = f"https://api.elevenlabs.io/v1/convai/conversation/get_signed_url?agent_id={agent_id}"
+        req = urllib.request.Request(url)
+        if api_key:
+            req.add_header('xi-api-key', api_key)
+        
+        with urllib.request.urlopen(req, timeout=10) as response:
+            res_data = json.loads(response.read().decode('utf-8'))
+            return JsonResponse({
+                'status': 'success',
+                'signed_url': res_data.get('signed_url'),
+                'agent_id': agent_id
+            })
+    except Exception as e:
+        # Fallback to direct WebSocket URL format if signed URL fails or unauthenticated public agent
+        wss_url = f"wss://api.elevenlabs.io/v1/convai/conversation?agent_id={agent_id}"
+        return JsonResponse({
+            'status': 'success',
+            'signed_url': wss_url,
+            'agent_id': agent_id,
+            'note': str(e)
+        })
+
+@check_login(['Buyer'])
+def buyer_elevenlabs_tts(request):
+    """Proxies text-to-speech request to ElevenLabs API."""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        text = data.get('text', '').strip()
+        voice_id = data.get('voice_id') or request.session.get('elevenlabs_voice_id') or getattr(settings, 'ELEVENLABS_VOICE_ID', '21m00Tcm4TlvDq8ikWAM')
+        api_key = request.session.get('elevenlabs_api_key') or getattr(settings, 'ELEVENLABS_API_KEY', '')
+
+        if not text:
+            return JsonResponse({'status': 'error', 'message': 'Text parameter missing'}, status=400)
+
+        url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'audio/mpeg'
+        }
+        if api_key:
+            headers['xi-api-key'] = api_key
+
+        payload = json.dumps({
+            "text": text,
+            "model_id": "eleven_multilingual_v2",
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.75
+            }
+        }).encode('utf-8')
+
+        req = urllib.request.Request(url, data=payload, headers=headers, method='POST')
+        with urllib.request.urlopen(req, timeout=15) as response:
+            audio_bytes = response.read()
+            return HttpResponse(audio_bytes, content_type='audio/mpeg')
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': f'ElevenLabs TTS error: {str(e)}'}, status=500)
+
+
