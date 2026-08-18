@@ -62,19 +62,23 @@ def chek_premium(buyr):
 
     premium_buyr.check_subscription()
     return premium_buyr
-    
+
+def get_buyer_context(uid):
+    buyr, _ = Buyer.objects.get_or_create(user=uid)
+    cart, _ = Cart.objects.get_or_create(user=uid)
+    premium_type = chek_premium(buyr)
+    return buyr, cart, premium_type
+
 @check_login(['Buyer'])
 def buyer_dashboard(request):
     uid = request.uid
+    buyr, cart, premium_type = get_buyer_context(uid)
     orders = Order.objects.filter(user = uid).order_by('-id')
     items = OrderItem.objects.filter(order__in=orders).order_by('-id')[:6]
     item_count = OrderItem.objects.filter(order__in=orders).count()
     pending_count = OrderItem.objects.filter(order__in=orders, order__status='Pending').count()    
     complated = OrderItem.objects.filter(order__in=orders, order__status='Delivered').count()
-    buyr = Buyer.objects.get(user=uid)
-    cart = Cart.objects.get(user = uid)
-    premium_buyr = chek_premium(buyr)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    
     if premium_type.premium_type == "Free":
         buyr.is_premiume = False
         buyr.save()
@@ -97,8 +101,7 @@ def buyer_dashboard(request):
 @check_login(['Buyer'])
 def buyer_browse_crops(request):
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
-    cart = Cart.objects.get(user = uid)
+    buyr, cart, premium_type = get_buyer_context(uid)
     all_crops = crop.objects.filter(is_approved = True)
     
     query = request.GET.get('q')
@@ -132,20 +135,16 @@ def buyer_browse_crops(request):
 def buyer_crop_details(request,pk):
     uid = request.uid
     crp = crop.objects.get(id=pk)
-    cart = Cart.objects.get(user = uid)
-    buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
+    buyr, cart, premium_type = get_buyer_context(uid)
     context = {'crop' : crp,'premium_type':premium_type,'buyr':buyr,'cart':cart}
     return render(request, "buyer/crop-details.html",context)
 
 @check_login(['Buyer'])
 def buyer_cart(request):
     uid = request.uid
-    cart = Cart.objects.get(user = uid)
-    buyr = Buyer.objects.get(user=uid)
+    buyr, cart, premium_type = get_buyer_context(uid)
     cart_items = CartItem.objects.filter(cart=cart)
     total_qty = sum(item.quantity * 20 for item in cart_items)
-    premium_type = premium_buyer.objects.get(user=buyr)
     if request.method == 'POST':
         quantity = request.POST.get('quantity', 1)
         crop_id = request.POST.get('crop')
@@ -165,14 +164,8 @@ def buyer_cart(request):
         context = {'cart_items': cart_items, 'cart': cart, 'premium_type': premium_type, 'buyr': buyr, 'total_qty': total_qty}
         return render(request, "buyer/cart.html", context)
 
-    if cart:
-        cart_items = CartItem.objects.filter(cart=cart)
-        context = {'cart_items': cart_items, 'cart': cart, 'premium_type': premium_type, 'buyr': buyr, 'total_qty': total_qty}
-        return render(request, "buyer/cart.html", context)
-    else:
-        cart = Cart.objects.create(user=uid)
-        cart.save()
-    return render(request, "buyer/cart.html")
+    context = {'cart_items': cart_items, 'cart': cart, 'premium_type': premium_type, 'buyr': buyr, 'total_qty': total_qty}
+    return render(request, "buyer/cart.html", context)
 
 @check_login(['Buyer'])
 def buyer_addto_cart(request):
@@ -284,7 +277,7 @@ def buyer_checkout(request):
             )
             total_quantity += (item.quantity * 20)
         cart_items.delete()
-        cart.total_kg += total_quantity
+        cart.total_kg = (cart.total_kg or 0) + total_quantity
         cart.save()
         notification = notifications.objects.create(
             user = buyr,
