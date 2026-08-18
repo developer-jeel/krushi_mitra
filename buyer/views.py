@@ -759,20 +759,18 @@ def premium_checkout(request):
 @check_login(['Buyer'])
 def current_plan(request):
     uid = request.uid
-    buyr = Buyer.objects.get(user=uid)
-    premium_type = premium_buyer.objects.get(user=buyr)
-    cart = Cart.objects.get(user=uid)
-    cart_used = cart.total_kg
-    cart_limit = cart.cart_limit
-    cart_usage_pct = min(int((cart_used / cart_limit) * 100), 100)
-    last_buy = premium_history.objects.filter(user=buyr).first()
+    buyr, cart, premium_type = get_buyer_context(uid)
+    cart_used = cart.total_kg or 0
+    cart_limit = cart.cart_limit or 1000
+    cart_usage_pct = min(int((cart_used / cart_limit) * 100), 100) if cart_limit > 0 else 0
+    last_buy = premium_history.objects.filter(user=buyr).order_by('-id').first()
     return render(request, "buyer/current_plan.html", {
         'buyr': buyr,
         'premium_type': premium_type,
         'cart': cart,
         'cart_used': cart_used,
         'cart_usage_pct': cart_usage_pct,
-        'last_buy':last_buy
+        'last_buy': last_buy
     })
 
 @check_login(['Buyer'])
