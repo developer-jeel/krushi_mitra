@@ -1,8 +1,8 @@
 /* ============================================================
    KRUSHI MITRA — BUYER VOICE ASSISTANT JAVASCRIPT
    Handles ElevenLabs Conversational AI WebSockets,
-   ElevenLabs TTS API, orb animations, audio visualizer,
-   live transcripts, timers, quick actions & voice settings.
+   ElevenLabs TTS API, official ConvAI Widget, orb animations,
+   audio visualizer, live transcripts, timers, quick actions & voice settings.
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -67,12 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ElevenLabs Session Variables
   let elevenlabsWS = null;
-  let audioContext = null;
-  let audioQueue = [];
-  let isPlayingAudio = false;
+  let audioCtx = null;
 
-  // Load ElevenLabs configuration from localStorage if present
-  let elevenlabsAgentId = (elevenlabsAgentIdInput && elevenlabsAgentIdInput.value) || localStorage.getItem('km_elevenlabs_agent_id') || '';
+  // Load ElevenLabs configuration
+  let elevenlabsAgentId = (elevenlabsAgentIdInput && elevenlabsAgentIdInput.value) || localStorage.getItem('km_elevenlabs_agent_id') || 'agent_8901m09twyzsft9awzgeg15p6xh8';
   let elevenlabsApiKey = localStorage.getItem('km_elevenlabs_api_key') || '';
   let elevenlabsVoiceId = (voiceSelect && voiceSelect.value) || '21m00Tcm4TlvDq8ikWAM';
 
@@ -81,8 +79,53 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial setup: create waveform bars
   initWaveformBars();
 
+  // Helper to unlock Browser Audio Policy on User Click
+  function unlockBrowserAudio() {
+    try {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (synthesis && synthesis.paused) {
+        synthesis.resume();
+      }
+      if (synthesis) {
+        const dummyUtterance = new SpeechSynthesisUtterance('');
+        dummyUtterance.volume = 0;
+        synthesis.speak(dummyUtterance);
+      }
+    } catch (e) {
+      console.warn("Audio Context unlock error:", e);
+    }
+  }
+
+  // Trigger ElevenLabs Official ConvAI Widget if present
+  function triggerElevenLabsWidget() {
+    try {
+      const widget = document.querySelector('elevenlabs-convai');
+      if (widget) {
+        // Try clicking internal shadow root button or widget element directly
+        if (widget.shadowRoot) {
+          const btn = widget.shadowRoot.querySelector('button') || widget.shadowRoot.querySelector('.widget-button');
+          if (btn) btn.click();
+        }
+        widget.click();
+      }
+    } catch (e) {
+      console.log("ElevenLabs widget trigger note:", e);
+    }
+  }
+
   // ----- EVENT LISTENERS -----
-  if (startCallBtn) startCallBtn.addEventListener('click', () => initiateCall());
+  if (startCallBtn) startCallBtn.addEventListener('click', () => { 
+    unlockBrowserAudio(); 
+    triggerElevenLabsWidget();
+    initiateCall(); 
+  });
+
   if (endCallBtn) endCallBtn.addEventListener('click', () => showEndCallModal());
   if (continueCallBtn) continueCallBtn.addEventListener('click', () => hideEndCallModal());
   if (confirmEndCallBtn) confirmEndCallBtn.addEventListener('click', () => terminateCall());
@@ -96,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
   if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', saveSettings);
 
-  if (retryMicBtn) retryMicBtn.addEventListener('click', () => { hideError(micPermError); initiateCall(); });
-  if (reconnectBtn) reconnectBtn.addEventListener('click', () => { hideError(connError); initiateCall(); });
+  if (retryMicBtn) retryMicBtn.addEventListener('click', () => { unlockBrowserAudio(); hideError(micPermError); initiateCall(); });
+  if (reconnectBtn) reconnectBtn.addEventListener('click', () => { unlockBrowserAudio(); hideError(connError); initiateCall(); });
 
   if (newCallBtn) newCallBtn.addEventListener('click', resetToIdle);
   if (viewTranscriptBtn) viewTranscriptBtn.addEventListener('click', scrollToTranscript);
@@ -107,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     quickActionsGrid.addEventListener('click', (e) => {
       const card = e.target.closest('.va-quick-card');
       if (!card) return;
+      unlockBrowserAudio();
+      triggerElevenLabsWidget();
       const action = card.getAttribute('data-action');
       handleQuickAction(action, card);
     });
@@ -225,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 3500);
 
-    }, 1000);
+    }, 800);
   }
 
   // ----- ELEVENLABS WEBSOCKET REALTIME AGENT -----
@@ -248,24 +293,44 @@ document.addEventListener('DOMContentLoaded', () => {
         if (transcriptEmpty) transcriptEmpty.style.display = 'none';
 
         const greeting = initialPrompt 
-          ? `Namaste! Connected to ElevenLabs AI Agent. How can I assist with ${initialPrompt}?`
+          ? `Namaste! Connected to ElevenLabs AI Agent (${elevenlabsAgentId}). How can I assist with ${initialPrompt}?`
           : `Namaste! Connected to ElevenLabs Voice Agent for Krushi Mitra Buyer Panel. How can I assist you today?`;
 
+        // Render transcript message AND trigger ElevenLabs audio output
         addTranscriptMessage('ai', greeting);
-        setOrbState('listening');
-        startSpeechRecognition();
+        speakTextWithElevenLabsOrTTS(greeting);
+
+        setTimeout(() => {
+          if (isCallActive) {
+            setOrbState('listening');
+            startSpeechRecognition();
+          }
+        }, 3500);
       };
 
       elevenlabsWS.onmessage = (event) => {
         try {
           const msg = JSON.parse(event.data);
-          if (msg.type === 'agent_response' || msg.type === 'user_transcript') {
-            const role = msg.type === 'user_transcript' ? 'user' : 'ai';
-            addTranscriptMessage(role, msg.text || msg.transcript);
-            if (role === 'ai') setOrbState('speaking');
-          } else if (msg.type === 'audio' && msg.audio_event?.audio_base_64) {
-            playRawAudioBase64(msg.audio_event.audio_base_64);
+          
+          // Transcript events
+          if (msg.type === 'agent_response' || msg.type === 'user_transcript' || msg.text || msg.transcript) {
+            const text = msg.text || msg.transcript || (msg.agent_response_event && msg.agent_response_event.agent_response);
+            if (text) {
+              const role = (msg.type === 'user_transcript' || msg.role === 'user') ? 'user' : 'ai';
+              addTranscriptMessage(role, text);
+              if (role === 'ai') {
+                setOrbState('speaking');
+                speakTextWithElevenLabsOrTTS(text);
+              }
+            }
           }
+
+          // Audio events (Check all possible ElevenLabs payload formats)
+          const base64Audio = msg.audio_event?.audio_base_64 || msg.audio_base_64 || msg.audio || msg.user_audio_chunk;
+          if (base64Audio) {
+            playRawAudioBase64(base64Audio);
+          }
+
         } catch (e) {
           console.warn("Error parsing ElevenLabs WS message:", e);
         }
@@ -554,6 +619,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function speakTextWithElevenLabsOrTTS(text) {
     if (!isSpeakerOn) return;
 
+    unlockBrowserAudio();
+
     // First try backend ElevenLabs TTS Proxy endpoint
     fetch('/buyer/elevenlabs/tts/', {
       method: 'POST',
@@ -573,31 +640,45 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(blob => {
       const audioUrl = URL.createObjectURL(blob);
       const audio = new Audio(audioUrl);
-      audio.play();
-      setOrbState('speaking');
+      audio.play().then(() => {
+        setOrbState('speaking');
+      }).catch(err => {
+        console.warn("Audio element play error:", err);
+        fallbackWebSpeechTTS(text);
+      });
       audio.onended = () => {
         if (isCallActive) setOrbState('listening');
       };
     })
     .catch(err => {
       console.log("ElevenLabs TTS proxy unavailable, falling back to WebSpeech TTS:", err);
-      if (synthesis) {
-        synthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        utterance.lang = 'en-IN';
-        synthesis.speak(utterance);
-      }
+      fallbackWebSpeechTTS(text);
     });
+  }
+
+  function fallbackWebSpeechTTS(text) {
+    if (synthesis) {
+      synthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.lang = 'en-IN';
+      utterance.onstart = () => setOrbState('speaking');
+      utterance.onend = () => { if (isCallActive) setOrbState('listening'); };
+      synthesis.speak(utterance);
+    }
   }
 
   function playRawAudioBase64(base64Audio) {
     if (!isSpeakerOn) return;
+    unlockBrowserAudio();
     try {
       const audio = new Audio("data:audio/mp3;base64," + base64Audio);
-      audio.play();
-      setOrbState('speaking');
+      audio.play().then(() => {
+        setOrbState('speaking');
+      }).catch(err => {
+        console.warn("Base64 audio play error:", err);
+      });
       audio.onended = () => {
         if (isCallActive) setOrbState('listening');
       };

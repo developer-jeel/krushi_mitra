@@ -131,6 +131,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ElevenLabs Voice Agent Configuration
 ELEVENLABS_API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
-ELEVENLABS_AGENT_ID = os.environ.get('ELEVENLABS_AGENT_ID', '')
+ELEVENLABS_AGENT_ID = os.environ.get('ELEVENLABS_AGENT_ID', 'agent_8901m09twyzsft9awzgeg15p6xh8')
 ELEVENLABS_VOICE_ID = os.environ.get('ELEVENLABS_VOICE_ID', '21m00Tcm4TlvDq8ikWAM') # Default Rachel voice
+
 
